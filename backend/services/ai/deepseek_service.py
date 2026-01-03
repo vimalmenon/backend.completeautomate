@@ -1,0 +1,2 @@
+class DeepseekService:
+    pass
