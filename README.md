@@ -1,6 +1,9 @@
 # Backend for all Complete Automate
 
-### Automate Shorts
+
+
+### Poetry
+### Automate Scripts
 ### Automate SEO
 ### Auto Post
 
