@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "backend-completeautomate"
+version = "0.0.1"
+description = ""
+authors = ["Vimal Menon"]
+readme = "README.md"
+packages = [{include = "backend"}]
+
+[tool.poetry.dependencies]
+python = "3.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
