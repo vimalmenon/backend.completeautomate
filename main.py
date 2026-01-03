@@ -1,6 +1,6 @@
 import os
 
-def main(**kwargs):
+def main():
     print(os.getenv("MY_API_KEY"))
 
 
