@@ -9,7 +9,7 @@ class AppService:
     def start(self) -> None:
         # Start new Ideas
         NewIdeaTask().input(
-            idea="I want to list down the tasks to be performed by team as task name as what they have to do and team."
+            idea="I want to build a website for the company. List down the tasks to be performed by team as task name as what they have to do and team."
         )
         # Get Human Confirmation
         # HumanInputTask().confirm()

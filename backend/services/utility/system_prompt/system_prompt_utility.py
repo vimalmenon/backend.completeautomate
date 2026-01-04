@@ -43,6 +43,8 @@ class SystemPromptUtility:
         )
 
     def __get_responsibility_as_role(self, role: TeamEnum) -> str:
+        responsibility_template = jinja_env.get_template("responsibility.txt")
+        return responsibility_template.render(is_manager=(role == TeamEnum.MANAGER))
         if role == TeamEnum.MANAGER:
             return """
             # Responsibility as Manager
