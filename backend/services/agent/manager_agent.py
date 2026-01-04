@@ -4,7 +4,6 @@ from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
 
 
-
 class ManagerAgent:
     name: str = "Elara"
     role: TeamEnum = TeamEnum.MANAGER
