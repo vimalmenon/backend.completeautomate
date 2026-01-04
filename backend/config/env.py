@@ -10,10 +10,26 @@ logger = getLogger(__name__)
 class Env:
     VERSION: str = os.environ["VERSION"]
     COMPANY_NAME: str = os.environ["COMPANY_NAME"]
-    DEEPSEEK_API_KEY: str = os.environ["DEEPSEEK_API_KEY"]
+    AWS_CLIENT_ID: str = os.environ["AWS_CLIENT_ID"]
+    AWS_SECRET: str = os.environ["AWS_SECRET"]
+    AWS_REGION: str = os.environ["AWS_REGION"]
+    AWS_SECRET_MANAGER: str = os.environ["AWS_SECRET_MANAGER"]
+    DEEPSEEK_API_KEY: str
+    AWS_TABLE: str
 
     def __init__(self):
-        pass
+        secrets = self.get_from_aws_secret()
+        self.DEEPSEEK_API_KEY = str(
+            self.__get_from_env_or_secret(secrets, "DEEPSEEK_API_KEY", "")
+        )
+
+    def __get_from_env_or_secret(self, secrets: dict[str, str], key: str, default=None):
+        """
+        Fetches a value from environment variables or AWS Secrets Manager.
+        :param key: The key to fetch.
+        :return: The value of the key.
+        """
+        return os.getenv(key, secrets.get(key, default))
 
     def get_from_aws_secret(self) -> dict[str, str]:
         """
