@@ -16,16 +16,22 @@ class ManagerAgent:
         system_prompt = SystemPromptUtility(
             role=self.role, teams=self.teams
         ).get_system_prompt()
-        # model = DeepseekAI().get_model()
+        model = DeepseekAI().get_model()
 
-        print(system_prompt)
-        # agent = create_agent(
-        #     name=self.name,
-        #     llm=model,
-        #     agent_type="chat-conversational-react-description",
-        #     verbose=True,
-        #     system_prompt=system_prompt,
+        agent = create_agent(
+            name=self.name,
+            model=model,
+            system_prompt=system_prompt,
+        )
+        # result = agent.invoke(
+        #     {
+        #         "messages": [
+        #             {"role": "user", "content": "I prefer technical explanations"}
+        #         ],
+        #         "user_preferences": {"style": "technical", "verbosity": "detailed"},
+        #     }
         # )
+        # print(result)
         # result = agent.invoke(
         #     input="You are a manager agent. Your role is to oversee team performance and project delivery."
         # )
