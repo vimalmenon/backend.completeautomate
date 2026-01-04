@@ -14,7 +14,7 @@ class ManagerAgent:
         # CompanyValueUtility(
         #     role=self.role, responsibility=self.responsibility
         # ).company_values
-        model = DeepseekAI().get_llm()
+        model = DeepseekAI().get_model()
         agent = create_agent(
             llm=model,
             agent_type="chat-conversational-react-description",
