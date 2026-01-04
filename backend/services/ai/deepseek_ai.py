@@ -18,3 +18,6 @@ class DeepseekAI:
     def start(self, messages: list):
         self.llm.invoke(messages)
         return self.llm.content
+
+    def get_llm(self):
+        return self.llm

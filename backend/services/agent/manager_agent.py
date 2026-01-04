@@ -1,5 +1,8 @@
 # from backend.services.utility.company_detail_utility import CompanyDetailUtility
 from backend.config.enum import TeamEnum
+from langchain.agents import create_agent
+from backend.services.ai.deepseek_ai import DeepseekAI
+
 
 
 class ManagerAgent:
@@ -12,4 +15,13 @@ class ManagerAgent:
         # CompanyValueUtility(
         #     role=self.role, responsibility=self.responsibility
         # ).company_values
-        pass
+        model = DeepseekAI().get_llm()
+        agent = create_agent(
+            llm=model,
+            agent_type="chat-conversational-react-description",
+            verbose=True,
+        )
+        result = agent.invoke(
+            input="You are a manager agent. Your role is to oversee team performance and project delivery."
+        )
+        print(result)

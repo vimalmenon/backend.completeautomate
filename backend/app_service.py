@@ -10,11 +10,11 @@ class AppService:
         # Start new Ideas
         NewIdeaTask().input("Search for new tasks")
         # Get pending tasks
-        PendingTask().check()
+        # PendingTask().check()
         # Prepare next tasks
-        ScrumMasterAgent().check()
+        # ScrumMasterAgent().check()
         # Start next tasks
-        StartNewTask().check()
+        # StartNewTask().check()
 
         # print(
         #     CompanyDetailUtility(
