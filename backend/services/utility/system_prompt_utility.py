@@ -13,17 +13,15 @@ class SystemPromptUtility:
     def __get_company_values(self, role: TeamEnum, teams: list[TeamEnum]) -> str:
         base_text = """
             As the {role} of {company_name}, my core responsibility is to operationalize our primary value of customer satisfaction and long-term relationships in every decision and process and also includes
-
-            # Company core values.
-            1) I will steer the company towards being a trusted automation partner, not just a service provider. Our goal is to become an integral part of our clients' operational efficiency and growth.
         """
+        core_values = self.__get_company_core_values()
 
         team_details = ""
         if teams:
             team_details = self.__get_team_details(teams)
         responsibility_as_role = self.__get_responsibility_as_role(role)
 
-        return (base_text + team_details + responsibility_as_role).format(
+        return (base_text + core_values + team_details + responsibility_as_role).format(
             company_name=env.COMPANY_NAME,
             role=role.get_role(),
         )
@@ -53,6 +51,9 @@ class SystemPromptUtility:
             2) You must ensure that the code adheres to best practices and coding standards.
             3) You will collaborate with other team members to ensure that the code integrates seamlessly with other components of the project.
             4) You must participate in code reviews and provide constructive feedback to peers.
+            5) You will write unit tests to ensure the quality and reliability of the code.
+            6) You must document the code to facilitate future maintenance and updates.
+            7) You will push the code to the designated repository following the project's version control guidelines.
             """
         return ""
 
@@ -69,6 +70,15 @@ class SystemPromptUtility:
             """.format(
             team_details=team_details
         )
+
+    def __get_company_core_values(self) -> str:
+        return """
+            # Company core values.
+            1) Customer Satisfaction: We prioritize our clients' needs and strive to exceed their expectations through innovative automation solutions.
+            2) Long-term Relationships: We believe in building lasting partnerships with our clients based on trust, transparency, and mutual growth.
+            3) Innovation: We are committed to staying at the forefront of automation technology and continuously improving our services.
+            4) Excellence: We aim for excellence in every project we undertake, ensuring high-quality deliverables and exceptional service.
+        """
 
     def get_system_prompt(self) -> str:
         return self.system_prompt

@@ -18,12 +18,16 @@ class ManagerAgent:
 
         print(system_prompt)
         # agent = create_agent(
+        #     name=self.name,
         #     llm=model,
         #     agent_type="chat-conversational-react-description",
         #     verbose=True,
-        #     system_prompt=values,
+        #     system_prompt=system_prompt,
         # )
         # result = agent.invoke(
         #     input="You are a manager agent. Your role is to oversee team performance and project delivery."
         # )
         # print(result)
+
+    def start_task(self, task: str):
+        pass
