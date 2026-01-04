@@ -5,6 +5,7 @@ class ManagerAgent:
     name: str = "Elara"
     role: str = "Manager"
     responsibility: str = "Overseeing team performance and project delivery"
+    teams: list = ["scrum_master", "researcher"]
 
     def __init__(self):
         CompanyDetailUtility(
