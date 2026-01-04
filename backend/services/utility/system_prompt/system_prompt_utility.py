@@ -19,18 +19,28 @@ class SystemPromptUtility:
 
     def __get_company_values(self, role: TeamEnum, teams: list[TeamEnum]) -> str:
         base_text_template = jinja_env.get_template("base_text.txt")
+        core_values_template = jinja_env.get_template("core_values.txt")
+        team_details_template = jinja_env.get_template("team_details.txt")
+
         base_text = base_text_template.render(
             role=role.get_role(), company_name=env.COMPANY_NAME
         )
-        core_values_template = jinja_env.get_template("core_values.txt")
         core_values = core_values_template.render()
 
         team_details = ""
         if teams:
-            team_details = self.__get_team_details(teams)
+            team_details = "\n".join(
+                [
+                    f"- {team.value['role']}: {team.value['responsibility']}"
+                    for team in teams
+                ]
+            )
+            team_details = team_details_template.render(team_details=team_details)
         responsibility_as_role = self.__get_responsibility_as_role(role)
 
-        return base_text + core_values + team_details + responsibility_as_role
+        return "\n\n".join(
+            [base_text, core_values, team_details, responsibility_as_role]
+        )
 
     def __get_responsibility_as_role(self, role: TeamEnum) -> str:
         if role == TeamEnum.MANAGER:
@@ -62,29 +72,6 @@ class SystemPromptUtility:
             7) You will push the code to the designated repository following the project's version control guidelines.
             """
         return ""
-
-    def __get_team_details(self, teams: list[TeamEnum]) -> str:
-        team_details = "\n".join(
-            [
-                f"- {team.value['role']}: {team.value['responsibility']}"
-                for team in teams
-            ]
-        )
-        return """
-            You have access to following teams to do your job effectively:
-            {team_details}
-            """.format(
-            team_details=team_details
-        )
-
-    def __get_company_core_values(self) -> str:
-        return """
-            # Company core values.
-            1) Customer Satisfaction: We prioritize our clients' needs and strive to exceed their expectations through innovative automation solutions.
-            2) Long-term Relationships: We believe in building lasting partnerships with our clients based on trust, transparency, and mutual growth.
-            3) Innovation: We are committed to staying at the forefront of automation technology and continuously improving our services.
-            4) Excellence: We aim for excellence in every project we undertake, ensuring high-quality deliverables and exceptional service.
-        """
 
     def get_system_prompt(self) -> str:
         return self.system_prompt

@@ -1,0 +1,2 @@
+You have access to following teams to do your job effectively:
+{{ team_details }}
