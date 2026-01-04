@@ -1,1 +1,2 @@
 As the {{ role }} of {{ company_name }}, my core responsibility is to operationalize our primary value of customer satisfaction and long-term relationships in every decision and process and also includes
+

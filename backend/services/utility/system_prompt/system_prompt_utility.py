@@ -22,7 +22,8 @@ class SystemPromptUtility:
         base_text = base_text_template.render(
             role=role.get_role(), company_name=env.COMPANY_NAME
         )
-        core_values = self.__get_company_core_values()
+        core_values_template = jinja_env.get_template("core_values.txt")
+        core_values = core_values_template.render()
 
         team_details = ""
         if teams:
