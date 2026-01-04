@@ -15,3 +15,9 @@ class TeamEnum(str, Enum):
     CODER = "coder"
     SCRIPT_WRITER = "SCRIPT WRITER"
     MANAGER = "MANAGER"
+
+
+class AICreativityLevelEnum(str, Enum):
+    LOW = 0
+    MEDIUM = 4
+    HIGH = 7
