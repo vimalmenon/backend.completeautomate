@@ -46,6 +46,14 @@ class SystemPromptUtility:
             4) You must work closely with the product owner to ensure that the team has a clear understanding of the project goals and requirements.
             5) You will create subtasks for the team based on the project requirements and ensure that they are completed on time.
             """
+        if role == TeamEnum.CODER:
+            return """
+            # Responsibility as Coder
+            1) You are responsible for developing and implementing code based on project requirements.
+            2) You must ensure that the code adheres to best practices and coding standards.
+            3) You will collaborate with other team members to ensure that the code integrates seamlessly with other components of the project.
+            4) You must participate in code reviews and provide constructive feedback to peers.
+            """
         return ""
 
     def __get_team_details(self, teams: list[TeamEnum]) -> str:
