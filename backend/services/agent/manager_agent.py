@@ -1,4 +1,4 @@
-from backend.services.utility.company_value_utility import CompanyValueUtility
+from backend.services.utility.system_prompt_utility import SystemPromptUtility
 from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
@@ -8,12 +8,12 @@ class ManagerAgent:
     name: str = "Elara"
     role: TeamEnum = TeamEnum.MANAGER
     responsibility: str = "Overseeing team performance and project delivery"
-    teams: list = ["scrum_master", "researcher"]
+    teams: list = [TeamEnum.SCRUM_MASTER, TeamEnum.RESEARCHER]
 
     def __init__(self):
-        system_prompt = CompanyValueUtility(
-            role=self.role, responsibility=self.responsibility, teams=self.teams
-        ).get_values()
+        system_prompt = SystemPromptUtility(
+            role=self.role, teams=self.teams
+        ).get_system_prompt()
         # model = DeepseekAI().get_model()
 
         print(system_prompt)

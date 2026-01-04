@@ -31,6 +31,12 @@ class TeamEnum(dict, Enum):
         "responsibility": "Overseeing team performance and project delivery",
     }
 
+    def get_role(self) -> str:
+        return self.value["role"]
+
+    def get_responsibility(self) -> str:
+        return self.value["responsibility"]
+
 
 class AICreativityLevelEnum(str, Enum):
     LOW = 0

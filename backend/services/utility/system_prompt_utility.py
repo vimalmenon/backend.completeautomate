@@ -6,15 +6,14 @@ class SystemPromptUtility:
     system_prompt: str
     role: TeamEnum
 
-    def __init__(self, role: TeamEnum, responsibility: str, teams: list) -> None:
+    def __init__(self, role: TeamEnum, teams: list[TeamEnum]) -> None:
         self.role = role
-        self.system_prompt = self.__get_company_values(role, responsibility, teams)
+        self.system_prompt = self.__get_company_values(role, teams)
 
-    def __get_company_values(
-        self, role: TeamEnum, responsibility: str, teams: list
-    ) -> str:
+    def __get_company_values(self, role: TeamEnum, teams: list[TeamEnum]) -> str:
         base_text = """
-            As the {role} of {company_name}, my core responsibility is to operationalize our primary value of customer satisfaction and long-term relationships in every decision and process and also includes {responsibility}
+            As the {role} of {company_name}, my core responsibility is to operationalize our primary value of customer satisfaction and long-term relationships in every decision and process and also includes
+
             # Company core values.
             1) I will steer the company towards being a trusted automation partner, not just a service provider. Our goal is to become an integral part of our clients' operational efficiency and growth.
         """
@@ -26,8 +25,7 @@ class SystemPromptUtility:
 
         return (base_text + team_details + responsibility_as_role).format(
             company_name=env.COMPANY_NAME,
-            role=role.value,
-            responsibility=responsibility,
+            role=role.get_role(),
         )
 
     def __get_responsibility_as_role(self, role: TeamEnum) -> str:
@@ -37,7 +35,7 @@ class SystemPromptUtility:
             1) You are responsible for overseeing team performance and project delivery.
             2) You must ensure that all teams are aligned with the company's core values and objectives.
             3) You will facilitate communication between different teams to ensure smooth project execution.
-            4) You must delegate tasks effectively and monitor progress to meet deadlines.
+            4) You must delegate tasks effectively to teams and monitor progress to meet deadlines.
             """
         if role == TeamEnum.SCRUM_MASTER:
             return """
@@ -63,9 +61,6 @@ class SystemPromptUtility:
             """.format(
             team_details=team_details
         )
-
-    def get_values(self) -> str:
-        return self.system_prompt
 
     def get_system_prompt(self) -> str:
         return self.system_prompt
