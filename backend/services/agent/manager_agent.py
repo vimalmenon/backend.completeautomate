@@ -1,3 +1,2 @@
 class ManagerAgent:
-    name:str = "Alex"
-
+    name: str = "Alex"

@@ -4,4 +4,3 @@ class AppService:
         # TODO: Implement application startup logic
         # This method should contain initialization code for the service
         pass
-
