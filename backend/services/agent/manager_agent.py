@@ -1,4 +1,6 @@
-from backend.services.utility.system_prompt_utility import SystemPromptUtility
+from backend.services.utility.system_prompt.system_prompt_utility import (
+    SystemPromptUtility,
+)
 from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI

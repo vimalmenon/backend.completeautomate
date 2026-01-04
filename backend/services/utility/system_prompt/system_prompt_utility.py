@@ -1,6 +1,13 @@
 from backend.config.env import env
 from backend.config.enum import TeamEnum
 
+from jinja2 import Environment, FileSystemLoader
+
+# Set up environment to load templates from a directory
+jinja_env = Environment(
+    loader=FileSystemLoader("backend/services/utility/system_prompt/templates")
+)
+
 
 class SystemPromptUtility:
     system_prompt: str
@@ -11,9 +18,10 @@ class SystemPromptUtility:
         self.system_prompt = self.__get_company_values(role, teams)
 
     def __get_company_values(self, role: TeamEnum, teams: list[TeamEnum]) -> str:
-        base_text = """
-            As the {role} of {company_name}, my core responsibility is to operationalize our primary value of customer satisfaction and long-term relationships in every decision and process and also includes
-        """
+        base_text_template = jinja_env.get_template("base_text.txt")
+        base_text = base_text_template.render(
+            role=role.get_role(), company_name=env.COMPANY_NAME
+        )
         core_values = self.__get_company_core_values()
 
         team_details = ""
@@ -21,10 +29,7 @@ class SystemPromptUtility:
             team_details = self.__get_team_details(teams)
         responsibility_as_role = self.__get_responsibility_as_role(role)
 
-        return (base_text + core_values + team_details + responsibility_as_role).format(
-            company_name=env.COMPANY_NAME,
-            role=role.get_role(),
-        )
+        return base_text + core_values + team_details + responsibility_as_role
 
     def __get_responsibility_as_role(self, role: TeamEnum) -> str:
         if role == TeamEnum.MANAGER:
