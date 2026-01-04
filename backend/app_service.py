@@ -8,7 +8,9 @@ class AppService:
 
     def start(self) -> None:
         # Start new Ideas
-        NewIdeaTask().input(idea="Research on automation")
+        NewIdeaTask().input(
+            idea="I want to list down the tasks to be performed by team as task name as what they have to do and team."
+        )
         # Get pending tasks
         # PendingTask().check()
         # Prepare next tasks
