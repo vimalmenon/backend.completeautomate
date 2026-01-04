@@ -13,6 +13,7 @@ langchain = "^1.2.0"
 langchain-deepseek = "^1.0.1"
 langchain-groq = "^1.1.1"
 langchain-openai = "^1.1.6"
+langchain-xai = "^1.2.0"
 
 [tool.poetry.scripts]
 app = "main:main"
