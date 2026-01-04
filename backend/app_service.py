@@ -11,6 +11,8 @@ class AppService:
         NewIdeaTask().input(
             idea="I want to list down the tasks to be performed by team as task name as what they have to do and team."
         )
+        # Get Human Confirmation
+        # HumanInputTask().input()
         # Get pending tasks
         # PendingTask().check()
         # Prepare next tasks

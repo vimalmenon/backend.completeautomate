@@ -31,3 +31,6 @@ class ManagerAgent:
 
     def start_task(self, task: str):
         pass
+
+    def continue_task(self, task_id: str):
+        pass
