@@ -9,7 +9,7 @@ class CompanyDetailUtility:
 
     def __get_company_values(self, role: str) -> str:
         return """
-            You work for a company, {company_name}, as a {role}, and the company provides automation services. Align your response based on the company's values.
+            You work for a company, {company_name}, as {role}, and the company provides automation services. Align your response based on the company's values.
             #Values.
             2) We prioritize customer satisfaction and long-term relationships
         """.format(
