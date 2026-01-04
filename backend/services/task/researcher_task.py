@@ -1,0 +1,2 @@
+class ResearcherTask:
+    pass
