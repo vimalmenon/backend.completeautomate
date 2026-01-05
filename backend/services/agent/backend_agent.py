@@ -1,9 +1,11 @@
 from backend.services.agent.base_agent import BaseAgent
+from backend.config.enum import TeamEnum
 
-class FrontendAgent(BaseAgent):
-    name = "Frontend Agent"
-    role = "Frontend Developer"
-    responsibility = "Building and maintaining the user interface of applications"
+
+class BackendAgent(BaseAgent):
+    name = "Backend Agent"
+    role = TeamEnum.BACKEND_DEVELOPER
+    responsibility = "Building and maintaining the server-side logic and databases"
     teams = []
 
     def __init__(self):

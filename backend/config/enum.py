@@ -18,9 +18,13 @@ class TeamEnum(dict[str, str], Enum):
         "role": "RESEARCHER",
         "responsibility": "Conducting in-depth research to gather relevant information",
     }
-    CODER = {
-        "role": "CODER",
-        "responsibility": "Developing and implementing code based on project requirements",
+    BACKEND_DEVELOPER = {
+        "role": "BACKEND DEVELOPER",
+        "responsibility": "Designing and implementing server-side logic and databases",
+    }
+    FRONTEND_DEVELOPER = {
+        "role": "FRONTEND DEVELOPER",
+        "responsibility": "Creating user interfaces and enhancing user experience",
     }
     SCRIPT_WRITER = {
         "role": "SCRIPT WRITER",
