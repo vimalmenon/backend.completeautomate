@@ -5,9 +5,10 @@ from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
 from langchain.messages import SystemMessage, HumanMessage
+from backend.services.agent.base_agent import BaseAgent
 
 
-class ManagerAgent:
+class ManagerAgent(BaseAgent):
     name: str = "Elara"
     role: TeamEnum = TeamEnum.MANAGER
     responsibility: str = "Overseeing team performance and project delivery"
@@ -39,5 +40,5 @@ class ManagerAgent:
         )
         return result
 
-    def continue_task(self, task_id: str):
+    def resume_task(self, task_id: str):
         pass
