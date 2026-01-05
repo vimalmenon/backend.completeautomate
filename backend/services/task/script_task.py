@@ -1,2 +1,0 @@
-class ScriptTask:
-    pass

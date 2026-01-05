@@ -18,9 +18,9 @@ class SystemPromptUtility:
         self.system_prompt = self.__get_company_values(role, teams)
 
     def __get_company_values(self, role: TeamEnum, teams: list[TeamEnum]) -> str:
-        base_text_template = jinja_env.get_template("base_text.txt")
-        core_values_template = jinja_env.get_template("core_values.txt")
-        team_details_template = jinja_env.get_template("team_details.txt")
+        base_text_template = jinja_env.get_template("base_text.html")
+        core_values_template = jinja_env.get_template("core_values.html")
+        team_details_template = jinja_env.get_template("team_details.html")
 
         base_text = base_text_template.render(
             role=role.get_role(), company_name=env.COMPANY_NAME
@@ -43,8 +43,11 @@ class SystemPromptUtility:
         )
 
     def __get_responsibility_as_role(self, role: TeamEnum) -> str:
-        responsibility_template = jinja_env.get_template("responsibility.txt")
-        return responsibility_template.render(is_manager=(role == TeamEnum.MANAGER))
+        responsibility_template = jinja_env.get_template("responsibility.html")
+        return responsibility_template.render(
+            is_manager=(role == TeamEnum.MANAGER),
+            is_frontend_developer=(role == TeamEnum.FRONTEND_DEVELOPER),
+        )
         if role == TeamEnum.MANAGER:
             return """
             # Responsibility as Manager

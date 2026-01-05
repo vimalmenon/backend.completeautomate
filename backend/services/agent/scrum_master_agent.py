@@ -1,4 +1,6 @@
-from backend.services.utility.company_detail_utility import CompanyDetailUtility
+from backend.services.utility.system_prompt.system_prompt_utility import (
+    SystemPromptUtility,
+)
 from backend.config.enum import TeamEnum
 
 
@@ -8,6 +10,6 @@ class ScrumMasterAgent:
     responsibility: str = "Facilitating agile processes and removing team impediments"
 
     def __init__(self):
-        CompanyDetailUtility(
+        self.system_prompt = SystemPromptUtility(
             role=self.role, responsibility=self.responsibility
-        ).company_values
+        ).get_system_prompt()

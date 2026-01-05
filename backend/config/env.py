@@ -14,7 +14,9 @@ class Env:
     AWS_SECRET: str = os.environ["AWS_SECRET"]
     AWS_REGION: str = os.environ["AWS_REGION"]
     AWS_SECRET_MANAGER: str = os.environ["AWS_SECRET_MANAGER"]
+    GROQ_API_KEY: str = os.environ["GROQ_API_KEY"]
     DEEPSEEK_API_KEY: str
+    
     AWS_TABLE: str
 
     def __init__(self):

@@ -1,2 +1,0 @@
-As the {{ role }} of {{ company_name }}, Company provide AI automation services.
-
