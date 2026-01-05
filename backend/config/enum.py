@@ -9,7 +9,7 @@ class TaskStatusEnum(str, Enum):
     PENDING_APPROVAL = "PENDING_APPROVAL"
 
 
-class TeamEnum(dict, Enum):
+class TeamEnum(dict[str, str], Enum):
     SCRUM_MASTER = {
         "role": "SCRUM MASTER",
         "responsibility": "Overseeing project management and team coordination",
