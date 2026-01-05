@@ -1,2 +1,0 @@
-class CoderAgent:
-    pass
