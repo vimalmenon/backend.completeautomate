@@ -38,6 +38,7 @@ class ManagerAgent(BaseAgent):
                 "user_preferences": {"style": "technical", "verbosity": "detailed"},
             }
         )
+        breakpoint()
         return result
 
     def resume_task(self, task_id: str):
