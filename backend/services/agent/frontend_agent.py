@@ -5,13 +5,13 @@ from backend.config.enum import TeamEnum
 from langgraph.prebuilt import create_react_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.command_tool import CommandTool
-from langchain.messages import SystemMessage, HumanMessage
+from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List
 
 
 class FrontendAgent(BaseAgent):
-    name = "Frontend Agent"
+    name = "Elizabeth"
     role = TeamEnum.FRONTEND_DEVELOPER
     responsibility = "Building and maintaining the user interface of applications"
     teams = []
