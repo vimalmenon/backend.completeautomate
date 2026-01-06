@@ -27,31 +27,29 @@ class FrontendAgent(BaseAgent):
     def _initialize_tools(self) -> List[Dict[str, Any]]:
         """
         Initialize available tools for the agent.
-        
+
         Returns:
             List of tool definitions
         """
-        tools = [
-            self.command_tool.get_tool_definition()
-        ]
+        tools = [self.command_tool.get_tool_definition()]
         return tools
 
-    def execute_command(self, command: str, cwd: str = None, shell: bool = False) -> Dict[str, Any]:
+    def execute_command(
+        self, command: str, cwd: str = None, shell: bool = False
+    ) -> Dict[str, Any]:
         """
         Execute a shell command using the CommandTool.
-        
+
         Args:
             command: The command to execute
             cwd: Working directory (optional)
             shell: Whether to use shell execution (default: False)
-            
+
         Returns:
             Result dictionary with returncode, stdout, stderr, and success flag
         """
         result = self.command_tool.execute_command(
-            command=command,
-            cwd=cwd,
-            shell=shell
+            command=command, cwd=cwd, shell=shell
         )
         return result
 
@@ -81,4 +79,3 @@ class FrontendAgent(BaseAgent):
 
     def resume_task(self, task_id: str):
         pass
-

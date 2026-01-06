@@ -4,6 +4,7 @@ from typing import Optional, Dict, Any, TypedDict
 
 class CommandInput(TypedDict, total=False):
     """Input schema for CommandTool."""
+
     command: str  # Required: The command to execute
     cwd: Optional[str]  # Optional: Working directory
     shell: bool  # Optional: Use shell execution
@@ -11,6 +12,7 @@ class CommandInput(TypedDict, total=False):
 
 class CommandOutput(TypedDict):
     """Output schema for CommandTool."""
+
     returncode: int  # Exit code
     stdout: str  # Standard output
     stderr: str  # Standard error
@@ -20,7 +22,7 @@ class CommandOutput(TypedDict):
 class CommandTool:
     """
     Tool for executing shell commands with output capture and error handling.
-    
+
     This tool allows executing arbitrary shell commands in a specified working
     directory with comprehensive result information including exit codes,
     standard output, and error messages.
@@ -44,20 +46,20 @@ class CommandTool:
             "command": {
                 "type": "string",
                 "description": "The shell command to execute (e.g., 'ls -la', 'npm install')",
-                "examples": ["npm install", "python script.py", "git status"]
+                "examples": ["npm install", "python script.py", "git status"],
             },
             "cwd": {
                 "type": ["string", "null"],
                 "description": "Working directory for command execution (optional)",
-                "examples": ["/path/to/project", "/home/user/workspace", None]
+                "examples": ["/path/to/project", "/home/user/workspace", None],
             },
             "shell": {
                 "type": "boolean",
                 "description": "Whether to use shell execution for complex commands (default: False)",
-                "examples": [True, False]
-            }
+                "examples": [True, False],
+            },
         },
-        "required": ["command"]
+        "required": ["command"],
     }
 
     OUTPUT_SCHEMA = {
@@ -68,22 +70,22 @@ class CommandTool:
             "returncode": {
                 "type": "integer",
                 "description": "Exit code (0 = success, non-zero = error)",
-                "examples": [0, 1, -1]
+                "examples": [0, 1, -1],
             },
             "stdout": {
                 "type": "string",
-                "description": "Standard output from the command"
+                "description": "Standard output from the command",
             },
             "stderr": {
                 "type": "string",
-                "description": "Standard error from the command"
+                "description": "Standard error from the command",
             },
             "success": {
                 "type": "boolean",
-                "description": "Whether the command executed successfully"
-            }
+                "description": "Whether the command executed successfully",
+            },
         },
-        "required": ["returncode", "stdout", "stderr", "success"]
+        "required": ["returncode", "stdout", "stderr", "success"],
     }
 
     # Configuration
@@ -93,7 +95,7 @@ class CommandTool:
     def __init__(self, timeout: int = DEFAULT_TIMEOUT):
         """
         Initialize CommandTool.
-        
+
         Args:
             timeout: Command execution timeout in seconds (default: 300)
         """
@@ -105,7 +107,7 @@ class CommandTool:
     def get_tool_definition(cls) -> Dict[str, Any]:
         """
         Get complete tool definition for registration.
-        
+
         Returns:
             Dictionary with full tool definition including metadata and schemas
         """
@@ -124,8 +126,8 @@ class CommandTool:
                         "returncode": 0,
                         "stdout": "total 24\ndrwxr-xr-x  5 user  staff   160 Jan  6 10:30 .",
                         "stderr": "",
-                        "success": True
-                    }
+                        "success": True,
+                    },
                 },
                 {
                     "name": "Install npm dependencies",
@@ -134,23 +136,20 @@ class CommandTool:
                         "returncode": 0,
                         "stdout": "added 150 packages",
                         "stderr": "",
-                        "success": True
-                    }
+                        "success": True,
+                    },
                 },
                 {
                     "name": "Execute with shell",
-                    "input": {
-                        "command": "echo $PATH && ls -la",
-                        "shell": True
-                    },
+                    "input": {"command": "echo $PATH && ls -la", "shell": True},
                     "output": {
                         "returncode": 0,
                         "stdout": "/usr/local/bin:/usr/bin\ntotal 24\n...",
                         "stderr": "",
-                        "success": True
-                    }
-                }
-            ]
+                        "success": True,
+                    },
+                },
+            ],
         }
 
     def execute_command(
@@ -158,27 +157,27 @@ class CommandTool:
     ) -> CommandOutput:
         """
         Execute a command and return the result.
-        
+
         Args:
             command: The command to execute (string or list)
             cwd: The working directory to execute the command in (optional)
             shell: Whether to use shell execution (default: False)
-        
+
         Returns:
             Dictionary containing:
                 - returncode: Exit code of the command
                 - stdout: Standard output
                 - stderr: Standard error
                 - success: Boolean indicating if command succeeded
-                
+
         Examples:
             >>> tool = CommandTool()
             >>> result = tool.execute_command("npm install")
             >>> print(result["success"])
-            
+
             >>> result = tool.execute_command("ls -la", cwd="/home/user")
             >>> print(result["stdout"])
-            
+
             >>> result = tool.execute_command("echo $HOME", shell=True)
             >>> print(result["stdout"])
         """
@@ -224,29 +223,28 @@ class CommandTool:
     def validate_input(self, input_data: Dict[str, Any]) -> tuple[bool, str]:
         """
         Validate input against schema.
-        
+
         Args:
             input_data: Input dictionary to validate
-            
+
         Returns:
             Tuple of (is_valid, error_message)
         """
         if not isinstance(input_data, dict):
             return False, "Input must be a dictionary"
-        
+
         if "command" not in input_data:
             return False, "Required parameter 'command' is missing"
-        
+
         if not isinstance(input_data["command"], str):
             return False, "'command' must be a string"
-        
+
         if "cwd" in input_data and input_data["cwd"] is not None:
             if not isinstance(input_data["cwd"], str):
                 return False, "'cwd' must be a string or null"
-        
+
         if "shell" in input_data:
             if not isinstance(input_data["shell"], bool):
                 return False, "'shell' must be a boolean"
-        
-        return True, ""
 
+        return True, ""

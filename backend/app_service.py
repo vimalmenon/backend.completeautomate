@@ -10,7 +10,7 @@ class AppService:
         # Start new Ideas
         # NewIdeaTask().input(
         #     task="""
-        #     Our team is building a website for our company. 
+        #     Our team is building a website for our company.
         #     Breakdown the tasks and provide list of work to be done by Front-End Developers.
         #     Ensure task are specific to front-end development and cover all necessary aspects such as UI design, responsiveness, user experience.
         #     Provide detailed instructions for each task to be performed by developers.
