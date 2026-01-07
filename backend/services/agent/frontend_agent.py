@@ -8,6 +8,10 @@ from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class FrontendAgent(BaseAgent):
@@ -33,6 +37,27 @@ class FrontendAgent(BaseAgent):
         """
         tools = [self.command_tool.get_tool_definition()]
         return tools
+
+    def _handle_tool_call(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
+        """
+        Handle tool calls from the agent.
+
+        Args:
+            tool_name: Name of the tool to call
+            tool_input: Input parameters for the tool
+
+        Returns:
+            Tool execution result as string
+        """
+        if tool_name == "command_executor":
+            result = self.command_tool.execute_command(
+                command=tool_input.get("command"),
+                cwd=tool_input.get("cwd"),
+                shell=tool_input.get("shell", False)
+            )
+            return json.dumps(result)
+        else:
+            return json.dumps({"error": f"Unknown tool: {tool_name}"})
 
     def execute_command(
         self, command: str, cwd: str = None, shell: bool = False
@@ -67,12 +92,46 @@ class FrontendAgent(BaseAgent):
             HumanMessage(content=task),
         ]
 
-        result = agent.invoke(
-            {
-                "messages": messages,
-                "user_preferences": {"style": "technical", "verbosity": "detailed"},
-            }
-        )
+        # Run agent in a loop to handle tool calls
+        while True:
+            result = agent.invoke(
+                {
+                    "messages": messages,
+                    "user_preferences": {"style": "technical", "verbosity": "detailed"},
+                }
+            )
+
+            # Check if the last message is a tool use
+            if "messages" in result:
+                messages = result["messages"]
+                last_message = messages[-1]
+
+                # Check if the last message contains tool use
+                if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+                    for tool_call in last_message.tool_calls:
+                        tool_name = tool_call.get("name") or tool_call.get("tool")
+                        tool_input = tool_call.get("args") or tool_call.get("input")
+
+                        logger.info(f"Calling tool: {tool_name} with input: {tool_input}")
+
+                        # Execute the tool
+                        tool_result = self._handle_tool_call(tool_name, tool_input)
+
+                        # Add tool message to messages
+                        messages.append(
+                            ToolMessage(
+                                content=tool_result,
+                                tool_call_id=tool_call.get("id"),
+                                name=tool_name
+                            )
+                        )
+                        logger.info(f"Tool result: {tool_result}")
+                else:
+                    # No more tool calls, exit loop
+                    break
+            else:
+                break
+
         breakpoint()
         return result
 
