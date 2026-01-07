@@ -9,7 +9,6 @@ packages = [{include = "backend"}]
 [tool.poetry.dependencies]
 python = "^3.13"
 resemble = "^1.7.0"
-langchain = "^1.2.0"
 langchain-deepseek = "^1.0.1"
 langchain-groq = "^1.1.1"
 langchain-openai = "^1.1.6"
@@ -19,6 +18,7 @@ boto3 = "^1.42.21"
 langchain-perplexity = "^1.1.0"
 langgraph = "^1.0.5"
 langsmith = "^0.6.1"
+langchain = "^1.2.1"
 
 [tool.poetry.scripts]
 app = "main:main"
