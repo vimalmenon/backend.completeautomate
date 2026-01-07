@@ -2,7 +2,7 @@ from backend.services.utility.system_prompt.system_prompt_utility import (
     SystemPromptUtility,
 )
 from backend.config.enum import TeamEnum
-from langgraph.prebuilt import create_react_agent
+from langgraph.prebuilt import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
@@ -54,28 +54,27 @@ class FrontendAgent(BaseAgent):
         return result
 
     def start_task(self, task: str):
-        agent = create_react_agent(
+        agent = create_agent(
             name=self.name,
             model=self.model,
             tools=self.tools,
-            # state_modifier=self.system_prompt
+            system_prompt=self.system_prompt,
         )
         messages = [
-            HumanMessage(content=(self.system_prompt + task)),
+            SystemMessage(
+                content="You are a frontend developer agent. Your role is to build and maintain the user interface of applications."
+            ),
+            HumanMessage(content=task),
         ]
-        # Pass messages as a dictionary with 'messages' key
-        for step in agent.stream({"messages": messages}, stream_mode="values"):
-            if "messages" in step:
-                step["messages"][-1].pretty_print()
 
-        # result = agent.invoke(
-        #     {
-        #         "messages": messages,
-        #         "user_preferences": {"style": "technical", "verbosity": "detailed"},
-        #     }
-        # )
+        result = agent.invoke(
+            {
+                "messages": messages,
+                "user_preferences": {"style": "technical", "verbosity": "detailed"},
+            }
+        )
         breakpoint()
-        # return result
+        return result
 
     def resume_task(self, task_id: str):
         pass
