@@ -2,7 +2,7 @@ from backend.services.utility.system_prompt.system_prompt_utility import (
     SystemPromptUtility,
 )
 from backend.config.enum import TeamEnum
-from langgraph.prebuilt import create_agent
+from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
@@ -101,10 +101,12 @@ class FrontendAgent(BaseAgent):
                 }
             )
 
-            # Check if the last message is a tool use
+            # Update messages with agent response
             if "messages" in result:
                 messages = result["messages"]
                 last_message = messages[-1]
+                last_message.pretty_print()
+                logger.info(f"Agent response: {last_message}")
 
                 # Check if the last message contains tool use
                 if hasattr(last_message, "tool_calls") and last_message.tool_calls:
@@ -128,6 +130,7 @@ class FrontendAgent(BaseAgent):
                         logger.info(f"Tool result: {tool_result}")
                 else:
                     # No more tool calls, exit loop
+                    logger.info("Agent completed task, no more tool calls")
                     break
             else:
                 break

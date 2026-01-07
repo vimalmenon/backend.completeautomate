@@ -1,6 +1,5 @@
 from backend.services.task.pending_task import PendingTask
 from backend.services.task.start_new_task import StartNewTask
-from backend.services.task.scrum_master_task import ScrumMasterAgent
 from backend.services.task.new_idea_task import NewIdeaTask
 
 
