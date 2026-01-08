@@ -47,6 +47,7 @@ class SystemPromptUtility:
         return responsibility_template.render(
             is_manager=(role == TeamEnum.MANAGER),
             is_frontend_developer=(role == TeamEnum.FRONTEND_DEVELOPER),
+            is_backend_developer=(role == TeamEnum.BACKEND_DEVELOPER),
         )
         if role == TeamEnum.MANAGER:
             return """
