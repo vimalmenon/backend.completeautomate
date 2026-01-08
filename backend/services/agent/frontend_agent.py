@@ -3,7 +3,7 @@ from backend.services.utility.system_prompt.system_prompt_utility import (
 )
 from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
-from backend.services.ai.deepseek_ai import DeepseekAI
+from backend.services.ai.groq_ai import GroqAI
 from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
@@ -24,7 +24,7 @@ class FrontendAgent(BaseAgent):
         self.system_prompt = SystemPromptUtility(
             role=self.role, teams=self.teams
         ).get_system_prompt()
-        self.model = DeepseekAI().get_model()
+        self.model = GroqAI().get_model()
         self.command_tool = CommandTool()
         self.tools = self._initialize_tools()
 
@@ -50,6 +50,8 @@ class FrontendAgent(BaseAgent):
             Tool execution result as string
         """
         if tool_name == "command_executor":
+            if not isinstance(tool_input, dict):
+                return json.dumps({"error": "Invalid input format for command_executor"})
             result = self.command_tool.execute_command(
                 command=tool_input.get("command"),
                 cwd=tool_input.get("cwd"),
