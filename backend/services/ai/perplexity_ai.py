@@ -21,8 +21,7 @@ class PerplexityAI:
         )
 
     def start(self, messages: list):
-        self.llm.invoke(messages)
-        return self.llm.content
+        return self.llm.invoke(messages)
 
     def get_model(self):
         return self.llm
