@@ -1,0 +1,81 @@
+import logging
+from datetime import datetime
+from uuid import uuid4
+
+from backend.data import (
+    Task,
+    YouTubeVideoDBData,
+    YouTubeVideoJobData,
+    YouTubeVideoSummarizeJobData,
+)
+from backend.database import YouTubeVideoDB
+from backend.database.task.task_db import TaskDB
+from backend.enum import JobEnum, TaskStatusEnum
+from backend.generator.base_generator import BaseGenerator
+from backend.integration.youtube.youtube_api import YouTubeAPI
+
+logger = logging.getLogger(__name__)
+
+
+class YouTubeVideoGenerator(BaseGenerator):
+
+    def __init__(self, task: Task):
+        super().__init__(task)
+        logger.info("Initializing YouTubeVideoGenerator")
+        self.youtube_api = YouTubeAPI()
+        self.job_data = YouTubeVideoJobData.to_cls(task.payload)
+        self.db = YouTubeVideoDB(self.job_data.channel_id)
+
+    def generate(self) -> TaskStatusEnum:
+        logger.info(
+            "Fetching videos for channel id: %s",
+            self.job_data.channel_id,
+        )
+        videos = YouTubeAPI().list_all_videos(self.job_data.channel_id)
+        logger.info("Found %s videos to process", len(videos))
+        for video in videos:
+            self.__update_video(video["id"])
+        return TaskStatusEnum.IN_PROGRESS
+
+    def __update_video(self, video_id: str) -> None:
+        logger.info("Updating video data for id: %s", video_id)
+        video_from_db = self.db.fetch_video_from_db(video_id)
+        if not video_from_db:
+            logger.info("Video not found in DB. Fetching details from API.")
+            youtube_response = self.youtube_api.fetch_video_details(video_id)
+            youtube_data = YouTubeVideoDBData.to_cls_from_response(
+                {**youtube_response, "task_id": str(self.task.id)}
+            )
+            self.db.add_video(youtube_data)
+            self.__create_task_for_transcript(video_id)
+
+        if video_from_db and video_from_db.past_update_time(
+            int(self.job_data.poll_frequency_in_days)
+        ):
+            logger.info("Video data stale. Refreshing from API.")
+            youtube_response = self.youtube_api.fetch_video_details(video_id)
+            latest_youtube_data = YouTubeVideoDBData.to_cls_from_response(
+                {**youtube_response, "task_id": str(self.task.id)}
+            )
+            self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
+
+    def __create_task_for_transcript(self, video_id: str) -> None:
+        job = YouTubeVideoSummarizeJobData(
+            video_id=video_id, channel_id=self.job_data.channel_id
+        )
+        task = Task(
+            id=uuid4(),
+            job_type=JobEnum.YouTubeVideoSummarize,
+            payload=job.to_json(),
+            created_by=JobEnum.YouTubeVideo,
+            created_at=datetime.now(),
+            failed_count=0,
+            status=TaskStatusEnum.IN_PROGRESS,
+            trail=[self.task.id],
+        )
+        TaskDB().add_task(task)
+        logger.info(
+            "Created summarize task for video id: %s with task id: %s",
+            video_id,
+            task.id,
+        )
