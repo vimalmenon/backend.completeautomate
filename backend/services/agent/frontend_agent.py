@@ -51,11 +51,13 @@ class FrontendAgent(BaseAgent):
         """
         if tool_name == "command_executor":
             if not isinstance(tool_input, dict):
-                return json.dumps({"error": "Invalid input format for command_executor"})
+                return json.dumps(
+                    {"error": "Invalid input format for command_executor"}
+                )
             result = self.command_tool.execute_command(
                 command=tool_input.get("command"),
                 cwd=tool_input.get("cwd"),
-                shell=tool_input.get("shell", False)
+                shell=tool_input.get("shell", False),
             )
             return json.dumps(result)
         else:
@@ -116,7 +118,9 @@ class FrontendAgent(BaseAgent):
                         tool_name = tool_call.get("name") or tool_call.get("tool")
                         tool_input = tool_call.get("args") or tool_call.get("input")
 
-                        logger.info(f"Calling tool: {tool_name} with input: {tool_input}")
+                        logger.info(
+                            f"Calling tool: {tool_name} with input: {tool_input}"
+                        )
 
                         # Execute the tool
                         tool_result = self._handle_tool_call(tool_name, tool_input)
@@ -126,7 +130,7 @@ class FrontendAgent(BaseAgent):
                             ToolMessage(
                                 content=tool_result,
                                 tool_call_id=tool_call.get("id"),
-                                name=tool_name
+                                name=tool_name,
                             )
                         )
                         logger.info(f"Tool result: {tool_result}")

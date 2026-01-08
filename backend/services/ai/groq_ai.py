@@ -8,6 +8,7 @@ class ModelEnum(Enum):
     QWEN_32B = "qwen/qwen3-32b"
     LLAMA_3_1_8B_INSTANT = "llama-3.1-8b-instant"
 
+
 class GroqAI:
     def __init__(
         self,

@@ -189,7 +189,9 @@ class CommandTool:
             >>> print(result["stdout"])
         """
         # Validate input first
-        is_valid, error_msg = self.validate_input({"command": command, "cwd": cwd, "shell": shell})
+        is_valid, error_msg = self.validate_input(
+            {"command": command, "cwd": cwd, "shell": shell}
+        )
         if not is_valid:
             logger.error(f"Validation failed: {error_msg}")
             return CommandOutput(
@@ -198,10 +200,12 @@ class CommandTool:
                 stderr=f"Validation error: {error_msg}",
                 success=False,
             )
-        
+
         try:
-            logger.info(f"Executing command: {command[:100]}... (cwd={cwd}, shell={shell})")
-            
+            logger.info(
+                f"Executing command: {command[:100]}... (cwd={cwd}, shell={shell})"
+            )
+
             # Parse command into list if it's a string and shell is False
             if isinstance(command, str) and not shell:
                 # Use shlex to properly handle quoted arguments
@@ -225,8 +229,10 @@ class CommandTool:
                 stderr=result.stderr,
                 success=result.returncode == 0,
             )
-            
-            logger.info(f"Command executed successfully. Return code: {result.returncode}")
+
+            logger.info(
+                f"Command executed successfully. Return code: {result.returncode}"
+            )
             return output
 
         except subprocess.TimeoutExpired as e:
@@ -275,7 +281,7 @@ class CommandTool:
 
         if not isinstance(input_data["command"], str):
             return False, "'command' must be a string"
-        
+
         if not input_data["command"].strip():
             return False, "'command' cannot be empty"
 
@@ -294,7 +300,7 @@ class CommandTool:
     def invoke(self, input_data: Union[Dict[str, Any], CommandInput]) -> CommandOutput:
         """
         Invoke the tool with langchain-compatible interface.
-        
+
         This method handles langchain tool invocations and validates input.
 
         Args:
@@ -318,5 +324,5 @@ class CommandTool:
         return self.execute_command(
             command=input_data.get("command", ""),
             cwd=input_data.get("cwd"),
-            shell=input_data.get("shell", False)
+            shell=input_data.get("shell", False),
         )
