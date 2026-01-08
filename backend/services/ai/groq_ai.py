@@ -6,11 +6,12 @@ from backend.config.enum import AICreativityLevelEnum
 
 class ModelEnum(Enum):
     QWEN_32B = "qwen/qwen3-32b"
+    LLAMA_3_1_8B_INSTANT = "llama-3.1-8b-instant"
 
 class GroqAI:
     def __init__(
         self,
-        model: ModelEnum = ModelEnum.QWEN_32B,
+        model: ModelEnum = ModelEnum.LLAMA_3_1_8B_INSTANT,
         creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW,
     ):
         self.llm = ChatGroq(
