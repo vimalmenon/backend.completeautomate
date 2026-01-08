@@ -1,5 +1,9 @@
 import subprocess
-from typing import Optional, Dict, Any, TypedDict
+import logging
+import shlex
+from typing import Optional, Dict, Any, TypedDict, Union
+
+logger = logging.getLogger(__name__)
 
 
 class CommandInput(TypedDict, total=False):
@@ -101,7 +105,10 @@ class CommandTool:
         """
         if timeout > self.MAX_TIMEOUT:
             raise ValueError(f"Timeout cannot exceed {self.MAX_TIMEOUT} seconds")
+        if timeout <= 0:
+            raise ValueError(f"Timeout must be positive, got {timeout}")
         self.timeout = timeout
+        logger.info(f"CommandTool initialized with timeout: {timeout}s")
 
     @classmethod
     def get_tool_definition(cls) -> Dict[str, Any]:
@@ -181,10 +188,24 @@ class CommandTool:
             >>> result = tool.execute_command("echo $HOME", shell=True)
             >>> print(result["stdout"])
         """
+        # Validate input first
+        is_valid, error_msg = self.validate_input({"command": command, "cwd": cwd, "shell": shell})
+        if not is_valid:
+            logger.error(f"Validation failed: {error_msg}")
+            return CommandOutput(
+                returncode=-1,
+                stdout="",
+                stderr=f"Validation error: {error_msg}",
+                success=False,
+            )
+        
         try:
+            logger.info(f"Executing command: {command[:100]}... (cwd={cwd}, shell={shell})")
+            
             # Parse command into list if it's a string and shell is False
             if isinstance(command, str) and not shell:
-                cmd_list = command.split()
+                # Use shlex to properly handle quoted arguments
+                cmd_list = shlex.split(command)
             else:
                 cmd_list = command
 
@@ -198,25 +219,41 @@ class CommandTool:
                 timeout=self.timeout,
             )
 
-            return CommandOutput(
+            output = CommandOutput(
                 returncode=result.returncode,
                 stdout=result.stdout,
                 stderr=result.stderr,
                 success=result.returncode == 0,
             )
+            
+            logger.info(f"Command executed successfully. Return code: {result.returncode}")
+            return output
 
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
+            error_msg = f"Command execution timed out after {self.timeout} seconds"
+            logger.error(error_msg)
             return CommandOutput(
                 returncode=-1,
                 stdout="",
-                stderr=f"Command execution timed out after {self.timeout} seconds",
+                stderr=error_msg,
+                success=False,
+            )
+        except FileNotFoundError as e:
+            error_msg = f"Command not found: {str(e)}"
+            logger.error(error_msg)
+            return CommandOutput(
+                returncode=-1,
+                stdout="",
+                stderr=error_msg,
                 success=False,
             )
         except Exception as e:
+            error_msg = f"Error executing command: {str(e)}"
+            logger.error(error_msg, exc_info=True)
             return CommandOutput(
                 returncode=-1,
                 stdout="",
-                stderr=f"Error executing command: {str(e)}",
+                stderr=error_msg,
                 success=False,
             )
 
@@ -238,13 +275,48 @@ class CommandTool:
 
         if not isinstance(input_data["command"], str):
             return False, "'command' must be a string"
+        
+        if not input_data["command"].strip():
+            return False, "'command' cannot be empty"
 
         if "cwd" in input_data and input_data["cwd"] is not None:
             if not isinstance(input_data["cwd"], str):
                 return False, "'cwd' must be a string or null"
+            if not input_data["cwd"].strip():
+                return False, "'cwd' cannot be an empty string"
 
         if "shell" in input_data:
             if not isinstance(input_data["shell"], bool):
                 return False, "'shell' must be a boolean"
 
         return True, ""
+
+    def invoke(self, input_data: Union[Dict[str, Any], CommandInput]) -> CommandOutput:
+        """
+        Invoke the tool with langchain-compatible interface.
+        
+        This method handles langchain tool invocations and validates input.
+
+        Args:
+            input_data: Dictionary with command, cwd, and shell parameters
+
+        Returns:
+            CommandOutput with execution results
+        """
+        # Validate input
+        is_valid, error_msg = self.validate_input(input_data)
+        if not is_valid:
+            logger.error(f"Input validation failed: {error_msg}")
+            return CommandOutput(
+                returncode=-1,
+                stdout="",
+                stderr=f"Input validation failed: {error_msg}",
+                success=False,
+            )
+
+        # Execute command
+        return self.execute_command(
+            command=input_data.get("command", ""),
+            cwd=input_data.get("cwd"),
+            shell=input_data.get("shell", False)
+        )
