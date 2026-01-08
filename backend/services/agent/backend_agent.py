@@ -1,4 +1,3 @@
-
 from backend.services.utility.system_prompt.system_prompt_utility import (
     SystemPromptUtility,
 )
