@@ -10,6 +10,7 @@ from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List
 import json
 import logging
+from langchain.tools import tool
 
 logger = logging.getLogger(__name__)
 

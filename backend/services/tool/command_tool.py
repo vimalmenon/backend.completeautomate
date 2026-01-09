@@ -2,6 +2,7 @@ import subprocess
 import logging
 import shlex
 from typing import Optional, Dict, Any, TypedDict, Union
+from langchain.tools import tool
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +111,7 @@ class CommandTool:
         self.timeout = timeout
         logger.info(f"CommandTool initialized with timeout: {timeout}s")
 
-    @classmethod
-    def get_tool_definition(cls) -> Dict[str, Any]:
+    def get_tool_definition(self) -> Dict[str, Any]:
         """
         Get complete tool definition for registration.
 
@@ -119,12 +119,12 @@ class CommandTool:
             Dictionary with full tool definition including metadata and schemas
         """
         return {
-            "name": cls.TOOL_NAME,
-            "version": cls.TOOL_VERSION,
-            "description": cls.TOOL_DESCRIPTION,
-            "category": cls.TOOL_CATEGORY,
-            "inputSchema": cls.INPUT_SCHEMA,
-            "outputSchema": cls.OUTPUT_SCHEMA,
+            "name": self.TOOL_NAME,
+            "version": self.TOOL_VERSION,
+            "description": self.TOOL_DESCRIPTION,
+            "category": self.TOOL_CATEGORY,
+            "inputSchema": self.INPUT_SCHEMA,
+            "outputSchema": self.OUTPUT_SCHEMA,
             "examples": [
                 {
                     "name": "List directory contents",
