@@ -31,8 +31,7 @@ class AppService:
                 - Create responsive header with logo on left and navigation on right
                 - Implement mobile hamburger menu with smooth slide-in animation
                 - Add sticky header functionality that appears on scroll
-                - Include navigation items: Home, Services, About, Case Studies, Contact
-                - Add CTA button "Get Free Consultation" with hover effects
+                - Include navigation items: Home, Services, About, Contact
                 - Ensure accessibility with proper ARIA labels and keyboard navigation
             """
         )

@@ -22,9 +22,10 @@ class FrontendAgent(BaseAgent):
     teams = []
 
     def __init__(self):
-        self.system_prompt = SystemPromptHelper(
+        self.system_prompt_helper = SystemPromptHelper(
             role=self.role, teams=self.teams
-        ).get_system_prompt()
+        )
+        self.system_prompt = self.system_prompt_helper.get_system_prompt()
         self.model = DeepseekAI().get_model()
         self.command_tool = CommandTool()
         self.tools = self._initialize_tools()
@@ -89,10 +90,11 @@ class FrontendAgent(BaseAgent):
             tools=self.tools,
             system_prompt=self.system_prompt,
         )
+        system_message = self.system_prompt_helper.get_system_message(
+            content="You are a frontend developer agent. Your role is to build and maintain the user interface of applications."
+        )
         messages = [
-            SystemMessage(
-                content="You are a frontend developer agent. Your role is to build and maintain the user interface of applications."
-            ),
+            SystemMessage(content=system_message),
             HumanMessage(content=task),
         ]
 
@@ -114,6 +116,7 @@ class FrontendAgent(BaseAgent):
 
                 # Check if the last message contains tool use
                 if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+                    breakpoint()
                     for tool_call in last_message.tool_calls:
                         tool_name = tool_call.get("name") or tool_call.get("tool")
                         tool_input = tool_call.get("args") or tool_call.get("input")
@@ -124,7 +127,8 @@ class FrontendAgent(BaseAgent):
 
                         # Execute the tool
                         tool_result = self._handle_tool_call(tool_name, tool_input)
-
+                        print(tool_result)
+                        breakpoint
                         # Add tool message to messages
                         messages.append(
                             ToolMessage(
