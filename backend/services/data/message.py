@@ -12,8 +12,8 @@ class Message:
 
     def to_dict(self) -> dict:
         return {
-            "role": self.role, 
-            "content": self.content, 
+            "role": self.role,
+            "content": self.content,
             "assigned_to": self.assigned_to,
             "tool_call_name": self.tool_call_name,
             "tool_call_results": self.tool_call_results,

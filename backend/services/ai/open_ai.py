@@ -5,6 +5,7 @@ from enum import Enum
 class ModelEnum(Enum):
     GPT_5_NANO = "gpt-5-nano"
     GPT_4O_MINI = "gpt-4o-mini"
+    GPT_5 = "gpt-5"
 
 
 class OpenAI:

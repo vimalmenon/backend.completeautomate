@@ -34,6 +34,10 @@ class TeamEnum(dict[str, str], Enum):
         "role": "MANAGER",
         "responsibility": "Overseeing team performance and project delivery",
     }
+    GRAPHIC_DESIGNER = {
+        "role": "GRAPHIC DESIGNER",
+        "responsibility": "Designing visual content for various media",
+    }
 
     def get_role(self) -> str:
         return self.value["role"]
