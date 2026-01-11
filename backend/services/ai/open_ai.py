@@ -16,6 +16,5 @@ class OpenAI:
             temperature=0,
         )
 
-    def start(self, messages: list):
-        self.llm.invoke(messages)
-        return self.llm.content
+    def get_model(self):
+        return self.llm
