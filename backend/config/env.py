@@ -16,6 +16,7 @@ class Env:
     AWS_SECRET_MANAGER: str = os.environ["AWS_SECRET_MANAGER"]
     GROQ_API_KEY: str = os.environ["GROQ_API_KEY"]
     ANTHROPIC_API_KEY: str = os.environ["ANTHROPIC_API_KEY"]
+    AWS_TABLE: str = os.environ["AWS_TABLE"]
     DEEPSEEK_API_KEY: str
 
     AWS_TABLE: str

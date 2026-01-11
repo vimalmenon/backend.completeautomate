@@ -141,8 +141,6 @@ class FrontendAgent(BaseAgent):
                     break
             else:
                 break
-
-        breakpoint()
         return result
 
     def resume_task(self, task_id: str):
