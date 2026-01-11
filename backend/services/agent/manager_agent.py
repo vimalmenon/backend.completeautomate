@@ -1,5 +1,5 @@
-from backend.services.utility.system_prompt.system_prompt_utility import (
-    SystemPromptUtility,
+from backend.services.helper.system_prompt.system_prompt_helper import (
+    SystemPromptHelper,
 )
 from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
@@ -15,7 +15,7 @@ class ManagerAgent(BaseAgent):
     teams: list = [TeamEnum.SCRUM_MASTER, TeamEnum.RESEARCHER]
 
     def __init__(self):
-        self.system_prompt = SystemPromptUtility(
+        self.system_prompt = SystemPromptHelper(
             role=self.role, teams=self.teams
         ).get_system_prompt()
         self.model = DeepseekAI().get_model()

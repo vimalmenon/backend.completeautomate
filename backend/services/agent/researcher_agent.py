@@ -1,8 +1,8 @@
 from langchain.agents import create_agent
 from langchain.messages import SystemMessage, HumanMessage
 
-from backend.services.utility.system_prompt.system_prompt_utility import (
-    SystemPromptUtility,
+from backend.services.helper.system_prompt.system_prompt_helper import (
+    SystemPromptHelper,
 )
 from backend.config.enum import TeamEnum
 from backend.services.ai.perplexity_ai import PerplexityAI
@@ -16,7 +16,7 @@ class ResearcherAgent(BaseAgent):
     teams: list = []
 
     def __init__(self):
-        self.system_prompt = SystemPromptUtility(
+        self.system_prompt = SystemPromptHelper(
             role=self.role, teams=self.teams
         ).get_system_prompt()
         self.model = PerplexityAI().get_model()

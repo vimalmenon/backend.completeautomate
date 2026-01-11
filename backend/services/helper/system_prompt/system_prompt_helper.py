@@ -9,7 +9,7 @@ jinja_env = Environment(
 )
 
 
-class SystemPromptUtility:
+class SystemPromptHelper:
     system_prompt: str
     role: TeamEnum
 
