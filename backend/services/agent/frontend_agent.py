@@ -116,7 +116,6 @@ class FrontendAgent(BaseAgent):
 
                 # Check if the last message contains tool use
                 if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-                    breakpoint()
                     for tool_call in last_message.tool_calls:
                         tool_name = tool_call.get("name") or tool_call.get("tool")
                         tool_input = tool_call.get("args") or tool_call.get("input")
@@ -127,8 +126,7 @@ class FrontendAgent(BaseAgent):
 
                         # Execute the tool
                         tool_result = self._handle_tool_call(tool_name, tool_input)
-                        print(tool_result)
-                        breakpoint
+
                         # Add tool message to messages
                         messages.append(
                             ToolMessage(
