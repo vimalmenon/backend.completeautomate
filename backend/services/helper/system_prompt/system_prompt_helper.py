@@ -48,6 +48,7 @@ class SystemPromptHelper:
             is_manager=(role == TeamEnum.MANAGER),
             is_frontend_developer=(role == TeamEnum.FRONTEND_DEVELOPER),
             is_backend_developer=(role == TeamEnum.BACKEND_DEVELOPER),
+            is_graphic_designer=(role == TeamEnum.GRAPHIC_DESIGNER),
         )
         if role == TeamEnum.MANAGER:
             return """

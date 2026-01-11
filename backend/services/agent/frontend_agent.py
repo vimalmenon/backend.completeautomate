@@ -36,8 +36,7 @@ class FrontendAgent(BaseAgent):
         Returns:
             List of tool definitions
         """
-        tools = [self.command_tool.get_tool_definition()]
-        return tools
+        return [self.command_tool.get_tool_definition()]
 
     def _handle_tool_call(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
         """
