@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class FrontendAgent(BaseAgent):
-    name = "Elizabeth"
-    role = TeamEnum.FRONTEND_DEVELOPER
-    responsibility = "Building and maintaining the user interface of applications"
-    teams = []
+    name: str = "Elizabeth"
+    role: TeamEnum = TeamEnum.FRONTEND_DEVELOPER
+    responsibility: str = "Building and maintaining the user interface of applications"
+    teams: List[TeamEnum] = []
 
     def __init__(self):
         self.system_prompt_helper = SystemPromptHelper(role=self.role, teams=self.teams)

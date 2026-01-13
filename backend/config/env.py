@@ -19,8 +19,6 @@ class Env:
     AWS_TABLE: str = os.environ["AWS_TABLE"]
     DEEPSEEK_API_KEY: str
 
-    AWS_TABLE: str
-
     def __init__(self):
         secrets = self.get_from_aws_secret()
         self.DEEPSEEK_API_KEY = str(

@@ -4,16 +4,17 @@ from backend.services.helper.system_prompt.system_prompt_helper import (
 from backend.services.agent.base_agent import BaseAgent
 from backend.config.enum import TeamEnum
 from backend.services.ai.open_ai import OpenAI, ModelEnum
+from typing import List
 
 
 # https://docs.langchain.com/oss/python/integrations/chat/openai#image-generation
 
 
 class GraphicDesignerAgent(BaseAgent):
-    name = "Julia"
-    role = TeamEnum.GRAPHIC_DESIGNER
-    responsibility = "Designing visual content for various media"
-    teams = []
+    name: str = "Julia"
+    role: TeamEnum = TeamEnum.GRAPHIC_DESIGNER
+    responsibility: str = "Designing visual content for various media"
+    teams: List[TeamEnum] = []
 
     def __init__(self) -> None:
         self.system_prompt = SystemPromptHelper(

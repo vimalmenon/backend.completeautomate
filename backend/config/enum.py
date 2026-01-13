@@ -9,41 +9,52 @@ class TaskStatusEnum(str, Enum):
     PENDING_APPROVAL = "PENDING_APPROVAL"
 
 
-class TeamEnum(dict[str, str], Enum):
-    SCRUM_MASTER = {
-        "role": "SCRUM MASTER",
-        "responsibility": "Overseeing project management and team coordination",
-    }
-    RESEARCHER = {
-        "role": "RESEARCHER",
-        "responsibility": "Conducting in-depth research to gather relevant information",
-    }
-    BACKEND_DEVELOPER = {
-        "role": "BACKEND DEVELOPER",
-        "responsibility": "Designing and implementing server-side logic and databases",
-    }
-    FRONTEND_DEVELOPER = {
-        "role": "FRONTEND DEVELOPER",
-        "responsibility": "Creating user interfaces and enhancing user experience",
-    }
-    SCRIPT_WRITER = {
-        "role": "SCRIPT WRITER",
-        "responsibility": "Creating engaging and informative video scripts",
-    }
-    MANAGER = {
-        "role": "MANAGER",
-        "responsibility": "Overseeing team performance and project delivery",
-    }
-    GRAPHIC_DESIGNER = {
-        "role": "GRAPHIC DESIGNER",
-        "responsibility": "Designing visual content for various media",
+class TeamEnum(str, Enum):
+    SCRUM_MASTER = "SCRUM_MASTER"
+    RESEARCHER = "RESEARCHER"
+    BACKEND_DEVELOPER = "BACKEND_DEVELOPER"
+    FRONTEND_DEVELOPER = "FRONTEND_DEVELOPER"
+    SCRIPT_WRITER = "SCRIPT_WRITER"
+    MANAGER = "MANAGER"
+    GRAPHIC_DESIGNER = "GRAPHIC_DESIGNER"
+
+    # Team roles and responsibilities mapping
+    TEAM_INFO = {
+        "SCRUM_MASTER": {
+            "role": "SCRUM MASTER",
+            "responsibility": "Overseeing project management and team coordination",
+        },
+        "RESEARCHER": {
+            "role": "RESEARCHER",
+            "responsibility": "Conducting in-depth research to gather relevant information",
+        },
+        "BACKEND_DEVELOPER": {
+            "role": "BACKEND DEVELOPER",
+            "responsibility": "Designing and implementing server-side logic and databases",
+        },
+        "FRONTEND_DEVELOPER": {
+            "role": "FRONTEND DEVELOPER",
+            "responsibility": "Creating user interfaces and enhancing user experience",
+        },
+        "SCRIPT_WRITER": {
+            "role": "SCRIPT WRITER",
+            "responsibility": "Creating engaging and informative video scripts",
+        },
+        "MANAGER": {
+            "role": "MANAGER",
+            "responsibility": "Overseeing team performance and project delivery",
+        },
+        "GRAPHIC_DESIGNER": {
+            "role": "GRAPHIC DESIGNER",
+            "responsibility": "Designing visual content for various media",
+        },
     }
 
     def get_role(self) -> str:
-        return self.value["role"]
+        return self.TEAM_INFO[self.value]["role"]
 
     def get_responsibility(self) -> str:
-        return self.value["responsibility"]
+        return self.TEAM_INFO[self.value]["responsibility"]
 
 
 class AICreativityLevelEnum(str, Enum):

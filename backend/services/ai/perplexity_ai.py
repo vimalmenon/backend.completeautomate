@@ -1,6 +1,7 @@
 from langchain_perplexity import ChatPerplexity
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
+from enum import Enum
 
 
 class ModelEnum(Enum):
