@@ -27,6 +27,7 @@ app = "main:main"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.19.1"
+boto3-stubs = "^1.42.27"
 
 [build-system]
 requires = ["poetry-core"]
