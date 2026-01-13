@@ -2,6 +2,8 @@ from langchain_groq import ChatGroq
 from enum import Enum
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
+from pydantic import SecretStr
+
 
 
 class ModelEnum(Enum):
@@ -18,7 +20,7 @@ class GroqAI:
         self.llm = ChatGroq(
             model=model.value,
             temperature=creativity_level.value,
-            api_key=env.GROQ_API_KEY,
+            api_key=SecretStr(env.GROQ_API_KEY),
         )
 
     def get_model(self):

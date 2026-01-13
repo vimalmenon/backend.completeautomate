@@ -7,7 +7,7 @@ from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import json
 import logging
 from langchain.tools import tool
@@ -63,7 +63,7 @@ class FrontendAgent(BaseAgent):
             return json.dumps({"error": f"Unknown tool: {tool_name}"})
 
     def execute_command(
-        self, command: str, cwd: str = None, shell: bool = False
+        self, command: str, cwd: str | None = None, shell: bool = False
     ) -> Dict[str, Any]:
         """
         Execute a shell command using the CommandTool.

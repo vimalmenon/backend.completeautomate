@@ -2,6 +2,7 @@ from langchain_perplexity import ChatPerplexity
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
 from enum import Enum
+from pydantic import SecretStr
 
 
 class ModelEnum(Enum):
@@ -18,7 +19,7 @@ class PerplexityAI:
         self.llm = ChatPerplexity(
             model=model.value,
             temperature=creativity_level.value,
-            api_key=env.PPLX_API_KEY,
+            api_key=SecretStr(env.PPLX_API_KEY),
         )
 
     def start(self, messages: list):
