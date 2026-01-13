@@ -5,11 +5,6 @@ from jinja2 import Environment, FileSystemLoader
 
 # Set up environment to load templates from a directory
 jinja_env = Environment(
-
-
-
-
-
     loader=FileSystemLoader("backend/services/helper/system_prompt/templates")
 )
 

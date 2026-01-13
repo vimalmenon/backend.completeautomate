@@ -2,6 +2,7 @@ from langchain_anthropic import ChatAnthropic
 from enum import Enum
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
+from pydantic import SecretStr
 
 
 class ModelEnum(Enum):
@@ -19,7 +20,7 @@ class AnthropicAI:
         self.llm = ChatAnthropic(
             model=model.value,
             temperature=creativity_level.value,
-            api_key=env.ANTHROPIC_API_KEY,
+            api_key=SecretStr(env.ANTHROPIC_API_KEY),
         )
 
     def start(self, messages: list):

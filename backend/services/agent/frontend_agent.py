@@ -22,9 +22,7 @@ class FrontendAgent(BaseAgent):
     teams = []
 
     def __init__(self):
-        self.system_prompt_helper = SystemPromptHelper(
-            role=self.role, teams=self.teams
-        )
+        self.system_prompt_helper = SystemPromptHelper(role=self.role, teams=self.teams)
         self.system_prompt = self.system_prompt_helper.get_system_prompt()
         self.model = DeepseekAI().get_model()
         self.command_tool = CommandTool()
