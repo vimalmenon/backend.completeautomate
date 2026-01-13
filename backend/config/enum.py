@@ -1,4 +1,38 @@
 from enum import Enum
+from typing import Dict, Any
+
+
+# Team roles and responsibilities mapping
+TEAM_INFO: Dict[str, Dict[str, str]] = {
+    "SCRUM_MASTER": {
+        "role": "SCRUM MASTER",
+        "responsibility": "Overseeing project management and team coordination",
+    },
+    "RESEARCHER": {
+        "role": "RESEARCHER",
+        "responsibility": "Conducting in-depth research to gather relevant information",
+    },
+    "BACKEND_DEVELOPER": {
+        "role": "BACKEND DEVELOPER",
+        "responsibility": "Designing and implementing server-side logic and databases",
+    },
+    "FRONTEND_DEVELOPER": {
+        "role": "FRONTEND DEVELOPER",
+        "responsibility": "Creating user interfaces and enhancing user experience",
+    },
+    "SCRIPT_WRITER": {
+        "role": "SCRIPT WRITER",
+        "responsibility": "Creating engaging and informative video scripts",
+    },
+    "MANAGER": {
+        "role": "MANAGER",
+        "responsibility": "Overseeing team performance and project delivery",
+    },
+    "GRAPHIC_DESIGNER": {
+        "role": "GRAPHIC DESIGNER",
+        "responsibility": "Designing visual content for various media",
+    },
+}
 
 
 class TaskStatusEnum(str, Enum):
@@ -18,43 +52,11 @@ class TeamEnum(str, Enum):
     MANAGER = "MANAGER"
     GRAPHIC_DESIGNER = "GRAPHIC_DESIGNER"
 
-    # Team roles and responsibilities mapping
-    TEAM_INFO = {
-        "SCRUM_MASTER": {
-            "role": "SCRUM MASTER",
-            "responsibility": "Overseeing project management and team coordination",
-        },
-        "RESEARCHER": {
-            "role": "RESEARCHER",
-            "responsibility": "Conducting in-depth research to gather relevant information",
-        },
-        "BACKEND_DEVELOPER": {
-            "role": "BACKEND DEVELOPER",
-            "responsibility": "Designing and implementing server-side logic and databases",
-        },
-        "FRONTEND_DEVELOPER": {
-            "role": "FRONTEND DEVELOPER",
-            "responsibility": "Creating user interfaces and enhancing user experience",
-        },
-        "SCRIPT_WRITER": {
-            "role": "SCRIPT WRITER",
-            "responsibility": "Creating engaging and informative video scripts",
-        },
-        "MANAGER": {
-            "role": "MANAGER",
-            "responsibility": "Overseeing team performance and project delivery",
-        },
-        "GRAPHIC_DESIGNER": {
-            "role": "GRAPHIC DESIGNER",
-            "responsibility": "Designing visual content for various media",
-        },
-    }
-
     def get_role(self) -> str:
-        return self.TEAM_INFO[self.value]["role"]
+        return TEAM_INFO[self.value]["role"]
 
     def get_responsibility(self) -> str:
-        return self.TEAM_INFO[self.value]["responsibility"]
+        return TEAM_INFO[self.value]["responsibility"]
 
 
 class AICreativityLevelEnum(str, Enum):

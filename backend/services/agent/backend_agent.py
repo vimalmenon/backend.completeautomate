@@ -3,13 +3,14 @@ from backend.services.helper.system_prompt.system_prompt_helper import (
 )
 from backend.services.agent.base_agent import BaseAgent
 from backend.config.enum import TeamEnum
+from typing import List
 
 
 class BackendAgent(BaseAgent):
-    name = "Backend Agent"
-    role = TeamEnum.BACKEND_DEVELOPER
-    responsibility = "Building and maintaining the server-side logic and databases"
-    teams = []
+    name: str = "Backend Agent"
+    role: TeamEnum = TeamEnum.BACKEND_DEVELOPER
+    responsibility: str = "Building and maintaining the server-side logic and databases"
+    teams: List[TeamEnum] = []
 
     def __init__(self):
         self.system_prompt = SystemPromptHelper(
