@@ -83,19 +83,31 @@ npm run tsc
 ## Code Quality Checks
 **Before committing code, you MUST run the following commands to ensure consistency:**
 ```bash
-# 1. Run type checking with mypy (if configured)
-poetry run mypy backend/
+# Option 1: Use Make (Recommended - runs all checks)
+make check
 
-# 2. Run linting and formatting checks
-poetry run black --check backend/
+# Option 2: Run checks individually
+make format      # Auto-format code with black
+make lint        # Run flake8 linter
+make type-check  # Run mypy type checker
+make test        # Run all tests
 
-# 3. Run all tests to ensure nothing breaks
-poetry run pytest tests/ -v
+# Option 3: Use Tox (runs in isolated environments)
+tox              # Run all checks
+tox -p auto      # Run all checks in parallel (faster)
 ```
 - All checks must pass before creating a pull request
+- Use `make format` to auto-fix formatting issues
+- Use `make help` to see all available commands
 - If any issues remain, fix them manually before committing
 - Ensure no errors appear in the console output
 - Verify all tests pass with green checkmarks
+
+**Quick Reference**:
+- `make check` - Run all checks (format, lint, type-check, test)
+- `make format` - Auto-format code
+- `make format-check` - Check formatting without changes
+- See CODE_QUALITY_GUIDE.md for detailed documentation
 
 ## Project Location
 - Backend repository: `/Users/vimalmenon/code/completeautomate/backend.completeautomate`
