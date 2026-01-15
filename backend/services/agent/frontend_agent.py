@@ -55,13 +55,15 @@ class FrontendAgent(BaseAgent):
                 )
             command = tool_input.get("command")
             shell = tool_input.get("shell", False)
-            
+
             # Auto-detect if shell is needed (contains shell operators)
             shell_operators = ("&&", "||", "|", ">", "<", "&", "$")
             if not shell and command and any(op in command for op in shell_operators):
                 shell = True
-                logger.info(f"Auto-enabling shell mode due to shell operators in command: {command}")
-            
+                logger.info(
+                    f"Auto-enabling shell mode due to shell operators in command: {command}"
+                )
+
             result = self.command_tool.execute_command(
                 command=command,
                 cwd=tool_input.get("cwd"),

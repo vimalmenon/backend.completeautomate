@@ -259,12 +259,18 @@ class FileTool:
 
         # Check allowed directories
         if not self._is_path_allowed(file_path):
-            return False, f"File path is not in allowed directories: {self.allowed_dirs}"
+            return (
+                False,
+                f"File path is not in allowed directories: {self.allowed_dirs}",
+            )
 
         # Check file extension
         _, ext = os.path.splitext(file_path)
         if ext and ext not in self.ALLOWED_EXTENSIONS:
-            return False, f"File extension '{ext}' is not allowed. Allowed: {self.ALLOWED_EXTENSIONS}"
+            return (
+                False,
+                f"File extension '{ext}' is not allowed. Allowed: {self.ALLOWED_EXTENSIONS}",
+            )
 
         return True, None
 
@@ -456,7 +462,9 @@ class FileTool:
                 content = f.read()
 
             bytes_read = len(content.encode("utf-8"))
-            logger.info(f"File '{expanded_path}' read successfully ({bytes_read} bytes)")
+            logger.info(
+                f"File '{expanded_path}' read successfully ({bytes_read} bytes)"
+            )
 
             return FileOutput(
                 success=True,
