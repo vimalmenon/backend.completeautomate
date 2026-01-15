@@ -32,6 +32,22 @@
 - Ensure all pull requests include proper descriptions and testing evidence
 - Participate in code reviews and incorporate feedback promptly
 
+## Code Quality Checks
+**Before committing code, you MUST run the following commands to ensure consistency:**
+```bash
+# 1. Fix ESLint issues automatically
+npm run lint:fix
+
+# 2. Format code with Prettier
+npm run format
+
+# 3. Run TypeScript type checking
+npm run tsc
+```
+- All three checks must pass before creating a pull request
+- If any issues remain after running these commands, fix them manually
+- Ensure no errors appear in the console output
+
 ## Project Location
 - Frontend repository: `/Users/vimalmenon/code/completeautomate/completeautomate.github.io`
 
@@ -63,6 +79,23 @@
 - Ensure all pull requests include proper descriptions and testing evidence
 - Participate in code reviews and incorporate feedback promptly
 - Write unit tests and integration tests for all new features
+
+## Code Quality Checks
+**Before committing code, you MUST run the following commands to ensure consistency:**
+```bash
+# 1. Run type checking with mypy (if configured)
+poetry run mypy backend/
+
+# 2. Run linting and formatting checks
+poetry run black --check backend/
+
+# 3. Run all tests to ensure nothing breaks
+poetry run pytest tests/ -v
+```
+- All checks must pass before creating a pull request
+- If any issues remain, fix them manually before committing
+- Ensure no errors appear in the console output
+- Verify all tests pass with green checkmarks
 
 ## Project Location
 - Backend repository: `/Users/vimalmenon/code/completeautomate/backend.completeautomate`
