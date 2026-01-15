@@ -7,8 +7,8 @@ from backend.services.aws.session import Session
 class DbManager:
     def __init__(self):
         session = Session().get_session()
-        self.dynamodb = session.resource("dynamodb", region_name=env.aws_region)
-        self.table = self.dynamodb.Table(env.table)
+        self.dynamodb = session.resource("dynamodb", region_name=env.AWS_REGION)
+        self.table = self.dynamodb.Table(env.AWS_TABLE)
 
     def add_item(self, item: dict):
         return self.table.put_item(Item=item)
