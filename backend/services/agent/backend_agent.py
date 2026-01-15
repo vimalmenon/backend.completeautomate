@@ -7,7 +7,7 @@ from typing import List
 
 
 class BackendAgent(BaseAgent):
-    name: str = "Backend Agent"
+    name: str = "Jordan"
     role: TeamEnum = TeamEnum.BACKEND_DEVELOPER
     responsibility: str = "Building and maintaining the server-side logic and databases"
     teams: List[TeamEnum] = []

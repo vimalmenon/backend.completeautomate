@@ -32,6 +32,10 @@ TEAM_INFO: Dict[str, Dict[str, str]] = {
         "role": "GRAPHIC DESIGNER",
         "responsibility": "Designing visual content for various media",
     },
+    "PLANNER": {
+        "role": "PLANNER",
+        "responsibility": "Planning and coordinating project tasks and resources",
+    },
 }
 
 
@@ -51,6 +55,7 @@ class TeamEnum(str, Enum):
     SCRIPT_WRITER = "SCRIPT_WRITER"
     MANAGER = "MANAGER"
     GRAPHIC_DESIGNER = "GRAPHIC_DESIGNER"
+    PLANNER = "PLANNER"
 
     def get_role(self) -> str:
         return TEAM_INFO[self.value]["role"]
