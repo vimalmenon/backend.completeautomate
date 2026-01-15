@@ -28,6 +28,9 @@ app = "main:main"
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.19.1"
 boto3-stubs = "^1.42.27"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.11.1"
 
 [build-system]
 requires = ["poetry-core"]
