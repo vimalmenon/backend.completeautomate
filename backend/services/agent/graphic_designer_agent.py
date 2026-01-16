@@ -13,7 +13,6 @@ from typing import List
 class GraphicDesignerAgent(BaseAgent):
     name: str = "Julia"
     role: TeamEnum = TeamEnum.GRAPHIC_DESIGNER
-    responsibility: str = "Designing visual content for various media"
     teams: List[TeamEnum] = []
 
     def __init__(self) -> None:

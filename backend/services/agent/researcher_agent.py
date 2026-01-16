@@ -12,7 +12,6 @@ from backend.services.agent.base_agent import BaseAgent
 class ResearcherAgent(BaseAgent):
     name = "Christopher"
     role: TeamEnum = TeamEnum.RESEARCHER
-    responsibility: str = "Conducting in-depth research to gather relevant information"
     teams: list = []
 
     def __init__(self):
