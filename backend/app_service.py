@@ -24,15 +24,27 @@ class AppService:
         #     I want more detailed breakdown than this.
         #     """
         # )
+        # NewIdeaTask().input(
+        #     task="""
+        #         ### **3) Header Component**
+        #         - **Instructions**:
+        #         - Create responsive header with logo on left and navigation on right
+        #         - Implement mobile hamburger menu with smooth slide-in animation
+        #         - Add sticky header functionality that appears on scroll
+        #         - Include navigation items: Home, Services, About, Contact
+        #         - Ensure accessibility with proper ARIA labels and keyboard navigation
+        #     """
+        # )
+
         NewIdeaTask().input(
             task="""
-                ### **3) Header Component**
-                - **Instructions**:
-                - Create responsive header with logo on left and navigation on right
-                - Implement mobile hamburger menu with smooth slide-in animation
-                - Add sticky header functionality that appears on scroll
-                - Include navigation items: Home, Services, About, Contact
-                - Ensure accessibility with proper ARIA labels and keyboard navigation
+            Our team is building a website for our company.
+            Breakdown the tasks for building the complete website.
+            Provide list of work to be done by all team members.
+            Ensure task are specific to each role and cover all necessary aspects such as UI design, responsiveness, user experience, backend development, database design, deployment.
+            Provide detailed instructions for each task to be performed by team members.
+            Breakdown the tasks in smaller work items that can be easily assigned and tracked.
+            Provide me the list of tasks in a structured format.
             """
         )
         # Get Human Confirmation
