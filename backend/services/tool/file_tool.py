@@ -498,7 +498,7 @@ class FileTool:
                 success=True,
                 file_path=expanded_path,
                 bytes_written=bytes_read,
-                message=f"File read successfully\n\n{content}",
+                message=content,
             )
 
         except PermissionError as e:
