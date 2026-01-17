@@ -46,6 +46,8 @@ class SystemPromptHelper:
             is_frontend_developer=(role == TeamEnum.FRONTEND_DEVELOPER),
             is_backend_developer=(role == TeamEnum.BACKEND_DEVELOPER),
             is_graphic_designer=(role == TeamEnum.GRAPHIC_DESIGNER),
+            is_researcher=(role == TeamEnum.RESEARCHER),
+            is_planner=(role == TeamEnum.PLANNER),
         )
 
     def get_system_prompt(self) -> str:
