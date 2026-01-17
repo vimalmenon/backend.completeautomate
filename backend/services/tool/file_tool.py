@@ -156,9 +156,9 @@ class FileTool:
             Dictionary with full tool definition for writing files
         """
         return {
-            "name": self.TOOL_NAME,
+            "name": "file_writer",
             "version": self.TOOL_VERSION,
-            "description": "Write content to a file",
+            "description": "Write or append content to a file. Use 'mode' parameter: 'w' to overwrite, 'a' to append.",
             "category": self.TOOL_CATEGORY,
             "operation": "write",
             "inputSchema": self.WRITE_INPUT_SCHEMA,
@@ -204,9 +204,9 @@ class FileTool:
             Dictionary with full tool definition for reading files
         """
         return {
-            "name": self.TOOL_NAME,
+            "name": "file_reader",
             "version": self.TOOL_VERSION,
-            "description": "Read content from a file",
+            "description": "Read the entire content of a file. Provide the absolute file path.",
             "category": self.TOOL_CATEGORY,
             "operation": "read",
             "inputSchema": self.READ_INPUT_SCHEMA,
@@ -219,6 +219,34 @@ class FileTool:
                         "success": True,
                         "file_path": "./src/components/Button.tsx",
                         "message": "File read successfully\n\nimport React from 'react';\n...",
+                    },
+                },
+            ],
+        }
+
+    def get_delete_tool_definition(self) -> Dict[str, Any]:
+        """
+        Get complete tool definition for file deletion.
+
+        Returns:
+            Dictionary with full tool definition for deleting files
+        """
+        return {
+            "name": "file_deleter",
+            "version": self.TOOL_VERSION,
+            "description": "Delete a file permanently. Provide the absolute file path.",
+            "category": self.TOOL_CATEGORY,
+            "operation": "delete",
+            "inputSchema": self.READ_INPUT_SCHEMA,  # Same as read - only needs file_path
+            "outputSchema": self.OUTPUT_SCHEMA,
+            "examples": [
+                {
+                    "name": "Delete a file",
+                    "input": {"file_path": "./src/temp.tsx"},
+                    "output": {
+                        "success": True,
+                        "file_path": "./src/temp.tsx",
+                        "message": "File deleted successfully",
                     },
                 },
             ],

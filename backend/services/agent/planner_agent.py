@@ -10,6 +10,7 @@ from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List, Optional
 import json
 import logging
+import time
 from langchain.tools import tool
 
 logger = logging.getLogger(__name__)
@@ -37,6 +38,7 @@ class PlannerAgent(BaseAgent):
         return [
             self.file_tool.get_write_tool_definition(),
             self.file_tool.get_read_tool_definition(),
+            self.file_tool.get_delete_tool_definition(),
         ]
 
     def _handle_tool_call(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
@@ -51,22 +53,47 @@ class PlannerAgent(BaseAgent):
             Tool execution result as string
         """
         if not isinstance(tool_input, dict):
-            return json.dumps({"error": f"Invalid input format for {tool_name}"})
+            error_msg = f"Invalid input format for {tool_name}"
+            logger.error(error_msg)
+            return json.dumps({"error": error_msg})
 
-        if tool_name == "file_writer":
-            result = self.file_tool.write_file(
-                file_path=tool_input.get("file_path"),
-                content=tool_input.get("content"),
-                mode=tool_input.get("mode", "w"),
-            )
-            return json.dumps(result)
-        elif tool_name == "file_reader":
-            result = self.file_tool.read_file(
-                file_path=tool_input.get("file_path"),
-            )
-            return json.dumps(result)
-        else:
-            return json.dumps({"error": f"Unknown tool: {tool_name}"})
+        try:
+            # Normalize parameter names (handle both 'path' and 'file_path')
+            file_path = tool_input.get("file_path") or tool_input.get("path")
+
+            # Determine operation from tool_input or tool_name
+            operation = tool_input.get("operation", "").lower()
+
+            # Handle file operations based on tool name
+            if tool_name == "file_writer" or operation == "write" or "write" in tool_name.lower():
+                logger.info(f"Executing file_write: {file_path}")
+                result = self.file_tool.write_file(
+                    file_path=file_path,
+                    content=tool_input.get("content", ""),
+                    mode=tool_input.get("mode", "w"),
+                    create_dirs=tool_input.get("create_dirs", True),
+                )
+                return json.dumps(result)
+            elif tool_name == "file_reader" or operation == "read" or "read" in tool_name.lower():
+                logger.info(f"Executing file_read: {file_path}")
+                result = self.file_tool.read_file(
+                    file_path=file_path,
+                )
+                return json.dumps(result)
+            elif tool_name == "file_deleter" or operation == "delete" or "delete" in tool_name.lower():
+                logger.info(f"Executing file_delete: {file_path}")
+                result = self.file_tool.delete_file(
+                    file_path=file_path,
+                )
+                return json.dumps(result)
+            else:
+                error_msg = f"Unknown tool: {tool_name}. Available tools: file_reader, file_writer, file_deleter"
+                logger.error(error_msg)
+                return json.dumps({"error": error_msg})
+        except Exception as e:
+            error_msg = f"Error executing tool {tool_name}: {str(e)}"
+            logger.error(error_msg)
+            return json.dumps({"error": error_msg})
 
     def write_file(
         self, file_path: str, content: str, mode: str = "w"
@@ -113,7 +140,7 @@ class PlannerAgent(BaseAgent):
         result = self.file_tool.delete_file(file_path=file_path)
         return result
 
-    def start_task(self, task: str):
+    def start_task(self, task: str, max_retries: int = 3):
         agent = create_agent(
             name=self.name,
             model=self.model,
@@ -129,13 +156,39 @@ class PlannerAgent(BaseAgent):
         ]
 
         # Run agent in a loop to handle tool calls
+        retry_count = 0
         while True:
-            result = agent.invoke(
-                {
-                    "messages": messages,
-                    "user_preferences": {"style": "technical", "verbosity": "detailed"},
-                }
-            )
+            try:
+                result = agent.invoke(
+                    {
+                        "messages": messages,
+                        "user_preferences": {
+                            "style": "technical",
+                            "verbosity": "detailed",
+                        },
+                    }
+                )
+                # Reset retry count on successful invocation
+                retry_count = 0
+
+            except Exception as e:
+                retry_count += 1
+                error_msg = f"Error invoking agent (attempt {retry_count}/{max_retries}): {str(e)}"
+                logger.error(error_msg)
+
+                if retry_count >= max_retries:
+                    logger.error(f"Max retries ({max_retries}) reached. Aborting.")
+                    return {
+                        "error": error_msg,
+                        "messages": messages,
+                        "success": False,
+                    }
+
+                # Wait before retrying (exponential backoff)
+                wait_time = 2**retry_count
+                logger.info(f"Waiting {wait_time} seconds before retry...")
+                time.sleep(wait_time)
+                continue
 
             # Update messages with agent response
             if "messages" in result:
@@ -147,8 +200,30 @@ class PlannerAgent(BaseAgent):
                 # Check if the last message contains tool use
                 if hasattr(last_message, "tool_calls") and last_message.tool_calls:
                     for tool_call in last_message.tool_calls:
-                        tool_name = tool_call.get("name") or tool_call.get("tool")
-                        tool_input = tool_call.get("args") or tool_call.get("input")
+                        # Extract tool name and input from different formats
+                        tool_name = None
+                        tool_input = None
+
+                        if isinstance(tool_call, dict):
+                            tool_name = tool_call.get("name") or tool_call.get(
+                                "tool"
+                            )
+                            tool_input = tool_call.get("args") or tool_call.get(
+                                "input"
+                            )
+                        else:
+                            tool_name = getattr(tool_call, "name", None) or getattr(
+                                tool_call, "tool", None
+                            )
+                            tool_input = getattr(tool_call, "args", None) or getattr(
+                                tool_call, "input", None
+                            )
+
+                        if not tool_name or not tool_input:
+                            logger.warning(
+                                f"Invalid tool call format: {tool_call}"
+                            )
+                            continue
 
                         logger.info(
                             f"Calling tool: {tool_name} with input: {tool_input}"
@@ -156,22 +231,29 @@ class PlannerAgent(BaseAgent):
 
                         # Execute the tool
                         tool_result = self._handle_tool_call(tool_name, tool_input)
-                        breakpoint()
+                        logger.info(f"Tool result: {tool_result}")
+
                         # Add tool message to messages
+                        tool_call_id = (
+                            tool_call.get("id")
+                            if isinstance(tool_call, dict)
+                            else getattr(tool_call, "id", None)
+                        )
                         messages.append(
                             ToolMessage(
                                 content=tool_result,
-                                tool_call_id=tool_call.get("id"),
+                                tool_call_id=tool_call_id,
                                 name=tool_name,
                             )
                         )
-                        logger.info(f"Tool result: {tool_result}")
                 else:
                     # No more tool calls, exit loop
                     logger.info("Agent completed task, no more tool calls")
                     break
             else:
                 break
+
+        logger.info("Agent task completed successfully")
         return result
 
     def resume_task(self, task_id: str):
