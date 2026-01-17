@@ -40,11 +40,10 @@ class AppService:
             task="""
             Our team is building a website for our company.
             Breakdown the tasks for building the complete website.
-            Provide list of work to be done by all team members.
-            Ensure task are specific to each role and cover all necessary aspects such as UI design, responsiveness, user experience, backend development, database design, deployment.
-            Provide detailed instructions for each task to be performed by team members.
-            Breakdown the tasks in smaller work items that can be easily assigned and tracked.
-            Provide me the list of tasks in a structured format.
+            Only include frontend tasks for frontend developers.
+            Breakdown the tasks to very small chunks with detailed instructions.
+            It should include all the pages required for a complete website.
+            U
             """
         )
         # Get Human Confirmation

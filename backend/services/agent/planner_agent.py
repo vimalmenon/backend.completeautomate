@@ -11,6 +11,7 @@ from typing import Dict, Any, List, Optional
 import json
 import logging
 import time
+import re
 from langchain.tools import tool
 
 logger = logging.getLogger(__name__)
@@ -58,18 +59,44 @@ class PlannerAgent(BaseAgent):
             return json.dumps({"error": error_msg})
 
         try:
+            # Accept string args by attempting JSON parse
+            if isinstance(tool_input, str):
+                try:
+                    tool_input = json.loads(tool_input)
+                except Exception as e:
+                    error_msg = f"Tool input is not valid JSON string: {str(e)}"
+                    logger.error(error_msg)
+                    return json.dumps({"error": error_msg})
+
             # Normalize parameter names (handle both 'path' and 'file_path')
             file_path = tool_input.get("file_path") or tool_input.get("path")
 
+            # If missing, try to extract from a description field like 'Read file: /path'
+            if not file_path and isinstance(tool_input.get("description"), str):
+                desc = tool_input.get("description")
+                m = re.search(r"(?:read|write|delete)\s+file:\s*(\S+)", desc, re.IGNORECASE)
+                if m:
+                    file_path = m.group(1)
+
             # Determine operation from tool_input or tool_name
             operation = tool_input.get("operation", "").lower()
+
+            # Coerce content to a string (LLM may pass JSON objects)
+            content = tool_input.get("content", "")
+            if isinstance(content, (dict, list)):
+                try:
+                    content = json.dumps(content, ensure_ascii=False)
+                except Exception:
+                    content = str(content)
+            elif content is not None and not isinstance(content, str):
+                content = str(content)
 
             # Handle file operations based on tool name
             if tool_name == "file_writer" or operation == "write" or "write" in tool_name.lower():
                 logger.info(f"Executing file_write: {file_path}")
                 result = self.file_tool.write_file(
                     file_path=file_path,
-                    content=tool_input.get("content", ""),
+                    content=content,
                     mode=tool_input.get("mode", "w"),
                     create_dirs=tool_input.get("create_dirs", True),
                 )

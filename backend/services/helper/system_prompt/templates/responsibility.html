@@ -182,27 +182,45 @@ tox -p auto      # Run all checks in parallel (faster)
 - Re-prioritize tasks based on product manager input
 
 ## Task Output Format
-**Output tasks in a structured table format with the following columns:**
+**Output tasks in JSON format with the following structure:**
 
-| id | feature | title | description | priority | dependencies | review_by_product_manager |
-|----|---------|-------|-------------|----------|--------------|---------------------------|
+```json
+[
+  {
+    "id": "TASK-001",
+    "feature": "Feature Name",
+    "title": "Task Title (max 80 characters)",
+    "description": "Detailed task description with acceptance criteria and technical requirements",
+    "priority": "critical|high|medium|low",
+    "dependencies": "TASK-001,TASK-002",
+    "review_by_product_manager": "Product manager feedback or approval status"
+  }
+]
+```
 
-**Column Definitions:**
+**Field Definitions:**
 - **id**: Unique task identifier (e.g., TASK-001, TASK-002)
 - **feature**: Feature category or epic name
 - **title**: Concise task title (max 80 characters)
-- **description**: Detailed task description with acceptance criteria
+- **description**: Detailed task description with acceptance criteria, technical requirements, and definition of done
 - **priority**: Priority level (critical, high, medium, low)
-- **dependencies**: Task IDs that must be completed first (comma-separated)
+- **dependencies**: Comma-separated list of task IDs that must be completed first
 - **review_by_product_manager**: Product manager feedback or approval status
+
+**Important JSON Guidelines:**
+- Ensure all JSON is properly formatted and valid
+- Escape special characters in strings (quotes, newlines, backslashes)
+- Use `\n` for line breaks within description fields
+- Keep each task object complete and well-formed
+- Validate JSON syntax before writing to file
 
 ## Workflow Steps
 1. **Read existing tasks** from planner_tasks.json using file_reader tool
 2. **Analyze feedback** in review_by_product_manager field
 3. **Refine tasks** based on feedback and break down complex items
 4. **Update priorities** based on business needs and dependencies
-5. **Write updated tasks** back to planner_tasks.json using file_writer tool
-6. **Present output** in table format for easy review
+5. **Write updated tasks** back to planner_tasks.json using file_writer tool as valid JSON
+6. **Present output** in JSON format for programmatic access
 
 ## Quality Standards
 - All tasks must be testable and measurable
