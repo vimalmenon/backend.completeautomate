@@ -74,7 +74,9 @@ class PlannerAgent(BaseAgent):
             # If missing, try to extract from a description field like 'Read file: /path'
             if not file_path and isinstance(tool_input.get("description"), str):
                 desc = tool_input.get("description")
-                m = re.search(r"(?:read|write|delete)\s+file:\s*(\S+)", desc, re.IGNORECASE)
+                m = re.search(
+                    r"(?:read|write|delete)\s+file:\s*(\S+)", desc, re.IGNORECASE
+                )
                 if m:
                     file_path = m.group(1)
 
@@ -92,7 +94,11 @@ class PlannerAgent(BaseAgent):
                 content = str(content)
 
             # Handle file operations based on tool name
-            if tool_name == "file_writer" or operation == "write" or "write" in tool_name.lower():
+            if (
+                tool_name == "file_writer"
+                or operation == "write"
+                or "write" in tool_name.lower()
+            ):
                 logger.info(f"Executing file_write: {file_path}")
                 result = self.file_tool.write_file(
                     file_path=file_path,
@@ -101,13 +107,21 @@ class PlannerAgent(BaseAgent):
                     create_dirs=tool_input.get("create_dirs", True),
                 )
                 return json.dumps(result)
-            elif tool_name == "file_reader" or operation == "read" or "read" in tool_name.lower():
+            elif (
+                tool_name == "file_reader"
+                or operation == "read"
+                or "read" in tool_name.lower()
+            ):
                 logger.info(f"Executing file_read: {file_path}")
                 result = self.file_tool.read_file(
                     file_path=file_path,
                 )
                 return json.dumps(result)
-            elif tool_name == "file_deleter" or operation == "delete" or "delete" in tool_name.lower():
+            elif (
+                tool_name == "file_deleter"
+                or operation == "delete"
+                or "delete" in tool_name.lower()
+            ):
                 logger.info(f"Executing file_delete: {file_path}")
                 result = self.file_tool.delete_file(
                     file_path=file_path,
@@ -232,12 +246,8 @@ class PlannerAgent(BaseAgent):
                         tool_input = None
 
                         if isinstance(tool_call, dict):
-                            tool_name = tool_call.get("name") or tool_call.get(
-                                "tool"
-                            )
-                            tool_input = tool_call.get("args") or tool_call.get(
-                                "input"
-                            )
+                            tool_name = tool_call.get("name") or tool_call.get("tool")
+                            tool_input = tool_call.get("args") or tool_call.get("input")
                         else:
                             tool_name = getattr(tool_call, "name", None) or getattr(
                                 tool_call, "tool", None
@@ -247,9 +257,7 @@ class PlannerAgent(BaseAgent):
                             )
 
                         if not tool_name or not tool_input:
-                            logger.warning(
-                                f"Invalid tool call format: {tool_call}"
-                            )
+                            logger.warning(f"Invalid tool call format: {tool_call}")
                             continue
 
                         logger.info(

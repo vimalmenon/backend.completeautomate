@@ -3,6 +3,8 @@ import json
 from logging import getLogger
 
 from botocore.exceptions import ClientError
+from pydantic import SecretStr
+
 
 logger = getLogger(__name__)
 
@@ -18,6 +20,8 @@ class Env:
     ANTHROPIC_API_KEY: str = os.environ["ANTHROPIC_API_KEY"]
     PPLX_API_KEY: str = os.environ["PPLX_API_KEY"]
     AWS_TABLE: str = os.environ["AWS_TABLE"]
+    OPEN_ROUTE_API_KEY: SecretStr = SecretStr(os.environ["OPEN_ROUTE_API_KEY"])
+    OPENAI_API_KEY: SecretStr = SecretStr(os.environ["OPENAI_API_KEY"])
     DEEPSEEK_API_KEY: str
 
     def __init__(self):

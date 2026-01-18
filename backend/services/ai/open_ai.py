@@ -1,5 +1,6 @@
 from langchain_openai import ChatOpenAI
 from enum import Enum
+from backend.config.env import env
 
 
 class ModelEnum(Enum):
@@ -11,11 +12,15 @@ class ModelEnum(Enum):
 class OpenAI:
     models = ModelEnum
 
-    def __init__(self, model: ModelEnum = ModelEnum.GPT_5_NANO):
-        self.llm = ChatOpenAI(
-            model=model.value,
-            temperature=0,
-        )
+    def __init__(
+        self, model: ModelEnum = ModelEnum.GPT_5_NANO, use_open_route: bool = False
+    ):
+        extra_args = {}
+        if use_open_route:
+            extra_args["base_url"] = "https://openrouter.ai/api/v1"
+            extra_args["api_key"] = env.OPEN_ROUTE_API_KEY
+
+        self.llm = ChatOpenAI(model=model.value, temperature=0, **extra_args)
 
     def get_model(self):
         return self.llm
