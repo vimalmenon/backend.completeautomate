@@ -17,7 +17,7 @@ class Env:
     AWS_TABLE: str = os.environ["AWS_TABLE"]
     GROQ_API_KEY: str = os.environ["GROQ_API_KEY"]
     ANTHROPIC_API_KEY: str = os.environ["ANTHROPIC_API_KEY"]
-    PPLX_API_KEY: str = os.environ["PPLX_API_KEY"]
+    PPLX_API_KEY: SecretStr = SecretStr(os.environ["PPLX_API_KEY"])
     OPEN_ROUTE_API_KEY: SecretStr = SecretStr(os.environ["OPEN_ROUTE_API_KEY"])
     OPENAI_API_KEY: SecretStr = SecretStr(os.environ["OPENAI_API_KEY"])
     DEEPSEEK_API_KEY: SecretStr = SecretStr(os.environ["DEEPSEEK_API_KEY"])
