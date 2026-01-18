@@ -2,7 +2,6 @@ from langchain_deepseek import ChatDeepSeek
 from enum import Enum
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
-from pydantic import SecretStr
 
 
 class ModelEnum(Enum):
@@ -16,11 +15,17 @@ class DeepseekAI:
         self,
         model: ModelEnum = ModelEnum.DEEPSEEK_CHAT,
         creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW,
+        use_open_route: bool = False,
     ):
+        extra_args = {}
+        if use_open_route:
+            extra_args["base_url"] = "https://openrouter.ai/api/v1"
+            extra_args["api_key"] = env.OPEN_ROUTE_API_KEY
+        else:
+            extra_args["api_key"] = env.DEEPSEEK_API_KEY
+
         self.llm = ChatDeepSeek(
-            model=model.value,
-            temperature=creativity_level.value,
-            api_key=SecretStr(env.DEEPSEEK_API_KEY),
+            model=model.value, temperature=creativity_level.value, **extra_args
         )
 
     def start(self, messages: list):
