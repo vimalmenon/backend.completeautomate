@@ -16,11 +16,17 @@ class AnthropicAI:
         self,
         model: ModelEnum = ModelEnum.claude_haiku,
         creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW,
+        use_open_route: bool = False,
     ):
+        extra_args = {}
+        if use_open_route:
+            extra_args["base_url"] = "https://openrouter.ai/api/v1"
+            extra_args["api_key"] = env.OPEN_ROUTE_API_KEY
+        else:
+            extra_args["api_key"] = env.ANTHROPIC_API_KEY
+
         self.llm = ChatAnthropic(
-            model=model.value,
-            temperature=creativity_level.value,
-            api_key=SecretStr(env.ANTHROPIC_API_KEY),
+            model=model.value, temperature=creativity_level.value, **extra_args
         )
 
     def start(self, messages: list):
