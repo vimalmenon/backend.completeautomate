@@ -2,7 +2,6 @@ from langchain_anthropic import ChatAnthropic
 from enum import Enum
 from backend.config.env import env
 from backend.config.enum import AICreativityLevelEnum
-from pydantic import SecretStr
 
 
 class ModelEnum(Enum):
