@@ -47,9 +47,9 @@ class AppService:
         # )
         NewIdeaTask().input(
             task="""
-            I want to create a image for youtube banner, 
-            it should show properly for mobile and desktop both.
-            Make it visually appealing and relevant to my channel's content.
+            I want to create a image for youtube banner,
+            it should show properly on mobile and desktop both.
+            Make it visually appealing and relevant to my channel's theme.
             """
         )
         # Get Human Confirmation
