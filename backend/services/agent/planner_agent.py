@@ -13,8 +13,22 @@ import logging
 import time
 import re
 from langchain.tools import tool
+from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
+
+
+class PlannedTask(BaseModel):
+    task_id: str = Field(..., description="Unique identifier for the task")
+    feature: str = Field(..., description="Feature name associated with the task")
+    description: str = Field(..., description="Detailed description of the task")
+    review_comments: Optional[str] = Field(
+        None, description="Optional review comments for the task"
+    )
+
+
+class OutputResponse(BaseModel):
+    tasks: List[PlannedTask] = Field(..., description="List of planned tasks")
 
 
 class PlannerAgent(BaseAgent):
@@ -187,6 +201,7 @@ class PlannerAgent(BaseAgent):
             model=self.model,
             tools=self.tools,
             system_prompt=self.system_prompt,
+            response_format=OutputResponse,
         )
         system_message = self.system_prompt_helper.get_system_message(
             content="You are a planner agent. Your role is to plan and organize tasks, and manage project documentation."
