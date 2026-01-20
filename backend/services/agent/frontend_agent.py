@@ -134,7 +134,7 @@ class FrontendAgent(BaseAgent):
 
                         # Execute the tool
                         tool_result = self._handle_tool_call(tool_name, tool_input)
-                        breakpoint()
+
                         # Add tool message to messages
                         messages.append(
                             ToolMessage(
