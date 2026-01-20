@@ -218,10 +218,6 @@ class PlannerAgent(BaseAgent):
                 result = agent.invoke(
                     {
                         "messages": messages,
-                        "user_preferences": {
-                            "style": "technical",
-                            "verbosity": "detailed",
-                        },
                     }
                 )
                 # Reset retry count on successful invocation
