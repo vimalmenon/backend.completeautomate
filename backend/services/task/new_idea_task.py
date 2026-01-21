@@ -9,5 +9,5 @@ class NewIdeaTask:
     def input(self, task: str):
         # manager = ManagerAgent().start_task(task=task)
         # FrontendAgent().start_task(task=task)
-        # PlannerAgent().start_task(task=task)
-        GraphicDesignerAgent().start_task(task=task)
+        PlannerAgent().start_task(task=task)
+        # GraphicDesignerAgent().start_task(task=task)
