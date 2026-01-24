@@ -1,3 +1,4 @@
+from uuid import uuid4
 from backend.services.helper.system_prompt.system_prompt_helper import (
     SystemPromptHelper,
 )
@@ -224,7 +225,6 @@ class PlannerAgent(BaseAgent):
                 )
                 message = self.__transform_result_to_message(result)
                 MessageDB().save_message(message)
-                breakpoint()
                 # result["structured_response"].tasks
                 # Reset retry count on successful invocation
                 retry_count = 0
@@ -317,6 +317,7 @@ class PlannerAgent(BaseAgent):
             messages=[msg.dict() for msg in messages],
             llm_model=message.response_metadata.get("model_name"),
             completed=False,
+            ref_id=uuid4(),
         )
         return message
 
