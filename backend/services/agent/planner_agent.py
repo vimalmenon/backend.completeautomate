@@ -14,6 +14,8 @@ import time
 import re
 from langchain.tools import tool
 from pydantic import BaseModel, Field
+from backend.services.aws.message_db import Message, MessageDB
+
 
 logger = logging.getLogger(__name__)
 
@@ -199,9 +201,9 @@ class PlannerAgent(BaseAgent):
         agent = create_agent(
             name=self.name,
             model=self.model,
-            tools=self.tools,
+            # tools=self.tools,
             system_prompt=self.system_prompt,
-            response_format=OutputResponse,
+            # response_format=OutputResponse,
         )
         system_message = self.system_prompt_helper.get_system_message(
             content="You are a planner agent. Your role is to plan and organize tasks, and manage project documentation."
@@ -220,6 +222,10 @@ class PlannerAgent(BaseAgent):
                         "messages": messages,
                     }
                 )
+                message = self.__transform_result_to_message(result)
+                MessageDB().save_message(message)
+                breakpoint()
+                # result["structured_response"].tasks
                 # Reset retry count on successful invocation
                 retry_count = 0
 
@@ -301,6 +307,18 @@ class PlannerAgent(BaseAgent):
 
         logger.info("Agent task completed successfully")
         return result
+    
+    def __transform_result_to_message(self, result) -> Message:
+        message = result.get("messages", [])[-1]
+        messages = result.get("messages", [])
+        message = Message(
+            name=message.name,
+            content=message.content,
+            messages=[msg.dict() for msg in messages],
+            llm_model=message.response_metadata.get("model_name"),
+            completed=False,
+        )
+        return message
 
     def resume_task(self, task_id: str):
         pass
