@@ -4,11 +4,10 @@ from backend.services.helper.system_prompt.system_prompt_helper import (
 from backend.config.enum import TeamEnum
 from langchain.agents import create_agent
 from backend.services.ai.deepseek_ai import DeepseekAI
-from langchain.messages import SystemMessage, HumanMessage, ToolMessage
+from langchain.messages import SystemMessage, HumanMessage
 from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List
 import logging
-import time
 from langchain.tools import tool, ToolRuntime
 from backend.services.aws.message_db import MessageDB
 from backend.services.aws.task_db import TaskDB, PlannedTaskOutputResponse
@@ -76,7 +75,8 @@ class PlannerAgent(BaseAgent):
                 }
             )
             # MessageDB().save_message_from_agent_result(result)
-            TaskDB().save_tasks(result["structured_response"])
+            if structured_response := result.get("structured_response"):
+                TaskDB().save_tasks(structured_response)
             # result["structured_response"].tasks
             # Reset retry count on successful invocation
         except Exception as e:
