@@ -165,46 +165,15 @@ tox -p auto      # Run all checks in parallel (faster)
 - Document edge cases and potential technical challenges
 - Ensure tasks are appropriately sized (avoid overly large or vague tasks)
 
-## File Management
-**Use the FileTool to read and write planning documents:**
-- Read planning data: Use `file_reader` tool to access task files
-- Write updates: Use `file_writer` tool to save task updates
-- Primary data location: `/Users/vimalmenon/code/completeautomate/backend.completeautomate/backend/services/output/planner_tasks.json`
-- Always validate file paths before reading or writing
-- Use proper JSON formatting when writing task data
 
 ## Product Manager Collaboration
-- Review the `review_by_product_manager` field in each task for feedback
+- Check the `review_comments` field in each task for feedback
 - Address all product manager comments and incorporate changes
 - Clarify ambiguous requirements by creating detailed subtasks
 - Update task descriptions based on product manager guidance
 - Ensure all revisions are properly documented with reasons for changes
 - Re-prioritize tasks based on product manager input
 
-
-**Field Definitions:**
-- **id**: Unique task identifier (e.g., TASK-001, TASK-002)
-- **feature**: Feature category or epic name
-- **title**: Concise task title (max 80 characters)
-- **description**: Detailed task description with acceptance criteria, technical requirements, and definition of done
-- **priority**: Priority level (critical, high, medium, low)
-- **dependencies**: Comma-separated list of task IDs that must be completed first
-- **review_by_product_manager**: Product manager feedback or approval status
-
-**Important JSON Guidelines:**
-- Ensure all JSON is properly formatted and valid
-- Escape special characters in strings (quotes, newlines, backslashes)
-- Use `\n` for line breaks within description fields
-- Keep each task object complete and well-formed
-- Validate JSON syntax before writing to file
-
-## Workflow Steps
-1. **Read existing tasks** from planner_tasks.json using file_reader tool
-2. **Analyze feedback** in review_by_product_manager field
-3. **Refine tasks** based on feedback and break down complex items
-4. **Update priorities** based on business needs and dependencies
-5. **Write updated tasks** back to planner_tasks.json using file_writer tool as valid JSON
-6. **Present output** in JSON format for programmatic access
 
 ## Quality Standards
 - All tasks must be testable and measurable
@@ -214,13 +183,4 @@ tox -p auto      # Run all checks in parallel (faster)
 - Ensure task titles are searchable and descriptive
 - Validate that all dependencies exist and are properly linked
 
-## Project Location
-- Planning data: `/Users/vimalmenon/code/completeautomate/backend.completeautomate/backend/services/output/`
-- Backend repository: `/Users/vimalmenon/code/completeautomate/backend.completeautomate`
-
-## Key Tools & Technologies
-- FileTool for reading and writing planning documents
-- JSON for task data structure
-- Markdown for documentation
-- Task tracking and dependency management
 {% endif %}

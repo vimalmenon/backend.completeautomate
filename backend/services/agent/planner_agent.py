@@ -1,4 +1,3 @@
-from uuid import uuid4
 from backend.services.helper.system_prompt.system_prompt_helper import (
     SystemPromptHelper,
 )
@@ -8,29 +7,17 @@ from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.file_tool import FileTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 import json
 import logging
 import time
 import re
 from langchain.tools import tool
-from pydantic import BaseModel, Field
-from backend.services.aws.message_db import Message, MessageDB
+from backend.services.aws.message_db import MessageDB
+from backend.services.aws.task_db import TaskDB, PlannedTaskOutputResponse
+from uuid import UUID
 
 logger = logging.getLogger(__name__)
-
-
-class PlannedTask(BaseModel):
-    task_id: str = Field(..., description="Unique identifier for the task")
-    feature: str = Field(..., description="Feature name associated with the task")
-    description: str = Field(..., description="Detailed description of the task")
-    review_comments: Optional[str] = Field(
-        None, description="Optional review comments for the task"
-    )
-
-
-class OutputResponse(BaseModel):
-    tasks: List[PlannedTask] = Field(..., description="List of planned tasks")
 
 
 class PlannerAgent(BaseAgent):
@@ -203,7 +190,7 @@ class PlannerAgent(BaseAgent):
             model=self.model,
             # tools=self.tools,
             system_prompt=self.system_prompt,
-            # response_format=OutputResponse,
+            response_format=PlannedTaskOutputResponse,
         )
         system_message = self.system_prompt_helper.get_system_message(
             content="You are a planner agent. Your role is to plan and organize tasks, and manage project documentation."
@@ -222,7 +209,9 @@ class PlannerAgent(BaseAgent):
                         "messages": messages,
                     }
                 )
-                MessageDB().save_message_from_agent_result(result)
+                breakpoint()
+                # MessageDB().save_message_from_agent_result(result)
+                TaskDB().save_tasks(result["structured_response"])
                 # result["structured_response"].tasks
                 # Reset retry count on successful invocation
                 retry_count = 0
