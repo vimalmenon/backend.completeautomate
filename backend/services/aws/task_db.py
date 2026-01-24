@@ -6,6 +6,20 @@ from uuid import UUID
 from typing import List, Optional
 from backend.services.data.enum import DbKeys
 from boto3.dynamodb.conditions import Key
+from enum import Enum
+from backend.config.enum import TeamEnum
+
+
+class PriorityLevel(str, Enum):
+    HIGH = "High"
+    MEDIUM = "Medium"
+    LOW = "Low"
+
+
+class StatusLevel(str, Enum):
+    PLANNED = "Planned"
+    IN_PROGRESS = "In Progress"
+    DONE = "Done"
 
 
 class PlannedTaskOutput(BaseModel):
@@ -15,12 +29,12 @@ class PlannedTaskOutput(BaseModel):
     dependencies: List[UUID] = Field(
         default_factory=list, description="List of task IDs that are dependencies"
     )
-    status: str = Field(..., description="Current status of the task")
-    assigned_to: Optional[str] = Field(
-        None, description="Name of the person assigned to the task"
-    )
-    priority: Optional[str] = Field(
+    status: StatusLevel = Field(..., description="Current status of the task")
+    priority: PriorityLevel = Field(
         None, description="Priority level of the task (e.g., High, Medium, Low)"
+    )
+    assigned_to: Optional[TeamEnum] = Field(
+        None, description="Name of the person assigned to the task"
     )
     review_comments: Optional[str] = Field(
         None, description="Optional review comments for the task"
@@ -37,9 +51,10 @@ class Task:
     feature: str
     description: str
     dependencies: List[UUID]
-    status: str
+    status: StatusLevel
+    priority: PriorityLevel
     assigned_to: Optional[str] = None
-    priority: Optional[str] = None
+
     review_comments: Optional[str] = None
 
     def to_json(self) -> dict:
@@ -48,9 +63,9 @@ class Task:
             "feature": self.feature,
             "description": self.description,
             "dependencies": [str(dep) for dep in self.dependencies],
-            "status": self.status,
+            "status": self.status.value,
             "assigned_to": self.assigned_to,
-            "priority": self.priority,
+            "priority": self.priority.value if self.priority else None,
             "review_comments": self.review_comments,
         }
 
@@ -63,7 +78,7 @@ class Task:
             dependencies=data.dependencies,
             status=data.status,
             assigned_to=data.assigned_to,
-            priority=data.priority,
+            priority=PriorityLevel(data.priority) if data.priority else None,
             review_comments=data.review_comments,
         )
 
@@ -74,9 +89,11 @@ class Task:
             feature=data["feature"],
             description=data["description"],
             dependencies=data["dependencies"],
-            status=data["status"],
+            status=StatusLevel(data["status"]),
             assigned_to=data.get("assigned_to", None),
-            priority=data.get("priority", None),
+            priority=(
+                PriorityLevel(data.get("priority")) if data.get("priority") else None
+            ),
             review_comments=data.get("review_comments", None),
         )
 
@@ -103,3 +120,32 @@ class TaskDB:
     def get_tasks(self) -> Optional[PlannedTaskOutputResponse]:
         results = self.db_manager.query_items(Key(DbKeys.Primary.value).eq(self.table))
         return [Task.to_cls(item) for item in results] if results else None
+
+    def update_task(self, task: Task) -> None:
+        try:
+            self.db_manager.update_item(
+                Key={
+                    DbKeys.Primary.value: self.table,
+                    DbKeys.Secondary.value: str(task.task_id),
+                },
+                UpdateExpression="""
+                    SET feature = :feature,
+                        description = :description,
+                        dependencies = :dependencies,
+                        status = :status,
+                        assigned_to = :assigned_to,
+                        priority = :priority,
+                        review_comments = :review_comments
+                """,
+                ExpressionAttributeValues={
+                    ":feature": task.feature,
+                    ":description": task.description,
+                    ":dependencies": [str(dep) for dep in task.dependencies],
+                    ":status": task.status,
+                    ":assigned_to": task.assigned_to,
+                    ":priority": task.priority.value if task.priority else None,
+                    ":review_comments": task.review_comments,
+                },
+            )
+        except Exception as e:
+            pass

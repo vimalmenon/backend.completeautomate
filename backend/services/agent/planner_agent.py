@@ -8,17 +8,26 @@ from backend.services.tool.file_tool import FileTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
 from typing import Dict, Any, List
-import json
 import logging
 import time
-import re
 from langchain.tools import tool
 from backend.services.aws.message_db import MessageDB
 from backend.services.aws.task_db import TaskDB, PlannedTaskOutputResponse
-from uuid import UUID
 
 logger = logging.getLogger(__name__)
 
+
+@tool
+def list_all_tasks() -> List[Dict[str, Any]]:
+    """
+    Tool to list all tasks from the TaskDB.
+
+    Returns:
+        List of tasks as dictionaries
+    """
+    breakpoint()
+    tasks = TaskDB().get_tasks() or []
+    return [task.to_json() for task in tasks]
 
 class PlannerAgent(BaseAgent):
     name: str = "Parker"
@@ -39,11 +48,7 @@ class PlannerAgent(BaseAgent):
         Returns:
             List of tool definitions
         """
-        return [
-            self.file_tool.get_write_tool_definition(),
-            self.file_tool.get_read_tool_definition(),
-            self.file_tool.get_delete_tool_definition(),
-        ]
+        return [list_all_tasks]
 
     def _handle_tool_call(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
         """
@@ -56,139 +61,13 @@ class PlannerAgent(BaseAgent):
         Returns:
             Tool execution result as string
         """
-        if not isinstance(tool_input, dict):
-            error_msg = f"Invalid input format for {tool_name}"
-            logger.error(error_msg)
-            return json.dumps({"error": error_msg})
-
-        try:
-            # Accept string args by attempting JSON parse
-            if isinstance(tool_input, str):
-                try:
-                    tool_input = json.loads(tool_input)
-                except Exception as e:
-                    error_msg = f"Tool input is not valid JSON string: {str(e)}"
-                    logger.error(error_msg)
-                    return json.dumps({"error": error_msg})
-
-            # Normalize parameter names (handle both 'path' and 'file_path')
-            file_path = tool_input.get("file_path") or tool_input.get("path")
-
-            # If missing, try to extract from a description field like 'Read file: /path'
-            if not file_path and isinstance(tool_input.get("description"), str):
-                desc = tool_input.get("description")
-                m = re.search(
-                    r"(?:read|write|delete)\s+file:\s*(\S+)", desc, re.IGNORECASE
-                )
-                if m:
-                    file_path = m.group(1)
-
-            # Determine operation from tool_input or tool_name
-            operation = tool_input.get("operation", "").lower()
-
-            # Coerce content to a string (LLM may pass JSON objects)
-            content = tool_input.get("content", "")
-            if isinstance(content, (dict, list)):
-                try:
-                    content = json.dumps(content, ensure_ascii=False)
-                except Exception:
-                    content = str(content)
-            elif content is not None and not isinstance(content, str):
-                content = str(content)
-
-            # Handle file operations based on tool name
-            if (
-                tool_name == "file_writer"
-                or operation == "write"
-                or "write" in tool_name.lower()
-            ):
-                logger.info(f"Executing file_write: {file_path}")
-                result = self.file_tool.write_file(
-                    file_path=file_path,
-                    content=content,
-                    mode=tool_input.get("mode", "w"),
-                    create_dirs=tool_input.get("create_dirs", True),
-                )
-                return json.dumps(result)
-            elif (
-                tool_name == "file_reader"
-                or operation == "read"
-                or "read" in tool_name.lower()
-            ):
-                logger.info(f"Executing file_read: {file_path}")
-                result = self.file_tool.read_file(
-                    file_path=file_path,
-                )
-                return json.dumps(result)
-            elif (
-                tool_name == "file_deleter"
-                or operation == "delete"
-                or "delete" in tool_name.lower()
-            ):
-                logger.info(f"Executing file_delete: {file_path}")
-                result = self.file_tool.delete_file(
-                    file_path=file_path,
-                )
-                return json.dumps(result)
-            else:
-                error_msg = f"Unknown tool: {tool_name}. Available tools: file_reader, file_writer, file_deleter"
-                logger.error(error_msg)
-                return json.dumps({"error": error_msg})
-        except Exception as e:
-            error_msg = f"Error executing tool {tool_name}: {str(e)}"
-            logger.error(error_msg)
-            return json.dumps({"error": error_msg})
-
-    def write_file(
-        self, file_path: str, content: str, mode: str = "w"
-    ) -> Dict[str, Any]:
-        """
-        Write content to a file using the FileTool.
-
-        Args:
-            file_path: Path to the file to write
-            content: Content to write to the file
-            mode: Write mode ('w' for overwrite, 'a' for append)
-
-        Returns:
-            Result dictionary with success status and message
-        """
-        result = self.file_tool.write_file(
-            file_path=file_path, content=content, mode=mode
-        )
-        return result
-
-    def read_file(self, file_path: str) -> Dict[str, Any]:
-        """
-        Read content from a file using the FileTool.
-
-        Args:
-            file_path: Path to the file to read
-
-        Returns:
-            Result dictionary with file content or error message
-        """
-        result = self.file_tool.read_file(file_path=file_path)
-        return result
-
-    def delete_file(self, file_path: str) -> Dict[str, Any]:
-        """
-        Delete a file using the FileTool.
-
-        Args:
-            file_path: Path to the file to delete
-
-        Returns:
-            Result dictionary with success status and message
-        """
-        result = self.file_tool.delete_file(file_path=file_path)
-        return result
+        breakpoint()
 
     def start_task(self, task: str, max_retries: int = 3):
         agent = create_agent(
             name=self.name,
             model=self.model,
-            # tools=self.tools,
+            tools=self.tools,
             system_prompt=self.system_prompt,
             response_format=PlannedTaskOutputResponse,
         )
