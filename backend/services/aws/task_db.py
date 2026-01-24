@@ -67,6 +67,19 @@ class Task:
             review_comments=data.review_comments,
         )
 
+    @classmethod
+    def to_cls(cls, data: dict):
+        return cls(
+            task_id=data["task_id"],
+            feature=data["feature"],
+            description=data["description"],
+            dependencies=data["dependencies"],
+            status=data["status"],
+            assigned_to=data.get("assigned_to", None),
+            priority=data.get("priority", None),
+            review_comments=data.get("review_comments", None),
+        )
+
 
 class TaskDB:
     table = "CA#TASK"
@@ -75,9 +88,7 @@ class TaskDB:
         self.db_manager = DbManager()
 
     def save_tasks(self, tasks: PlannedTaskOutputResponse) -> None:
-        breakpoint()
         for task in tasks.tasks:
-            breakpoint()
             try:
                 self.db_manager.add_item(
                     {
@@ -87,10 +98,8 @@ class TaskDB:
                     }
                 )
             except Exception as e:
-                breakpoint()
                 pass
 
     def get_tasks(self) -> Optional[PlannedTaskOutputResponse]:
-        return self.db_manager.query_items(
-            Key(DbKeys.Primary.value).eq(self.table)
-        )
+        results = self.db_manager.query_items(Key(DbKeys.Primary.value).eq(self.table))
+        return [Task.to_cls(item) for item in results] if results else None
