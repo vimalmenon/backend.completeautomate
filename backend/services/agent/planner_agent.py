@@ -307,7 +307,7 @@ class PlannerAgent(BaseAgent):
 
         logger.info("Agent task completed successfully")
         return result
-    
+
     def __transform_result_to_message(self, result) -> Message:
         message = result.get("messages", [])[-1]
         messages = result.get("messages", [])

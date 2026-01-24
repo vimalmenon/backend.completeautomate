@@ -1,6 +1,7 @@
 from backend.services.aws.dynamo_database import DbManager
 from dataclasses import dataclass
 from backend.services.data.enum import DbKeys
+from boto3.dynamodb.conditions import Key
 
 
 @dataclass
@@ -12,7 +13,7 @@ class Message:
     completed: bool = False
 
     @classmethod
-    def from_json(cls, data: dict):
+    def to_cls(cls, data: dict):
         return cls(
             name=data["name"],
             content=data["content"],
@@ -33,23 +34,31 @@ class Message:
 
 class MessageDB:
     table = "CA#MESSAGE"
+
     def __init__(self) -> None:
         self.db_manager = DbManager()
 
     def save_message(self, message: Message) -> None:
-        breakpoint()
         try:
-            self.db_manager.add_item({
-                DbKeys.Primary.value: self.table,
-                DbKeys.Secondary.value: message.name,
-                **message.to_json()
-            })
+            self.db_manager.add_item(
+                {
+                    DbKeys.Primary.value: self.table,
+                    DbKeys.Secondary.value: message.name,
+                    **message.to_json(),
+                }
+            )
         except Exception as e:
-            breakpoint()
-        
+            pass
 
     def get_message(self) -> None:
         pass
+
+    def query_messages(self) -> None:
+        try:
+            results =  self.db_manager.query_items(Key(DbKeys.Primary.value).eq(self.table))
+            return [Message.to_cls(item) for item in results]
+        except Exception as e:
+            return []
 
     def delete_message(self) -> None:
         pass
