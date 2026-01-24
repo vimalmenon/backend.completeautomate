@@ -2,6 +2,7 @@ from backend.services.aws.dynamo_database import DbManager
 from dataclasses import dataclass
 from backend.services.data.enum import DbKeys
 from boto3.dynamodb.conditions import Key
+from uuid import uuid4, UUID
 
 
 @dataclass
@@ -9,6 +10,7 @@ class Message:
     name: str
     content: str
     messages: list[dict]
+    ref_id: UUID
     llm_model: str | None
     completed: bool = False
     id: str | None = None
@@ -22,6 +24,7 @@ class Message:
             completed=data.get("completed", False),
             llm_model=data.get("llm_model", None),
             id=data.get("id", None),
+            ref_id=UUID(data["ref_id"]),
         )
 
     def to_json(self) -> dict:
@@ -32,6 +35,7 @@ class Message:
             "messages": self.messages,
             "completed": self.completed,
             "llm_model": self.llm_model,
+            "ref_id": str(self.ref_id),
         }
 
 
