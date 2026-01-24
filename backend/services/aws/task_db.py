@@ -121,6 +121,17 @@ class TaskDB:
         results = self.db_manager.query_items(Key(DbKeys.Primary.value).eq(self.table))
         return [Task.to_cls(item) for item in results] if results else None
 
+    def get_task_by_id(self, task_id: UUID) -> Optional[Task]:
+        result = self.db_manager.get_item(
+            {
+                DbKeys.Primary.value: self.table,
+                DbKeys.Secondary.value: str(task_id),
+            }
+        )
+        if result:
+            return Task.to_cls(result)
+        return None
+
     def update_task(self, task: Task) -> None:
         try:
             self.db_manager.update_item(
