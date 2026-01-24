@@ -36,22 +36,20 @@ class AppService:
         #     """
         # )
 
+        NewIdeaTask().input(task="""
+            Our team is building a website for our company.
+            Breakdown the tasks for building the complete website.
+            Only include frontend tasks for frontend developers.
+            Breakdown the tasks to very small chunks with detailed instructions.
+            It should include all the pages required for a complete website.
+            """)
         # NewIdeaTask().input(
         #     task="""
-        #     Our team is building a website for our company.
-        #     Breakdown the tasks for building the complete website.
-        #     Only include frontend tasks for frontend developers.
-        #     Breakdown the tasks to very small chunks with detailed instructions.
-        #     It should include all the pages required for a complete website.
+        #     I want to create a image for youtube banner,
+        #     it should show properly on mobile and desktop both.
+        #     Make it visually appealing and relevant to my channel's theme.
         #     """
         # )
-        NewIdeaTask().input(
-            task="""
-            I want to create a image for youtube banner,
-            it should show properly on mobile and desktop both.
-            Make it visually appealing and relevant to my channel's theme.
-            """
-        )
         # Get Human Confirmation
         # HumanInputTask().confirm()
         # Get pending tasks
