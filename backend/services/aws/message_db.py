@@ -54,8 +54,12 @@ class MessageDB:
                     **message.to_json(),
                 }
             )
-        except Exception as e:
+        except Exception:
             pass
+
+    def save_message_from_agent_result(self, result: dict) -> None:
+        message = self.__transform_result_to_message(result)
+        self.save_message(message)
 
     def get_message(self) -> None:
         pass
@@ -66,7 +70,7 @@ class MessageDB:
                 Key(DbKeys.Primary.value).eq(self.table)
             )
             return [Message.to_cls(item) for item in results]
-        except Exception as e:
+        except Exception:
             return []
 
     def delete_message(self, id: str) -> None:
@@ -76,3 +80,16 @@ class MessageDB:
                 DbKeys.Secondary.value: id,
             }
         )
+
+    def __transform_result_to_message(self, result) -> Message:
+        message = result.get("messages", [])[-1]
+        messages = result.get("messages", [])
+        message = Message(
+            name=message.name,
+            content=message.content,
+            messages=[msg.dict() for msg in messages],
+            llm_model=message.response_metadata.get("model_name"),
+            completed=False,
+            ref_id=uuid4(),
+        )
+        return message

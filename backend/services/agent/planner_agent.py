@@ -17,7 +17,6 @@ from langchain.tools import tool
 from pydantic import BaseModel, Field
 from backend.services.aws.message_db import Message, MessageDB
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -223,8 +222,7 @@ class PlannerAgent(BaseAgent):
                         "messages": messages,
                     }
                 )
-                message = self.__transform_result_to_message(result)
-                MessageDB().save_message(message)
+                MessageDB().save_message_from_agent_result(result)
                 # result["structured_response"].tasks
                 # Reset retry count on successful invocation
                 retry_count = 0
@@ -308,18 +306,5 @@ class PlannerAgent(BaseAgent):
         logger.info("Agent task completed successfully")
         return result
 
-    def __transform_result_to_message(self, result) -> Message:
-        message = result.get("messages", [])[-1]
-        messages = result.get("messages", [])
-        message = Message(
-            name=message.name,
-            content=message.content,
-            messages=[msg.dict() for msg in messages],
-            llm_model=message.response_metadata.get("model_name"),
-            completed=False,
-            ref_id=uuid4(),
-        )
-        return message
-
-    def resume_task(self, task_id: str):
+    def resume_task(self, ref_id: str):
         pass

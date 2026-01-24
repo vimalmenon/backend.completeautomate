@@ -3,7 +3,6 @@ from logging import getLogger
 
 from pydantic import SecretStr
 
-
 logger = getLogger(__name__)
 
 

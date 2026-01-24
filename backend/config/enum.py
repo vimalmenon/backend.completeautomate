@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import Dict, Any
 
-
 # Team roles and responsibilities mapping
 TEAM_INFO: Dict[str, Dict[str, str]] = {
     "SCRUM_MASTER": {

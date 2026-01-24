@@ -10,7 +10,6 @@ from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 import base64
 from IPython.display import Image
 
-
 # https://docs.langchain.com/oss/python/integrations/chat/openai#image-generation
 
 
