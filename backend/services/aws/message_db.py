@@ -64,7 +64,18 @@ class MessageDB:
     def get_message(self) -> None:
         pass
 
-    def query_messages(self) -> None:
+    def get_message_by_ref_id(self, ref_id: UUID) -> list[Message] | None:
+        try:
+            results = self.db_manager.query_items(
+                Key(DbKeys.Primary.value).eq(self.table) & Key("ref_id").eq(str(ref_id))
+            )
+            if results:
+                return [Message.to_cls(item) for item in results]
+            return None
+        except Exception:
+            return None
+
+    def query_messages(self) -> list[Message]:
         try:
             results = self.db_manager.query_items(
                 Key(DbKeys.Primary.value).eq(self.table)
