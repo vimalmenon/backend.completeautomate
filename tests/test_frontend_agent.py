@@ -2,7 +2,7 @@ import pytest
 import json
 import tempfile
 import os
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import patch
 from backend.services.agent.frontend_agent import FrontendAgent
 from backend.services.tool.command_tool import CommandTool
 

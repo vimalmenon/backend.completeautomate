@@ -24,7 +24,6 @@ def list_all_tasks(runtime: ToolRuntime) -> List[Dict[str, Any]]:
         List of tasks in JSON format
 
     """
-    breakpoint()
     tasks = TaskDB().get_tasks() or []
     return [task.to_json() for task in tasks]
 
@@ -38,19 +37,6 @@ class PlannerAgent(BaseAgent):
         self.system_prompt_helper = SystemPromptHelper(role=self.role, teams=self.teams)
         self.system_prompt = self.system_prompt_helper.get_system_prompt()
         self.model = DeepseekAI().get_model()
-
-    def _handle_tool_call(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
-        """
-        Handle tool calls from the agent.
-
-        Args:
-            tool_name: Name of the tool to call
-            tool_input: Input parameters for the tool
-
-        Returns:
-            Tool execution result as string
-        """
-        breakpoint()
 
     def start_task(self, task: str):
         agent = create_agent(
@@ -74,10 +60,9 @@ class PlannerAgent(BaseAgent):
                     "messages": messages,
                 }
             )
-            # MessageDB().save_message_from_agent_result(result)
+            MessageDB(self.role).save_message_from_agent_result(result)
             if structured_response := result.get("structured_response"):
                 TaskDB().save_tasks(structured_response)
-            # result["structured_response"].tasks
             # Reset retry count on successful invocation
         except Exception as e:
             pass

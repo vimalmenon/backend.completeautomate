@@ -3,11 +3,13 @@ from dataclasses import dataclass
 from backend.services.data.enum import DbKeys
 from boto3.dynamodb.conditions import Key
 from uuid import uuid4, UUID
+from backend.config.enum import TeamEnum
 
 
 @dataclass
 class Message:
     name: str
+    agent: str
     content: str
     messages: list[dict]
     ref_id: UUID
@@ -19,6 +21,7 @@ class Message:
     def to_cls(cls, data: dict):
         return cls(
             name=data["name"],
+            agent=data["agent"],
             content=data["content"],
             messages=data["messages"],
             completed=data.get("completed", False),
@@ -31,6 +34,7 @@ class Message:
         return {
             "id": self.id,
             "name": self.name,
+            "agent": self.agent,
             "content": self.content,
             "messages": self.messages,
             "completed": self.completed,
@@ -42,8 +46,9 @@ class Message:
 class MessageDB:
     table = "CA#MESSAGE"
 
-    def __init__(self) -> None:
+    def __init__(self, team: TeamEnum) -> None:
         self.db_manager = DbManager()
+        self.team = team
 
     def save_message(self, message: Message) -> None:
         try:
@@ -70,7 +75,10 @@ class MessageDB:
                 Key(DbKeys.Primary.value).eq(self.table) & Key("ref_id").eq(str(ref_id))
             )
             if results:
-                return [Message.to_cls(item) for item in results]
+                return [
+                    Message.to_cls({**item, "agent": self.team.value})
+                    for item in results
+                ]
             return None
         except Exception:
             return None
@@ -80,7 +88,9 @@ class MessageDB:
             results = self.db_manager.query_items(
                 Key(DbKeys.Primary.value).eq(self.table)
             )
-            return [Message.to_cls(item) for item in results]
+            return [
+                Message.to_cls({**item, "agent": self.team.value}) for item in results
+            ]
         except Exception:
             return []
 
@@ -97,6 +107,7 @@ class MessageDB:
         messages = result.get("messages", [])
         message = Message(
             name=message.name,
+            agent=self.team.value,
             content=message.content,
             messages=[msg.dict() for msg in messages],
             llm_model=message.response_metadata.get("model_name"),

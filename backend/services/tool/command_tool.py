@@ -2,7 +2,6 @@ import subprocess
 import logging
 import shlex
 from typing import Optional, Dict, Any, TypedDict, Union
-from langchain.tools import tool
 
 logger = logging.getLogger(__name__)
 
