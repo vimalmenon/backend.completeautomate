@@ -1,6 +1,7 @@
 from backend.services.task.pending_task import PendingTask
 from backend.services.task.start_new_task import StartNewTask
 from backend.services.task.new_idea_task import NewIdeaTask
+from backend.config.enum import TeamEnum
 
 
 class AppService:
@@ -36,20 +37,19 @@ class AppService:
         #     """
         # )
 
-        NewIdeaTask().input(task="""
-            Our team is building a website for our company.
-            Breakdown the tasks for building the complete website.
-            Only include frontend tasks for frontend developers.
-            Breakdown the tasks to very small chunks with detailed instructions.
-            It should include all the pages required for a complete website.
-            """)
-        # NewIdeaTask().input(
-        #     task="""
-        #     I want to create a image for youtube banner,
-        #     it should show properly on mobile and desktop both.
-        #     Make it visually appealing and relevant to my channel's theme.
-        #     """
-        # )
+        # NewIdeaTask().input(task="""
+        #     Our team is building a website for our company.
+        #     Breakdown the tasks for building the complete website.
+        #     Only include frontend tasks for frontend developers.
+        #     Breakdown the tasks to very small chunks with detailed instructions.
+        #     It should include all the pages required for a complete website.
+        #     """)
+        graphic_design_task = """
+            I want to create a image for youtube banner,
+            it should show properly on mobile and desktop both.
+            Make it visually appealing and relevant to my channel's theme.
+            """
+        NewIdeaTask(TeamEnum.GRAPHIC_DESIGNER).input(task=graphic_design_task)
         # Get Human Confirmation
         # HumanInputTask().confirm()
         # Get pending tasks

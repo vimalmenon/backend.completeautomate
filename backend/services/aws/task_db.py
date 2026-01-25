@@ -17,6 +17,7 @@ class PriorityLevel(str, Enum):
 
 
 class StatusLevel(str, Enum):
+    NEW = "New"
     PLANNED = "Planned"
     IN_PROGRESS = "In Progress"
     DONE = "Done"
