@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 from backend.services.aws.dynamo_database import DbManager
 from dataclasses import dataclass
@@ -35,7 +36,7 @@ class PlannedTaskOutput(BaseModel):
         None, description="Priority level of the task (e.g., High, Medium, Low)"
     )
     assigned_to: Optional[TeamEnum] = Field(
-        None, description="Name of the person assigned to the task"
+        None, description="The team task has been assigned"
     )
     review_comments: Optional[str] = Field(
         None, description="Optional review comments for the task"
@@ -54,8 +55,8 @@ class Task:
     dependencies: List[UUID]
     status: StatusLevel
     priority: PriorityLevel
-    assigned_to: Optional[str] = None
-
+    created_at: datetime
+    assigned_to: Optional[TeamEnum] = None
     review_comments: Optional[str] = None
 
     def to_json(self) -> dict:
@@ -65,9 +66,10 @@ class Task:
             "description": self.description,
             "dependencies": [str(dep) for dep in self.dependencies],
             "status": self.status.value,
-            "assigned_to": self.assigned_to,
+            "assigned_to": self.assigned_to.value if self.assigned_to else None,
             "priority": self.priority.value if self.priority else None,
             "review_comments": self.review_comments,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
     @classmethod
@@ -78,9 +80,10 @@ class Task:
             description=data.description,
             dependencies=data.dependencies,
             status=data.status,
-            assigned_to=data.assigned_to,
+            assigned_to=TeamEnum(data.assigned_to) if data.assigned_to else None,
             priority=PriorityLevel(data.priority) if data.priority else None,
             review_comments=data.review_comments,
+            created_at=datetime.now(timezone.utc),
         )
 
     @classmethod
@@ -91,7 +94,8 @@ class Task:
             description=data["description"],
             dependencies=data["dependencies"],
             status=StatusLevel(data["status"]),
-            assigned_to=data.get("assigned_to", None),
+            created_at=datetime.fromisoformat(data["created_at"]),
+            assigned_to=TeamEnum(data.get("assigned_to")),
             priority=(
                 PriorityLevel(data.get("priority")) if data.get("priority") else None
             ),
@@ -154,7 +158,9 @@ class TaskDB:
                     ":description": task.description,
                     ":dependencies": [str(dep) for dep in task.dependencies],
                     ":status": task.status,
-                    ":assigned_to": task.assigned_to,
+                    ":assigned_to": (
+                        task.assigned_to.value if task.assigned_to else None
+                    ),
                     ":priority": task.priority.value if task.priority else None,
                     ":review_comments": task.review_comments,
                 },
