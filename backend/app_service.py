@@ -5,6 +5,7 @@ from backend.config.enum import TeamEnum
 
 
 class AppService:
+    task = TeamEnum.GRAPHIC_DESIGNER
 
     def start(self) -> None:
         # Start new Ideas
@@ -36,20 +37,22 @@ class AppService:
         #         - Ensure accessibility with proper ARIA labels and keyboard navigation
         #     """
         # )
-
-        # NewIdeaTask().input(task="""
-        #     Our team is building a website for our company.
-        #     Breakdown the tasks for building the complete website.
-        #     Only include frontend tasks for frontend developers.
-        #     Breakdown the tasks to very small chunks with detailed instructions.
-        #     It should include all the pages required for a complete website.
-        #     """)
-        graphic_design_task = """
+        if self.task == TeamEnum.GRAPHIC_DESIGNER:
+            graphic_design_task = """
             I want to create a image for youtube banner,
             it should show properly on mobile and desktop both.
             Make it visually appealing and relevant to my channel's theme.
             """
-        NewIdeaTask(TeamEnum.GRAPHIC_DESIGNER).input(task=graphic_design_task)
+            NewIdeaTask(TeamEnum.GRAPHIC_DESIGNER).input(task=graphic_design_task)
+        if self.task == TeamEnum.PLANNER:
+            planner_task = """
+                Our team is building a website for our company.
+                Breakdown the tasks for building the complete website.
+                Only include frontend tasks for frontend developers.
+                Breakdown the tasks to very small chunks with detailed instructions.
+                It should include all the pages required for a complete website.
+            """
+            NewIdeaTask(TeamEnum.PLANNER).input(task=planner_task)
         # Get Human Confirmation
         # HumanInputTask().confirm()
         # Get pending tasks
@@ -58,10 +61,3 @@ class AppService:
         # ScrumMasterAgent().check()
         # Start next tasks
         # StartNewTask().check()
-
-        # print(
-        #     CompanyDetailUtility(
-        #         "AI Automation Service Provider",
-        #         responsibility="driving innovation and excellence in automation solutions",
-        #     ).company_values
-        # )
