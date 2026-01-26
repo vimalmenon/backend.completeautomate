@@ -6,38 +6,47 @@ TEAM_INFO: Dict[str, Dict[str, str]] = {
     "SCRUM_MASTER": {
         "role": "SCRUM MASTER",
         "responsibility": "Overseeing project management and team coordination",
+        "name": "Alex",
     },
     "RESEARCHER": {
         "role": "RESEARCHER",
         "responsibility": "Conducting in-depth research to gather relevant information",
+        "name": "Christopher",
     },
     "BACKEND_DEVELOPER": {
         "role": "BACKEND DEVELOPER",
         "responsibility": "Designing and implementing server-side logic and databases",
+        "name": "Jordan",
     },
     "FRONTEND_DEVELOPER": {
         "role": "FRONTEND DEVELOPER",
         "responsibility": "Creating user interfaces and enhancing user experience",
+        "name": "Elizabeth",
     },
     "SCRIPT_WRITER": {
         "role": "SCRIPT WRITER",
         "responsibility": "Creating engaging and informative video scripts",
+        "name": "Michael",
     },
     "MANAGER": {
         "role": "MANAGER",
         "responsibility": "Overseeing team performance and project delivery",
+        "name": "Elara",
     },
     "GRAPHIC_DESIGNER": {
         "role": "GRAPHIC DESIGNER",
         "responsibility": "Designing visual content for various media",
+        "name": "Sophia",
     },
     "PLANNER": {
         "role": "PLANNER",
         "responsibility": "Planning and coordinating project tasks and resources",
+        "name": "Parker",
     },
     "SOCIAL_MEDIA_MANAGER": {
         "role": "SOCIAL MEDIA MANAGER",
         "responsibility": "Managing social media platforms and campaigns",
+        "name": "Samantha",
     },
 }
 
@@ -66,6 +75,9 @@ class TeamEnum(str, Enum):
 
     def get_responsibility(self) -> str:
         return TEAM_INFO[self.value]["responsibility"]
+
+    def get_name(self) -> str:
+        return TEAM_INFO[self.value]["name"]
 
 
 class AICreativityLevelEnum(str, Enum):
