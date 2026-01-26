@@ -10,3 +10,6 @@ class BaseAgent(ABC):
     @abstractmethod
     def resume_task(self, task_id: str):
         pass
+
+    def get_system_prompt_and_message(self):
+        return "test", "test message"

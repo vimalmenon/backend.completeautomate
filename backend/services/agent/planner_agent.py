@@ -47,7 +47,7 @@ class PlannerAgent(BaseAgent):
             response_format=PlannedTaskOutputResponse,
         )
         system_message = self.system_prompt_helper.get_system_message(
-            content="You are a planner agent. Your role is to plan and organize tasks and get all the planned tasks before starting the planning process."
+            content="You are a planner agent. Your role is to plan and organize tasks."
         )
         messages = [
             SystemMessage(content=system_message),
