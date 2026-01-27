@@ -4,6 +4,7 @@ from backend.services.data.enum import DbKeys
 from boto3.dynamodb.conditions import Key
 from uuid import uuid4, UUID
 from backend.config.enum import TeamEnum
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -13,6 +14,7 @@ class Message:
     content: str
     messages: list[dict]
     ref_id: UUID
+    created_at: datetime
     llm_model: str | None
     completed: bool = False
     id: str | None = None
@@ -28,6 +30,7 @@ class Message:
             llm_model=data.get("llm_model", None),
             id=data.get("id", None),
             ref_id=UUID(data["ref_id"]),
+            created_at=datetime.now(timezone.utc),
         )
 
     def to_json(self) -> dict:
@@ -40,6 +43,7 @@ class Message:
             "completed": self.completed,
             "llm_model": self.llm_model,
             "ref_id": str(self.ref_id),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
 
