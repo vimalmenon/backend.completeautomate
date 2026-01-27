@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Any
+from typing import Dict
 
 # Team roles and responsibilities mapping
 TEAM_INFO: Dict[str, Dict[str, str]] = {

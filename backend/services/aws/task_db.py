@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-from pydantic import BaseModel, Field
 from backend.services.aws.dynamo_database import DbManager
 from dataclasses import dataclass
 from pydantic import BaseModel, Field
