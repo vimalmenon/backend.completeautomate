@@ -117,5 +117,6 @@ class MessageDB:
             llm_model=message.response_metadata.get("model_name"),
             completed=False,
             ref_id=uuid4(),
+            created_at=datetime.now(timezone.utc),
         )
         return message

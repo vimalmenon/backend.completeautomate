@@ -124,62 +124,258 @@ else:
 - `cwd` (str, optional): Working directory for execution
 - `shell` (bool, optional): Use shell execution (default: False)
 
-### SystemPromptUtility
+### SystemPromptHelper
 Manages dynamic system prompts using Jinja2 template engine.
 
-**Location:** `backend/services/utility/system_prompt_utility.py`
+**Location:** `backend/services/helper/system_prompt/system_prompt_helper.py`
 
 **Features:**
 - Template-based prompt generation
+- Role-based system prompts
 - Variable substitution
-- Filter support (uppercase, join, etc.)
-- Easy customization
+- Team-aware prompts
+- Message formatting
 
 **Usage:**
 
 ```python
-from jinja2 import Template
+from backend.services.helper.system_prompt.system_prompt_helper import SystemPromptHelper
+from backend.config.enum import TeamEnum
 
-# Create a template
-template = Template("""
-You are a {{ role }} assistant.
-Task: {{ task }}
-Available tools: {{ tools | join(', ') }}
-""")
-
-# Render with variables
-output = template.render(
-    role="Python expert",
-    task="help with code",
-    tools=["execute_command", "analyze_code", "suggest_improvements"]
+helper = SystemPromptHelper(
+    role=TeamEnum.PLANNER,
+    teams=[TeamEnum.BACKEND, TeamEnum.FRONTEND]
 )
 
-print(output)
+# Get system prompt
+system_prompt = helper.get_system_prompt()
+
+# Get system message
+system_message = helper.get_system_message(
+    content="You are responsible for planning tasks"
+)
 ```
 
-**Common Jinja2 Features:**
+### AI Services
 
-```jinja2
-{# Variables #}
-Hello {{ name }}!
+Multiple AI provider integrations for model inference.
 
-{# Filters #}
-{{ message | upper }}
-{{ items | length }}
-{{ items | join(', ') }}
+**Location:** `backend/services/ai/`
 
-{# Conditionals #}
-{% if user %}
-  Welcome {{ user }}!
-{% endif %}
+**Supported Providers:**
+- OpenAI (`open_ai.py`)
+- DeepSeek (`deepseek_ai.py`)
+- Groq (`groq_ai.py`)
+- Anthropic (`anthropic_ai.py`)
+- Perplexity (`perplexity_ai.py`)
+- OpenRouter (`open_router_ai.py`)
 
-{# Loops #}
-{% for item in items %}
-  - {{ item }}
-{% endfor %}
+**Usage:**
 
-{# Comments #}
-{# This is a comment #}
+```python
+from backend.services.ai.open_ai import OpenAI
+from backend.services.ai.deepseek_ai import DeepseekAI
+from langchain.messages import HumanMessage
+
+# Initialize AI service
+ai_service = DeepseekAI()
+model = ai_service.get_model()
+
+# Invoke model with messages
+response = model.invoke([
+    HumanMessage(content="Generate a plan for building a website")
+])
+
+print(response.content)
+```
+
+### Agent Services
+
+Specialized agents for different roles and tasks.
+
+**Location:** `backend/services/agent/`
+
+**Available Agents:**
+- **PlannerAgent** (`planner_agent.py`) - Plans and organizes tasks
+- **BackendAgent** (`backend_agent.py`) - Backend development tasks
+- **FrontendAgent** (`frontend_agent.py`) - Frontend development tasks
+- **GraphicDesignerAgent** (`graphic_designer_agent.py`) - Design tasks
+- **ResearcherAgent** (`researcher_agent.py`) - Research and information gathering
+- **SocialMediaAgent** (`social_media_agent.py`) - Social media content
+- **ManagerAgent** (`manager_agent.py`) - Project management
+
+**Base Agent Class:**
+All agents extend `BaseAgent` with common functionality like system prompts, model management, and tool handling.
+
+**Usage:**
+
+```python
+from backend.services.agent.planner_agent import PlannerAgent
+
+agent = PlannerAgent()
+result = agent.start_task(
+    task="Break down the website project into tasks",
+    max_retries=3
+)
+```
+
+### AWS Services
+
+Cloud integration with AWS services.
+
+**Location:** `backend/services/aws/`
+
+**Services:**
+- **DynamoDB** (`dynamo_database.py`) - Database operations
+- **MessageDB** (`message_db.py`) - Message storage and retrieval
+- **TaskDB** (`task_db.py`) - Task management with PlannedTaskOutput
+- **S3Storage** (`s3_storage.py`) - File storage
+- **SecretManager** (`secret.py`) - Secret management
+- **SessionManager** (`session.py`) - Session handling
+
+**Usage:**
+
+```python
+from backend.services.aws.task_db import TaskDB, Task, StatusLevel, PriorityLevel
+from backend.services.aws.message_db import MessageDB
+from uuid import UUID
+
+# Task Database
+task_db = TaskDB()
+
+# Get all tasks
+tasks = task_db.get_tasks()
+
+# Get specific task
+task = task_db.get_task_by_id(UUID("task-id"))
+
+# Save tasks
+task_db.save_tasks(tasks)
+
+# Message Database
+msg_db = MessageDB()
+messages = msg_db.query_messages()
+```
+
+### FileTool Service
+
+File system operations and management.
+
+**Location:** `backend/services/tool/file_tool.py`
+
+**Features:**
+- Read files
+- Write files
+- Delete files
+- Directory operations
+- File validation
+
+**Usage:**
+
+```python
+from backend.services.tool.file_tool import FileTool
+
+file_tool = FileTool()
+
+# Read file
+content = file_tool.read_file("path/to/file.txt")
+
+# Write file
+file_tool.write_file("path/to/file.txt", "content")
+
+# Delete file
+file_tool.delete_file("path/to/file.txt")
+```
+
+### InternetTool Service
+
+Web browsing and internet operations.
+
+**Location:** `backend/services/tool/internet_tool.py`
+
+**Features:**
+- Web searches
+- Page fetching
+- Content retrieval
+
+**Usage:**
+
+```python
+from backend.services.tool.internet_tool import InternetTool
+
+internet_tool = InternetTool()
+
+# Search the web
+results = internet_tool.search("query")
+
+# Fetch page content
+content = internet_tool.fetch_page("url")
+```
+
+### Task Services
+
+Task management and execution.
+
+**Location:** `backend/services/task/`
+
+**Task Types:**
+- **PendingTask** (`pending_task.py`) - Manage pending tasks
+- **StartNewTask** (`start_new_task.py`) - Start new task execution
+- **NewIdeaTask** (`new_idea_task.py`) - Create and process new ideas
+- **HumanInputTask** (`human_input_task.py`) - Request human input/confirmation
+
+**Usage:**
+
+```python
+from backend.services.task.new_idea_task import NewIdeaTask
+from backend.config.enum import TeamEnum
+
+# Create and process new idea
+idea_task = NewIdeaTask(team=TeamEnum.PLANNER)
+result = idea_task.input(
+    task="Describe what you want to build"
+)
+```
+
+### Text-to-Speech Service
+
+Audio generation from text.
+
+**Location:** `backend/services/text_to_speech/resemble_service.py`
+
+**Features:**
+- Text to speech conversion
+- Multiple voice options
+- Audio file generation
+
+**Usage:**
+
+```python
+from backend.services.text_to_speech.resemble_service import ResembleService
+
+tts = ResembleService()
+audio_url = tts.generate_speech("Hello, this is a test message")
+```
+
+### Configuration & Enums
+
+**Location:** `backend/config/`
+
+**Components:**
+- **Env** (`env.py`) - Environment variables using Pydantic
+- **Enums** (`enum.py`) - Team roles, status levels, priority levels
+
+**Usage:**
+
+```python
+from backend.config.env import env
+from backend.config.enum import TeamEnum
+
+# Access environment variables (as SecretStr)
+api_key = env.OPENAI_API_KEY.get_secret_value()
+
+# Use enums
+team = TeamEnum.PLANNER
 ```
 
 ---
