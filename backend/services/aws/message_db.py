@@ -108,8 +108,8 @@ class MessageDB:
         )
 
     def __transform_result_to_message(self, result) -> Message:
-        message = result.get("messages", [])[-1]
         messages = result.get("messages", [])
+        message = messages[-1]
         message = Message(
             name=message.name,
             agent=self.team.value,
@@ -117,7 +117,7 @@ class MessageDB:
             messages=[msg.dict() for msg in messages],
             llm_model=message.response_metadata.get("model_name"),
             completed=False,
-            ref_id={},
+            ref_id=result["ref_id"],
             created_at=datetime.now(timezone.utc),
         )
         return message
