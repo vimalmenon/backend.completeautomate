@@ -7,7 +7,7 @@ from backend.services.ai.deepseek_ai import DeepseekAI
 from backend.services.tool.command_tool import CommandTool
 from langchain.messages import SystemMessage, HumanMessage, ToolMessage
 from backend.services.agent.base_agent import BaseAgent
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 import json
 import logging
 from langchain.tools import tool

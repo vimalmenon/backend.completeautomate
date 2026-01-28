@@ -12,7 +12,7 @@ class ManagerAgent(BaseAgent):
     name: str = "Elara"
     role: TeamEnum = TeamEnum.MANAGER
     responsibility: str = "Overseeing team performance and project delivery"
-    teams: list = [TeamEnum.SCRUM_MASTER, TeamEnum.RESEARCHER]
+    teams: list = [TeamEnum.SCRUM_MASTER, TeamEnum.RESEARCHER, TeamEnum.PLANNER]
 
     def __init__(self):
         self.system_prompt = SystemPromptHelper(
