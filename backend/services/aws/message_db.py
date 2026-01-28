@@ -14,7 +14,7 @@ class Message:
     agent: str
     content: str
     messages: list[dict]
-    ref_id: UUID
+    ref_id: dict
     created_at: datetime
     llm_model: str | None
     completed: bool = False
@@ -30,7 +30,7 @@ class Message:
             completed=data.get("completed", False),
             llm_model=data.get("llm_model", None),
             id=data.get("id", None),
-            ref_id=UUID(data["ref_id"]),
+            ref_id=data["ref_id"],
             created_at=datetime.now(timezone.utc),
         )
 
@@ -43,7 +43,7 @@ class Message:
             "messages": self.messages,
             "completed": self.completed,
             "llm_model": self.llm_model,
-            "ref_id": str(self.ref_id),
+            "ref_id": self.ref_id,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
@@ -117,7 +117,7 @@ class MessageDB:
             messages=[msg.dict() for msg in messages],
             llm_model=message.response_metadata.get("model_name"),
             completed=False,
-            ref_id=uuid4(),
+            ref_id={},
             created_at=datetime.now(timezone.utc),
         )
         return message
