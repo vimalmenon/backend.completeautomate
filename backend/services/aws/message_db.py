@@ -5,6 +5,7 @@ from boto3.dynamodb.conditions import Key
 from uuid import uuid4, UUID
 from backend.config.enum import TeamEnum
 from datetime import datetime, timezone
+from backend.services.exception.app_exception import AppException
 
 
 @dataclass
@@ -63,8 +64,8 @@ class MessageDB:
                     **message.to_json(),
                 }
             )
-        except Exception:
-            pass
+        except Exception as e:
+            raise AppException(f"Error saving message: {e}")
 
     def save_message_from_agent_result(self, result: dict) -> None:
         message = self.__transform_result_to_message(result)
@@ -84,8 +85,8 @@ class MessageDB:
                     for item in results
                 ]
             return None
-        except Exception:
-            return None
+        except Exception as e:
+            raise AppException(f"Error getting message by ref_id: {e}")
 
     def query_messages(self) -> list[Message]:
         try:
@@ -95,8 +96,8 @@ class MessageDB:
             return [
                 Message.to_cls({**item, "agent": self.team.value}) for item in results
             ]
-        except Exception:
-            return []
+        except Exception as e:
+            raise AppException(f"Error querying messages: {e}")
 
     def delete_message(self, id: str) -> None:
         self.db_manager.remove_item(

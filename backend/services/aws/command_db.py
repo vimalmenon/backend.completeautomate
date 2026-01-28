@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from uuid import uuid4, UUID
 from datetime import datetime, timezone
 from backend.services.exception.app_exception import AppException
+from backend.services.data.enum import DbKeys
 
 
 @dataclass
@@ -33,11 +34,18 @@ class CommandDB:
     def __init__(self):
         self.db_manager = DbManager()
 
-    def save_command(self, command: Command) -> None:
+    def save_command(self, command: Command) -> dict:
         try:
             self.db_manager.add_item(
-                command.to_json(),
-                table_name=self.table,
+                {
+                    DbKeys.Primary.value: self.table,
+                    DbKeys.Secondary.value: str(command.id),
+                    **command.to_json(),
+                }
             )
         except Exception as e:
             raise AppException(f"Error saving command: {e}")
+        return {
+            DbKeys.Primary.value: self.table,
+            DbKeys.Secondary.value: str(command.id),
+        }
