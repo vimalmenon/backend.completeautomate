@@ -17,6 +17,14 @@ class Command:
             "created_at": self.created_at.isoformat(),
         }
 
+    @classmethod
+    def to_cls(cls, data: dict):
+        return cls(
+            id=UUID(data["id"]),
+            cmd=data["cmd"],
+            created_at=datetime.fromisoformat(data["created_at"]),
+        )
+
 
 class CommandDB:
     table = "CA#COMMAND"
