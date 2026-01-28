@@ -8,6 +8,7 @@ from backend.services.data.enum import DbKeys
 from boto3.dynamodb.conditions import Key
 from enum import Enum
 from backend.config.enum import TeamEnum
+from backend.services.exception.app_exception import AppException
 
 
 class PriorityLevel(str, Enum):
@@ -108,7 +109,7 @@ class TaskDB:
     def __init__(self) -> None:
         self.db_manager = DbManager()
 
-    def save_tasks(self, tasks: PlannedTaskOutputResponse) -> None:
+    def save_tasks(self, tasks: PlannedTaskOutputResponse) -> dict:
         for task in tasks.tasks:
             try:
                 self.db_manager.add_item(
@@ -119,7 +120,11 @@ class TaskDB:
                     }
                 )
             except Exception as e:
-                pass
+                raise AppException(f"Error saving tasks: {e}")
+            return {
+                DbKeys.Primary.value: self.table,
+                DbKeys.Secondary.value: str(task.task_id),
+            }
 
     def get_tasks(self) -> Optional[PlannedTaskOutputResponse]:
         results = self.db_manager.query_items(Key(DbKeys.Primary.value).eq(self.table))
@@ -165,4 +170,4 @@ class TaskDB:
                 },
             )
         except Exception as e:
-            pass
+            raise AppException(f"Error updating task: {e}")
