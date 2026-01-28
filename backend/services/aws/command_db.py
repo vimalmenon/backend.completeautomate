@@ -2,6 +2,7 @@ from backend.services.aws.dynamo_database import DbManager
 from dataclasses import dataclass
 from uuid import uuid4, UUID
 from datetime import datetime, timezone
+from backend.services.exception.app_exception import AppException
 
 
 @dataclass
@@ -39,4 +40,4 @@ class CommandDB:
                 table_name=self.table,
             )
         except Exception as e:
-            print(f"Error saving command: {e}")
+            raise AppException(f"Error saving command: {e}")
