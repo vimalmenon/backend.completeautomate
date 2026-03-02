@@ -83,7 +83,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - Analyzer
     - Generator
     - Updater
-- [ ] Need to create Platform reference DB ( youtube or insta, Video_id and Channel_id)
+- [ ] Need to add UI for Youtube Channel
+- [ ] Need to add Graph for stats for YouTube
+- [ ] Need to create platform reference DB ( youtube or insta, Video_id and Channel_id)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
 - [ ] Test if the it's able to generate good image Prompt with multiple options
 - [ ] Add DB to store data from YouTube Analysis
@@ -103,7 +105,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 **Ideas / Low Priority:**
 
 - Dockerfile + DockerHub CD
-- Local text-to-speech option
+- Local text-to-speech
 - Instagram/Twitter posting integration
 - YouTube comments analysis
 
