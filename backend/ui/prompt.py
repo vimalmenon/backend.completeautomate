@@ -19,7 +19,9 @@ def save_prompt_changes(
         prompt_data.last_updated = datetime.now()
         PromptDB().save_prompt(prompt_data)
         ui.notify("Prompt updated", type="positive")
-        ui.run_javascript('window.location.href = "/prompt"')
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
     except AppException:
         ui.notify("Failed to update prompt", type="negative")
 
@@ -79,7 +81,9 @@ def add_prompt(
         )
         PromptDB().save_prompt(prompt_data)
         ui.notify("Prompt created", type="positive")
-        ui.run_javascript('window.location.href = "/prompt"')
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
     except (ValueError, AppException):
         ui.notify("Failed to create prompt", type="negative")
 
@@ -153,7 +157,7 @@ def prompt_page(page: str):
                 ui.button(
                     icon="refresh",
                     on_click=lambda: ui.run_javascript(
-                        'window.location.href = "/prompt"'
+                        "window.location.href = window.location.pathname + window.location.search"
                     ),
                 ).props("flat")
                 ui.button(

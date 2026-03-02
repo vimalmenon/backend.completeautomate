@@ -172,7 +172,7 @@ def youtube_page(page: str):
                 ui.button(
                     icon="refresh",
                     on_click=lambda: ui.run_javascript(
-                        'window.location.href = "/youtube"'
+                        "window.location.href = window.location.pathname + window.location.search"
                     ),
                 ).props("flat")
                 ui.button(

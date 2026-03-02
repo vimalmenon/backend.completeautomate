@@ -78,17 +78,6 @@ def update_task_status(event, current_task):
         ui.notify("Failed to update task status", type="negative")
 
 
-def delete_task(current_task) -> None:
-    try:
-        TaskDB().delete_task(current_task)
-        ui.notify("Task deleted", type="positive")
-        ui.run_javascript(
-            "window.location.href = window.location.pathname + window.location.search"
-        )
-    except AppException:
-        ui.notify("Failed to delete task", type="negative")
-
-
 def toggle_row(section, header, expand_button):
     is_hidden = "hidden" in section.classes
     if is_hidden:
@@ -229,7 +218,7 @@ def tasks_page(page: str):
                 ui.button(
                     icon="refresh",
                     on_click=lambda: ui.run_javascript(
-                        'window.location.href = "/tasks"'
+                        "window.location.href = window.location.pathname + window.location.search"
                     ),
                 ).props("flat")
                 ui.button(
@@ -271,8 +260,7 @@ def tasks_page(page: str):
                     ui.label("Created By").classes("w-1/8")
                     ui.label("Created At").classes("w-1/8")
                     ui.label("Completed At").classes("w-1/8")
-                    ui.label("Actions").classes("w-1/24 text-center shrink-0")
-                    ui.label("Expand").classes("w-1/24 text-center shrink-0")
+                    ui.label("Expand").classes("w-1/12 text-center shrink-0")
 
                 # Table rows
                 for task in tasks:
@@ -312,22 +300,9 @@ def tasks_page(page: str):
                             ui.label(created_at).classes("w-1/8 text-sm font-medium")
                             ui.label(completed_at).classes("w-1/8 text-sm font-medium")
 
-                            # Actions cell
-                            with ui.row().classes(
-                                "w-1/24 justify-center items-center shrink-0"
-                            ):
-                                ui.button(
-                                    icon="delete",
-                                    on_click=lambda _=None, current_task=task: delete_task(
-                                        current_task
-                                    ),
-                                ).props(
-                                    'flat dense color="negative" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
-                                )
-
                             # Expand cell
                             with ui.row().classes(
-                                "w-1/24 justify-center items-center shrink-0"
+                                "w-1/12 justify-center items-center shrink-0"
                             ):
                                 expand_button = ui.button(icon="expand_more").props(
                                     'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
