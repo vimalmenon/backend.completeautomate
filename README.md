@@ -78,11 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] Generator Types 
-    - Creator 
-    - Analyzer
-    - Generator
-    - Updater
 - [ ] Need to add UI for Youtube Channel
 - [ ] Need to add Graph for stats for YouTube
 - [ ] Need to create platform reference DB ( youtube or insta, Video_id and Channel_id)
