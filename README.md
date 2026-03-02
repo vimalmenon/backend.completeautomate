@@ -88,7 +88,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test if the it's able to generate good image Prompt with multiple options
 - [ ] Add DB to store data from YouTube Analysis
 - [ ] Fix transcript for any grammar or any errors in the name
-- [ ] Test all the prompt once done
+- [ ] Test all the prompts once done
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot prompt examples for image and other generation tasks
