@@ -99,7 +99,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
 - [ ] Mock Data for UI and Test
-- [ ] GUI enhancements (task create/edit, analytics dashboard, YouTube stats graphs)
+- [ ] GUI enhancements 
+  - task create/edit
+  - analytics dashboard, 
+  - YouTube stats graphs
 
 
 **Ideas / Low Priority:**
@@ -108,6 +111,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - Local text-to-speech
 - Instagram/Twitter posting integration
 - YouTube comments analysis
+- Adopt GIT branching strategies
 
 </details>
 
