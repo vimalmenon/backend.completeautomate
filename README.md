@@ -78,10 +78,14 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] Generator of Type (creator, analyzer, generator, updater )
-- [ ] Summarize should be next step
-- [ ] Test if it's able to generate YouTube Title, Description and Tags (Give Multiple Options)
-- [ ] Test if the it's able to generate good image title Prompt
+- [ ] Generator Types 
+    - Creator 
+    - Analyzer
+    - Generator
+    - Updater
+- [ ] Need to create Platform reference DB ( youtube or insta, Video_id and Channel_id)
+- [ ] Test if it's able to generate YouTube Title, Description and Tags and give multiple options
+- [ ] Test if the it's able to generate good image Prompt with
 - [ ] Add DB to store data from YouTube Analysis
 - [ ] Fix transcript for any grammar or any errors in the name
 - [ ] Test all the prompt once done
@@ -92,6 +96,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add topic suggestions for next week
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
+- [ ] Mock Data for UI and Test
 - [ ] GUI enhancements (task create/edit, analytics dashboard, YouTube stats graphs)
 
 

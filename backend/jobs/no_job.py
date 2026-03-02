@@ -11,7 +11,7 @@ class NoJob(BaseJob):
 
     def execute(self, task: Task) -> tuple[TaskStatusEnum, int]:
         logger.error(
-            "No job handler available for task %s with job type %s",
+            "No job handler available for task %s",
             task.id,
         )
         return (TaskStatusEnum.FAILED, task.failed_count + 1)

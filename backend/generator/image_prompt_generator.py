@@ -50,7 +50,7 @@ class ImagePromptGenerator(BaseGenerator):
             )
             result = agent.invoke()
             structured_response = result.get("structured_response", [])
-            prompt_responses = [
+            prompt_response = [
                 PromptData(
                     name=data.name,
                     prompt=data.prompt,
@@ -66,17 +66,13 @@ class ImagePromptGenerator(BaseGenerator):
                 video_id=self.job_data.video_id,
                 image_type=self.job_data.image_type,
                 status=JobStatusEnum.REVIEW,
-                messages=agent.parse_messages_to_dict(result["messages"]),
-                prompt_responses=prompt_responses,
+                prompts=prompt_response,
             )
             self.db_manager.save_to_db(data)
             return TaskStatusEnum.REVIEW
         elif len(prompts) == 1:
             prompt = prompts[0]
-            prompt.prompt_responses = self.__filter_prompt_responses(
-                prompt.prompt_responses
-            )
-
+            prompt.prompts = self.__filter_prompt_responses(prompt.prompts)
             self.db_manager.update_data(prompt)
             return TaskStatusEnum.REVIEW
         else:

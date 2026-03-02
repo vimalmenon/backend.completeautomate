@@ -4,7 +4,6 @@ from uuid import UUID
 
 from backend.data.s3 import S3Data
 from backend.enum import (
-    AICreativityLevelEnum,
     ImageTypeEnum,
     JobStatusEnum,
 )
@@ -72,7 +71,6 @@ class ImagePromptJobData:
     description: str
     video_id: str
     image_type: ImageTypeEnum
-    creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW
 
     def to_json(self) -> dict:
         return {
@@ -80,7 +78,6 @@ class ImagePromptJobData:
             "description": self.description,
             "image_type": self.image_type.value,
             "video_id": self.video_id,
-            "creativity_level": self.creativity_level.value,
         }
 
     @classmethod
@@ -90,7 +87,6 @@ class ImagePromptJobData:
             description=data["description"],
             image_type=ImageTypeEnum(data["image_type"]),
             video_id=data["video_id"],
-            creativity_level=AICreativityLevelEnum(data["creativity_level"]),
         )
 
 
@@ -103,8 +99,7 @@ class ImagePromptDBData:
     image_type: ImageTypeEnum
     comment: str | None = None
     status: JobStatusEnum = JobStatusEnum.NEW
-    messages: list[dict] = field(default_factory=list)
-    prompt_responses: list[PromptData] = field(default_factory=list)
+    prompts: list[PromptData] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -113,8 +108,7 @@ class ImagePromptDBData:
             "task_id": str(self.task_id),
             "comment": self.comment,
             "status": self.status.value,
-            "messages": self.messages,
-            "prompt_responses": [pr.to_json() for pr in self.prompt_responses],
+            "prompts": [pr.to_json() for pr in self.prompts],
             "video_id": self.video_id,
             "image_type": self.image_type.value,
         }
@@ -126,10 +120,7 @@ class ImagePromptDBData:
             prompt=data["prompt"],
             task_id=UUID(data["task_id"]),
             comment=data.get("comment"),
-            messages=data.get("messages", []),
-            prompt_responses=[
-                PromptData.to_cls(pr) for pr in data.get("prompt_responses", [])
-            ],
+            prompts=[PromptData.to_cls(pr) for pr in data.get("prompts", [])],
             video_id=data["video_id"],
             image_type=ImageTypeEnum(data["image_type"]),
         )
