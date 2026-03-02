@@ -23,6 +23,7 @@ class Env:
     DEEPSEEK_API_KEY: SecretStr = SecretStr(os.environ["DEEPSEEK_API_KEY"])
     YOUTUBE_API_KEY: str = os.environ["YOUTUBE_API_KEY"]
     YOUTUBE_CHANNEL_ID: str = os.environ["YOUTUBE_CHANNEL_ID"]
+    OFFLINE:bool= os.environ["OFFLINE"]
 
 
 env = Env()

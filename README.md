@@ -84,8 +84,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - Generator
     - Updater
 - [ ] Need to create Platform reference DB ( youtube or insta, Video_id and Channel_id)
-- [ ] Test if it's able to generate YouTube Title, Description and Tags and give multiple options
-- [ ] Test if the it's able to generate good image Prompt with
+- [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
+- [ ] Test if the it's able to generate good image Prompt with multiple options
 - [ ] Add DB to store data from YouTube Analysis
 - [ ] Fix transcript for any grammar or any errors in the name
 - [ ] Test all the prompt once done
