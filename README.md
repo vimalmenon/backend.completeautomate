@@ -86,12 +86,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Fix transcript for any grammar or any errors in the name
 - [ ] Test all the prompt once done
 - [ ] Agent to analyze prompts
-- [ ] Fix tox Issues
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot prompt examples for image and other generation tasks
 - [ ] Add playlist details to video records
 - [ ] Add topic suggestions for next week
 - [ ] Fix TODOs and dead code
+- [ ] Fix tox issues
 - [ ] GUI enhancements (task create/edit, analytics dashboard, YouTube stats graphs)
 
 
