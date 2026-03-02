@@ -30,8 +30,8 @@ class TaskSchedulerServices:
             JobEnum.YouTubeVideoAnalyze: YouTubeJob,
             JobEnum.YouTubeVideoDetailUpdater: YouTubeJob,
             JobEnum.PromptAnalyzer: PromptAnalyzerJob,
-            ImageGeneratorJob.job: ImageGeneratorJob,
-            ImagePromptJob.job: ImagePromptJob,
+            JobEnum.ImageGenerator: ImageGeneratorJob,
+            JobEnum.ImagePrompt: ImagePromptJob,
         }
 
     def start(self) -> None:

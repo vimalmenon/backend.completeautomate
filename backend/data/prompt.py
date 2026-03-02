@@ -66,8 +66,8 @@ class PromptAnalysisDBData:
     prompt_task: PromptTaskEnum
     description: str
     used_version: str
-    comment: str
     versions: list[PromptAnalysisVersionDBData]
+    comment: str | None
 
     def to_json(self) -> dict:
         return {
@@ -84,7 +84,7 @@ class PromptAnalysisDBData:
             prompt_task=PromptTaskEnum(data["prompt_task"]),
             description=data["description"],
             used_version=data["used_version"],
-            comment=data["comment"],
+            comment=data.get("comment"),
             versions=[
                 PromptAnalysisVersionDBData.to_cls(version)
                 for version in data.get("versions", [])
