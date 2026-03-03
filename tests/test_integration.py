@@ -39,15 +39,24 @@ class TestAWSIntegration:
     def test_dynamodb_put_get_cycle(self, dynamodb_table) -> None:
         """Test complete DynamoDB put and get cycle"""
         from backend.database.dynamo_database import DbManager
+        from backend.enum import DbKeysEnum
 
         db = DbManager()
         db.table = dynamodb_table
 
         # Put item
-        test_item = {"id": "test-123", "data": "test data"}
+        test_item = {
+            DbKeysEnum.Primary.value: "test-table",
+            DbKeysEnum.Secondary.value: "test-123",
+            "data": "test data",
+        }
         db.add_item(test_item)
 
         # Get item
-        result = db.get_item({"id": "test-123"})
-        assert result["id"] == "test-123"
+        result = db.get_item({
+            DbKeysEnum.Primary.value: "test-table",
+            DbKeysEnum.Secondary.value: "test-123",
+        })
+        assert result[DbKeysEnum.Primary.value] == "test-table"
+        assert result[DbKeysEnum.Secondary.value] == "test-123"
         assert result["data"] == "test data"
