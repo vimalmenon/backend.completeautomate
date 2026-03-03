@@ -23,7 +23,9 @@ class PlatformDB:
 
     def save_data(self, data: PlatformDBData) -> str:
         secondary = ""
-        if data.platform_type == PlatformEnum.YouTubeVideo:
+        if data.platform_type == PlatformEnum.YouTubeVideo and hasattr(
+            data.data, "video_id"
+        ):
             secondary = f"{data.platform_type.value}#{data.data.channel_id}#{data.data.video_id}"
         if data.platform_type == PlatformEnum.YouTubeChannel:
             secondary = f"{data.platform_type.value}#{data.data.channel_id}"
