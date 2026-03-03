@@ -48,6 +48,7 @@ class YouTubeChannelStatsDBData:
 @dataclass
 class YouTubeChannelDBData:
     channel_id: str
+    ref_id: str
     title: str
     description: str
     custom_url: str
@@ -61,10 +62,17 @@ class YouTubeChannelDBData:
     task_id: UUID
     stats: list[YouTubeChannelStatsDBData]
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
             title=data["title"],
             description=data["description"],
             custom_url=data["custom_url"],
@@ -87,6 +95,7 @@ class YouTubeChannelDBData:
         stat = YouTubeChannelStatsDBData.to_cls_from_response(channel["statistics"])
         return cls(
             channel_id=channel["id"],
+            ref_id=channel["ref_id"],
             title=snippet["title"],
             description=snippet["description"],
             custom_url=snippet["customUrl"],
@@ -105,6 +114,7 @@ class YouTubeChannelDBData:
         return {
             "channel_id": self.channel_id,
             "title": self.title,
+            "ref_id": self.ref_id,
             "description": self.description,
             "custom_url": self.custom_url,
             "published_at": self.published_at.isoformat(),
