@@ -43,8 +43,10 @@ class YouTubeVideoGenerator(BaseGenerator):
         if not video_from_db:
             logger.info("Video not found in DB. Fetching details from API.")
             youtube_response = self.youtube_api.fetch_video_details(video_id)
+            self.__create_platform_data()
+
             youtube_data = YouTubeVideoDBData.to_cls_from_response(
-                {**youtube_response, "task_id": str(self.task.id)}
+                {**youtube_response, "task_id": str(self.task.id), "ref_id": ""}
             )
             self.db.add_video(youtube_data)
             self.__create_task_for_transcript(video_id)
@@ -81,3 +83,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             video_id,
             task.id,
         )
+
+    def __create_platform_data(self):
+        ## TODO Add platform when new vide is added
+        pass

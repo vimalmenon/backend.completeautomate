@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add platform data
 - [ ] Fetch platform data
 - [ ] Add Platform data
+- [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel
 - [ ] Use Platform data for all references
 - [ ] Remove all the channel and video reference
@@ -99,12 +100,16 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
 - [ ] Mock Data use (factory)
-- [ ] GUI enhancements 
-  - [ ] Task create/edit
-  - [ ] Analytics dashboard, 
+- [ ] Test Coverage
+  - [ ] Mock data from Agents (Positive and Negative)
+  - [ ] Test all the flows from Generator to Updater, Analyze
+- [ ] GUI Enhancements 
+  - [ ] Task Create or Edit
+  - [ ] Analytics dashboard
   - [ ] YouTube stats graphs
   - [ ] Need to add UI for Youtube Channel
   - [ ] Need to add Graph for stats for YouTube
+  - [ ] Show Graph next to Edit button to show Graph
 
 
 **Ideas / Low Priority:**

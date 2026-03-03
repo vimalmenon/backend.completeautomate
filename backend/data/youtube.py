@@ -362,6 +362,12 @@ class YouTubeVideoJobData:
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
         )
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeChannelJobData:
@@ -384,6 +390,12 @@ class YouTubeChannelJobData:
             ref_id=data["ref_id"],
         )
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeVideoSummarizeJobData:
@@ -405,6 +417,12 @@ class YouTubeVideoSummarizeJobData:
             channel_id=data["channel_id"],
             ref_id=data["ref_id"],
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
