@@ -23,7 +23,7 @@ def pytest_configure(config: pytest.Config) -> None:
     os.environ["AWS_SECRET_MANAGER"] = "test-manager"
     os.environ["AWS_TABLE"] = "test-table"
     os.environ["AWS_S3_BUCKET"] = "test-bucket"
-    os.environ["OFFLINE"] = False
+    os.environ["OFFLINE"] = "False"
 
     # Application Configuration
     os.environ["COMPANY_NAME"] = "Complete Automate"
