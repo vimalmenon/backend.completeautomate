@@ -198,6 +198,7 @@ class YouTubeTranscriptData:
 
 @dataclass
 class YouTubeVideoDBData:
+    channel_id: str
     video_id: str
     published_at: datetime
     last_updated_at: datetime
@@ -210,11 +211,16 @@ class YouTubeVideoDBData:
     stats: list[YouTubeVideoDBStats]
     transcript: YouTubeTranscriptData | None = None
 
+    @property
+    def platform(self) -> str:
+        return ""
+
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         stats = [YouTubeVideoDBStats.to_cls(stat) for stat in data["stats"]]
         return cls(
             video_id=data["video_id"],
+            channel_id=data["channel_id"],
             published_at=datetime.fromisoformat(data["published_at"]),
             title=data["title"],
             description=data["description"],
@@ -237,6 +243,7 @@ class YouTubeVideoDBData:
         snippet = item["snippet"]
         return cls(
             video_id=item["id"],
+            channel_id=item["channel_id"],
             published_at=datetime.fromisoformat(snippet["publishedAt"]),
             title=snippet["title"],
             description=snippet["description"],
@@ -251,6 +258,7 @@ class YouTubeVideoDBData:
     def to_json(self) -> dict:
         return {
             "video_id": self.video_id,
+            "channel_id": self.channel_id,
             "title": self.title,
             "description": self.description,
             "published_at": self.published_at.isoformat(),
