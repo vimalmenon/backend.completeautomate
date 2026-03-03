@@ -22,13 +22,15 @@ class PlatformDB:
         raise AppException(f"data with reference : {ref_id} not found")
 
     def save_data(self, data: PlatformDBData) -> str:
-        secondary = ""
+        secondary = None
         if data.platform_type == PlatformEnum.YouTubeVideo and hasattr(
             data.data, "video_id"
         ):
             secondary = f"{data.platform_type.value}#{data.data.channel_id}#{data.data.video_id}"
         if data.platform_type == PlatformEnum.YouTubeChannel:
             secondary = f"{data.platform_type.value}#{data.data.channel_id}"
+        if not secondary:
+            raise AppException(f"Platform with value : {data.platform_type.value} not found")
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
