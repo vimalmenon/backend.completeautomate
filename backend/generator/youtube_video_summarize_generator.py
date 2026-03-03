@@ -23,17 +23,17 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
     def __init__(self, task: TaskData):
         super().__init__(task)
         logger.info(f"Initializing YouTubeVideoSummarizeGenerator for video: {task.id}")
-        self.payload = YouTubeVideoSummarizeJobData.to_cls(task.payload)
+        self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.youtube_api = YouTubeAPI()
-        self.db = YouTubeVideoDB(self.payload.platform.channel_id)
+        self.db = YouTubeVideoDB(self.job_data.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:
-        logger.info(f"Fetching transcript for video: {self.payload.platform.video_id}")
+        logger.info(f"Fetching transcript for video: {self.job_data.platform.video_id}")
         try:
-            result = self.youtube_api.get_transcript(self.payload.platform.video_id)
+            result = self.youtube_api.get_transcript(self.job_data.platform.video_id)
             if not result:
                 raise AppException(
-                    f"No transcript found for video: {self.payload.platform.video_id}"
+                    f"No transcript found for video: {self.job_data.platform.video_id}"
                 )
             if result:
                 logger.info("Processing transcript")
@@ -41,7 +41,7 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
                 logger.info("Summarizing transcript")
                 summarize = self.__summarize_transcript(text_transcript)
                 logger.info(
-                    f"Successfully generated transcript and summary for video: {self.payload.platform.video_id}"
+                    f"Successfully generated transcript and summary for video: {self.job_data.platform.video_id}"
                 )
                 data = YouTubeTranscriptDBData(
                     transcript=text_transcript, summarize=summarize
@@ -50,10 +50,10 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
                 self.__create_analysis_task()
         except Exception as e:
             logger.error(
-                f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
+                f"Error processing transcript for video: {self.job_data.platform.video_id}, error: {str(e)}"
             )
             raise AppException(
-                f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
+                f"Error processing transcript for video: {self.job_data.platform.video_id}, error: {str(e)}"
             )
         return TaskStatusEnum.COMPLETED
 
@@ -102,14 +102,14 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
 
     def __update_db_with_transcript(self, transcript: YouTubeTranscriptDBData) -> None:
         logger.info(
-            f"Updating database with transcript for video: {self.payload.platform.video_id}"
+            f"Updating database with transcript for video: {self.job_data.platform.video_id}"
         )
-        self.db.update_transcript(self.payload.platform.video_id, transcript)
+        self.db.update_transcript(self.job_data.platform.video_id, transcript)
 
     def __create_analysis_task(self):
         manager = TaskManager()
         data = manager.create_youtube_analysis_task(
-            ref_id=self.payload.ref_id,
+            ref_id=self.job_data.ref_id,
             created_by=JobEnum.YouTubeVideoSummarize,
             trail=self.task.trail + [self.task.id],
         )
