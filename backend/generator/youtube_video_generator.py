@@ -3,14 +3,15 @@ from datetime import datetime
 from uuid import uuid4
 
 from backend.data import (
+    PlatformDBData,
+    PlatformYouTubeVideoDBData,
     TaskData,
     YouTubeVideoDBData,
     YouTubeVideoJobData,
     YouTubeVideoSummarizeJobData,
 )
-from backend.database import YouTubeVideoDB
-from backend.database.task.task_db import TaskDB
-from backend.enum import JobEnum, TaskStatusEnum
+from backend.database import PlatformDB, TaskDB, YouTubeVideoDB
+from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 
@@ -43,10 +44,10 @@ class YouTubeVideoGenerator(BaseGenerator):
         if not video_from_db:
             logger.info("Video not found in DB. Fetching details from API.")
             youtube_response = self.youtube_api.fetch_video_details(video_id)
-            self.__create_platform_data()
+            ref_id = self.__create_platform_data(video_id)
 
             youtube_data = YouTubeVideoDBData.to_cls_from_response(
-                {**youtube_response, "task_id": str(self.task.id), "ref_id": ""}
+                {**youtube_response, "task_id": str(self.task.id), "ref_id": ref_id}
             )
             self.db.add_video(youtube_data)
             self.__create_task_for_transcript(video_id)
@@ -84,6 +85,12 @@ class YouTubeVideoGenerator(BaseGenerator):
             task.id,
         )
 
-    def __create_platform_data(self):
-        # TODO Add platform when new vide is added
-        pass
+    def __create_platform_data(self, video_id: str) -> str:
+        data = PlatformDBData(
+            platform_type=PlatformEnum.YouTubeVideo,
+            data=PlatformYouTubeVideoDBData(
+                channel_id=self.job_data.channel_id, video_id=video_id
+            ),
+        )
+
+        return PlatformDB().save_data(data)

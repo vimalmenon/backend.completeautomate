@@ -3,6 +3,7 @@ from logging import getLogger
 from boto3.dynamodb.conditions import Key
 
 from backend.data import YouTubeTranscriptDBData, YouTubeVideoDBData
+from backend.data.platform import PlatformYouTubeVideoDBData
 from backend.database import DbManager
 from backend.enum import DbKeysEnum
 
@@ -43,10 +44,13 @@ class YouTubeVideoDB:
         return [YouTubeVideoDBData.to_cls(result) for result in results]
 
     def add_video(self, video: YouTubeVideoDBData) -> None:
+        video_data = video.platform.data
+        if not isinstance(video_data, PlatformYouTubeVideoDBData):
+            raise ValueError("Expected PlatformYouTubeVideoDBData")
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{video.video_id}",
+                DbKeysEnum.Secondary.value: f"{video_data.channel_id}#{video_data.video_id}",
                 **video.to_json(),
             }
         )
