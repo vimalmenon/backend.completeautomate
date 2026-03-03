@@ -1,10 +1,10 @@
 import logging
 from datetime import datetime
+from uuid import uuid4
 
 from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
-from backend.enum.job import JobEnum
-from backend.enum.status import TaskStatusEnum
+from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
 from backend.helper.start_up.start_up import StartUp
 from backend.jobs import (
     BaseJob,
@@ -46,6 +46,16 @@ class TaskSchedulerServices:
             logger.info("Task %s executed with status: %s", task.id, status)
             self.task_db.update_task(task)
         self.task_db.cleanup_tasks()
+
+    def setup_one_time_task(self) -> TaskData:
+        TaskData(
+            id=uuid4(),
+            job_type=JobEnum.YouTubeVideo,
+            payload={},
+            created_by=TeamEnum.OWNER,
+            created_at=datetime.now(),
+            status=TaskStatusEnum.IN_PROGRESS,
+        )
 
     def create_task(self, task: TaskData) -> TaskData:
         self.task_db.add_task(task)
