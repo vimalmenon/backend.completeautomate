@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import Any, Self
 from uuid import UUID
 
+from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
 from backend.enum.status import JobStatusEnum, TaskStatusEnum
 
@@ -212,8 +213,10 @@ class YouTubeVideoDBData:
     transcript: YouTubeTranscriptData | None = None
 
     @property
-    def platform(self) -> str:
-        return ""
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data()
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:

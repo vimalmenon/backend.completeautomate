@@ -11,5 +11,5 @@ class PlatformDB:
     def get_data(self) -> PlatformDBData:
         pass
 
-    def save_data(self, data: PlatformDBData):
+    def save_data(self, data: PlatformDBData) -> None:
         pass
