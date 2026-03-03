@@ -32,8 +32,8 @@ class PlatformYouTubeChannelData:
 
 @dataclass
 class PlatformDBData:
-    platform_type: PlatformEnum | PlatformYouTubeChannelData
-    data: PlatformYouTubeVideoData
+    platform_type: PlatformEnum
+    data: PlatformYouTubeVideoData | PlatformYouTubeChannelData
 
     def to_json(self) -> dict:
         return {"data": self.data.to_json(), "platform_type": self.platform_type.value}
