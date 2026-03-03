@@ -23,18 +23,18 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
         logger.info(f"Initializing YouTubeVideoSummarizeGenerator for video: {task.id}")
         self.payload = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.youtube_api = YouTubeAPI()
-        self.db = YouTubeVideoDB(self.payload.channel_id)
+        self.db = YouTubeVideoDB(self.payload.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:
-        logger.info(f"Fetching transcript for video: {self.payload.video_id}")
+        logger.info(f"Fetching transcript for video: {self.payload.platform.video_id}")
         try:
-            result = self.youtube_api.get_transcript(self.payload.video_id)
+            result = self.youtube_api.get_transcript(self.payload.platform.video_id)
             logger.info("Processing transcript")
             text_transcript = self.__convert_transcript_to_text(result)
             logger.info("Summarizing transcript")
             summarize = self.__summarize_transcript(text_transcript)
             logger.info(
-                f"Successfully generated transcript and summary for video: {self.payload.video_id}"
+                f"Successfully generated transcript and summary for video: {self.payload.platform.video_id}"
             )
             data = YouTubeTranscriptDBData(
                 transcript=text_transcript, summarize=summarize
@@ -42,7 +42,7 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
             self.__update_db_with_transcript(data)
         except Exception as e:
             logger.error(
-                f"Error processing transcript for video: {self.payload.video_id}, error: {str(e)}"
+                f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
             )
         return TaskStatusEnum.COMPLETED
 
@@ -91,6 +91,6 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
 
     def __update_db_with_transcript(self, transcript: YouTubeTranscriptDBData) -> None:
         logger.info(
-            f"Updating database with transcript for video: {self.payload.video_id}"
+            f"Updating database with transcript for video: {self.payload.platform.video_id}"
         )
-        self.db.update_transcript(self.payload.video_id, transcript)
+        self.db.update_transcript(self.payload.platform.video_id, transcript)

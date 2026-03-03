@@ -25,14 +25,14 @@ class YouTubeVideoGenerator(BaseGenerator):
         logger.info("Initializing YouTubeVideoGenerator")
         self.youtube_api = YouTubeAPI()
         self.job_data = YouTubeVideoJobData.to_cls(task.payload)
-        self.db = YouTubeVideoDB(self.job_data.channel_id)
+        self.db = YouTubeVideoDB(self.job_data.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:
         logger.info(
             "Fetching videos for channel id: %s",
-            self.job_data.channel_id,
+            self.job_data.platform.channel_id,
         )
-        videos = YouTubeAPI().list_all_videos(self.job_data.channel_id)
+        videos = YouTubeAPI().list_all_videos(self.job_data.platform.channel_id)
         logger.info("Found %s videos to process", len(videos))
         for video in videos:
             self.__update_video(video["id"])
@@ -64,8 +64,6 @@ class YouTubeVideoGenerator(BaseGenerator):
 
     def __create_task_for_transcript(self, video_id: str) -> None:
         job = YouTubeVideoSummarizeJobData(
-            video_id=video_id,
-            channel_id=self.job_data.channel_id,
             ref_id=self.job_data.ref_id,
         )
         task = TaskData(
@@ -89,7 +87,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         data = PlatformDBData(
             platform_type=PlatformEnum.YouTubeVideo,
             data=PlatformYouTubeVideoDBData(
-                channel_id=self.job_data.channel_id, video_id=video_id
+                channel_id=self.job_data.platform.channel_id, video_id=video_id
             ),
         )
 

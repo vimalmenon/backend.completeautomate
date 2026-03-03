@@ -50,6 +50,14 @@ class PlatformDBData:
             return self.data.video_id
         raise AppException("Invalid data type for video_id")
 
+    @property
+    def channel_id(self) -> str:
+        if isinstance(self.data, PlatformYouTubeVideoDBData):
+            return self.data.channel_id
+        if isinstance(self.data, PlatformYouTubeChannelDBData):
+            return self.data.channel_id
+        raise AppException("Invalid data type for channel_id")
+
     @classmethod
     def to_cls(cls, data) -> Self:
         if data["platform_type"] == PlatformEnum.YouTubeVideo.value:

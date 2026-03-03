@@ -207,6 +207,8 @@ If no token exists, the app launches the OAuth flow on first authenticated YouTu
 
 Use `make help` to list all commands.
 
+Windows note: if `make.exe` is blocked by App Control policy, run `./make.cmd <target>` (for example, `./make.cmd ci`).
+
 ```sh
 make install       # Poetry install
 make run           # Run scheduler (poetry run app)

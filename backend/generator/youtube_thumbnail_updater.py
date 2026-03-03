@@ -15,7 +15,7 @@ class YouTubeThumbnailUpdater(BaseGenerator):
         s3_data = self.job_data.data
         S3Storage().download_data(s3_data)
         YouTubeAPI().update_thumbnail(
-            video_id=self.job_data.video_id,
+            video_id=self.job_data.platform.video_id,
             thumbnail_path=s3_data.downloaded_path,
         )
         return TaskStatusEnum.COMPLETED
