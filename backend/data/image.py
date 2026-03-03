@@ -70,6 +70,7 @@ class ImagePromptJobData:
     task_id: UUID
     description: str
     video_id: str
+    channel_id: str
     image_type: ImageTypeEnum
 
     def to_json(self) -> dict:
@@ -77,6 +78,7 @@ class ImagePromptJobData:
             "task_id": str(self.task_id),
             "description": self.description,
             "image_type": self.image_type.value,
+            "channel_id": self.channel_id,
             "video_id": self.video_id,
         }
 
@@ -86,6 +88,7 @@ class ImagePromptJobData:
             task_id=UUID(data["task_id"]),
             description=data["description"],
             image_type=ImageTypeEnum(data["image_type"]),
+            channel_id=data["channel_id"],
             video_id=data["video_id"],
         )
 
@@ -95,6 +98,7 @@ class ImagePromptDBData:
     id: UUID
     prompt: str
     task_id: UUID
+    channel_id: str
     video_id: str
     image_type: ImageTypeEnum
     comment: str | None = None
@@ -109,6 +113,7 @@ class ImagePromptDBData:
             "comment": self.comment,
             "status": self.status.value,
             "prompts": [pr.to_json() for pr in self.prompts],
+            "channel_id": self.channel_id,
             "video_id": self.video_id,
             "image_type": self.image_type.value,
         }
@@ -122,5 +127,6 @@ class ImagePromptDBData:
             comment=data.get("comment"),
             prompts=[PromptData.to_cls(pr) for pr in data.get("prompts", [])],
             video_id=data["video_id"],
+            channel_id=data["channel_id"],
             image_type=ImageTypeEnum(data["image_type"]),
         )
