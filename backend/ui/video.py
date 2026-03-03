@@ -1,7 +1,7 @@
 from nicegui import ui
 
 from backend.config.env import env
-from backend.data import YouTubeTranscriptData
+from backend.data import YouTubeTranscriptDBData
 from backend.database.youtube import YouTubeVideoDB
 
 
@@ -49,7 +49,7 @@ def save_video_details(video_id: str, title: str, description: str) -> None:
 
 def save_transcript(video_id: str, transcript_text: str, summarize_text: str) -> None:
     try:
-        transcript = YouTubeTranscriptData(
+        transcript = YouTubeTranscriptDBData(
             transcript=transcript_text,
             summarize=summarize_text,
         )
@@ -65,7 +65,7 @@ def save_transcript(video_id: str, transcript_text: str, summarize_text: str) ->
 
 def save_summarize(video_id: str, transcript_text: str, summarize_text: str) -> None:
     try:
-        transcript = YouTubeTranscriptData(
+        transcript = YouTubeTranscriptDBData(
             transcript=transcript_text,
             summarize=summarize_text,
         )

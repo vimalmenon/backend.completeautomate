@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from functools import cached_property
 from typing import Any, Self
 from uuid import UUID
 
@@ -179,7 +180,7 @@ class YouTubeVideoDBStats:
 
 
 @dataclass
-class YouTubeTranscriptData:
+class YouTubeTranscriptDBData:
     transcript: str
     summarize: str
 
@@ -201,6 +202,7 @@ class YouTubeTranscriptData:
 class YouTubeVideoDBData:
     channel_id: str
     video_id: str
+    ref_id: str
     published_at: datetime
     last_updated_at: datetime
     title: str
@@ -210,13 +212,13 @@ class YouTubeVideoDBData:
     language: str
     task_id: UUID
     stats: list[YouTubeVideoDBStats]
-    transcript: YouTubeTranscriptData | None = None
+    transcript: YouTubeTranscriptDBData | None = None
 
-    @property
+    @cached_property
     def platform(self) -> PlatformDBData:
         from backend.database.platform.platform_database import PlatformDB
 
-        return PlatformDB().get_data()
+        return PlatformDB().get_data(self.ref_id)
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
@@ -224,6 +226,7 @@ class YouTubeVideoDBData:
         return cls(
             video_id=data["video_id"],
             channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
             published_at=datetime.fromisoformat(data["published_at"]),
             title=data["title"],
             description=data["description"],
@@ -231,7 +234,7 @@ class YouTubeVideoDBData:
             tags=data["tags"],
             language=data["language"],
             transcript=(
-                YouTubeTranscriptData.to_cls(data["transcript"])
+                YouTubeTranscriptDBData.to_cls(data["transcript"])
                 if data["transcript"]
                 else None
             ),
@@ -246,6 +249,7 @@ class YouTubeVideoDBData:
         snippet = item["snippet"]
         return cls(
             video_id=item["id"],
+            ref_id=item.get("ref_id", ""),
             channel_id=item["channel_id"],
             published_at=datetime.fromisoformat(snippet["publishedAt"]),
             title=snippet["title"],
@@ -262,6 +266,7 @@ class YouTubeVideoDBData:
         return {
             "video_id": self.video_id,
             "channel_id": self.channel_id,
+            "ref_id": self.ref_id,
             "title": self.title,
             "description": self.description,
             "published_at": self.published_at.isoformat(),

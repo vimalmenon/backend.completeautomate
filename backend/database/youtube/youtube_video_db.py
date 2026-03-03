@@ -2,7 +2,7 @@ from logging import getLogger
 
 from boto3.dynamodb.conditions import Key
 
-from backend.data import YouTubeTranscriptData, YouTubeVideoDBData
+from backend.data import YouTubeTranscriptDBData, YouTubeVideoDBData
 from backend.database import DbManager
 from backend.enum import DbKeysEnum
 
@@ -68,7 +68,7 @@ class YouTubeVideoDB:
         )
 
     def update_transcript(
-        self, video_id: str, transcript: YouTubeTranscriptData
+        self, video_id: str, transcript: YouTubeTranscriptDBData
     ) -> None:
         self.db_manager.update_item(
             Key={

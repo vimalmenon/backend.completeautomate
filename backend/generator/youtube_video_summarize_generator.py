@@ -3,7 +3,7 @@ from typing import Any
 
 from backend.data import (
     TaskData,
-    YouTubeTranscriptData,
+    YouTubeTranscriptDBData,
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB
@@ -36,7 +36,7 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
             logger.info(
                 f"Successfully generated transcript and summary for video: {self.payload.video_id}"
             )
-            data = YouTubeTranscriptData(
+            data = YouTubeTranscriptDBData(
                 transcript=text_transcript, summarize=summarize
             )
             self.__update_db_with_transcript(data)
@@ -89,7 +89,7 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
         result = agent.invoke()
         return result["messages"][-1].content
 
-    def __update_db_with_transcript(self, transcript: YouTubeTranscriptData) -> None:
+    def __update_db_with_transcript(self, transcript: YouTubeTranscriptDBData) -> None:
         logger.info(
             f"Updating database with transcript for video: {self.payload.video_id}"
         )
