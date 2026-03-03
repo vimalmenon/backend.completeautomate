@@ -43,7 +43,7 @@ class PlatformDBData:
 
     def to_json(self) -> dict:
         return {"data": self.data.to_json(), "platform_type": self.platform_type.value}
-    
+
     @property
     def video_id(self) -> str:
         if isinstance(self.data, PlatformYouTubeVideoDBData):

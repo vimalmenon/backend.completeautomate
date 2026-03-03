@@ -53,10 +53,12 @@ class TestAWSIntegration:
         db.add_item(test_item)
 
         # Get item
-        result = db.get_item({
-            DbKeysEnum.Primary.value: "test-table",
-            DbKeysEnum.Secondary.value: "test-123",
-        })
+        result = db.get_item(
+            {
+                DbKeysEnum.Primary.value: "test-table",
+                DbKeysEnum.Secondary.value: "test-123",
+            }
+        )
         assert result[DbKeysEnum.Primary.value] == "test-table"
         assert result[DbKeysEnum.Secondary.value] == "test-123"
         assert result["data"] == "test data"
