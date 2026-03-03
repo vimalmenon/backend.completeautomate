@@ -41,3 +41,19 @@ class TaskManager:
             status=TaskStatusEnum.IN_PROGRESS,
             trail=trail,
         )
+
+    def create_youtube_summarize_task(
+        self, ref_id: str, created_by: TeamEnum | JobEnum, trail=[]
+    ) -> TaskData:
+        job = YouTubeVideoSummarizeJobData(
+            ref_id=ref_id,
+        )
+        return TaskData(
+            id=uuid4(),
+            job_type=JobEnum.YouTubeVideoSummarize,
+            payload=job.to_json(),
+            created_by=created_by,
+            created_at=datetime.now(),
+            status=TaskStatusEnum.IN_PROGRESS,
+            trail=trail,
+        )

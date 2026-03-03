@@ -1,6 +1,4 @@
 import logging
-from datetime import datetime
-from uuid import uuid4
 
 from backend.data import (
     PlatformDBData,
@@ -8,12 +6,12 @@ from backend.data import (
     TaskData,
     YouTubeVideoDBData,
     YouTubeVideoJobData,
-    YouTubeVideoSummarizeJobData,
 )
-from backend.database import PlatformDB, TaskDB, YouTubeVideoDB
+from backend.database import PlatformDB, YouTubeVideoDB
 from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
+from backend.manager import TaskManager
 
 logger = logging.getLogger(__name__)
 
@@ -63,20 +61,11 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
 
     def __create_task_for_transcript(self, video_id: str) -> None:
-        job = YouTubeVideoSummarizeJobData(
-            ref_id=self.job_data.ref_id,
+        manager = TaskManager()
+        task = manager.create_youtube_summarize_task(
+            self.job_data.ref_id, JobEnum.YouTubeVideo, self.task.trail + [self.task.id]
         )
-        task = TaskData(
-            id=uuid4(),
-            job_type=JobEnum.YouTubeVideoSummarize,
-            payload=job.to_json(),
-            created_by=JobEnum.YouTubeVideo,
-            created_at=datetime.now(),
-            failed_count=0,
-            status=TaskStatusEnum.IN_PROGRESS,
-            trail=[self.task.id],
-        )
-        TaskDB().add_task(task)
+        manager.add_task(task)
         logger.info(
             "Created summarize task for video id: %s with task id: %s",
             video_id,
