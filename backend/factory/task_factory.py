@@ -5,16 +5,16 @@ from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
 
 
-def create_task_factory(payload=dict) -> TaskData:
+def create_task_factory(**kwargs) -> TaskData:
     return TaskData(
-        id=uuid4(),
-        job_type=JobEnum.YouTubeChannel,
-        payload=payload,
-        created_by=TeamEnum.OWNER,
-        created_at=datetime.now(),
-        status=TaskStatusEnum.NEW,
+        id=kwargs.get("id", uuid4()),
+        job_type=kwargs.get("job_type", JobEnum.YouTubeChannel),
+        payload=kwargs.get("payload", {}),
+        created_by=kwargs.get("created_by", TeamEnum.OWNER),
+        created_at=kwargs.get("created_at", datetime.now()),
+        status=kwargs.get("status", TaskStatusEnum.NEW),
     )
 
 
-def create_tasks_factory(int_number=5) -> list[TaskData]:
-    return [create_task_factory() for _i in (0, int_number)]
+def create_tasks_factory(items: list[dict] = []) -> list[TaskData]:
+    return [create_task_factory(**key) for key in (0, len(items))]

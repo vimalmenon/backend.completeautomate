@@ -49,7 +49,7 @@ Current internal score: **7.5/10**
 
 ### Improvement areas
 
-- UI page logic has grown and can be further componentized
+- UI page logic has grown and can be further componentize
 - Some runtime configuration is still tightly coupled to environment setup
 - Need stronger end-to-end GUI flow validation for confidence in regressions
 
@@ -79,9 +79,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
+- [ ] Find a way to cache from method level in platform data
 - [ ] Add platform data
 - [ ] Fetch platform data
-- [ ] Find a way to cache from method level in platform data
 - [ ] Add playlist details to video records
 - [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel
@@ -98,12 +98,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add one-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
-- [ ] Mock Data use (factory)
+- [ ] Mock data use (factory)
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test data for DB integration
-  - [ ] Integration with YouTube API
+  - [ ] Mock Integration with YouTube API
 - [ ] GUI Enhancements 
   - [ ] Ability to Work Offline
   - [ ] Mock AWS Dynamo DB Data
@@ -114,6 +114,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Need to add UI for Youtube Channel
   - [ ] Need to add Graph for stats for YouTube
   - [ ] Show Graph next to Edit button to show Graph
+  - [ ] Ability to perform all tasks from GUI
 
 
 **Ideas / Low Priority:**

@@ -85,5 +85,5 @@ class YouTubeVideoGenerator(BaseGenerator):
         )
 
     def __create_platform_data(self):
-        ## TODO Add platform when new vide is added
+        # TODO Add platform when new vide is added
         pass
