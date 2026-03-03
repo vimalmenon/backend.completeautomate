@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
+from functools import cached_property
 from typing import Self
 from uuid import UUID
 
+from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
 from backend.enum import (
     ImageTypeEnum,
@@ -71,6 +73,7 @@ class ImagePromptJobData:
     description: str
     video_id: str
     channel_id: str
+    ref_id: str
     image_type: ImageTypeEnum
 
     def to_json(self) -> dict:
@@ -79,6 +82,7 @@ class ImagePromptJobData:
             "description": self.description,
             "image_type": self.image_type.value,
             "channel_id": self.channel_id,
+            "ref_id": self.ref_id,
             "video_id": self.video_id,
         }
 
@@ -89,8 +93,15 @@ class ImagePromptJobData:
             description=data["description"],
             image_type=ImageTypeEnum(data["image_type"]),
             channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
             video_id=data["video_id"],
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
@@ -100,6 +111,7 @@ class ImagePromptDBData:
     task_id: UUID
     channel_id: str
     video_id: str
+    ref_id: str
     image_type: ImageTypeEnum
     comment: str | None = None
     status: JobStatusEnum = JobStatusEnum.NEW
@@ -116,6 +128,7 @@ class ImagePromptDBData:
             "channel_id": self.channel_id,
             "video_id": self.video_id,
             "image_type": self.image_type.value,
+            "ref_id": self.ref_id,
         }
 
     @classmethod
@@ -129,4 +142,11 @@ class ImagePromptDBData:
             video_id=data["video_id"],
             channel_id=data["channel_id"],
             image_type=ImageTypeEnum(data["image_type"]),
+            ref_id=data["ref_id"],
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)

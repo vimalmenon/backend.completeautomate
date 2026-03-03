@@ -30,7 +30,9 @@ class PlatformDB:
         if data.platform_type == PlatformEnum.YouTubeChannel:
             secondary = f"{data.platform_type.value}#{data.data.channel_id}"
         if not secondary:
-            raise AppException(f"Platform with value : {data.platform_type.value} not found")
+            raise AppException(
+                f"Platform with value : {data.platform_type.value} not found"
+            )
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
