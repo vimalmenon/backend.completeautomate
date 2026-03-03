@@ -17,4 +17,4 @@ def create_task_factory(**kwargs) -> TaskData:
 
 
 def create_tasks_factory(items: list[dict] = []) -> list[TaskData]:
-    return [create_task_factory(**key) for key in (0, len(items))]
+    return [create_task_factory(**key) for key in items]
