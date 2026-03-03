@@ -90,5 +90,9 @@ class YouTubeVideoGenerator(BaseGenerator):
                 channel_id=self.job_data.platform.channel_id, video_id=video_id
             ),
         )
-
+        logger.info(
+            "Saving platform data for video id: %s to database with ref_id: %s",
+            video_id,
+            self.job_data.ref_id,
+        )
         return PlatformDB().save_data(data)

@@ -12,6 +12,7 @@ from backend.generator.base_generator import BaseGenerator
 from backend.integration.agent.general_agent import GeneralAgent
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.services.agent_service import AgentService
+from backend.exception.app_exception import AppException
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,9 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
             self.__update_db_with_transcript(data)
         except Exception as e:
             logger.error(
+                f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
+            )
+            raise AppException(
                 f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
             )
         return TaskStatusEnum.COMPLETED

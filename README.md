@@ -79,7 +79,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
-- [ ] Find a way to cache from method level in platform data
 - [ ] Add platform data
 - [ ] Fetch platform data
 - [ ] Add playlist details to video records
