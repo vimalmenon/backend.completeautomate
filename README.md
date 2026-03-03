@@ -80,6 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Add platform data
 - [ ] Fetch platform data
+- [ ] Find a way to cache from method level in platform data
+- [ ] Add playlist details to video records
 - [ ] Add Platform data
 - [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel
@@ -95,7 +97,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot prompt examples for image and other generation tasks
-- [ ] Add playlist details to video records
 - [ ] Add topic suggestions for next week
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
@@ -103,6 +104,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Test all the flows from Generator to Updater, Analyze
+  - [ ] Test data for DB integration
+  - [ ] 
 - [ ] GUI Enhancements 
   - [ ] Task Create or Edit
   - [ ] Analytics dashboard
