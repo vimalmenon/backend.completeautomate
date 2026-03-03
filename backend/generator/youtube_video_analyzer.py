@@ -59,14 +59,12 @@ class YouTubeVideoAnalyzer(BaseGenerator):
             )
             for data in structured_response.image_prompts
         ]
-        messages = agent.parse_messages_to_dict(result["messages"])
         data = YouTubeVideoAnalysisDBData(
             video_id=self.job_data.video_id,
             channel_id=self.job_data.channel_id,
-            ref_id="",
+            ref_id=self.job_data.ref_id,
             task_id=self.task.id,
             video_details=video_details,
-            messages=messages,
         )
         self.analysis_db.add_data(data)
         logger.info("Successfully analyzed video data for task id: %s", self.task.id)

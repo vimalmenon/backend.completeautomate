@@ -61,7 +61,9 @@ class YouTubeVideoGenerator(BaseGenerator):
 
     def __create_task_for_transcript(self, video_id: str) -> None:
         job = YouTubeVideoSummarizeJobData(
-            video_id=video_id, channel_id=self.job_data.channel_id
+            video_id=video_id,
+            channel_id=self.job_data.channel_id,
+            ref_id=self.job_data.ref_id,
         )
         task = TaskData(
             id=uuid4(),

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from functools import cached_property
 from typing import Any, Self
@@ -343,12 +343,14 @@ class YouTubeThumbnailJobData:
 
 @dataclass
 class YouTubeVideoJobData:
+    ref_id: str
     channel_id: str
     poll_frequency_in_days: int = 7
 
     def to_json(self) -> dict:
         return {
             "channel_id": self.channel_id,
+            "ref_id": self.ref_id,
             "poll_frequency_in_days": self.poll_frequency_in_days,
         }
 
@@ -356,6 +358,7 @@ class YouTubeVideoJobData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
         )
 
@@ -363,12 +366,14 @@ class YouTubeVideoJobData:
 @dataclass
 class YouTubeChannelJobData:
     channel_id: str
+    ref_id: str
     poll_frequency_in_days: int = 7
 
     def to_json(self) -> dict:
         return {
             "channel_id": self.channel_id,
             "poll_frequency_in_days": self.poll_frequency_in_days,
+            "ref_id": self.ref_id,
         }
 
     @classmethod
@@ -376,6 +381,7 @@ class YouTubeChannelJobData:
         return cls(
             channel_id=data["channel_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
+            ref_id=data["ref_id"],
         )
 
 
@@ -383,13 +389,22 @@ class YouTubeChannelJobData:
 class YouTubeVideoSummarizeJobData:
     video_id: str
     channel_id: str
+    ref_id: str
 
     def to_json(self) -> dict:
-        return {"video_id": self.video_id, "channel_id": self.channel_id}
+        return {
+            "video_id": self.video_id,
+            "channel_id": self.channel_id,
+            "ref_id": self.ref_id,
+        }
 
     @classmethod
     def to_cls(cls, data) -> Self:
-        return cls(video_id=data["video_id"], channel_id=data["channel_id"])
+        return cls(
+            video_id=data["video_id"],
+            channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
+        )
 
 
 @dataclass
@@ -425,7 +440,6 @@ class YouTubeVideoAnalysisDBData:
     task_id: UUID
     video_details: list[YouTubeVideoDetailDBData]
     comment: str | None = None
-    messages: list[dict] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -434,7 +448,6 @@ class YouTubeVideoAnalysisDBData:
             "task_id": str(self.task_id),
             "video_details": [detail.to_json() for detail in self.video_details],
             "comment": self.comment,
-            "messages": self.messages,
             "ref_id": self.ref_id,
         }
 
@@ -448,7 +461,6 @@ class YouTubeVideoAnalysisDBData:
                 for detail in data["video_details"]
             ],
             comment=data.get("comment"),
-            messages=data.get("messages", []),
             task_id=UUID(data["task_id"]),
             ref_id=data["ref_id"],
         )
