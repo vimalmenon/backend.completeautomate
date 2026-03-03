@@ -7,7 +7,7 @@ from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
 
 
 @dataclass
-class Task:
+class TaskData:
     id: UUID
     job_type: JobEnum
     payload: dict

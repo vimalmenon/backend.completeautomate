@@ -2,7 +2,7 @@ import logging
 from typing import Any
 
 from backend.data import (
-    Task,
+    TaskData,
     YouTubeTranscriptData,
     YouTubeVideoSummarizeJobData,
 )
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class YouTubeVideoSummarizeGenerator(BaseGenerator):
 
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         logger.info(f"Initializing YouTubeVideoSummarizeGenerator for video: {task.id}")
         self.payload = YouTubeVideoSummarizeJobData.to_cls(task.payload)

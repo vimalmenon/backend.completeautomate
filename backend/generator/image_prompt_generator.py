@@ -8,7 +8,7 @@ from backend.data import (
     ImagePromptJobData,
     PromptData,
     S3Data,
-    Task,
+    TaskData,
 )
 from backend.database.image.image_prompt_db import ImagePromptDB
 from backend.database.task.task_db import TaskDB
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 class ImagePromptGenerator(BaseGenerator):
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = ImagePromptJobData.to_cls({**task.payload, "task_id": task.id})
         self.db_manager = ImagePromptDB()
@@ -110,7 +110,7 @@ class ImagePromptGenerator(BaseGenerator):
                 key=str(task_id),
             ),
         )
-        task = Task(
+        task = TaskData(
             id=task_id,
             job_type=JobEnum.ImagePrompt,
             payload=job_type.to_json(),

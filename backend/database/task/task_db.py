@@ -2,7 +2,7 @@ import logging
 
 from boto3.dynamodb.conditions import Attr, Key
 
-from backend.data import Task
+from backend.data import TaskData
 from backend.database import DbManager
 from backend.enum.db_keys import DbKeysEnum
 from backend.enum.status import TaskStatusEnum
@@ -16,7 +16,7 @@ class TaskDB:
     def __init__(self):
         self.db_manager = DbManager()
 
-    def add_task(self, task: Task):
+    def add_task(self, task: TaskData):
         logger.info(f"Adding task with id: {task.id}")
         self.db_manager.add_item(
             {
@@ -26,18 +26,18 @@ class TaskDB:
             }
         )
 
-    def update_task(self, task: Task):
+    def update_task(self, task: TaskData):
         logger.info(f"Updating task with id: {task.id}")
         self.__update_task(task)
 
-    def get_tasks(self) -> list[Task]:
+    def get_tasks(self) -> list[TaskData]:
         logger.info("Fetching all tasks")
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE)
         )
-        return [Task.to_cls(item) for item in items]
+        return [TaskData.to_cls(item) for item in items]
 
-    def get_task_by_id(self, task_id: str) -> Task | None:
+    def get_task_by_id(self, task_id: str) -> TaskData | None:
         logger.info(f"Fetching task with id: {task_id}")
         item = self.db_manager.get_item(
             {
@@ -46,10 +46,10 @@ class TaskDB:
             }
         )
         if item:
-            return Task.to_cls(item)
+            return TaskData.to_cls(item)
         return None
 
-    def get_active_tasks(self) -> list[Task]:
+    def get_active_tasks(self) -> list[TaskData]:
         logger.info("Fetching active tasks")
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
@@ -57,9 +57,9 @@ class TaskDB:
                 [TaskStatusEnum.IN_PROGRESS.value, TaskStatusEnum.FAILED.value]
             ),
         )
-        return [Task.to_cls(item) for item in items]
+        return [TaskData.to_cls(item) for item in items]
 
-    def delete_task(self, task: Task):
+    def delete_task(self, task: TaskData):
         logger.info(f"Deleting task with id: {task.id}")
         self.db_manager.remove_item(
             {
@@ -75,10 +75,10 @@ class TaskDB:
             filter_expression=Attr("status").eq(TaskStatusEnum.CLEAN_UP.value),
         )
         logger.info(f"Found {len(items)} tasks to clean up")
-        [self.delete_task(Task.to_cls(item)) for item in items]
+        [self.delete_task(TaskData.to_cls(item)) for item in items]
         logger.info("Task cleanup completed")
 
-    def __update_task(self, task: Task):
+    def __update_task(self, task: TaskData) -> None:
         logger.info(
             f"Updating task status to {task.status.value} for task id: {task.id}"
         )

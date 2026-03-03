@@ -3,7 +3,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from backend.data import (
-    Task,
+    TaskData,
     YouTubeVideoDBData,
     YouTubeVideoJobData,
     YouTubeVideoSummarizeJobData,
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class YouTubeVideoGenerator(BaseGenerator):
 
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         logger.info("Initializing YouTubeVideoGenerator")
         self.youtube_api = YouTubeAPI()
@@ -63,7 +63,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         job = YouTubeVideoSummarizeJobData(
             video_id=video_id, channel_id=self.job_data.channel_id
         )
-        task = Task(
+        task = TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeVideoSummarize,
             payload=job.to_json(),

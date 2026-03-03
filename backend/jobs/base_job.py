@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 
-from backend.data import Task
+from backend.data import TaskData
 from backend.enum.status import TaskStatusEnum
 from backend.exception.app_exception import AppException
 
 
 class BaseJob(ABC):
 
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         self.task = task
 
     @abstractmethod
-    def execute(self, task: Task) -> tuple[TaskStatusEnum, int]:
+    def execute(self, task: TaskData) -> tuple[TaskStatusEnum, int]:
         raise AppException("Subclasses must implement the execute method")

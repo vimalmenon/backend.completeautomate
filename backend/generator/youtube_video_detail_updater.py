@@ -1,11 +1,11 @@
-from backend.data import Task, YouTubeVideoDetailJobData
+from backend.data import TaskData, YouTubeVideoDetailJobData
 from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 
 
 class YouTubeVideoDetailUpdater(BaseGenerator):
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = YouTubeVideoDetailJobData.to_cls(task.payload)
         self.youtube_api = YouTubeAPI()

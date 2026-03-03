@@ -1,7 +1,7 @@
 import logging
 
 from backend.data import (
-    Task,
+    TaskData,
     YouTubeVideoAnalysisDBData,
     YouTubeVideoDetailDBData,
     YouTubeVideoSummarizeJobData,
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class YouTubeVideoAnalyzer(BaseGenerator):
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.video_db = YouTubeVideoDB(self.job_data.channel_id)

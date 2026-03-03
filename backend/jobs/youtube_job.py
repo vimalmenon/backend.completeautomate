@@ -1,6 +1,6 @@
 import logging
 
-from backend.data import Task
+from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator import (
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class YouTubeJob(BaseJob):
 
-    def execute(self, task: Task) -> tuple[TaskStatusEnum, int]:
+    def execute(self, task: TaskData) -> tuple[TaskStatusEnum, int]:
         try:
             if task.job_type == JobEnum.YouTubeThumbnail:
                 return (YouTubeThumbnailUpdater(task).generate(), 0)

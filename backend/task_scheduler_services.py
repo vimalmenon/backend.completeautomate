@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from backend.data import Task
+from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
 from backend.enum.job import JobEnum
 from backend.enum.status import TaskStatusEnum
@@ -47,23 +47,23 @@ class TaskSchedulerServices:
             self.task_db.update_task(task)
         self.task_db.cleanup_tasks()
 
-    def create_task(self, task: Task) -> Task:
+    def create_task(self, task: TaskData) -> TaskData:
         self.task_db.add_task(task)
         return task
 
-    def delete_task(self, task: Task) -> Task:
+    def delete_task(self, task: TaskData) -> TaskData:
         self.task_db.delete_task(task)
         return task
 
-    def get_tasks(self) -> list[Task]:
+    def get_tasks(self) -> list[TaskData]:
         return self.task_db.get_tasks()
 
-    def get_task_by_id(self, task_id: str) -> Task | None:
+    def get_task_by_id(self, task_id: str) -> TaskData | None:
         tasks = self.task_db.get_tasks()
         for task in tasks:
             if str(task.id) == task_id:
                 return task
         return None
 
-    def update_task(self, task: Task):
+    def update_task(self, task: TaskData) -> None:
         self.task_db.update_task(task)

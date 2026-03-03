@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from nicegui import ui
 
-from backend.data.task import Task
+from backend.data.task import TaskData
 from backend.database.task.task_db import TaskDB
 from backend.enum.job import JobEnum
 from backend.enum.status import TaskStatusEnum
@@ -51,7 +51,7 @@ def get_status_row_class(status_value: str) -> str:
     return "hover:bg-blue-50 dark:hover:bg-blue-900/40"
 
 
-def sort_tasks_by_priority(tasks: list[Task]) -> list[Task]:
+def sort_tasks_by_priority(tasks: list[TaskData]) -> list[TaskData]:
     return sorted(
         tasks,
         key=lambda task: (
@@ -136,7 +136,7 @@ def add_task(
 
     try:
         status = TaskStatusEnum(selected_status)
-        task = Task(
+        task = TaskData(
             id=uuid4(),
             job_type=JobEnum(selected_job_type),
             payload=payload,

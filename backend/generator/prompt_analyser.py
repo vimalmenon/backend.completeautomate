@@ -1,12 +1,12 @@
 from backend.data import (
-    Task,
+    TaskData,
 )
 from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 
 
 class PromptAnalyzer(BaseGenerator):
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
 
     def generate(self) -> TaskStatusEnum:

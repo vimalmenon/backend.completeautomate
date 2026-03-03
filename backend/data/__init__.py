@@ -7,7 +7,7 @@ from backend.data.image import (
 from backend.data.message import MessageDBData
 from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
-from backend.data.task import Task
+from backend.data.task import TaskData
 from backend.data.team import GraphicDesignerClsData, SocialMediaManagerData
 from backend.data.youtube import (
     YouTubeChannelDBData,
@@ -28,7 +28,7 @@ __all__ = [
     "ImageGeneratorJobData",
     "S3Data",
     "PromptData",
-    "Task",
+    "TaskData",
     "YouTubeChannelDBData",
     "YouTubeChannelJobData",
     "YouTubeVideoJobData",

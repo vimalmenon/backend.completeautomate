@@ -1,4 +1,4 @@
-from backend.data import ImageGeneratorJobData, S3Data, Task
+from backend.data import ImageGeneratorJobData, S3Data, TaskData
 from backend.database.image.image_generator_db import ImageGeneratorDB
 from backend.enum.status import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
@@ -7,7 +7,7 @@ from backend.integration.storage.s3_storage import S3Storage
 
 
 class ImageGenerator(BaseGenerator):
-    def __init__(self, task: Task):
+    def __init__(self, task: TaskData):
         super().__init__(task)
         payload = task.payload
         s3_data = S3Data(
