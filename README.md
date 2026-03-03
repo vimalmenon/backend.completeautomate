@@ -78,16 +78,15 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
+- [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
 - [ ] Add platform data
 - [ ] Fetch platform data
 - [ ] Find a way to cache from method level in platform data
 - [ ] Add playlist details to video records
-- [ ] Add Platform data
 - [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel
 - [ ] Use Platform data for all references
-- [ ] Remove all the channel and video reference
-- [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
+- [ ] Remove all the channel_id and video_id reference
 - [ ] Agent to review tasks
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
 - [ ] Test if the it's able to generate good image prompt with multiple options
@@ -97,7 +96,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot prompt examples for image and other generation tasks
-- [ ] Add topic suggestions for next week
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
 - [ ] Mock Data use (factory)
@@ -105,8 +103,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test data for DB integration
-  - [ ] 
+  - [ ] Integration with YouTube API
 - [ ] GUI Enhancements 
+  - [ ] Ability to Work Offline
+  - [ ] Mock AWS Dynamo DB Data
+  - [ ] Mock AWS S3 data
   - [ ] Task Create or Edit
   - [ ] Analytics dashboard
   - [ ] YouTube stats graphs
@@ -117,6 +118,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 **Ideas / Low Priority:**
 
+- Add topic suggestions for next week
 - Dockerfile + DockerHub CD
 - Local text-to-speech
 - Instagram/Twitter posting integration
