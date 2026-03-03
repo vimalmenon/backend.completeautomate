@@ -78,8 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [x] Rename Task to TaskData 
-- [x] Pass Task as constructor to Jobs
 - [ ] Add platform data
 - [ ] Fetch platform data
 - [ ] Use Platform data for all references
