@@ -49,6 +49,7 @@ moto = "^5.1.21"
 deadcode = "^2.4.1"
 google-api-python-client-stubs = "^1.32.0"
 types-jinja2 = "^2.11.9"
+pyfaker = "^0.1"
 
 [tool.black]
 line-length = 88

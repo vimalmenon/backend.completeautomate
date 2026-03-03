@@ -8,6 +8,8 @@ import boto3
 import pytest
 from moto import mock_aws
 
+from backend.enum import DbKeysEnum
+
 
 def pytest_configure(config: pytest.Config) -> None:
     """Set up mock environment variables before any tests run"""
@@ -82,8 +84,14 @@ def dynamodb_table(aws_credentials: None):
         dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
         table = dynamodb.create_table(
             TableName="test-table",
-            KeySchema=[{"AttributeName": "id", "KeyType": "HASH"}],
-            AttributeDefinitions=[{"AttributeName": "id", "AttributeType": "S"}],
+            KeySchema=[
+                {"AttributeName": DbKeysEnum.Primary.value, "KeyType": "HASH"},
+                {"AttributeName": DbKeysEnum.Secondary.value, "KeyType": "RANGE"},
+            ],
+            AttributeDefinitions=[
+                {"AttributeName": DbKeysEnum.Primary.value, "AttributeType": "S"},
+                {"AttributeName": DbKeysEnum.Secondary.value, "AttributeType": "S"},
+            ],
             BillingMode="PAY_PER_REQUEST",
         )
         yield table

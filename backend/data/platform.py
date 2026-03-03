@@ -43,6 +43,12 @@ class PlatformDBData:
 
     def to_json(self) -> dict:
         return {"data": self.data.to_json(), "platform_type": self.platform_type.value}
+    
+    @property
+    def video_id(self) -> str:
+        if isinstance(self.data, PlatformYouTubeVideoDBData):
+            return self.data.video_id
+        raise AppException("Invalid data type for video_id")
 
     @classmethod
     def to_cls(cls, data) -> Self:
