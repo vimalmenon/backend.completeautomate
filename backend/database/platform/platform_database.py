@@ -1,6 +1,6 @@
 from backend.data import PlatformDBData
 from backend.database.dynamo_database import DbManager
-from backend.enum import DbKeysEnum
+from backend.enum import DbKeysEnum, PlatformEnum
 from backend.exception.app_exception import AppException
 
 
@@ -22,11 +22,16 @@ class PlatformDB:
         raise AppException(f"data with reference : {ref_id} not found")
 
     def save_data(self, data: PlatformDBData) -> str:
+        secondary = ""
+        if data.platform_type == PlatformEnum.YouTubeVideo:
+            secondary = f"{data.platform_type.value}#{data.data.channel_id}#{data.data.video_id}"
+        if data.platform_type == PlatformEnum.YouTubeChannel:
+            secondary = f"{data.platform_type.value}#{data.data.channel_id}"
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{data.platform_type.value}#{data.data.channel_id}",
+                DbKeysEnum.Secondary.value: secondary,
                 **data.to_json(),
             }
         )
-        return ""
+        return secondary

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self
+from typing import Self, Union
 
 from backend.enum import PlatformEnum
 from backend.exception.app_exception import AppException
@@ -33,7 +33,7 @@ class PlatformYouTubeChannelData:
 @dataclass
 class PlatformDBData:
     platform_type: PlatformEnum
-    data: PlatformYouTubeVideoData | PlatformYouTubeChannelData
+    data: Union[PlatformYouTubeVideoData, PlatformYouTubeChannelData]
 
     def to_json(self) -> dict:
         return {"data": self.data.to_json(), "platform_type": self.platform_type.value}
