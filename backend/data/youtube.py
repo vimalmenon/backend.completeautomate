@@ -315,12 +315,14 @@ class YouTubeThumbnailJobData:
     video_id: str
     data: S3Data
     status: TaskStatusEnum
+    ref_id: str
 
     def to_json(self) -> dict:
         return {
             "video_id": self.video_id,
             "data": self.data.to_json(),
             "status": self.status.value,
+            "ref_id": self.ref_id,
         }
 
     @classmethod
@@ -329,7 +331,14 @@ class YouTubeThumbnailJobData:
             video_id=data["video_id"],
             data=S3Data.to_cls(data["data"]),
             status=TaskStatusEnum(data["status"]),
+            ref_id=data["ref_id"],
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
@@ -412,6 +421,7 @@ class YouTubeVideoDetailDBData:
 class YouTubeVideoAnalysisDBData:
     video_id: str
     channel_id: str
+    ref_id: str
     task_id: UUID
     video_details: list[YouTubeVideoDetailDBData]
     comment: str | None = None
@@ -425,6 +435,7 @@ class YouTubeVideoAnalysisDBData:
             "video_details": [detail.to_json() for detail in self.video_details],
             "comment": self.comment,
             "messages": self.messages,
+            "ref_id": self.ref_id,
         }
 
     @classmethod
@@ -439,7 +450,14 @@ class YouTubeVideoAnalysisDBData:
             comment=data.get("comment"),
             messages=data.get("messages", []),
             task_id=UUID(data["task_id"]),
+            ref_id=data["ref_id"],
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
@@ -447,6 +465,7 @@ class YouTubeVideoDetailJobData:
     task_id: str
     video_id: str
     channel_id: str
+    ref_id: str
     title: str
     description: str
     tags: list[str]
@@ -458,6 +477,7 @@ class YouTubeVideoDetailJobData:
             task_id=data["task_id"],
             video_id=data["video_id"],
             channel_id=data["channel_id"],
+            ref_id=data["ref_id"],
             title=data["title"],
             description=data["description"],
             tags=data["tags"],
@@ -469,8 +489,15 @@ class YouTubeVideoDetailJobData:
             "task_id": self.task_id,
             "video_id": self.video_id,
             "channel_id": self.channel_id,
+            "ref_id": self.ref_id,
             "title": self.title,
             "description": self.description,
             "tags": self.tags,
             "status": self.status.value,
         }
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)

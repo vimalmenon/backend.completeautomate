@@ -63,6 +63,7 @@ class YouTubeVideoAnalyzer(BaseGenerator):
         data = YouTubeVideoAnalysisDBData(
             video_id=self.job_data.video_id,
             channel_id=self.job_data.channel_id,
+            ref_id="",
             task_id=self.task.id,
             video_details=video_details,
             messages=messages,
