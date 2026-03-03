@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Rename Task to TaskData 
 - [x] Pass Task as constructor to Jobs
 - [ ] Add Platform data
+- [ ] use Platform data for all references.
 - [ ] Agent to review tasks
 - [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
