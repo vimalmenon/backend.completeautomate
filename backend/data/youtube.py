@@ -47,7 +47,6 @@ class YouTubeChannelStatsDBData:
 
 @dataclass
 class YouTubeChannelDBData:
-    channel_id: str
     ref_id: str
     title: str
     description: str
@@ -71,7 +70,6 @@ class YouTubeChannelDBData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            channel_id=data["channel_id"],
             ref_id=data["ref_id"],
             title=data["title"],
             description=data["description"],
@@ -94,7 +92,6 @@ class YouTubeChannelDBData:
         status = channel["status"]
         stat = YouTubeChannelStatsDBData.to_cls_from_response(channel["statistics"])
         return cls(
-            channel_id=channel["id"],
             ref_id=channel["ref_id"],
             title=snippet["title"],
             description=snippet["description"],
@@ -112,7 +109,6 @@ class YouTubeChannelDBData:
 
     def to_json(self) -> dict:
         return {
-            "channel_id": self.channel_id,
             "title": self.title,
             "ref_id": self.ref_id,
             "description": self.description,
@@ -304,14 +300,12 @@ class YouTubeVideoDBData:
 
 @dataclass
 class YouTubeThumbnailJobData:
-    video_id: str
     data: S3Data
     status: TaskStatusEnum
     ref_id: str
 
     def to_json(self) -> dict:
         return {
-            "video_id": self.video_id,
             "data": self.data.to_json(),
             "status": self.status.value,
             "ref_id": self.ref_id,
@@ -320,7 +314,6 @@ class YouTubeThumbnailJobData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            video_id=data["video_id"],
             data=S3Data.to_cls(data["data"]),
             status=TaskStatusEnum(data["status"]),
             ref_id=data["ref_id"],
@@ -336,12 +329,10 @@ class YouTubeThumbnailJobData:
 @dataclass
 class YouTubeVideoJobData:
     ref_id: str
-    channel_id: str
     poll_frequency_in_days: int = 7
 
     def to_json(self) -> dict:
         return {
-            "channel_id": self.channel_id,
             "ref_id": self.ref_id,
             "poll_frequency_in_days": self.poll_frequency_in_days,
         }
@@ -349,7 +340,6 @@ class YouTubeVideoJobData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            channel_id=data["channel_id"],
             ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
         )
@@ -363,13 +353,11 @@ class YouTubeVideoJobData:
 
 @dataclass
 class YouTubeChannelJobData:
-    channel_id: str
     ref_id: str
     poll_frequency_in_days: int = 7
 
     def to_json(self) -> dict:
         return {
-            "channel_id": self.channel_id,
             "poll_frequency_in_days": self.poll_frequency_in_days,
             "ref_id": self.ref_id,
         }
@@ -377,7 +365,6 @@ class YouTubeChannelJobData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            channel_id=data["channel_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
             ref_id=data["ref_id"],
         )
@@ -391,22 +378,16 @@ class YouTubeChannelJobData:
 
 @dataclass
 class YouTubeVideoSummarizeJobData:
-    video_id: str
-    channel_id: str
     ref_id: str
 
     def to_json(self) -> dict:
         return {
-            "video_id": self.video_id,
-            "channel_id": self.channel_id,
             "ref_id": self.ref_id,
         }
 
     @classmethod
     def to_cls(cls, data) -> Self:
         return cls(
-            video_id=data["video_id"],
-            channel_id=data["channel_id"],
             ref_id=data["ref_id"],
         )
 
@@ -444,8 +425,6 @@ class YouTubeVideoDetailDBData:
 
 @dataclass
 class YouTubeVideoAnalysisDBData:
-    video_id: str
-    channel_id: str
     ref_id: str
     task_id: UUID
     video_details: list[YouTubeVideoDetailDBData]
@@ -453,8 +432,6 @@ class YouTubeVideoAnalysisDBData:
 
     def to_json(self) -> dict:
         return {
-            "video_id": self.video_id,
-            "channel_id": self.channel_id,
             "task_id": str(self.task_id),
             "video_details": [detail.to_json() for detail in self.video_details],
             "comment": self.comment,
@@ -464,8 +441,6 @@ class YouTubeVideoAnalysisDBData:
     @classmethod
     def to_cls(cls, data) -> Self:
         return cls(
-            video_id=data["video_id"],
-            channel_id=data["channel_id"],
             video_details=[
                 YouTubeVideoDetailDBData.to_cls(detail)
                 for detail in data["video_details"]
@@ -485,8 +460,6 @@ class YouTubeVideoAnalysisDBData:
 @dataclass
 class YouTubeVideoDetailJobData:
     task_id: str
-    video_id: str
-    channel_id: str
     ref_id: str
     title: str
     description: str
@@ -497,8 +470,6 @@ class YouTubeVideoDetailJobData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             task_id=data["task_id"],
-            video_id=data["video_id"],
-            channel_id=data["channel_id"],
             ref_id=data["ref_id"],
             title=data["title"],
             description=data["description"],
@@ -509,8 +480,6 @@ class YouTubeVideoDetailJobData:
     def to_json(self) -> dict:
         return {
             "task_id": self.task_id,
-            "video_id": self.video_id,
-            "channel_id": self.channel_id,
             "ref_id": self.ref_id,
             "title": self.title,
             "description": self.description,

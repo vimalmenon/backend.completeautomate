@@ -12,7 +12,7 @@ class YouTubeVideoDetailUpdater(BaseGenerator):
 
     def generate(self) -> TaskStatusEnum:
         self.youtube_api.update_video_metadata(
-            video_id=self.job_data.video_id,
+            video_id=self.job_data.platform.video_id,
             title=self.job_data.title,
             description=self.job_data.description,
             tags=self.job_data.tags,
