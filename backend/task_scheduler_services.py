@@ -1,9 +1,8 @@
 import logging
 from datetime import datetime
-from uuid import uuid4
 
 from backend.config.env import env
-from backend.data import TaskData, YouTubeVideoJobData
+from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
 from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum, TeamEnum
 from backend.helper.start_up.start_up import StartUp
@@ -15,6 +14,7 @@ from backend.jobs import (
     PromptAnalyzerJob,
     YouTubeJob,
 )
+from backend.manager import TaskManager
 
 logger = logging.getLogger(__name__)
 
@@ -48,19 +48,13 @@ class TaskSchedulerServices:
             self.task_db.update_task(task)
         self.task_db.cleanup_tasks()
 
-    def setup_one_time_task(self) -> TaskData:
-        payload_cls = YouTubeVideoJobData(
-            ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}"
-        )
-        task = TaskData(
-            id=uuid4(),
-            job_type=JobEnum.YouTubeVideo,
-            payload=payload_cls.to_json(),
+    def setup_one_time_task(self) -> None:
+        manager = TaskManager()
+        task = manager.create_youtube_video_task(
+            ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
             created_by=TeamEnum.OWNER,
-            created_at=datetime.now(),
-            status=TaskStatusEnum.IN_PROGRESS,
         )
-        self.create_task(task)
+        manager.add_task(task)
 
     def create_task(self, task: TaskData) -> TaskData:
         self.task_db.add_task(task)

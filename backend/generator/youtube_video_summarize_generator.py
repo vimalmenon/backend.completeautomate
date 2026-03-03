@@ -7,11 +7,12 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB
-from backend.enum import PromptTaskEnum, TaskStatusEnum
+from backend.enum import JobEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.agent.general_agent import GeneralAgent
 from backend.integration.youtube.youtube_api import YouTubeAPI
+from backend.manager import TaskManager
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -46,6 +47,7 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
                     transcript=text_transcript, summarize=summarize
                 )
                 self.__update_db_with_transcript(data)
+                self.__create_analysis_task()
         except Exception as e:
             logger.error(
                 f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"
@@ -103,3 +105,12 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
             f"Updating database with transcript for video: {self.payload.platform.video_id}"
         )
         self.db.update_transcript(self.payload.platform.video_id, transcript)
+
+    def __create_analysis_task(self):
+        manager = TaskManager()
+        data = manager.create_youtube_analysis_task(
+            ref_id=self.payload.ref_id,
+            created_by=JobEnum.YouTubeVideoSummarize,
+            trail=self.task.trail + [self.task.id],
+        )
+        manager.add_task(data)
