@@ -11,5 +11,5 @@ class BaseJob(ABC):
         self.task = task
 
     @abstractmethod
-    def execute(self, task: TaskData) -> tuple[TaskStatusEnum, int]:
+    def execute(self) -> tuple[TaskStatusEnum, int]:
         raise AppException("Subclasses must implement the execute method")

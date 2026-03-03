@@ -38,7 +38,7 @@ class TaskSchedulerServices:
         tasks = self.task_db.get_active_tasks()
         for task in tasks:
             job_class = self.job.get(task.job_type, NoJob)
-            status, failed_count = job_class(task).execute(task)
+            status, failed_count = job_class(task).execute()
             task.status = status
             task.failed_count = failed_count
             if status == TaskStatusEnum.COMPLETED:

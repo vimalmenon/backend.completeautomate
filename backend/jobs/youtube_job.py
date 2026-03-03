@@ -1,6 +1,5 @@
 import logging
 
-from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator import (
@@ -18,21 +17,21 @@ logger = logging.getLogger(__name__)
 
 class YouTubeJob(BaseJob):
 
-    def execute(self, task: TaskData) -> tuple[TaskStatusEnum, int]:
+    def execute(self) -> tuple[TaskStatusEnum, int]:
         try:
-            if task.job_type == JobEnum.YouTubeThumbnail:
-                return (YouTubeThumbnailUpdater(task).generate(), 0)
-            if task.job_type == JobEnum.YouTubeChannel:
-                return (YouTubeChannelGenerator(task).generate(), 0)
-            if task.job_type == JobEnum.YouTubeVideo:
-                return (YouTubeVideoGenerator(task).generate(), 0)
-            if task.job_type == JobEnum.YouTubeVideoSummarize:
-                return (YouTubeVideoSummarizeGenerator(task).generate(), 0)
-            if task.job_type == JobEnum.YouTubeVideoAnalyze:
-                return (YouTubeVideoAnalyzer(task).generate(), 0)
-            if task.job_type == JobEnum.YouTubeVideoDetailUpdater:
-                return (YouTubeVideoDetailUpdater(task).generate(), 0)
-            raise AppException(f"Unsupported job type: {task.job_type.value}")
+            if self.task.job_type == JobEnum.YouTubeThumbnail:
+                return (YouTubeThumbnailUpdater(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeChannel:
+                return (YouTubeChannelGenerator(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideo:
+                return (YouTubeVideoGenerator(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideoSummarize:
+                return (YouTubeVideoSummarizeGenerator(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideoAnalyze:
+                return (YouTubeVideoAnalyzer(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideoDetailUpdater:
+                return (YouTubeVideoDetailUpdater(self.task).generate(), 0)
+            raise AppException(f"Unsupported job type: {self.task.job_type.value}")
         except Exception as e:
-            logger.error("Error executing YouTube task %s: %s", task.id, e)
-            return (TaskStatusEnum.FAILED, task.failed_count + 1)
+            logger.error("Error executing YouTube task %s: %s", self.task.id, e)
+            return (TaskStatusEnum.FAILED, self.task.failed_count + 1)

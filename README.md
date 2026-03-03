@@ -79,6 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Rename Task to TaskData 
+- [x] Pass Task as constructor
 - [ ] Need to create platform reference DB ( youtube or insta, Video_id and Channel_id)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
 - [ ] Test if the it's able to generate good image Prompt with multiple options
@@ -92,7 +93,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add topic suggestions for next week
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
-- [ ] Mock Data for UI and Test
+- [ ] Mock Data use (factory)
 - [ ] GUI enhancements 
   - [ ] Task create/edit
   - [ ] Analytics dashboard, 

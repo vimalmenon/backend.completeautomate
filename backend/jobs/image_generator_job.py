@@ -1,4 +1,3 @@
-from backend.data import TaskData
 from backend.enum.status import TaskStatusEnum
 from backend.generator.image_generator import ImageGenerator
 from backend.jobs.base_job import BaseJob
@@ -6,8 +5,8 @@ from backend.jobs.base_job import BaseJob
 
 class ImageGeneratorJob(BaseJob):
 
-    def execute(self, task: TaskData) -> tuple[TaskStatusEnum, int]:
+    def execute(self) -> tuple[TaskStatusEnum, int]:
         try:
-            return (ImageGenerator(task).generate(), 0)
+            return (ImageGenerator(self.task).generate(), 0)
         except Exception:
-            return (TaskStatusEnum.FAILED, task.failed_count + 1)
+            return (TaskStatusEnum.FAILED, self.task.failed_count + 1)

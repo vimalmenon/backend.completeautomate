@@ -5,7 +5,7 @@ from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
 
 
-def create_task(payload=dict) -> TaskData:
+def create_task_factory(payload=dict) -> TaskData:
     return TaskData(
         id=uuid4(),
         job_type=JobEnum.YouTubeChannel,
@@ -16,5 +16,5 @@ def create_task(payload=dict) -> TaskData:
     )
 
 
-def create_tasks(int_number=5) -> list[TaskData]:
-    return [create_task() for _i in (0, int_number)]
+def create_tasks_factory(int_number=5) -> list[TaskData]:
+    return [create_task_factory() for _i in (0, int_number)]

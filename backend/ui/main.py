@@ -8,14 +8,6 @@ def main_page():
                 "name": "List Tasks",
                 "links_to": "/tasks?page=list_tasks",
             },
-            # {
-            #     "name": "Update Task",
-            #     "links_to": "/tasks?page=update_task",
-            # },
-            # {
-            #     "name": "Delete Tasks",
-            #     "links_to": "/tasks?page=delete_tasks",
-            # },
         ],
         "YouTube": [
             {
