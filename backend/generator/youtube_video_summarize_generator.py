@@ -8,11 +8,11 @@ from backend.data import (
 )
 from backend.database import YouTubeVideoDB
 from backend.enum import PromptTaskEnum, TaskStatusEnum
+from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.agent.general_agent import GeneralAgent
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.services.agent_service import AgentService
-from backend.exception.app_exception import AppException
 
 logger = logging.getLogger(__name__)
 
@@ -30,17 +30,22 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
         logger.info(f"Fetching transcript for video: {self.payload.platform.video_id}")
         try:
             result = self.youtube_api.get_transcript(self.payload.platform.video_id)
-            logger.info("Processing transcript")
-            text_transcript = self.__convert_transcript_to_text(result)
-            logger.info("Summarizing transcript")
-            summarize = self.__summarize_transcript(text_transcript)
-            logger.info(
-                f"Successfully generated transcript and summary for video: {self.payload.platform.video_id}"
-            )
-            data = YouTubeTranscriptDBData(
-                transcript=text_transcript, summarize=summarize
-            )
-            self.__update_db_with_transcript(data)
+            if not result:
+                raise AppException(
+                    f"No transcript found for video: {self.payload.platform.video_id}"
+                )
+            if result:
+                logger.info("Processing transcript")
+                text_transcript = self.__convert_transcript_to_text(result)
+                logger.info("Summarizing transcript")
+                summarize = self.__summarize_transcript(text_transcript)
+                logger.info(
+                    f"Successfully generated transcript and summary for video: {self.payload.platform.video_id}"
+                )
+                data = YouTubeTranscriptDBData(
+                    transcript=text_transcript, summarize=summarize
+                )
+                self.__update_db_with_transcript(data)
         except Exception as e:
             logger.error(
                 f"Error processing transcript for video: {self.payload.platform.video_id}, error: {str(e)}"

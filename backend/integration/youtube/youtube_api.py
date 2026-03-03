@@ -346,4 +346,4 @@ class YouTubeAPI:
             return YouTubeTranscriptApi().fetch(video_id)
         except Exception as e:
             logger.error(f"An error occurred while fetching transcript: {e}")
-            raise AppException(f"An error occurred while fetching transcript: {str(e)}")
+            return ""
