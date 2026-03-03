@@ -1,5 +1,5 @@
-from typing import Any
 from functools import lru_cache
+from typing import Any
 
 from backend.data import PlatformDBData
 from backend.database.dynamo_database import DbManager

@@ -5,7 +5,11 @@ from backend.data.image import (
     PromptData,
 )
 from backend.data.message import MessageDBData
-from backend.data.platform import PlatformDBData
+from backend.data.platform import (
+    PlatformDBData,
+    PlatformYouTubeChannelDBData,
+    PlatformYouTubeVideoDBData,
+)
 from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
 from backend.data.task import TaskData
@@ -45,4 +49,6 @@ __all__ = [
     "MessageDBData",
     "YouTubeVideoDetailJobData",
     "PlatformDBData",
+    "PlatformYouTubeChannelDBData",
+    "PlatformYouTubeVideoDBData",
 ]

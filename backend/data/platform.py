@@ -6,7 +6,7 @@ from backend.exception.app_exception import AppException
 
 
 @dataclass
-class PlatformYouTubeVideoData:
+class PlatformYouTubeVideoDBData:
     channel_id: str
     video_id: str
 
@@ -23,7 +23,7 @@ class PlatformYouTubeVideoData:
 
 
 @dataclass
-class PlatformYouTubeChannelData:
+class PlatformYouTubeChannelDBData:
     channel_id: str
 
     def to_json(self) -> dict:
@@ -39,7 +39,7 @@ class PlatformYouTubeChannelData:
 @dataclass
 class PlatformDBData:
     platform_type: PlatformEnum
-    data: Union[PlatformYouTubeVideoData, PlatformYouTubeChannelData]
+    data: Union[PlatformYouTubeVideoDBData, PlatformYouTubeChannelDBData]
 
     def to_json(self) -> dict:
         return {"data": self.data.to_json(), "platform_type": self.platform_type.value}
@@ -48,12 +48,12 @@ class PlatformDBData:
     def to_cls(cls, data) -> Self:
         if data["platform_type"] == PlatformEnum.YouTubeVideo.value:
             return cls(
-                data=PlatformYouTubeVideoData.to_cls(data["data"]),
+                data=PlatformYouTubeVideoDBData.to_cls(data["data"]),
                 platform_type=PlatformEnum(data["platform_type"]),
             )
         if data["platform_type"] == PlatformEnum.YouTubeChannel.value:
             return cls(
-                data=PlatformYouTubeChannelData.to_cls(data["data"]),
+                data=PlatformYouTubeChannelDBData.to_cls(data["data"]),
                 platform_type=PlatformEnum(data["platform_type"]),
             )
         else:
