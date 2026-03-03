@@ -80,6 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Add platform data
 - [ ] Fetch platform data
+- [ ] Add Platform data
+- [ ] Transform data YouTube Video and YouTube Channel
 - [ ] Use Platform data for all references
 - [ ] Remove all the channel and video reference
 - [ ] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
