@@ -1,3 +1,6 @@
+from typing import Any
+from functools import lru_cache
+
 from backend.data import PlatformDBData
 from backend.database.dynamo_database import DbManager
 from backend.enum import DbKeysEnum, PlatformEnum
@@ -10,13 +13,18 @@ class PlatformDB:
     def __init__(self):
         self.db_manager = DbManager()
 
-    def get_data(self, ref_id: str) -> PlatformDBData:
-        item = self.db_manager.get_item(
+    @classmethod
+    @lru_cache(maxsize=256)
+    def _get_item_cached(cls, ref_id: str) -> Any | None:
+        return DbManager().get_item(
             {
-                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Primary.value: cls.TABLE,
                 DbKeysEnum.Secondary.value: ref_id,
             }
         )
+
+    def get_data(self, ref_id: str) -> PlatformDBData:
+        item = self._get_item_cached(ref_id)
         if item:
             return PlatformDBData.to_cls(item)
         raise AppException(f"data with reference : {ref_id} not found")
@@ -40,4 +48,5 @@ class PlatformDB:
                 **data.to_json(),
             }
         )
+        self._get_item_cached.cache_clear()
         return secondary

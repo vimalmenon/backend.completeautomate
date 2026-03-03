@@ -14,7 +14,11 @@ class PlatformYouTubeVideoData:
         return {"channel_id": self.channel_id, "video_id": self.video_id}
 
     @classmethod
-    def to_cls(cls, data) -> Self:
+    def to_cls(cls, data: dict) -> Self:
+        if "channel_id" not in data or "video_id" not in data:
+            raise AppException(
+                "Missing required fields: channel_id and video_id are required"
+            )
         return cls(channel_id=data["channel_id"], video_id=data["video_id"])
 
 
@@ -26,7 +30,9 @@ class PlatformYouTubeChannelData:
         return {"channel_id": self.channel_id}
 
     @classmethod
-    def to_cls(cls, data) -> Self:
+    def to_cls(cls, data: dict) -> Self:
+        if "channel_id" not in data:
+            raise AppException("Missing required field: channel_id")
         return cls(channel_id=data["channel_id"])
 
 
