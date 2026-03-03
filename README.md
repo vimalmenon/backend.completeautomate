@@ -103,7 +103,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test data for DB integration
   - [ ] Mock Integration with YouTube API
-- [ ] GUI Enhancements 
+- [ ] GUI Enhancements
+  - [ ] Add Platform to GUI
   - [ ] Ability to Work Offline
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
