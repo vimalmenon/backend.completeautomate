@@ -87,16 +87,16 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Add Entry on Video Add to add to platform reference
 - [x] Transform data YouTube Video and YouTube Channel
 - [x] Add DB to store data from YouTube Analysis
-- [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
-- [ ] Test if the it's able to generate good image prompt with multiple options
+- [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
+- [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
 - [ ] Need to check what this class does `PromptAnalyzerJob`
-- [ ] Adding YouTubeChannel should add Video and Channel Detail (as they both use same data)
+- [ ] Adding YouTubeChannel should add Video and Channel Detail (as they both use the same data)
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] YouTube Idea Suggester
 - [ ] Integrate with twitter
 - [ ] Agent to review tasks
-- [ ] Fix transcript for any grammar or any errors in the name
+- [ ] Fix transcripts for grammar and naming errors
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
