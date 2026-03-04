@@ -87,22 +87,23 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Add Entry on Video Add to add to platform reference
 - [x] Transform data YouTube Video and YouTube Channel
 - [x] Add DB to store data from YouTube Analysis
-- [ ] Need to check what this class does `PromptAnalyzerJob`
-- [ ] Remove Teams as it looks of no use
-- [ ] Adding YouTubeChannel should add Video and Channel Detail (as they both use same data)
-- [ ] Add playlist details to YouTube Video Data
-- [ ] Agent to review tasks
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
 - [ ] Test if the it's able to generate good image prompt with multiple options
 - [ ] Test all the prompts once done
+- [ ] Need to check what this class does `PromptAnalyzerJob`
+- [ ] Adding YouTubeChannel should add Video and Channel Detail (as they both use same data)
+- [ ] Add Playlist details to YouTube Video DB
+- [ ] YouTube Idea Suggester
+- [ ] Integrate with twitter
+- [ ] Agent to review tasks
 - [ ] Fix transcript for any grammar or any errors in the name
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
-- [ ] Remove main.ipynb (Rather use GUI to manage it)
-- [ ] Mock data use (factory)
+- [ ] Remove `main.ipynb` (Rather use GUI to manage it)
+- [ ] Mock data (use factory)
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Test all the flows from Generator to Updater, Analyze
@@ -127,7 +128,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Suggester (Suggest for Something)
   - Creator (Create Data on DB)
   - Analyzer (Analysis the data)
-  - Generator (?)
+  - Generator (Generate Image / Video Sound)
+
 
 YouTubeChannel 
   -> YouTubeVideo 
@@ -146,6 +148,10 @@ YouTubeChannel
 - Instagram/Twitter posting integration
 - YouTube comments analysis
 - Adopt GIT branching strategies
+- Remove Teams as it looks of no use
+- Upload Corrected Transcript
+- Notify user on `REVIEW` via email or Telegram
+
 
 </details>
 
