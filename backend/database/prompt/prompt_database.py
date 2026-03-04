@@ -2,8 +2,7 @@ from boto3.dynamodb.conditions import Key
 
 from backend.data import PromptDBData
 from backend.database.dynamo_database import DbManager
-from backend.enum import PromptTaskEnum
-from backend.enum.db_keys import DbKeysEnum
+from backend.enum import DbKeysEnum, PromptTaskEnum
 
 
 class PromptDB:

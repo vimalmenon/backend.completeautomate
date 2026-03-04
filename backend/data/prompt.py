@@ -40,7 +40,7 @@ class PromptDBData:
 
 
 @dataclass
-class PromptAnalysisVersionDBData:
+class PromptVersionDBData:
     prompt: str
     system_message: str
     version: str
@@ -62,18 +62,16 @@ class PromptAnalysisVersionDBData:
 
 
 @dataclass
-class PromptAnalysisDBData:
-    prompt_task: PromptTaskEnum
+class PromptSuggesterDBData:
+    ref_id: str
     description: str
-    used_version: str
-    versions: list[PromptAnalysisVersionDBData]
+    versions: list[PromptVersionDBData]
     comment: str | None
 
     def to_json(self) -> dict:
         return {
-            "prompt_task": self.prompt_task.value,
+            "ref_id": self.ref_id,
             "description": self.description,
-            "used_version": self.used_version,
             "comment": self.comment,
             "versions": [version.to_json() for version in self.versions],
         }
@@ -81,12 +79,11 @@ class PromptAnalysisDBData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            prompt_task=PromptTaskEnum(data["prompt_task"]),
+            ref_id=data["ref_id"],
             description=data["description"],
-            used_version=data["used_version"],
             comment=data.get("comment"),
             versions=[
-                PromptAnalysisVersionDBData.to_cls(version)
+                PromptVersionDBData.to_cls(version)
                 for version in data.get("versions", [])
             ],
         )
