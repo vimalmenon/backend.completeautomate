@@ -7,8 +7,8 @@ class JobEnum(str, Enum):
     YouTubeVideo = "YouTubeVideo"
     YouTubeThumbnail = "YouTubeThumbnail"
     YouTubeVideoSummarize = "YouTubeVideoSummarize"
-    YouTubeVideoAnalyze = "YouTubeVideoAnalyze"  # TODO find Better name
-    YouTubeVideoDetailUpdater = "YouTubeVideoDetailUpdater"
+    YouTubeVideoMetadataSuggester = "YouTubeVideoMetadataSuggester"
+    YouTubeVideoMetadataUpdater = "YouTubeVideoMetadataUpdater"
     ImageGenerator = "ImageGenerator"
     ImagePrompt = "ImagePrompt"
     PromptAnalyzer = "PromptAnalyzer"

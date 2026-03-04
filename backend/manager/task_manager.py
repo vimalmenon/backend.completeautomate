@@ -20,7 +20,7 @@ class TaskManager:
         payload_cls = YouTubeVideoSummarizeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
-            job_type=JobEnum.YouTubeVideoAnalyze,
+            job_type=JobEnum.YouTubeVideoMetadataSuggester,
             payload=payload_cls.to_json(),
             created_by=created_by,
             created_at=datetime.now(),

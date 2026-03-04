@@ -27,9 +27,9 @@ class YouTubeJob(BaseJob):
                 return (YouTubeVideoGenerator(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoSummarize:
                 return (YouTubeVideoSummarizeGenerator(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoAnalyze:
+            if self.task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
                 return (YouTubeVideoMetadataSuggester(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoDetailUpdater:
+            if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
                 return (YouTubeVideoDetailUpdater(self.task).generate(), 0)
             raise AppException(f"Unsupported job type: {self.task.job_type.value}")
         except Exception as e:
