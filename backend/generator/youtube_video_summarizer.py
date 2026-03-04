@@ -32,9 +32,10 @@ class YouTubeVideoSummarizer(BaseGenerator):
         try:
             result = self.youtube_api.get_transcript(self.job_data.platform.video_id)
             if not result:
-                raise AppException(
+                logger.warning(
                     f"No transcript found for video: {self.job_data.platform.video_id}"
                 )
+                return TaskStatusEnum.COMPLETED
             if result:
                 logger.info("Processing transcript")
                 text_transcript = self.__convert_transcript_to_text(result)

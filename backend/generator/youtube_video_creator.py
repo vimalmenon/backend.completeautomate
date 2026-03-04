@@ -48,7 +48,7 @@ class YouTubeVideoCreator(BaseGenerator):
                 {**youtube_response, "task_id": str(self.task.id), "ref_id": ref_id}
             )
             self.db.add_video(youtube_data)
-            self.__create_task_for_transcript(video_id)
+            self.__create_task_for_transcript(video_id, ref_id)
 
         if video_from_db and video_from_db.past_update_time(
             int(self.job_data.poll_frequency_in_days)
@@ -60,10 +60,10 @@ class YouTubeVideoCreator(BaseGenerator):
             )
             self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
 
-    def __create_task_for_transcript(self, video_id: str) -> None:
+    def __create_task_for_transcript(self, video_id: str, ref_id: str) -> None:
         manager = TaskManager(self.task)
         task = manager.create_youtube_summarize_task(
-            ref_id=self.job_data.ref_id, created_by=JobEnum.YouTubeVideo
+            ref_id=ref_id, created_by=JobEnum.YouTubeVideo
         )
         manager.add_task(task)
         logger.info(

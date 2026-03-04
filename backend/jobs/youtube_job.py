@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
@@ -32,6 +33,7 @@ class YouTubeJob(BaseJob):
             if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
                 return (YouTubeVideoMetadataUpdater(self.task).generate(), 0)
             raise AppException(f"Unsupported job type: {self.task.job_type.value}")
-        except Exception as e:
-            logger.error("Error executing YouTube task %s: %s", self.task.id, e)
+        except Exception:
+            error_msg = traceback.format_exc()
+            logger.error("Error executing YouTube task %s: %s", self.task.id, error_msg)
             return (TaskStatusEnum.FAILED, self.task.failed_count + 1)
