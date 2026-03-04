@@ -83,7 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Add platform data
 - [x] Fetch platform data
 - [ ] Use Platform data for all references
-- [ ] Remove all the channel_id and video_id reference
+- [x] Remove all the channel_id and video_id reference
 - [ ] Add playlist details to video records
 - [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel

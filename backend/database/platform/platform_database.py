@@ -1,9 +1,13 @@
 from functools import lru_cache
 from typing import Any
 
-from backend.data import PlatformDBData
+from backend.data import (
+    PlatformDBData,
+    PlatformYouTubeChannelDBData,
+    PlatformYouTubeVideoDBData,
+)
 from backend.database.dynamo_database import DbManager
-from backend.enum import DbKeysEnum, PlatformEnum
+from backend.enum import DbKeysEnum
 from backend.exception.app_exception import AppException
 
 
@@ -31,12 +35,11 @@ class PlatformDB:
 
     def save_data(self, data: PlatformDBData) -> str:
         secondary = None
-        if data.platform_type == PlatformEnum.YouTubeVideo and hasattr(
-            data.data, "video_id"
-        ):
-            secondary = f"{data.platform_type.value}#{data.data.channel_id}#{data.data.video_id}"
-        if data.platform_type == PlatformEnum.YouTubeChannel:
-            secondary = f"{data.platform_type.value}#{data.data.channel_id}"
+
+        if isinstance(data.data, PlatformYouTubeVideoDBData):
+            secondary = f"{data.platform_type.value}#{data.channel_id}#{data.video_id}"
+        if isinstance(data.data, PlatformYouTubeChannelDBData):
+            secondary = f"{data.platform_type.value}#{data.channel_id}"
         if not secondary:
             raise AppException(
                 f"Platform with value : {data.platform_type.value} not found"
