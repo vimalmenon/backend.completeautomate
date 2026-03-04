@@ -4,7 +4,7 @@ from datetime import datetime
 from backend.config.env import env
 from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
-from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum, TeamEnum
+from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
 from backend.helper.start_up.start_up import StartUp
 from backend.jobs import (
     BaseJob,
@@ -52,12 +52,12 @@ class TaskSchedulerServices:
         manager = TaskManager()
         task = manager.create_youtube_video_task(
             ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
-            created_by=TeamEnum.OWNER,
+            created_by=JobEnum.OWNER,
         )
         manager.add_task(task)
         task = manager.create_youtube_channel_task(
             ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
-            created_by=TeamEnum.OWNER,
+            created_by=JobEnum.OWNER,
         )
         manager.add_task(task)
 

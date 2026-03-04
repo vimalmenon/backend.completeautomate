@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Self
 from uuid import UUID
 
-from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
+from backend.enum import JobEnum, TaskStatusEnum
 
 
 @dataclass
@@ -11,7 +11,7 @@ class TaskData:
     id: UUID
     job_type: JobEnum
     payload: dict
-    created_by: TeamEnum | JobEnum
+    created_by: JobEnum
     created_at: datetime
     status: TaskStatusEnum
     failed_count: int = 0
@@ -41,7 +41,7 @@ class TaskData:
             payload=data["payload"],
             created_at=datetime.fromisoformat(data["created_at"]),
             status=TaskStatusEnum(data["status"]),
-            created_by=TeamEnum.from_value(data["created_by"]),
+            created_by=JobEnum(data["created_by"]),
             failed_count=data.get("failed_count", 0),
             trail=[UUID(trail) for trail in data["trail"]],
             completed_at=(

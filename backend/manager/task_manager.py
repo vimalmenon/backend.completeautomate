@@ -8,7 +8,7 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import TaskDB
-from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
+from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 
 
@@ -24,7 +24,7 @@ class TaskManager:
         TaskDB().add_task(task)
 
     def create_youtube_analysis_task(
-        self, ref_id: str, created_by: TeamEnum | JobEnum
+        self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
             raise AppException("Task not found")
@@ -39,9 +39,7 @@ class TaskManager:
             trail=self.task.trail + [self.task.id],
         )
 
-    def create_youtube_video_task(
-        self, ref_id: str, created_by: TeamEnum | JobEnum
-    ) -> TaskData:
+    def create_youtube_video_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
         payload_cls = YouTubeVideoJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -53,9 +51,7 @@ class TaskManager:
             trail=[],
         )
 
-    def create_youtube_channel_task(
-        self, ref_id: str, created_by: TeamEnum | JobEnum
-    ) -> TaskData:
+    def create_youtube_channel_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
         payload_cls = YouTubeChannelJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -68,7 +64,7 @@ class TaskManager:
         )
 
     def create_youtube_summarize_task(
-        self, ref_id: str, created_by: TeamEnum | JobEnum
+        self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
             raise AppException("Task not found")
