@@ -1,6 +1,11 @@
+import logging
+
 from nicegui import ui
 
+from backend.config.logging_config import setup_logging
 from backend.ui import main_page, prompt_page, tasks_page, youtube_page
+
+logger = logging.getLogger(__name__)
 
 
 def loading_page():
@@ -81,6 +86,9 @@ def root():
 
 
 def main() -> None:
+    # Initialize logging
+    setup_logging(log_dir="logs")
+    logger.info("Starting CompleteAutomate GUI")
     ui.run(root, title="CompleteAutomate", favicon="🤖")
 
 
