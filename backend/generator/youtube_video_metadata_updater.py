@@ -4,7 +4,7 @@ from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 
 
-class YouTubeVideoDetailUpdater(BaseGenerator):
+class YouTubeVideoMetadataUpdater(BaseGenerator):
     def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = YouTubeVideoDetailJobData.to_cls(task.payload)

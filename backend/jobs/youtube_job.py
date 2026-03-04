@@ -5,9 +5,9 @@ from backend.exception.app_exception import AppException
 from backend.generator import (
     YouTubeChannelGenerator,
     YouTubeThumbnailUpdater,
-    YouTubeVideoDetailUpdater,
     YouTubeVideoGenerator,
     YouTubeVideoMetadataSuggester,
+    YouTubeVideoMetadataUpdater,
     YouTubeVideoSummarizeGenerator,
 )
 from backend.jobs.base_job import BaseJob
@@ -30,7 +30,7 @@ class YouTubeJob(BaseJob):
             if self.task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
                 return (YouTubeVideoMetadataSuggester(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
-                return (YouTubeVideoDetailUpdater(self.task).generate(), 0)
+                return (YouTubeVideoMetadataUpdater(self.task).generate(), 0)
             raise AppException(f"Unsupported job type: {self.task.job_type.value}")
         except Exception as e:
             logger.error("Error executing YouTube task %s: %s", self.task.id, e)
