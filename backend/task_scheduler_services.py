@@ -50,13 +50,8 @@ class TaskSchedulerServices:
 
     def setup_one_time_task(self) -> None:
         manager = TaskManager()
-        task = manager.create_youtube_video_task(
-            ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
-            created_by=JobEnum.OWNER,
-        )
-        manager.add_task(task)
         task = manager.create_youtube_channel_task(
-            ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
+            ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
             created_by=JobEnum.OWNER,
         )
         manager.add_task(task)
