@@ -55,6 +55,11 @@ class TaskSchedulerServices:
             created_by=TeamEnum.OWNER,
         )
         manager.add_task(task)
+        task = manager.create_youtube_channel_task(
+            ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
+            created_by=TeamEnum.OWNER,
+        )
+        manager.add_task(task)
 
     def create_task(self, task: TaskData) -> TaskData:
         self.task_db.add_task(task)

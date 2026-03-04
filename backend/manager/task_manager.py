@@ -1,7 +1,12 @@
 from datetime import datetime
 from uuid import uuid4
 
-from backend.data import TaskData, YouTubeVideoJobData, YouTubeVideoSummarizeJobData
+from backend.data import (
+    TaskData,
+    YouTubeChannelJobData,
+    YouTubeVideoJobData,
+    YouTubeVideoSummarizeJobData,
+)
 from backend.database import TaskDB
 from backend.enum import JobEnum, TaskStatusEnum, TeamEnum
 from backend.exception.app_exception import AppException
@@ -41,6 +46,20 @@ class TaskManager:
         return TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeVideo,
+            payload=payload_cls.to_json(),
+            created_by=created_by,
+            created_at=datetime.now(),
+            status=TaskStatusEnum.IN_PROGRESS,
+            trail=[],
+        )
+
+    def create_youtube_channel_task(
+        self, ref_id: str, created_by: TeamEnum | JobEnum
+    ) -> TaskData:
+        payload_cls = YouTubeChannelJobData(ref_id=ref_id)
+        return TaskData(
+            id=uuid4(),
+            job_type=JobEnum.YouTubeChannel,
             payload=payload_cls.to_json(),
             created_by=created_by,
             created_at=datetime.now(),
