@@ -4,11 +4,11 @@ from backend.generator.youtube_channel_generator import YouTubeChannelGenerator
 from backend.generator.youtube_thumbnail_updater import (
     YouTubeThumbnailUpdater,
 )
-from backend.generator.youtube_video_analyzer import (
-    YouTubeVideoAnalyzer,
-)
 from backend.generator.youtube_video_detail_updater import YouTubeVideoDetailUpdater
 from backend.generator.youtube_video_generator import YouTubeVideoGenerator
+from backend.generator.youtube_video_metadata_suggester import (
+    YouTubeVideoMetadataSuggester,
+)
 from backend.generator.youtube_video_summarize_generator import (
     YouTubeVideoSummarizeGenerator,
 )
@@ -20,6 +20,6 @@ __all__ = [
     "YouTubeChannelGenerator",
     "YouTubeVideoGenerator",
     "YouTubeVideoSummarizeGenerator",
-    "YouTubeVideoAnalyzer",
+    "YouTubeVideoMetadataSuggester",
     "YouTubeVideoDetailUpdater",
 ]

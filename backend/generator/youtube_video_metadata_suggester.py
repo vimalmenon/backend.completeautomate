@@ -6,7 +6,7 @@ from backend.data import (
     YouTubeVideoDetailDBData,
     YouTubeVideoSummarizeJobData,
 )
-from backend.database import YouTubeVideoAnalysisDB, YouTubeVideoDB
+from backend.database import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
 from backend.enum import PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
@@ -17,12 +17,12 @@ from backend.services.agent_service import AgentService
 logger = logging.getLogger(__name__)
 
 
-class YouTubeVideoAnalyzer(BaseGenerator):
+class YouTubeVideoMetadataSuggester(BaseGenerator):
     def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.video_db = YouTubeVideoDB(self.job_data.platform.channel_id)
-        self.analysis_db = YouTubeVideoAnalysisDB()
+        self.analysis_db = YouTubeVideoMetadataSuggesterDB()
         logger.info("Initializing YouTubeVideoAnalyzerGenerator")
 
     def generate(self) -> TaskStatusEnum:

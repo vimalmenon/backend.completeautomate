@@ -3,8 +3,8 @@ from backend.database import DbManager
 from backend.enum import DbKeysEnum
 
 
-class YouTubeVideoAnalysisDB:
-    TABLE = "CA#YOUTUBE_VIDEO_ANALYSIS"
+class YouTubeVideoMetadataSuggesterDB:
+    TABLE = "CA#YOUTUBE_VIDEO_METADATA_SUGGESTER"
 
     def __init__(self):
         self.db_manager = DbManager()

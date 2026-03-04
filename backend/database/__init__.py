@@ -5,8 +5,8 @@ from backend.database.prompt.prompt_database import PromptDB
 from backend.database.task.task_db import TaskDB
 from backend.database.youtube import (
     YouTubeChannelDB,
-    YouTubeVideoAnalysisDB,
     YouTubeVideoDB,
+    YouTubeVideoMetadataSuggesterDB,
 )
 
 __all__ = [
@@ -14,7 +14,7 @@ __all__ = [
     "TaskDB",
     "YouTubeChannelDB",
     "YouTubeVideoDB",
-    "YouTubeVideoAnalysisDB",
+    "YouTubeVideoMetadataSuggesterDB",
     "PromptDB",
     "AgentMessageDB",
     "PlatformDB",
