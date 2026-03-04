@@ -78,12 +78,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] Get better name for YouTube Analysis (YouTubeVideoMetadataSuggester)
+- [x] Get better name for YouTube Analysis (YouTubeVideoMetadataSuggester)
 - [x] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
 - [x] Add platform data
 - [x] Fetch platform data
 - [x] Remove all the channel_id and video_id reference
-- [ ] Use Platform data for all references
+- [x] Use Platform data for all references
 - [ ] Add playlist details to video records
 - [ ] Add Entry on Video Add to add to platform reference
 - [ ] Transform data YouTube Video and YouTube Channel
