@@ -107,10 +107,8 @@ class YouTubeVideoSummarizeGenerator(BaseGenerator):
         self.db.update_transcript(self.job_data.platform.video_id, transcript)
 
     def __create_analysis_task(self):
-        manager = TaskManager()
+        manager = TaskManager(self.task)
         data = manager.create_youtube_analysis_task(
-            ref_id=self.job_data.ref_id,
-            created_by=JobEnum.YouTubeVideoSummarize,
-            trail=self.task.trail + [self.task.id],
+            ref_id=self.job_data.ref_id, created_by=JobEnum.YouTubeVideoSummarizer
         )
         manager.add_task(data)

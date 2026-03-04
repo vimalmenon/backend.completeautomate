@@ -61,9 +61,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
 
     def __create_task_for_transcript(self, video_id: str) -> None:
-        manager = TaskManager()
+        manager = TaskManager(self.task)
         task = manager.create_youtube_summarize_task(
-            self.job_data.ref_id, JobEnum.YouTubeVideo, self.task.trail + [self.task.id]
+            self.job_data.ref_id, JobEnum.YouTubeVideo
         )
         manager.add_task(task)
         logger.info(
