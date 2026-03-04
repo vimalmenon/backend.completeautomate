@@ -104,6 +104,7 @@ class ImagePromptGenerator(BaseGenerator):
             prompt=prompt_response.prompt,
             image_type=ImageTypeEnum.YouTube,
             task_id=task_id,
+            ref_id=self.job_data.ref_id,
             data=S3Data(
                 name=prompt_response.name,
                 content_type=S3Data.detect_content_type_from_name(prompt_response.name),

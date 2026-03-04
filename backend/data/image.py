@@ -17,6 +17,7 @@ class ImageGeneratorJobData:
     name: str
     prompt: str
     image_type: ImageTypeEnum
+    ref_id: str
     task_id: UUID
     data: S3Data
 
@@ -28,6 +29,7 @@ class ImageGeneratorJobData:
             "task_id": str(self.task_id),
             "image_type": self.image_type.value,
             "data": self.data.to_json(),
+            "ref_id": self.ref_id,
         }
 
     @classmethod
@@ -39,6 +41,7 @@ class ImageGeneratorJobData:
             task_id=UUID(data["task_id"]),
             image_type=ImageTypeEnum(data["image_type"]),
             data=S3Data.to_cls(data["data"]),
+            ref_id=data["ref_id"],
         )
 
 

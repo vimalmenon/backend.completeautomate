@@ -29,6 +29,7 @@ class TestImageGeneratorDB:
             id=job_id,
             name="Test Image",
             prompt="test prompt",
+            ref_id="",
             image_type=ImageTypeEnum.YouTube,
             task_id=task_id,
             data=s3_data,
