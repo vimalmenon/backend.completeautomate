@@ -56,10 +56,6 @@ class TaskSchedulerServices:
         )
         manager.add_task(task)
 
-    def create_task(self, task: TaskData) -> TaskData:
-        self.task_db.add_task(task)
-        return task
-
     def delete_task(self, task: TaskData) -> TaskData:
         self.task_db.delete_task(task)
         return task

@@ -79,23 +79,25 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Fix tox issues
+- [x] Adding YouTubeChannel should add Video and Channel Detail (as they both use the same data)
+- [x] Need to check what this class does `PromptAnalyzerJob`
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
-- [ ] Need to check what this class does `PromptAnalyzerJob`
-- [ ] Adding YouTubeChannel should add Video and Channel Detail (as they both use the same data)
 - [ ] Add Playlist details to YouTube Video DB
-- [ ] YouTube Idea Suggester
+- [ ] Find trending topic in a sector (YouTube, Google)
+- [ ] YouTube Idea suggester
 - [ ] Integrate with twitter
-- [ ] Agent to review tasks
+- [ ] Agent to review tasks (only once)
+- [ ] Add AI review step for generated answers
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Agent to analyze prompts
-- [ ] Add AI review step for generated answers
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Remove `main.ipynb` (Rather use GUI to manage it)
 - [ ] Mock data (use factory)
 - [ ] Test Coverage
+  - [ ] Use Faker for data
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test data for DB integration

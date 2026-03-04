@@ -1,9 +1,12 @@
 from backend.enum import TaskStatusEnum
+from backend.generator import PromptSuggester
 from backend.jobs.base_job import BaseJob
 
 
 class PromptSuggesterJob(BaseJob):
-    # TODO No implemention available
 
     def execute(self) -> tuple[TaskStatusEnum, int]:
-        return TaskStatusEnum.IN_PROGRESS, 0
+        try:
+            return PromptSuggester(self.task).generate(), 0
+        except Exception:
+            return (TaskStatusEnum.FAILED, self.task.failed_count + 1)
