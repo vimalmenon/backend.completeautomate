@@ -250,7 +250,7 @@ class YouTubeVideoDBData:
         stat = YouTubeVideoDBStats.to_cls_from_response(item)
         snippet = item["snippet"]
         return cls(
-            ref_id=item.get("ref_id", ""),
+            ref_id=item["ref_id"],
             published_at=datetime.fromisoformat(snippet["publishedAt"]),
             title=snippet["title"],
             description=snippet["description"],

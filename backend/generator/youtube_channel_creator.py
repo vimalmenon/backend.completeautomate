@@ -25,7 +25,7 @@ class YouTubeChannelCreator(BaseGenerator):
         if not channel_from_db:
             result = YouTubeAPI().get_channel_info(self.job_data.platform.channel_id)
             channel_from_api = YouTubeChannelDBData.to_cls_from_response(
-                {**result, "task_id": str(self.task.id)}
+                {**result, "task_id": str(self.task.id), "ref_id": self.job_data.ref_id}
             )
             self.db.add_channel(channel_from_api)
             task = self.manager.create_youtube_video_task(
@@ -41,7 +41,7 @@ class YouTubeChannelCreator(BaseGenerator):
         ):
             result = YouTubeAPI().get_channel_info(self.job_data.platform.channel_id)
             latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
-                {**result, "task_id": str(self.task.id)}
+                {**result, "task_id": str(self.task.id), "ref_id": self.job_data.ref_id}
             )
             self.db.update_channel(
                 latest_channel_from_api.values_to_update(channel_from_db)
