@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class JobEnum(str, Enum):
-    DUMMY = "DUMMY"
+    OWNER = "OWNER"
     YouTubeChannel = "YouTubeChannel"
     YouTubeVideo = "YouTubeVideo"
     YouTubeThumbnail = "YouTubeThumbnail"
