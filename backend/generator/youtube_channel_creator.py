@@ -1,8 +1,8 @@
 import logging
 
-from backend.data import YouTubeChannelDBData, YouTubeChannelJobData
+from backend.data import YouTubeChannelDBData, YouTubeJobData
 from backend.database import YouTubeChannelDB
-from backend.enum.status import TaskStatusEnum
+from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 
@@ -14,7 +14,7 @@ class YouTubeChannelCreator(BaseGenerator):
     def __init__(self, task):
         super().__init__(task)
         self.youtube_api = YouTubeAPI()
-        self.job_data = YouTubeChannelJobData.to_cls(self.task.payload)
+        self.job_data = YouTubeJobData.to_cls(self.task.payload)
         self.db = YouTubeChannelDB(self.job_data.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:

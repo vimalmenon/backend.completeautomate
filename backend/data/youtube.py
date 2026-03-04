@@ -327,7 +327,7 @@ class YouTubeThumbnailJobData:
 
 
 @dataclass
-class YouTubeVideoJobData:
+class YouTubeJobData:
     ref_id: str
     poll_frequency_in_days: int = 7
 
@@ -342,31 +342,6 @@ class YouTubeVideoJobData:
         return cls(
             ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
-        )
-
-    @cached_property
-    def platform(self) -> PlatformDBData:
-        from backend.database.platform.platform_database import PlatformDB
-
-        return PlatformDB().get_data(self.ref_id)
-
-
-@dataclass
-class YouTubeChannelJobData:
-    ref_id: str
-    poll_frequency_in_days: int = 7
-
-    def to_json(self) -> dict:
-        return {
-            "poll_frequency_in_days": self.poll_frequency_in_days,
-            "ref_id": self.ref_id,
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
-            ref_id=data["ref_id"],
         )
 
     @cached_property

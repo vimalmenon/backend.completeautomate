@@ -3,8 +3,7 @@ from uuid import uuid4
 
 from backend.data import (
     TaskData,
-    YouTubeChannelJobData,
-    YouTubeVideoJobData,
+    YouTubeJobData,
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import TaskDB
@@ -40,7 +39,9 @@ class TaskManager:
         )
 
     def create_youtube_video_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
-        payload_cls = YouTubeVideoJobData(ref_id=ref_id)
+        if not self.task:
+            raise AppException("Task not found")
+        payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeVideo,
@@ -52,7 +53,7 @@ class TaskManager:
         )
 
     def create_youtube_channel_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
-        payload_cls = YouTubeChannelJobData(ref_id=ref_id)
+        payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeChannel,
