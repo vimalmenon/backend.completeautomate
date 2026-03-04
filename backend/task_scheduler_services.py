@@ -27,7 +27,7 @@ class TaskSchedulerServices:
             JobEnum.YouTubeChannel: YouTubeJob,
             JobEnum.YouTubeVideo: YouTubeJob,
             JobEnum.YouTubeThumbnail: YouTubeJob,
-            JobEnum.YouTubeVideoSummarize: YouTubeJob,
+            JobEnum.YouTubeVideoSummarizer: YouTubeJob,
             JobEnum.YouTubeVideoMetadataSuggester: YouTubeJob,
             JobEnum.YouTubeVideoMetadataUpdater: YouTubeJob,
             JobEnum.PromptAnalyzer: PromptAnalyzerJob,
