@@ -11,7 +11,7 @@ from backend.jobs import (
     ImageGeneratorJob,
     ImagePromptJob,
     NoJob,
-    PromptAnalyzerJob,
+    PromptSuggesterJob,
     YouTubeJob,
 )
 from backend.manager import TaskManager
@@ -32,7 +32,7 @@ class TaskSchedulerServices:
             JobEnum.YouTubeVideoMetadataUpdater: YouTubeJob,
             JobEnum.ImageGenerator: ImageGeneratorJob,
             JobEnum.ImagePrompt: ImagePromptJob,
-            JobEnum.PromptAnalyzer: PromptAnalyzerJob,
+            JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 
     def start(self) -> None:

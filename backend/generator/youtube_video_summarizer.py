@@ -18,7 +18,7 @@ from backend.services.agent_service import AgentService
 logger = logging.getLogger(__name__)
 
 
-class YouTubeVideoSummarizeGenerator(BaseGenerator):
+class YouTubeVideoSummarizer(BaseGenerator):
 
     def __init__(self, task: TaskData):
         super().__init__(task)

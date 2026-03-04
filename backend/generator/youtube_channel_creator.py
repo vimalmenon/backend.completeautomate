@@ -9,7 +9,7 @@ from backend.integration.youtube.youtube_api import YouTubeAPI
 logger = logging.getLogger(__name__)
 
 
-class YouTubeChannelGenerator(BaseGenerator):
+class YouTubeChannelCreator(BaseGenerator):
 
     def __init__(self, task):
         super().__init__(task)

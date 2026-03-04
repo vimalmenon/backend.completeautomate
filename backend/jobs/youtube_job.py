@@ -3,12 +3,12 @@ import logging
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator import (
-    YouTubeChannelGenerator,
+    YouTubeChannelCreator,
     YouTubeThumbnailUpdater,
     YouTubeVideoGenerator,
     YouTubeVideoMetadataSuggester,
     YouTubeVideoMetadataUpdater,
-    YouTubeVideoSummarizeGenerator,
+    YouTubeVideoSummarizer,
 )
 from backend.jobs.base_job import BaseJob
 
@@ -22,11 +22,11 @@ class YouTubeJob(BaseJob):
             if self.task.job_type == JobEnum.YouTubeThumbnail:
                 return (YouTubeThumbnailUpdater(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeChannel:
-                return (YouTubeChannelGenerator(self.task).generate(), 0)
+                return (YouTubeChannelCreator(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideo:
                 return (YouTubeVideoGenerator(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoSummarizer:
-                return (YouTubeVideoSummarizeGenerator(self.task).generate(), 0)
+                return (YouTubeVideoSummarizer(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
                 return (YouTubeVideoMetadataSuggester(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
