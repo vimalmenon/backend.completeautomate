@@ -243,7 +243,8 @@ def youtube_page(page: str):
                                 "w-1/12 justify-center items-center shrink-0"
                             ):
                                 expand_button = ui.button(icon="expand_more").props(
-                                    'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                                    'flat dense onclick="event.stopPropagation()" '
+                                    'onmousedown="event.stopPropagation()"'
                                 )
 
                         # Expandable details section
@@ -265,12 +266,12 @@ def youtube_page(page: str):
                                 expand_btn.update()
                                 header.classes(remove="bg-blue-100 dark:bg-blue-900/40")
 
-                        expand_button.on(
-                            "click",
-                            lambda s=detail_section, h=row_header, eb=expand_button: toggle_row(
-                                s, h, eb
-                            ),
-                        )
+                        def on_expand_click(
+                            s=detail_section, h=row_header, eb=expand_button
+                        ):
+                            toggle_row(s, h, eb)
+
+                        expand_button.on("click", on_expand_click)
 
                         # Populate detail section
                         with detail_section:

@@ -1,5 +1,6 @@
-from jinja2 import StrictUndefined, Template
-from jinja2.exceptions import TemplateError
+from typing import cast
+
+from jinja2 import StrictUndefined, Template, TemplateError
 
 from backend.ai import DeepseekAI, GroqAI, PerplexityAI
 from backend.database import PromptDB
@@ -21,7 +22,9 @@ class AgentService:
 
     def __render_template(self, template: str) -> str:
         try:
-            return Template(template, undefined=StrictUndefined).render(**self.data)
+            return cast(
+                str, Template(template, undefined=StrictUndefined).render(**self.data)
+            )
         except TemplateError as e:
             raise AppException(f"Error rendering prompt template: {e}") from e
 

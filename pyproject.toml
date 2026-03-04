@@ -78,6 +78,7 @@ sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 
 [tool.mypy]
 python_version = "3.13"
+ignore_missing_imports = true
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
@@ -92,6 +93,20 @@ strict_equality = true
 
 [[tool.mypy.overrides]]
 module = [
+  "jinja2",
+  "jinja2.*",
+  "nicegui",
+  "nicegui.*",
+  "pydantic",
+  "pydantic.*",
+  "youtube_transcript_api",
+  "youtube_transcript_api.*",
+  "openai",
+  "openai.*",
+  "langchain_qwq",
+  "langchain_qwq.*",
+  "langchain_perplexity",
+  "langchain_perplexity.*",
     "langchain.*",
     "langchain_anthropic.*",
     "langchain_deepseek.*",
