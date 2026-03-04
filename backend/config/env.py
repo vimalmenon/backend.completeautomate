@@ -6,6 +6,10 @@ from pydantic import SecretStr
 logger = getLogger(__name__)
 
 
+def _to_bool(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 class Env:
     VERSION: str = os.environ["VERSION"]
     COMPANY_NAME: str = os.environ["COMPANY_NAME"]
@@ -23,7 +27,7 @@ class Env:
     DEEPSEEK_API_KEY: SecretStr = SecretStr(os.environ["DEEPSEEK_API_KEY"])
     YOUTUBE_API_KEY: str = os.environ["YOUTUBE_API_KEY"]
     YOUTUBE_CHANNEL_ID: str = os.environ["YOUTUBE_CHANNEL_ID"]
-    OFFLINE: bool = bool(os.environ["OFFLINE"])
+    OFFLINE: bool = _to_bool(os.environ.get("OFFLINE", "false"))
 
 
 env = Env()

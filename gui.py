@@ -1,8 +1,11 @@
 import logging
+import os
 
 from nicegui import ui
 
+from backend.config.env import env
 from backend.config.logging_config import setup_logging
+from backend.config.session import set_offline_mode
 from backend.ui import main_page, prompt_page, tasks_page, youtube_page
 
 logger = logging.getLogger(__name__)
@@ -19,6 +22,12 @@ def loading_page():
 
 
 def root():
+    def toggle_offline(is_offline: bool) -> None:
+        os.environ["OFFLINE"] = "true" if is_offline else "false"
+        set_offline_mode(is_offline)
+        mode = "Offline (Moto mock AWS)" if is_offline else "Online (real AWS)"
+        ui.notify(f"Mode switched: {mode}", type="positive", position="top")
+
     # Dark mode toggle
     dark = ui.dark_mode()
     ui.page_title("CompleteAutomate Dashboard")
@@ -53,6 +62,11 @@ def root():
                 ui.tooltip("Prompts")
 
             ui.separator().props("vertical")
+            ui.switch(
+                "Offline",
+                value=env.OFFLINE,
+                on_change=lambda e: toggle_offline(bool(e.value)),
+            ).props("dense")
             ui.switch("Dark").bind_value(dark).props("dense")
 
     # Progress bar for page loading
