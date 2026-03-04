@@ -78,6 +78,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
+- [x] Fix tox issues
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
@@ -92,7 +93,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add AI review step for generated answers
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
-- [ ] Fix tox issues
 - [ ] Remove `main.ipynb` (Rather use GUI to manage it)
 - [ ] Mock data (use factory)
 - [ ] Test Coverage
