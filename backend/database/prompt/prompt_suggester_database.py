@@ -11,3 +11,7 @@ class PromptSuggesterDB:
     def get_prompts(self) -> list[PromptSuggesterDBData]:
         # TODO Need implementation
         return []
+
+    def add_prompt(self, data: PromptSuggesterDBData):
+        # TODO Need implementation
+        pass
