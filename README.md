@@ -84,20 +84,21 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Fetch platform data
 - [x] Remove all the channel_id and video_id reference
 - [x] Use Platform data for all references
-- [ ] Add playlist details to video records
-- [ ] Add Entry on Video Add to add to platform reference
-- [ ] Transform data YouTube Video and YouTube Channel
+- [x] Add Entry on Video Add to add to platform reference
+- [x] Transform data YouTube Video and YouTube Channel
+- [x] Add DB to store data from YouTube Analysis
+- [ ] Add playlist details to YouTube Video Data
 - [ ] Agent to review tasks
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
 - [ ] Test if the it's able to generate good image prompt with multiple options
 - [ ] Test all the prompts once done
-- [ ] Add DB to store data from YouTube Analysis
 - [ ] Fix transcript for any grammar or any errors in the name
 - [ ] Agent to analyze prompts
 - [ ] Add AI review step for generated answers
-- [ ] Add one-shot prompt examples for image and other generation tasks
+- [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Fix tox issues
+- [ ] Remove main.ipynb (Rather use GUI to manage it)
 - [ ] Mock data use (factory)
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
@@ -105,6 +106,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test data for DB integration
   - [ ] Mock Integration with YouTube API
 - [ ] GUI Enhancements
+  - [ ] Add YouTube Channel
   - [ ] Add Platform to GUI
   - [ ] Ability to Work Offline
   - [ ] Mock AWS Dynamo DB Data
