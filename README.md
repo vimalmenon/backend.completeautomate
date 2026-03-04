@@ -78,15 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [x] Get better name for YouTube Analysis (YouTubeVideoMetadataSuggester)
-- [x] Need to create platform reference DB ( YouTube or Instagram, Video_id and Channel_id)
-- [x] Add platform data
-- [x] Fetch platform data
-- [x] Remove all the channel_id and video_id reference
-- [x] Use Platform data for all references
-- [x] Add Entry on Video Add to add to platform reference
-- [x] Transform data YouTube Video and YouTube Channel
-- [x] Add DB to store data from YouTube Analysis
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
@@ -130,15 +121,51 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Analyzer (Analysis the data)
   - Generator (Generate Image / Video Sound)
 
+### YouTube Workflow Pipeline
 
-YouTubeChannel 
-  -> YouTubeVideo 
-    -> YouTubeVideoSummarizer 
-      -> YouTubeVideoMetadataSuggester 
-        -> YouTubeVideoMetadataUpdater 
-          -> YouTubeVideoThumbnailPromptSuggester 
-            -> ImageGenerator
-              -> YouTubeThumbnailUpdater
+Task creation flows from top to bottom. Each stage is a separate scheduled job that fetches, processes, and creates the next task:
+
+```
+┌─ YouTubeChannelCreator (Initial Task)
+│  ├─ Action: Fetch channel info from YouTube API
+│  ├─ Store: YouTubeChannelDB
+│  └─ Creates: YouTubeVideoGenerator
+│
+├─ YouTubeVideoGenerator (Created by ChannelCreator)
+│  ├─ Action: Fetch all videos for channel
+│  ├─ Store: YouTubeVideoDB
+│  └─ Creates: YouTubeVideoAnalyzer
+│
+├─ YouTubeVideoAnalyzer (Created by VideoGenerator)
+│  ├─ Action: Analyze video stats and content
+│  └─ Creates: YouTubeMetadataSuggester
+│
+├─ YouTubeMetadataSuggester (Created by VideoAnalyzer)
+│  ├─ Action: Use LLM to generate title/description/tags
+│  ├─ Store: Prompt + suggestions in DB
+│  └─ Creates: YouTubeMetadataUpdater (if enabled)
+│
+├─ YouTubeMetadataUpdater (Created by MetadataSuggester)
+│  ├─ Action: Update YouTube video with suggested metadata
+│  └─ Creates: ImagePromptSuggester (if thumbnail update enabled)
+│
+├─ ImagePromptSuggester (Created by MetadataUpdater)
+│  ├─ Action: Generate image prompt from video content
+│  └─ Creates: ImageGenerator
+│
+├─ ImageGenerator (Created by ImagePromptSuggester)
+│  ├─ Action: Generate thumbnail image from prompt
+│  └─ Creates: YouTubeThumbnailUpdater
+│
+└─ YouTubeThumbnailUpdater (Created by ImageGenerator)
+   └─ Action: Upload generated thumbnail to YouTube (FINAL STEP)
+```
+
+**Key Points:**
+- Start with `YouTubeChannelCreator` task via task dashboard
+- Each job runs independently at scheduled intervals
+- Each job can be retried or repositioned in the queue via dashboard
+- Conditional task creation: some stages only create next task if specific conditions are met
 
 **Ideas / Low Priority:**
 
