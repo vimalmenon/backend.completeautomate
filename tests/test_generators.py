@@ -23,7 +23,7 @@ class TestImagePromptGenerator:
 class TestYouTubeVideoGenerator:
     """Test cases for YouTubeVideoGenerator"""
 
-    @patch("backend.generator.youtube_video_generator.YouTubeVideoGenerator")
+    @patch("backend.generator.youtube_video_creator.YouTubeVideoCreator")
     def test_generate_video_metadata(self, mock_generator: MagicMock) -> None:
         """Test generating YouTube video metadata"""
         expected_metadata = {
