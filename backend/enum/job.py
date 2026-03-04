@@ -9,8 +9,7 @@ class JobEnum(str, Enum):
     YouTubeVideoSummarizer = "YouTubeVideoSummarizer"
     YouTubeVideoMetadataSuggester = "YouTubeVideoMetadataSuggester"
     YouTubeVideoMetadataUpdater = "YouTubeVideoMetadataUpdater"
+    YouTubeVideoThumbnailPromptSuggester = "YouTubeVideoThumbnailPromptSuggester"
     ImageGenerator = "ImageGenerator"
     ImagePrompt = "ImagePrompt"
     PromptSuggester = "PromptSuggester"
-
-    # TODO create YouTube Image Generator than Generic one

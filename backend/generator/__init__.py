@@ -13,6 +13,9 @@ from backend.generator.youtube_video_metadata_updater import YouTubeVideoMetadat
 from backend.generator.youtube_video_summarizer import (
     YouTubeVideoSummarizer,
 )
+from backend.generator.youtube_video_thumbnail_image_prompt_suggester import (
+    YoutubeVideoThumbnailImagePromptSuggester,
+)
 
 __all__ = [
     "YouTubeThumbnailUpdater",
@@ -24,4 +27,5 @@ __all__ = [
     "YouTubeVideoMetadataSuggester",
     "YouTubeVideoMetadataUpdater",
     "PromptSuggester",
+    "YoutubeVideoThumbnailImagePromptSuggester",
 ]
