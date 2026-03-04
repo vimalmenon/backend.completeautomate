@@ -458,7 +458,7 @@ class YouTubeVideoMetadataDBData:
 
 
 @dataclass
-class YouTubeVideoDetailJobData:
+class YouTubeVideoMetadataJobData:
     task_id: str
     ref_id: str
     title: str
