@@ -16,7 +16,7 @@ from backend.manager import TaskManager
 logger = logging.getLogger(__name__)
 
 
-class YouTubeVideoGenerator(BaseGenerator):
+class YouTubeVideoCreator(BaseGenerator):
 
     def __init__(self, task: TaskData):
         super().__init__(task)

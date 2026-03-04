@@ -5,7 +5,7 @@ from backend.exception.app_exception import AppException
 from backend.generator import (
     YouTubeChannelCreator,
     YouTubeThumbnailUpdater,
-    YouTubeVideoGenerator,
+    YouTubeVideoCreator,
     YouTubeVideoMetadataSuggester,
     YouTubeVideoMetadataUpdater,
     YouTubeVideoSummarizer,
@@ -24,7 +24,7 @@ class YouTubeJob(BaseJob):
             if self.task.job_type == JobEnum.YouTubeChannel:
                 return (YouTubeChannelCreator(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideo:
-                return (YouTubeVideoGenerator(self.task).generate(), 0)
+                return (YouTubeVideoCreator(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoSummarizer:
                 return (YouTubeVideoSummarizer(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
