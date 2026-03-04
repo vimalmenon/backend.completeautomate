@@ -12,3 +12,5 @@ class JobEnum(str, Enum):
     ImageGenerator = "ImageGenerator"
     ImagePrompt = "ImagePrompt"
     PromptAnalyzer = "PromptAnalyzer"
+
+    # TODO create YouTube Image Generator than Generic one

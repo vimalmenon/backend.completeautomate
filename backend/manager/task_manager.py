@@ -37,8 +37,6 @@ class TaskManager:
     def create_youtube_video_task(
         self, ref_id: str, created_by: TeamEnum | JobEnum
     ) -> TaskData:
-        if not self.task:
-            raise AppException("Task not found")
         payload_cls = YouTubeVideoJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -47,7 +45,7 @@ class TaskManager:
             created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.IN_PROGRESS,
-            trail=self.task.trail + [self.task.id],
+            trail=[],
         )
 
     def create_youtube_summarize_task(

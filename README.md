@@ -88,6 +88,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Transform data YouTube Video and YouTube Channel
 - [x] Add DB to store data from YouTube Analysis
 - [ ] Need to check what this class does `PromptAnalyzerJob`
+
 - [ ] Add playlist details to YouTube Video Data
 - [ ] Agent to review tasks
 - [ ] Test if it's able to generate YouTube Title, Description and Tags and with multiple options
@@ -120,6 +121,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Show Graph next to Edit button to show Graph
   - [ ] Ability to perform all tasks from GUI
 
+- Naming convention for generator
+  - Updater (Update data to source)
+  - Suggester (Suggest for Something)
+  - Creator (Create Data on DB)
+  - Analyzer - (Analysis the data)
 
 **Ideas / Low Priority:**
 
