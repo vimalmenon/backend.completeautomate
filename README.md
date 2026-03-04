@@ -103,7 +103,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] GUI Enhancements
   - [ ] Add YouTube Channel
   - [ ] Add Platform to GUI
-  - [ ] Ability to Work Offline
+  - [x] Ability to Work Offline
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
   - [ ] Task Create or Edit
@@ -231,6 +231,8 @@ YOUTUBE_CHANNEL_ID=...
 Set `OFFLINE=true` to run AWS integrations against local Moto mocks (S3 + DynamoDB)
 without requiring internet or real AWS credentials.
 
+If `OFFLINE` is not set, the app defaults to `false`.
+
 ### 3) Run the app
 
 ```sh
@@ -244,6 +246,12 @@ poetry run python -m gui
 ```
 
 Open: `http://localhost:8080`
+
+You can also toggle AWS offline mode at runtime from the dashboard header using the
+`Offline` switch:
+
+- `On`: uses Moto-mocked AWS (S3 + DynamoDB)
+- `Off`: uses configured real AWS credentials/resources
 
 Dashboard pages:
 
@@ -293,6 +301,8 @@ Examples:
 poetry run pytest -m unit
 poetry run pytest -m integration
 poetry run pytest tests/test_s3_storage.py
+OFFLINE=true poetry run pytest tests/test_s3_storage.py tests/test_integration.py
+poetry run tox -e pytest
 ```
 
 Available markers:
