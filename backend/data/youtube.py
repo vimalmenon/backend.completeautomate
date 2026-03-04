@@ -424,7 +424,7 @@ class YouTubeVideoDetailDBData:
 
 
 @dataclass
-class YouTubeVideoAnalysisDBData:
+class YouTubeVideoMetadataDBData:
     ref_id: str
     task_id: UUID
     video_details: list[YouTubeVideoDetailDBData]

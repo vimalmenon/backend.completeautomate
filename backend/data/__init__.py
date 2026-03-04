@@ -19,11 +19,11 @@ from backend.data.youtube import (
     YouTubeChannelJobData,
     YouTubeThumbnailJobData,
     YouTubeTranscriptDBData,
-    YouTubeVideoAnalysisDBData,
     YouTubeVideoDBData,
     YouTubeVideoDetailDBData,
     YouTubeVideoDetailJobData,
     YouTubeVideoJobData,
+    YouTubeVideoMetadataDBData,
     YouTubeVideoSummarizeJobData,
 )
 
@@ -44,7 +44,7 @@ __all__ = [
     "SocialMediaManagerData",
     "YouTubeTranscriptDBData",
     "PromptDBData",
-    "YouTubeVideoAnalysisDBData",
+    "YouTubeVideoMetadataDBData",
     "YouTubeVideoDetailDBData",
     "MessageDBData",
     "YouTubeVideoDetailJobData",

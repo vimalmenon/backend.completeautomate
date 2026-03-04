@@ -2,8 +2,8 @@ import logging
 
 from backend.data import (
     TaskData,
-    YouTubeVideoAnalysisDBData,
     YouTubeVideoDetailDBData,
+    YouTubeVideoMetadataDBData,
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
@@ -63,7 +63,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             )
             for data in structured_response.image_prompts
         ]
-        data = YouTubeVideoAnalysisDBData(
+        data = YouTubeVideoMetadataDBData(
             ref_id=self.job_data.ref_id,
             task_id=self.task.id,
             video_details=video_details,
