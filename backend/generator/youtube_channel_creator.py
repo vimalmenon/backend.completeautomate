@@ -29,7 +29,7 @@ class YouTubeChannelCreator(BaseGenerator):
             )
             self.db.add_channel(channel_from_api)
             task = self.manager.create_youtube_video_task(
-                ref_id=f"{PlatformEnum.YouTubeVideo.value}#{env.YOUTUBE_CHANNEL_ID}",
+                ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
                 created_by=JobEnum.YouTubeChannel,
             )
             self.manager.add_task(task)
