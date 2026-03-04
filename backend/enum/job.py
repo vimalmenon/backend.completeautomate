@@ -5,7 +5,7 @@ class JobEnum(str, Enum):
     OWNER = "OWNER"
     YouTubeChannel = "YouTubeChannel"
     YouTubeVideo = "YouTubeVideo"
-    YouTubeThumbnail = "YouTubeThumbnail"
+    YouTubeThumbnailUpdater = "YouTubeThumbnailUpdater"
     YouTubeVideoSummarizer = "YouTubeVideoSummarizer"
     YouTubeVideoMetadataSuggester = "YouTubeVideoMetadataSuggester"
     YouTubeVideoMetadataUpdater = "YouTubeVideoMetadataUpdater"

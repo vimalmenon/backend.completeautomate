@@ -19,7 +19,7 @@ class YouTubeJob(BaseJob):
 
     def execute(self) -> tuple[TaskStatusEnum, int]:
         try:
-            if self.task.job_type == JobEnum.YouTubeThumbnail:
+            if self.task.job_type == JobEnum.YouTubeThumbnailUpdater:
                 return (YouTubeThumbnailUpdater(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeChannel:
                 return (YouTubeChannelCreator(self.task).generate(), 0)

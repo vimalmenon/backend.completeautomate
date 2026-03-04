@@ -26,7 +26,7 @@ class TaskSchedulerServices:
         self.job: dict[JobEnum, type[BaseJob]] = {
             JobEnum.YouTubeChannel: YouTubeJob,
             JobEnum.YouTubeVideo: YouTubeJob,
-            JobEnum.YouTubeThumbnail: YouTubeJob,
+            JobEnum.YouTubeThumbnailUpdater: YouTubeJob,
             JobEnum.YouTubeVideoSummarizer: YouTubeJob,
             JobEnum.YouTubeVideoMetadataSuggester: YouTubeJob,
             JobEnum.YouTubeVideoMetadataUpdater: YouTubeJob,

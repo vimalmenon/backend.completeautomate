@@ -129,6 +129,15 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Analyzer (Analysis the data)
   - Generator (?)
 
+YouTubeChannel 
+  -> YouTubeVideo 
+    -> YouTubeVideoSummarizer 
+      -> YouTubeVideoMetadataSuggester 
+        -> YouTubeVideoMetadataUpdater 
+          -> YouTubeVideoThumbnailPromptSuggester 
+            -> ImageGenerator
+              -> YouTubeThumbnailUpdater
+
 **Ideas / Low Priority:**
 
 - Add topic suggestions for next week
