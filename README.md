@@ -83,6 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Need to check what this class does `PromptAnalyzerJob`
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] `Service` and `Manager` can be integrated
+- [ ] Add channel as List
 - [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
 - [ ] Integrate with twitter
