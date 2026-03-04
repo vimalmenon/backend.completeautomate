@@ -64,8 +64,6 @@ class ImagePromptGenerator(BaseGenerator):
                 prompt=self.job_data.description,
                 ref_id=self.job_data.ref_id,
                 task_id=self.job_data.task_id,
-                video_id=self.job_data.video_id,
-                channel_id=self.job_data.channel_id,
                 image_type=self.job_data.image_type,
                 status=JobStatusEnum.REVIEW,
                 prompts=prompt_response,
