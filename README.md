@@ -109,7 +109,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] Fix video.py to use correct ref_id references
   - [ ] Add Platform to GUI
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
