@@ -24,13 +24,13 @@ class StartUpManager:
 
     def __create_ref_id_if_not_exists(self) -> str:
         platform_manager = PlatformManager()
-        platform_data = platform_manager.get_platform_by_channel_id(
+        ref_id = platform_manager.get_platform_by_channel_id(
             env.YOUTUBE_CHANNEL_ID
         )
-        if not platform_data:
+        if not ref_id:
             data = platform_manager.create_channel_data(env.YOUTUBE_CHANNEL_ID)
             return platform_manager.save_data(data)
-        return platform_data
+        return ref_id
 
     def __add_start_up_file(self):
         for path in ["pickle/token.pickle", "json/client_secret.json"]:
