@@ -7,7 +7,7 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
-from backend.enum import PromptTaskEnum, TaskStatusEnum
+from backend.enum import JobStatusEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
@@ -53,15 +53,18 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             response_format=YouTubeVideoAnalyzerListResponse,
         )
         result = agent.invoke()
-        structured_response = result.get("structured_response", [])
+        structured_response: YouTubeVideoAnalyzerListResponse = result.get(
+            "structured_response", YouTubeVideoAnalyzerListResponse(details=[])
+        )
+
         video_details = [
             YouTubeVideoDetailDBData(
                 title=data.title,
                 description=data.description,
-                status=data.status,
+                status=JobStatusEnum.REVIEW,
                 tags=data.tags,
             )
-            for data in structured_response.image_prompts
+            for data in structured_response.details
         ]
         data = YouTubeVideoMetadataDBData(
             ref_id=self.job_data.ref_id,
