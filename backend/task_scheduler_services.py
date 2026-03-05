@@ -35,8 +35,10 @@ class TaskSchedulerServices:
     def start(self) -> None:
         task_manager = TaskManager()
         tasks = task_manager.get_active_tasks()
+        parallel_tasks = []
         for task in tasks:
-            task.payload.get("is_agent")
+            if task.payload.get("is_agent"):
+                parallel_tasks.append(task)
             job_class = self.job.get(task.job_type, NoJob)
             status, failed_count = job_class(task).execute()
             task.status = status
@@ -45,9 +47,10 @@ class TaskSchedulerServices:
                 task.completed_at = datetime.now()
             logger.info("Task %s executed with status: %s", task.id, status)
             task_manager.update_task(task)
-
+        self.__run_in_parallel(parallel_tasks)
         task_manager.promote_new_task()
         task_manager.cleanup_tasks()
 
-    def __run_in_parallel(self):
+    def __run_in_parallel(self, parallel_tasks: list):
+        # TODO Need to implement
         pass

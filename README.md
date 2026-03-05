@@ -99,38 +99,38 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
+- [ ] Mock data (use factory)
+  - [ ] Use Faker for data
 - [ ] Improve on prompt suggester
-- [ ] Agent to analyze result
-  - [ ] Add AI review step for generated answers
-  - [ ] Agent to review tasks (only once)
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Fix TODOs and dead code
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and variable
-- [ ] Mock data (use factory)
-  - [ ] Use Faker for data
+- [ ] Agent to analyze result
+  - [ ] Add AI review step for generated answers
+  - [ ] Agent to review tasks (only once)
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [ ] Run app from UI
-  - [ ] Add Platform to GUI
+  - [x] YouTube stats graphs
+  - [x] Need to add Graph for stats for YouTube
+  - [x] Show Graph next to Edit button to show Graph
+  - [ ] Page for Youtube Channel
+  - [ ] Need to add UI for Youtube Channel
+  - [ ] Run `poetry run App` from UI
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
   - [ ] Task Create or Edit
   - [ ] Analytics dashboard
-  - [ ] YouTube stats graphs
-  - [ ] Need to add UI for Youtube Channel
-  - [ ] Need to add Graph for stats for YouTube
-  - [ ] Show Graph next to Edit button to show Graph
   - [ ] Ability to perform all tasks from GUI
 
 - Naming convention for generator
   - Updater (Update data to source)
-  - Suggester (Suggest for Something)
+  - Suggester (Suggest for Something mostly agent)
   - Creator (Create Data on DB)
   - Analyzer (Analysis the data)
   - Generator (Generate Image / Video Sound)
