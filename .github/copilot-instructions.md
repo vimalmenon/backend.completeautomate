@@ -21,6 +21,7 @@
 ## Testing
 - Add or update focused tests for behavior changes.
 - Prefer running targeted tests first, then broader tests.
+- After completing code changes, run `make check` and report the result.
 
 ## Scope Rules
 - Implement only what is requested.

@@ -349,6 +349,144 @@ def open_edit_summarize_dialog(video_json: dict) -> None:
     dialog.open()
 
 
+def _get_video_id_from_platform(video) -> str:
+    try:
+        video_id = video.platform.video_id
+        return video_id if isinstance(video_id, str) else str(video_id)
+    except Exception:
+        return ""
+
+
+def _render_video_action_buttons(video_json: dict) -> None:
+    with ui.row().classes("w-full justify-end gap-2"):
+        ui.button(
+            "View Stats",
+            icon="show_chart",
+            on_click=lambda current_video=video_json: open_stats_chart_dialog(
+                current_video
+            ),
+        ).props("flat")
+        ui.button(
+            "Edit Video",
+            icon="edit",
+            on_click=lambda current_video=video_json: open_edit_video_dialog(
+                current_video
+            ),
+        ).props("flat")
+        ui.button(
+            "Edit Transcript",
+            icon="edit_note",
+            on_click=lambda current_video=video_json: open_edit_transcript_dialog(
+                current_video
+            ),
+        ).props("flat")
+        ui.button(
+            "Edit Summarize",
+            icon="summarize",
+            on_click=lambda current_video=video_json: open_edit_summarize_dialog(
+                current_video
+            ),
+        ).props("flat")
+
+
+def _render_video_json_details(video_json: dict) -> None:
+    for key, value in video_json.items():
+        if key == "transcript" and isinstance(value, dict):
+            transcript_text = str(value.get("transcript", ""))
+            summarize_text = str(value.get("summarize", ""))
+
+            render_multiline_field("transcript", transcript_text)
+            render_multiline_field("summarize", summarize_text)
+            continue
+
+        if value is not None and not isinstance(value, list):
+            display_val = (
+                str(value)[:100] + "..." if len(str(value)) > 100 else str(value)
+            )
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label(f"**{key}:**").classes("w-1/5 font-bold text-blue-600 text-sm")
+                ui.label(display_val).classes("w-4/5 text-wrap text-sm")
+
+
+def _bind_expand_behavior(detail_section, row_header, expand_button) -> None:
+    def toggle_row(section, header, expand_btn):
+        """Toggle row expansion"""
+        is_hidden = "hidden" in section.classes
+        if is_hidden:
+            section.classes(remove="hidden")
+            expand_btn.props("icon=expand_less")
+            expand_btn.update()
+            header.classes(add="bg-blue-100 dark:bg-blue-900/40")
+        else:
+            section.classes(add="hidden")
+            expand_btn.props("icon=expand_more")
+            expand_btn.update()
+            header.classes(remove="bg-blue-100 dark:bg-blue-900/40")
+
+    expand_button.on(
+        "click",
+        lambda s=detail_section, h=row_header, eb=expand_button: toggle_row(s, h, eb),
+    )
+
+
+def _render_video_row(video) -> None:
+    video_id_full = _get_video_id_from_platform(video)
+    video_json = video.to_json()
+    video_id = video_json.get("ref_id", "")[:16]
+    title = video_json.get("title", "Untitled")
+    description = video_json.get("description", "")
+    short_description = (
+        description[:50] + "..." if len(description) > 50 else description
+    )
+    published = video_json.get("published_at", "")
+
+    with ui.column().classes(
+        "w-full gap-0 border-b border-gray-200 dark:border-slate-700"
+    ):
+        with ui.row().classes(
+            "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap"
+        ) as row_header:
+            ui.label(video_id).classes("w-1/6 text-sm")
+            ui.label(title).classes("w-1/4 text-sm font-medium")
+            ui.label(short_description).classes("w-1/3 text-sm")
+            ui.label(published).classes("w-1/6 text-sm")
+            with ui.row().classes("w-1/12 justify-center items-center shrink-0"):
+                expand_button = ui.button(icon="expand_more").props(
+                    'flat dense onclick="event.stopPropagation()" '
+                    'onmousedown="event.stopPropagation()"'
+                )
+
+        detail_section = ui.column().classes(
+            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3 hidden"
+        )
+        _bind_expand_behavior(detail_section, row_header, expand_button)
+
+        with detail_section:
+            if video_id_full:
+                render_metadata_suggestions(video_id_full)
+            _render_video_action_buttons(video_json)
+            _render_video_json_details(video_json)
+
+
+def _render_video_table(videos: list) -> None:
+    ui.label(f"Found {len(videos)} video(s)").classes("text-subtitle1 mb-4")
+
+    with ui.column().classes(
+        "w-full gap-0 border border-gray-300 dark:border-slate-600 rounded"
+    ):
+        with ui.row().classes(
+            "w-full bg-gray-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-600 p-3 font-bold flex-nowrap items-center"
+        ):
+            ui.label("Ref ID").classes("w-1/6")
+            ui.label("Title").classes("w-1/4")
+            ui.label("Description").classes("w-1/3")
+            ui.label("Published").classes("w-1/6")
+            ui.label("Expand").classes("w-1/12 text-center shrink-0")
+
+        for video in videos:
+            _render_video_row(video)
+
+
 def youtube_page(page: str):
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
@@ -382,147 +520,7 @@ def youtube_page(page: str):
         loading_row.delete()
 
         if videos:
-            ui.label(f"Found {len(videos)} video(s)").classes("text-subtitle1 mb-4")
-
-            # Create custom expandable table
-            with ui.column().classes(
-                "w-full gap-0 border border-gray-300 dark:border-slate-600 rounded"
-            ):
-                # Table header
-                with ui.row().classes(
-                    "w-full bg-gray-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-600 p-3 font-bold flex-nowrap items-center"
-                ):
-                    ui.label("Ref ID").classes("w-1/6")
-                    ui.label("Title").classes("w-1/4")
-                    ui.label("Description").classes("w-1/3")
-                    ui.label("Published").classes("w-1/6")
-                    ui.label("Expand").classes("w-1/12 text-center shrink-0")
-
-                # Table rows
-                for video in videos:
-                    video_id_full = ""
-                    try:
-                        video_id_full = video.platform.video_id
-                    except Exception:
-                        video_id_full = ""
-
-                    video_json = video.to_json()
-                    video_id = video_json.get("ref_id", "")[:16]
-                    title = video_json.get("title", "Untitled")
-                    description = video_json.get("description", "")
-                    short_description = (
-                        description[:50] + "..."
-                        if len(description) > 50
-                        else description
-                    )
-                    published = video_json.get("published_at", "")
-
-                    # Row container
-                    with ui.column().classes(
-                        "w-full gap-0 border-b border-gray-200 dark:border-slate-700"
-                    ):
-                        # Clickable row header
-                        with ui.row().classes(
-                            "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap"
-                        ) as row_header:
-                            ui.label(video_id).classes("w-1/6 text-sm")
-                            ui.label(title).classes("w-1/4 text-sm font-medium")
-                            ui.label(short_description).classes("w-1/3 text-sm")
-                            ui.label(published).classes("w-1/6 text-sm")
-                            # Icon container for toggling
-                            with ui.row().classes(
-                                "w-1/12 justify-center items-center shrink-0"
-                            ):
-                                expand_button = ui.button(icon="expand_more").props(
-                                    'flat dense onclick="event.stopPropagation()" '
-                                    'onmousedown="event.stopPropagation()"'
-                                )
-
-                        # Expandable details section
-                        detail_section = ui.column().classes(
-                            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3 hidden"
-                        )
-
-                        def toggle_row(section, header, expand_btn):
-                            """Toggle row expansion"""
-                            is_hidden = "hidden" in section.classes
-                            if is_hidden:
-                                section.classes(remove="hidden")
-                                expand_btn.props("icon=expand_less")
-                                expand_btn.update()
-                                header.classes(add="bg-blue-100 dark:bg-blue-900/40")
-                            else:
-                                section.classes(add="hidden")
-                                expand_btn.props("icon=expand_more")
-                                expand_btn.update()
-                                header.classes(remove="bg-blue-100 dark:bg-blue-900/40")
-
-                        def on_expand_click(
-                            s=detail_section, h=row_header, eb=expand_button
-                        ):
-                            toggle_row(s, h, eb)
-
-                        expand_button.on("click", on_expand_click)
-
-                        # Populate detail section
-                        with detail_section:
-                            if video_id_full:
-                                render_metadata_suggestions(video_id_full)
-
-                            with ui.row().classes("w-full justify-end gap-2"):
-                                ui.button(
-                                    "View Stats",
-                                    icon="show_chart",
-                                    on_click=lambda current_video=video_json: open_stats_chart_dialog(
-                                        current_video
-                                    ),
-                                ).props("flat")
-                                ui.button(
-                                    "Edit Video",
-                                    icon="edit",
-                                    on_click=lambda current_video=video_json: open_edit_video_dialog(
-                                        current_video
-                                    ),
-                                ).props("flat")
-                                ui.button(
-                                    "Edit Transcript",
-                                    icon="edit_note",
-                                    on_click=lambda current_video=video_json: open_edit_transcript_dialog(
-                                        current_video
-                                    ),
-                                ).props("flat")
-                                ui.button(
-                                    "Edit Summarize",
-                                    icon="summarize",
-                                    on_click=lambda current_video=video_json: open_edit_summarize_dialog(
-                                        current_video
-                                    ),
-                                ).props("flat")
-
-                            for key, value in video_json.items():
-                                if key == "transcript" and isinstance(value, dict):
-                                    transcript_text = str(value.get("transcript", ""))
-                                    summarize_text = str(value.get("summarize", ""))
-
-                                    render_multiline_field(
-                                        "transcript", transcript_text
-                                    )
-                                    render_multiline_field("summarize", summarize_text)
-                                    continue
-
-                                if value is not None and not isinstance(value, list):
-                                    display_val = (
-                                        str(value)[:100] + "..."
-                                        if len(str(value)) > 100
-                                        else str(value)
-                                    )
-                                    with ui.row().classes("w-full gap-4 items-start"):
-                                        ui.label(f"**{key}:**").classes(
-                                            "w-1/5 font-bold text-blue-600 text-sm"
-                                        )
-                                        ui.label(display_val).classes(
-                                            "w-4/5 text-wrap text-sm"
-                                        )
+            _render_video_table(videos)
         else:
             with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
                 ui.icon("video_library", size="xl").classes("text-gray-400")
