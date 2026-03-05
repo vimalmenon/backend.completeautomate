@@ -210,7 +210,7 @@ def render_add_task_form() -> None:
                 ).props("color=primary")
 
 
-def tasks_page(page: str):
+def tasks_page():
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("Task Management").classes("text-h4")

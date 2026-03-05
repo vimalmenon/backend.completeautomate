@@ -24,7 +24,7 @@ def main_page():
                 {
                     "name": "List Tasks",
                     "icon": "list_alt",
-                    "links_to": "/tasks?page=list_tasks",
+                    "links_to": "/tasks",
                 },
             ],
         },
