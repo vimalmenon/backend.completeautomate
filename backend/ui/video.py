@@ -5,6 +5,7 @@ from nicegui import ui
 from backend.config.env import env
 from backend.data import YouTubeTranscriptDBData
 from backend.database.youtube import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
+from backend.enum import JobStatusEnum
 
 
 def open_stats_chart_dialog(video_json: dict) -> None:
@@ -145,6 +146,27 @@ def render_multiline_field(field_name: str, text: str) -> None:
             ).props("flat dense").classes("self-end")
 
 
+def update_metadata_option_status(
+    video_id: str,
+    option_index: int,
+    status_value: str,
+) -> None:
+    try:
+        is_updated = YouTubeVideoMetadataSuggesterDB().update_option_status(
+            channel_id=env.YOUTUBE_CHANNEL_ID,
+            video_id=video_id,
+            option_index=option_index,
+            status=JobStatusEnum(status_value),
+        )
+        if not is_updated:
+            ui.notify("Unable to update option status", type="warning")
+            return
+        ui.notify("Option status updated", type="positive")
+        ui.run_javascript('window.location.href = "/youtube"')
+    except Exception:
+        ui.notify("Failed to update option status", type="negative")
+
+
 def render_metadata_suggestions(video_id: str) -> None:
     suggestion = YouTubeVideoMetadataSuggesterDB().fetch_suggestion(
         channel_id=env.YOUTUBE_CHANNEL_ID,
@@ -167,6 +189,25 @@ def render_metadata_suggestions(video_id: str) -> None:
                 ui.label(f"Option {index} ({detail.status.value})").classes(
                     "text-sm font-semibold text-amber-700"
                 )
+                with ui.row().classes("w-full justify-end items-center gap-2"):
+                    status_input = (
+                        ui.select(
+                            label="Status",
+                            options=[status.value for status in JobStatusEnum],
+                            value=detail.status.value,
+                        )
+                        .props("outlined dense")
+                        .classes("w-48")
+                    )
+                    ui.button(
+                        "Update Status",
+                        icon="save",
+                        on_click=lambda current_video_id=video_id, current_index=index - 1, current_status=status_input: update_metadata_option_status(
+                            video_id=current_video_id,
+                            option_index=current_index,
+                            status_value=str(current_status.value),
+                        ),
+                    ).props("color=primary")
                 with ui.row().classes("w-full gap-4 items-start"):
                     ui.label("Title:").classes("w-1/5 font-bold text-sm")
                     ui.label(detail.title).classes("w-4/5 text-wrap text-sm")

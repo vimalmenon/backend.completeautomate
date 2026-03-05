@@ -2,7 +2,7 @@ from boto3.dynamodb.conditions import Key
 
 from backend.data import YouTubeVideoMetadataDBData
 from backend.database import DbManager
-from backend.enum import DbKeysEnum
+from backend.enum import DbKeysEnum, JobStatusEnum
 
 
 class YouTubeVideoMetadataSuggesterDB:
@@ -40,3 +40,32 @@ class YouTubeVideoMetadataSuggesterDB:
             Key(DbKeysEnum.Primary.value).eq(self.TABLE)
         )
         return [YouTubeVideoMetadataDBData.to_cls(result) for result in results]
+
+    def update_option_status(
+        self,
+        channel_id: str,
+        video_id: str,
+        option_index: int,
+        status: JobStatusEnum,
+    ) -> bool:
+        suggestion = self.fetch_suggestion(channel_id=channel_id, video_id=video_id)
+        if not suggestion:
+            return False
+
+        if option_index < 0 or option_index >= len(suggestion.video_details):
+            return False
+
+        suggestion.video_details[option_index].status = status
+        self.db_manager.update_item(
+            Key={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: f"{channel_id}#{video_id}",
+            },
+            UpdateExpression="SET video_details = :video_details",
+            ExpressionAttributeValues={
+                ":video_details": [
+                    detail.to_json() for detail in suggestion.video_details
+                ]
+            },
+        )
+        return True
