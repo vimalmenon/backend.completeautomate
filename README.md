@@ -83,7 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Need to check what this class does `PromptAnalyzerJob`
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] `Service` and `Manager` can be integrated
-- [ ] Add channel as List
+- [ ] Add channels as List
 - [ ] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
 - [ ] Integrate with twitter
@@ -97,6 +97,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Remove `main.ipynb` (Rather use GUI to manage it)
+- [ ] Set Up GitHub Cron Job
 - [ ] Mock data (use factory)
 - [ ] Test Coverage
   - [ ] Use Faker for data
