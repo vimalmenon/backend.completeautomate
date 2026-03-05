@@ -16,10 +16,12 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 	- [2) Configure environment](#2-configure-environment)
 	- [3) Run the app](#3-run-the-app)
 	- [4) Run the dashboard](#4-run-the-dashboard)
+- [Environment Variables At A Glance](#environment-variables-at-a-glance)
 - [YouTube OAuth Notes](#youtube-oauth-notes)
 - [Development Commands](#development-commands)
 - [Testing](#testing)
 - [Architecture Overview](#architecture-overview)
+- [Response Formats](#response-formats)
 - [Project Layout](#project-layout)
 - [Contributing](#contributing)
 
@@ -234,6 +236,32 @@ without requiring internet or real AWS credentials.
 
 If `OFFLINE` is not set, the app defaults to `false`.
 
+## Environment Variables At A Glance
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `VERSION` | Yes | Runtime label (for example `local`, `dev`, `prod`). |
+| `COMPANY_NAME` | Yes | Branding/display name used in UI and logs. |
+| `AWS_CLIENT_ID` | Yes (online mode) | AWS access key ID. |
+| `AWS_SECRET` | Yes (online mode) | AWS secret access key. |
+| `AWS_REGION` | Yes | AWS region for DynamoDB/S3 resources. |
+| `AWS_SECRET_MANAGER` | Optional | Secret manager key/path if used in your deployment. |
+| `AWS_TABLE` | Yes | DynamoDB table name for app data. |
+| `AWS_S3_BUCKET` | Yes | S3 bucket for persisted output assets. |
+| `OFFLINE` | Optional | Local Moto mode flag (`true/1/yes/on` enables offline mode). |
+| `YOUTUBE_API_KEY` | Required for YouTube API workflows | Server-to-server YouTube API calls. |
+| `YOUTUBE_CHANNEL_ID` | Required for default channel workflows | Primary channel identifier. |
+| `OPENAI_API_KEY` | Optional | Enables OpenAI-backed generation paths. |
+| `DEEPSEEK_API_KEY` | Optional | Enables DeepSeek-backed generation paths. |
+| `GROQ_API_KEY` | Optional | Enables Groq-backed generation paths. |
+| `PPLX_API_KEY` | Optional | Enables Perplexity-backed generation paths. |
+| `OPEN_ROUTE_API_KEY` | Optional | Enables OpenRouter-backed generation paths. |
+
+Notes:
+
+- In offline mode, AWS calls are routed to Moto and bootstrap local resources automatically.
+- You only need to provide API keys for providers you actually use.
+
 ### 3) Run the app
 
 ```sh
@@ -327,6 +355,36 @@ Available markers:
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
 - `backend/data/`: Pydantic/domain data models with cache invalidation support for platform data
 - `backend/ui/` + `gui.py`: NiceGUI pages and app entry
+
+## Response Formats
+
+### YouTube Video Analyzer
+
+File: `backend/generator/response_format/youtube_video_analyzer_response.py`
+
+`YouTubeVideoAnalyzerResponse` fields:
+
+- `title: str`
+- `description: str`
+- `tags: list[str]`
+
+Batch wrapper:
+
+- `YouTubeVideoAnalyzerListResponse.details: list[YouTubeVideoAnalyzerResponse]`
+
+Example payload:
+
+```json
+{
+  "details": [
+    {
+      "title": "How I Automated My YouTube Workflow",
+      "description": "A short breakdown of task scheduling and metadata automation.",
+      "tags": ["youtube", "automation", "ai"]
+    }
+  ]
+}
+```
 
 ## Project Layout
 
