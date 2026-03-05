@@ -127,3 +127,7 @@ class TaskManager:
     def update_task(self, task: TaskData):
         logger.info(f"Updating task with id: {task.id}")
         self.db.update_task(task)
+
+    def get_active_tasks(self) -> list[TaskData]:
+        logger.info("Fetching active tasks")
+        return self.db.get_active_tasks()

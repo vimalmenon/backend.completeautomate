@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 
-from backend.database.task.task_db import TaskDB
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.jobs import (
     BaseJob,
@@ -18,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 class TaskSchedulerServices:
     def __init__(self):
-        self.task_db = TaskDB()
         StartUpManager().start()
         self.job: dict[JobEnum, type[BaseJob]] = {
             JobEnum.YouTubeChannel: YouTubeJob,
@@ -33,8 +31,8 @@ class TaskSchedulerServices:
         }
 
     def start(self) -> None:
-        tasks = self.task_db.get_active_tasks()
         task_manager = TaskManager()
+        tasks = task_manager.get_active_tasks()
         for task in tasks:
             job_class = self.job.get(task.job_type, NoJob)
             status, failed_count = job_class(task).execute()
