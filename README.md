@@ -88,7 +88,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [x] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] YouTube Metadata suggester need one more Stage For Correction
-- [ ] Find trending topic in a niche (YouTube, Google)
+- [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
+  - [ ] Use Google Trends
   - [ ] YouTube Idea suggester
 - [ ] Integrate with twitter
   - [ ] Create General Tweet
