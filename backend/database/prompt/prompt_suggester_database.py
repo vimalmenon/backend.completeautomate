@@ -17,7 +17,7 @@ class PromptSuggesterDB:
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: data.prompt_id,
+                DbKeysEnum.Secondary.value: data.task.value,
                 **data.to_json(),
             }
         )

@@ -13,7 +13,7 @@ class TaskStatusEnum(str, Enum):
 
 
 # Explanation of the status:
-# NEW: Task is newly created
+# NEW: Task will be IN_PROGRESS in next cycle
 # PENDING: Task is pending and waiting to for other process to complete
 # REVIEW: Task is under review by owner or agent
 # IN_PROGRESS: Task is currently being processed
