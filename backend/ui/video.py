@@ -34,10 +34,10 @@ def render_multiline_field(field_name: str, text: str) -> None:
             ).props("flat dense").classes("self-end")
 
 
-def save_video_details(video_id: str, title: str, description: str) -> None:
+def save_video_details(ref_id: str, title: str, description: str) -> None:
     try:
         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_video_details(
-            video_id=video_id,
+            video_id=ref_id,
             title=title,
             description=description,
         )
@@ -47,14 +47,14 @@ def save_video_details(video_id: str, title: str, description: str) -> None:
         ui.notify("Failed to update video", type="negative")
 
 
-def save_transcript(video_id: str, transcript_text: str, summarize_text: str) -> None:
+def save_transcript(ref_id: str, transcript_text: str, summarize_text: str) -> None:
     try:
         transcript = YouTubeTranscriptDBData(
             transcript=transcript_text,
             summarize=summarize_text,
         )
         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
-            video_id=video_id,
+            video_id=ref_id,
             transcript=transcript,
         )
         ui.notify("Transcript updated", type="positive")
@@ -63,14 +63,14 @@ def save_transcript(video_id: str, transcript_text: str, summarize_text: str) ->
         ui.notify("Failed to update transcript", type="negative")
 
 
-def save_summarize(video_id: str, transcript_text: str, summarize_text: str) -> None:
+def save_summarize(ref_id: str, transcript_text: str, summarize_text: str) -> None:
     try:
         transcript = YouTubeTranscriptDBData(
             transcript=transcript_text,
             summarize=summarize_text,
         )
         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
-            video_id=video_id,
+            video_id=ref_id,
             transcript=transcript,
         )
         ui.notify("Summary updated", type="positive")
@@ -102,7 +102,7 @@ def open_edit_video_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_video_details(
-                    str(video_json.get("video_id", "")),
+                    str(video_json.get("ref_id", "")),
                     str(title_input.value),
                     str(description_input.value),
                 ),
@@ -129,7 +129,7 @@ def open_edit_transcript_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_transcript(
-                    str(video_json.get("video_id", "")),
+                    str(video_json.get("ref_id", "")),
                     str(transcript_input.value),
                     current_summarize,
                 ),
@@ -156,7 +156,7 @@ def open_edit_summarize_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_summarize(
-                    str(video_json.get("video_id", "")),
+                    str(video_json.get("ref_id", "")),
                     current_transcript,
                     str(summarize_input.value),
                 ),
@@ -207,7 +207,7 @@ def youtube_page(page: str):
                 with ui.row().classes(
                     "w-full bg-gray-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-600 p-3 font-bold flex-nowrap items-center"
                 ):
-                    ui.label("Video ID").classes("w-1/6")
+                    ui.label("Ref ID").classes("w-1/6")
                     ui.label("Title").classes("w-1/4")
                     ui.label("Description").classes("w-1/3")
                     ui.label("Published").classes("w-1/6")
@@ -216,7 +216,7 @@ def youtube_page(page: str):
                 # Table rows
                 for video in videos:
                     video_json = video.to_json()
-                    video_id = video_json.get("video_id", "")[:16]
+                    video_id = video_json.get("ref_id", "")[:16]
                     title = video_json.get("title", "Untitled")
                     description = video_json.get("description", "")
                     short_description = (
