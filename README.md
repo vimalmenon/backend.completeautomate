@@ -83,7 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-- [x] Remove `main.ipynb` (Rather use GUI to manage everything)
+
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options

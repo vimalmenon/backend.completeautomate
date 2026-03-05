@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 
-from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.jobs import (
@@ -44,17 +43,7 @@ class TaskSchedulerServices:
             if status == TaskStatusEnum.COMPLETED:
                 task.completed_at = datetime.now()
             logger.info("Task %s executed with status: %s", task.id, status)
-            self.task_db.update_task(task)
+            task_manager.update_task(task)
 
         task_manager.promote_new_task()
         task_manager.cleanup_tasks()
-
-    def delete_task(self, task: TaskData) -> TaskData:
-        self.task_db.delete_task(task)
-        return task
-
-    def get_tasks(self) -> list[TaskData]:
-        return self.task_db.get_tasks()
-
-    def update_task(self, task: TaskData) -> None:
-        self.task_db.update_task(task)

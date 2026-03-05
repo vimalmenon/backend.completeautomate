@@ -18,6 +18,9 @@ class TaskManager:
     TASK_NOT_FOUND = "Task not found"
 
     def __init__(self, task: TaskData | None = None):
+        logger.debug(
+            f"Initializing TaskManager with task: {task.id if task else 'None'}"
+        )
         self.task = task
         self.db = TaskDB()
 
@@ -102,7 +105,9 @@ class TaskManager:
         )
 
     def promote_new_task(self):
+        logger.info("Promoting NEW tasks to IN_PROGRESS status")
         tasks = self.db.query_items(TaskStatusEnum.NEW)
+        logger.debug(f"Found {len(tasks)} NEW tasks to promote")
         [self.__move_new_to_in_progress(task) for task in tasks]
 
     def __move_new_to_in_progress(self, task: TaskData):
@@ -115,6 +120,10 @@ class TaskManager:
     def cleanup_tasks(self):
         logger.info("Starting cleanup of tasks with CLEAN_UP status")
         tasks = self.db.query_items(TaskStatusEnum.CLEAN_UP)
-        [self.db.delete_task(task) for task in tasks]
         logger.info(f"Found {len(tasks)} tasks to clean up")
+        [self.db.delete_task(task) for task in tasks]
         logger.info("Task cleanup completed")
+
+    def update_task(self, task: TaskData):
+        logger.info(f"Updating task with id: {task.id}")
+        self.db.update_task(task)
