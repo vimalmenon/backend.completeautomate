@@ -26,7 +26,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Highlights
 
 - Multi-agent orchestration for content and automation tasks
-- Multiple LLM providers via LangChain integrations (OpenAI, Groq, DeepSeek, Perplexity, Anthropic, xAI, Qwen)
+- Multiple LLM providers via LangChain integrations (OpenAI, Groq, DeepSeek, Perplexity, OpenRouter, Qwen)
 - YouTube automation (channel/video sync, transcript workflows, thumbnail updates)
 - Image generation + prompt pipelines
 - AWS-backed persistence (DynamoDB + S3)
@@ -49,7 +49,7 @@ Current internal score: **7.5/10**
 
 ### Improvement areas
 
-- UI page logic has grown and can be further componentize
+- UI page logic has grown and can be further componentized
 - Some runtime configuration is still tightly coupled to environment setup
 - Need stronger end-to-end GUI flow validation for confidence in regressions
 
@@ -133,39 +133,33 @@ Use this checklist to track progress toward a **9/10** quality target.
 Task creation flows from top to bottom. Each stage is a separate scheduled job that fetches, processes, and creates the next task:
 
 ```
-┌─ YouTubeChannelCreator (Initial Task)
-│  ├─ Action: Fetch channel info from YouTube API
-│  ├─ Store: YouTubeChannelDB
-│  └─ Creates: YouTubeVideoGenerator
+YouTubeChannelCreator (Initial Task)
 │
-├─ YouTubeVideoGenerator (Created by ChannelCreator)
-│  ├─ Action: Fetch all videos for channel
-│  ├─ Store: YouTubeVideoDB
-│  └─ Creates: YouTubeVideoAnalyzer
-│
-├─ YouTubeVideoAnalyzer (Created by VideoGenerator)
-│  ├─ Action: Analyze video stats and content
-│  └─ Creates: YouTubeMetadataSuggester
-│
-├─ YouTubeMetadataSuggester (Created by VideoAnalyzer)
-│  ├─ Action: Use LLM to generate title/description/tags
-│  ├─ Store: Prompt + suggestions in DB
-│  └─ Creates: YouTubeMetadataUpdater (if enabled)
-│
-├─ YouTubeMetadataUpdater (Created by MetadataSuggester)
-│  ├─ Action: Update YouTube video with suggested metadata
-│  └─ Creates: ImagePromptSuggester (if thumbnail update enabled)
-│
-├─ ImagePromptSuggester (Created by MetadataUpdater)
-│  ├─ Action: Generate image prompt from video content
-│  └─ Creates: ImageGenerator
-│
-├─ ImageGenerator (Created by ImagePromptSuggester)
-│  ├─ Action: Generate thumbnail image from prompt
-│  └─ Creates: YouTubeThumbnailUpdater
-│
-└─ YouTubeThumbnailUpdater (Created by ImageGenerator)
-   └─ Action: Upload generated thumbnail to YouTube (FINAL STEP)
+├── Action: Fetch channel info from YouTube API
+├── Store: YouTubeChannelDB
+└── Creates: YouTubeVideoGenerator
+    │
+    ├── Action: Fetch all videos for channel
+    ├── Store: YouTubeVideoDB
+    └── Creates: YouTubeVideoAnalyzer
+        │
+        ├── Action: Analyze video stats and content
+        └── Creates: YouTubeMetadataSuggester
+            │
+            ├── Action: Use LLM to generate title/description/tags
+            ├── Store: Prompt + suggestions in DB
+            └── Creates: YouTubeMetadataUpdater (if enabled)
+                │
+                ├── Action: Update YouTube video with suggested metadata
+                └── Creates: ImagePromptSuggester (if thumbnail update enabled)
+                    │
+                    ├── Action: Generate image prompt from video content
+                    └── Creates: ImageGenerator
+                        │
+                        ├── Action: Generate thumbnail image from prompt
+                        └── Creates: YouTubeThumbnailUpdater
+                            │
+                            └── Action: Upload generated thumbnail to YouTube (FINAL STEP)
 ```
 
 **Key Points:**
@@ -338,41 +332,88 @@ Available markers:
 ```text
 backend.completeautomate/
 ├── backend/
-│   ├── ai/                           # LLM provider wrappers (OpenAI, Groq, DeepSeek, etc.)
+│   ├── ai/                           # LLM provider wrappers (OpenAI, Groq, DeepSeek, Perplexity, OpenRouter, Qwen)
 │   ├── config/                       # env loading, logging setup, session config
-│   ├── data/                         # Core data models (Task, Prompt, YouTube, Image, S3)
+│   ├── data/                         # Core data models (Task, Prompt, YouTube, Image, S3, Platform, Team, Message)
 │   ├── database/                     # DynamoDB access layer and DB-specific repositories
+│   │   ├── agent/
 │   │   ├── image/
+│   │   ├── platform/
+│   │   ├── prompt/
 │   │   ├── task/
-│   │   └── youtube/
-│   ├── enum/                         # Enums for job/status/team/db keys/prompt types
+│   │   ├── youtube/
+│   │   └── dynamo_database.py
+│   ├── enum/                         # Enums for job/status/team/db keys/prompt types/platforms/images
 │   ├── exception/                    # Custom app exception types
-│   ├── generator/                    # Domain generators (image/youtube/analysis/summarize)
+│   ├── factory/                      # Factory classes for agent and task creation
+│   ├── generator/                    # Domain generators (image/youtube/analysis/summarize/metadata)
+│   │   ├── response_format/
+│   │   └── youtube_*.py
 │   ├── helper/                       # Startup + utility helpers
-│   ├── integration/                  # External integrations (YouTube API, S3, TTS, agents)
+│   │   ├── folder_helper/
+│   │   └── start_up/
+│   ├── integration/                  # External integrations
+│   │   ├── agent/
+│   │   ├── image_generation/
+│   │   ├── storage/
+│   │   ├── text_to_speech/
+│   │   └── youtube/
 │   ├── jobs/                         # Job executors mapped from task job type
+│   │   ├── base_job.py
+│   │   ├── image_generator_job.py
+│   │   ├── image_prompt_job.py
+│   │   ├── youtube_job.py
+│   │   └── no_job.py
+│   ├── manager/                      # Manager classes for platform, startup, and task operations
 │   ├── output/                       # Generated output assets (json/images/pickle)
 │   ├── services/                     # Shared services (e.g., agent service)
 │   ├── team/                         # Team role implementations used in workflows
-│   ├── ui/                           # NiceGUI pages (home/tasks/youtube/prompt)
+│   ├── ui/                           # NiceGUI pages and navigation
+│   │   ├── main.py
+│   │   ├── navigation.py
+│   │   ├── tasks.py
+│   │   ├── video.py
+│   │   └── prompt.py
 │   └── task_scheduler_services.py    # Main scheduler/orchestration service
 ├── tests/                            # Unit + integration tests
+│   └── database/
 ├── logs/                             # Runtime logs (app/error logs)
+├── .github/                          # GitHub Actions CI/CD workflows
 ├── gui.py                            # NiceGUI app entrypoint
 ├── main.py                           # Scheduler CLI entrypoint
 ├── main.ipynb                        # Notebook playground for manual flows
 ├── pyproject.toml                    # Poetry deps + tooling config
+├── poetry.lock                       # Poetry lock file
 ├── pytest.ini                        # Pytest config + markers
 ├── tox.ini                           # Tox envs for lint/type/test
 └── Makefile                          # Common development commands
 ```
 
-Key page modules under `backend/ui/`:
+Key modules:
 
-- `main.py`: dashboard navigation
+**UI pages** (`backend/ui/`):
+- `main.py`: home dashboard page
+- `navigation.py`: shared navigation component
 - `tasks.py`: task list, add-task form, inline status update, delete action
 - `video.py`: video list sorted by published date (desc), description preview
 - `prompt.py`: prompt list table with expandable details
+
+**Jobs** (`backend/jobs/`):
+- `base_job.py`: base job class
+- `image_generator_job.py`: image generation tasks
+- `image_prompt_job.py`: image prompt generation tasks
+- `youtube_job.py`: YouTube-related task execution
+- `prompt_suggester_job.py`: prompt suggestion tasks
+- `no_job.py`: fallback for unmapped job types
+
+**Factories** (`backend/factory/`):
+- `agent_factory.py`: creates AI agent instances
+- `task_factory.py`: creates task objects
+
+**Managers** (`backend/manager/`):
+- `platform_manager.py`: platform operations
+- `start_up_manager.py`: application startup logic
+- `task_manager.py`: task lifecycle management
 
 ## Contributing
 
