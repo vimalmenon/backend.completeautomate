@@ -5,7 +5,7 @@ from backend.enum import PlatformEnum
 
 class PlatformManager:
 
-    def save_data(self, platform: PlatformDB) -> str:
+    def save_data(self, platform: PlatformDBData) -> str:
         return PlatformDB().save_data(platform)
 
     def get_platform_by_channel_id(self, channel_id: str) -> str | None:
