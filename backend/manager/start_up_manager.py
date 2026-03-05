@@ -17,6 +17,7 @@ class StartUpManager:
         self.__add_start_up_file()
         ref_id = self.__create_ref_id_if_not_exists()
         self.__add_channel_if_not_exists(ref_id)
+        self.__transform_data()
         logger.info("Startup manager flow completed")
 
     def __add_channel_if_not_exists(self, ref_id: str) -> None:
@@ -58,3 +59,7 @@ class StartUpManager:
                 S3Storage().download_data(data)
             else:
                 logger.debug(f"Startup file already present: {path}")
+
+    def __transform_data(self) -> bool:
+        # Placeholder for any future data transformation logic needed during startup
+        return False
