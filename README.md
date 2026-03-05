@@ -79,7 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [x] Use StartUp Manager rather than startup script
 - [x] `Service` and `Manager` can be integrated
-- [ ] Add channels as List on start up
+- [x] Add channels as list on start up
 - [ ] Remove startup script once the flow is checked
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
@@ -87,11 +87,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve on prompt suggester
 - [ ] Integrate with twitter
 - [ ] Agent to analyze result
+  - [ ] Add AI review step for generated answers
+  - [ ] Agent to review tasks (only once)
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Find trending topic in a niche (YouTube, Google)
   - [ ] YouTube Idea suggester
-- [ ] Agent to review tasks (only once)
-- [ ] Add AI review step for generated answers
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
