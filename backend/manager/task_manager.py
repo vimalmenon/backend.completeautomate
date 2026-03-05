@@ -1,4 +1,5 @@
 from datetime import datetime
+from logging import getLogger
 from uuid import uuid4
 
 from backend.data import (
@@ -9,6 +10,8 @@ from backend.data import (
 from backend.database import TaskDB
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
+
+logger = getLogger(__name__)
 
 
 class TaskManager:
@@ -21,16 +24,22 @@ class TaskManager:
         self,
         task: TaskData,
     ) -> None:
+        logger.info(f"Adding task: job_type={task.job_type}")
         TaskDB().add_task(task)
 
     def get_all_active_tasks(self) -> list[TaskData]:
-        return TaskDB().get_active_tasks()
+        logger.debug("Fetching all active tasks")
+        tasks = TaskDB().get_active_tasks()
+        logger.debug(f"Fetched active tasks count: {len(tasks)}")
+        return tasks
 
     def create_youtube_analysis_task(
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
+            logger.warning("Cannot create YouTube analysis task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
+        logger.debug(f"Creating YouTube analysis task for ref_id={ref_id}")
         payload_cls = YouTubeVideoSummarizeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -44,7 +53,9 @@ class TaskManager:
 
     def create_youtube_video_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
         if not self.task:
+            logger.warning("Cannot create YouTube video task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
+        logger.debug(f"Creating YouTube video task for ref_id={ref_id}")
         payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -57,6 +68,7 @@ class TaskManager:
         )
 
     def create_youtube_channel_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
+        logger.debug(f"Creating YouTube channel task for ref_id={ref_id}")
         payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -72,7 +84,9 @@ class TaskManager:
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
+            logger.warning("Cannot create YouTube summarize task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
+        logger.debug(f"Creating YouTube summarize task for ref_id={ref_id}")
         job = YouTubeVideoSummarizeJobData(
             ref_id=ref_id,
         )

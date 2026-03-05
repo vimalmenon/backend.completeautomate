@@ -82,6 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
+  - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Improve on prompt suggester
 - [ ] Integrate with twitter
 - [ ] Agent to analyze result
@@ -91,7 +92,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Find trending topic in a niche (YouTube, Google)
   - [ ] YouTube Idea suggester
 - [ ] Fix transcripts for grammar and naming errors
-- [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Fix TODOs and dead code
 - [ ] Remove `main.ipynb` (Rather use GUI to manage it)
 - [ ] Set Up GitHub Cron Job
