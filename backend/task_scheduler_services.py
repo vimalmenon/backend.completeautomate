@@ -1,10 +1,9 @@
 import logging
 from datetime import datetime
 
-from backend.config.env import env
 from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
-from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import JobEnum, TaskStatusEnum
 from backend.jobs import (
     BaseJob,
     ImageGeneratorJob,
@@ -13,7 +12,7 @@ from backend.jobs import (
     PromptSuggesterJob,
     YouTubeJob,
 )
-from backend.manager import StartUpManager, TaskManager
+from backend.manager import StartUpManager
 
 logger = logging.getLogger(__name__)
 
@@ -47,27 +46,12 @@ class TaskSchedulerServices:
             self.task_db.update_task(task)
         self.task_db.cleanup_tasks()
 
-    def setup_one_time_task(self) -> None:
-        manager = TaskManager()
-        task = manager.create_youtube_channel_task(
-            ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
-            created_by=JobEnum.OWNER,
-        )
-        manager.add_task(task)
-
     def delete_task(self, task: TaskData) -> TaskData:
         self.task_db.delete_task(task)
         return task
 
     def get_tasks(self) -> list[TaskData]:
         return self.task_db.get_tasks()
-
-    def get_task_by_id(self, task_id: str) -> TaskData | None:
-        tasks = self.task_db.get_tasks()
-        for task in tasks:
-            if str(task.id) == task_id:
-                return task
-        return None
 
     def update_task(self, task: TaskData) -> None:
         self.task_db.update_task(task)
