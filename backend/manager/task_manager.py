@@ -23,6 +23,9 @@ class TaskManager:
     ) -> None:
         TaskDB().add_task(task)
 
+    def get_all_active_tasks(self) -> list[TaskData]:
+        return TaskDB().get_active_tasks()
+
     def create_youtube_analysis_task(
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
