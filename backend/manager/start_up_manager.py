@@ -14,10 +14,14 @@ class StartUpManager:
         self.__add_channel_if_not_exists(ref_id)
 
     def __add_channel_if_not_exists(self, ref_id: str) -> None:
-        # TODO this is not comprehensive
         manager = TaskManager()
         tasks = manager.get_all_active_tasks()
-        result = [task for task in tasks if task.payload.get("ref_id") == ref_id]
+        result = [
+            task
+            for task in tasks
+            if task.payload.get("ref_id") == ref_id
+            and task.job_type == JobEnum.YouTubeChannel
+        ]
 
         if len(result) == 0:
             task = manager.create_youtube_channel_task(
