@@ -1,10 +1,39 @@
+from backend.config.env import env
+from backend.data.s3 import S3Data
+from backend.enum import JobEnum, PlatformEnum
+from backend.helper.folder_helper.folder_helper import FolderHelper
+from backend.integration.storage.s3_storage import S3Storage
+from backend.manager.platform_manager import PlatformManager
+from backend.manager.task_manager import TaskManager
+
+
 class StartUpManager:
     def start(self):
-        self.__add_channel_if_not_exits()
         self.__add_start_up_file()
+        self.__create_ref_id_if_not_exists()
+        self.__add_channel_if_not_exists()
 
-    def __add_channel_if_not_exits(self):
-        pass
+    def __add_channel_if_not_exists(self):
+        # TODO check if data exists
+        manager = TaskManager()
+        task = manager.create_youtube_channel_task(
+            ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
+            created_by=JobEnum.OWNER,
+        )
+        manager.add_task(task)
+
+    def __create_ref_id_if_not_exists(self) -> str:
+        platform_manager = PlatformManager()
+        platform_data = platform_manager.get_platform_by_channel_id(
+            env.YOUTUBE_CHANNEL_ID
+        )
+        if not platform_data:
+            data = platform_manager.create_channel_data(env.YOUTUBE_CHANNEL_ID)
+            return platform_manager.save_data(data)
+        return platform_data
 
     def __add_start_up_file(self):
-        pass
+        for path in ["pickle/token.pickle", "json/client_secret.json"]:
+            data = S3Data.to_cls_from_path(path)
+            if not FolderHelper().check_if_file_exists(data.downloaded_path):
+                S3Storage().download_data(data)

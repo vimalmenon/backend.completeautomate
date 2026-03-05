@@ -98,6 +98,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Fix TODOs and dead code
 - [ ] Remove `main.ipynb` (Rather use GUI to manage it)
 - [ ] Set Up GitHub Cron Job
+  - [ ] Set up Env and variable
 - [ ] Mock data (use factory)
 - [ ] Test Coverage
   - [ ] Use Faker for data

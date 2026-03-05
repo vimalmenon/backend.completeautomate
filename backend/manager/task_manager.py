@@ -12,6 +12,7 @@ from backend.exception.app_exception import AppException
 
 
 class TaskManager:
+    TASK_NOT_FOUND = "Task not found"
 
     def __init__(self, task: TaskData | None = None):
         self.task = task
@@ -26,7 +27,7 @@ class TaskManager:
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
-            raise AppException("Task not found")
+            raise AppException(self.TASK_NOT_FOUND)
         payload_cls = YouTubeVideoSummarizeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -40,7 +41,7 @@ class TaskManager:
 
     def create_youtube_video_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
         if not self.task:
-            raise AppException("Task not found")
+            raise AppException(self.TASK_NOT_FOUND)
         payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
@@ -68,7 +69,7 @@ class TaskManager:
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
         if not self.task:
-            raise AppException("Task not found")
+            raise AppException(self.TASK_NOT_FOUND)
         job = YouTubeVideoSummarizeJobData(
             ref_id=ref_id,
         )
