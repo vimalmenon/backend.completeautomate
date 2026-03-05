@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Self
+from uuid import UUID
 
 from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum
 
@@ -63,14 +64,14 @@ class PromptVersionDBData:
 
 @dataclass
 class PromptSuggesterDBData:
-    ref_id: str
+    prompt_id: UUID
     description: str
     versions: list[PromptVersionDBData]
     comment: str | None
 
     def to_json(self) -> dict:
         return {
-            "ref_id": self.ref_id,
+            "prompt_id": str(self.prompt_id),
             "description": self.description,
             "comment": self.comment,
             "versions": [version.to_json() for version in self.versions],
@@ -79,7 +80,7 @@ class PromptSuggesterDBData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            ref_id=data["ref_id"],
+            prompt_id=UUID(data["prompt_id"]),
             description=data["description"],
             comment=data.get("comment"),
             versions=[
