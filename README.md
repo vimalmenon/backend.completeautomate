@@ -77,9 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-- [x] Use StartUp Manager rather than startup script
-- [x] `Service` and `Manager` can be integrated
-- [x] Add channels as list on start up
+
 - [ ] Remove startup script once the flow is checked
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
