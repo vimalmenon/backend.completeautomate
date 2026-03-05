@@ -1,8 +1,119 @@
+from datetime import datetime
+
 from nicegui import ui
 
 from backend.config.env import env
 from backend.data import YouTubeTranscriptDBData
 from backend.database.youtube import YouTubeVideoDB
+
+
+def open_stats_chart_dialog(video_json: dict) -> None:
+    """Open a dialog with line chart showing video stats over time."""
+    stats = video_json.get("stats", [])
+
+    if not stats:
+        ui.notify("No stats data available", type="warning")
+        return
+
+    # Parse stats data
+    timestamps = []
+    views = []
+    likes = []
+    comments = []
+
+    for stat in stats:
+        try:
+            timestamp_str = stat.get("timestamp", "")
+            timestamps.append(datetime.fromisoformat(timestamp_str))
+            views.append(int(stat.get("views", 0)))
+            likes.append(int(stat.get("likes", 0)))
+            comments.append(int(stat.get("comments", 0)))
+        except (ValueError, TypeError):
+            continue
+
+    if not timestamps:
+        ui.notify("No valid stats data to display", type="warning")
+        return
+
+    # Format timestamps for display
+    time_labels = [ts.strftime("%Y-%m-%d %H:%M") for ts in timestamps]
+
+    with ui.dialog() as dialog, ui.card().classes("w-[1100px] max-w-full"):
+        ui.label(f"Stats for: {video_json.get('title', 'Video')}").classes(
+            "text-h6 mb-4"
+        )
+
+        # Create plotly chart
+        import plotly.graph_objects as go
+
+        fig = go.Figure()
+
+        # Add traces for each metric
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=views,
+                mode="lines+markers",
+                name="Views",
+                line=dict(color="#2196F3", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=likes,
+                mode="lines+markers",
+                name="Likes",
+                line=dict(color="#4CAF50", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=comments,
+                mode="lines+markers",
+                name="Comments",
+                line=dict(color="#FF9800", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        # Update layout
+        fig.update_layout(
+            title="Video Statistics Over Time",
+            xaxis_title="Date/Time",
+            yaxis_title="Count",
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+            height=500,
+        )
+
+        ui.plotly(fig).classes("w-full")
+
+        # Summary stats
+        with ui.row().classes("w-full gap-4 mt-4"):
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Views").classes("text-sm text-gray-600")
+                ui.label(f"{views[-1]:,}").classes("text-2xl font-bold text-blue-600")
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Likes").classes("text-sm text-gray-600")
+                ui.label(f"{likes[-1]:,}").classes("text-2xl font-bold text-green-600")
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Comments").classes("text-sm text-gray-600")
+                ui.label(f"{comments[-1]:,}").classes(
+                    "text-2xl font-bold text-orange-600"
+                )
+
+        with ui.row().classes("w-full justify-end mt-4"):
+            ui.button("Close", on_click=dialog.close).props("flat")
+
+    dialog.open()
 
 
 def open_text_dialog(title: str, text: str) -> None:
@@ -276,6 +387,13 @@ def youtube_page(page: str):
                         # Populate detail section
                         with detail_section:
                             with ui.row().classes("w-full justify-end gap-2"):
+                                ui.button(
+                                    "View Stats",
+                                    icon="show_chart",
+                                    on_click=lambda current_video=video_json: open_stats_chart_dialog(
+                                        current_video
+                                    ),
+                                ).props("flat")
                                 ui.button(
                                     "Edit Video",
                                     icon="edit",

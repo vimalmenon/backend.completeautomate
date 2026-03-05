@@ -29,6 +29,7 @@ google-auth-httplib2 = "^0.3.0"
 google-auth-oauthlib = "^1.2.4"
 playwright = "^1.54.0"
 nicegui = "^3.8.0"
+plotly = "^6.6.0"
 
 [tool.poetry.scripts]
 app = "main:main"
