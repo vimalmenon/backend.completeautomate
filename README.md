@@ -30,11 +30,14 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - YouTube automation (channel/video sync, transcript workflows, thumbnail updates)
 - Image generation + prompt pipelines
 - AWS-backed persistence (DynamoDB + S3)
+- Offline mode support with Moto-mocked AWS services
 - Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
 - Tasks dashboard: add task form, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
-- Videos dashboard: newest-first by published date and 50-character description preview in table rows
+- Videos dashboard: newest-first by published date, expandable rows, inline editing for title/description/transcript/summary
 - Prompt dashboard: expandable prompt table with task/role/model metadata
+- Comprehensive logging across managers and services for debugging and monitoring
 - Test suite with unit and integration markers
+- Cache invalidation support for platform data models
 
 ## Project Health
 
@@ -46,6 +49,9 @@ Current internal score: **7.5/10**
 - Practical developer workflow (`Makefile`, pytest markers, lint/type checks)
 - Functional NiceGUI dashboards with live task operations
 - Good momentum with iterative UI improvements (status updates, row actions, sorting, JSON payload rendering)
+- Comprehensive logging in manager layer for operational visibility
+- Lazy import pattern prevents circular dependencies in data models
+- Cache invalidation methods for platform data freshness
 
 ### Improvement areas
 
@@ -78,9 +84,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [x] Remove startup script once the flow is checked
-- [x] Need to fix the issue with platform
-- [ ] Improve the logger (Show proper details)
+- [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
@@ -106,6 +110,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [x] Fix video.py to use correct ref_id references
   - [ ] Add Platform to GUI
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
@@ -317,10 +322,11 @@ Available markers:
 - Fallback behavior: if a task's `job_type` has no mapped handler, scheduler uses `NoJob`, logs an error, and marks the task as `FAILED` while incrementing `failed_count`
 - `backend/generator/`: workflow generators and domain logic
 - `backend/services/agent_service.py`: model/prompt orchestration
+- `backend/manager/`: manager layer with comprehensive logging for platform, startup, and task operations
 - `backend/ai/`: provider adapters
 - `backend/database/`: DynamoDB access layer
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
-- `backend/data/`: Pydantic/domain data models
+- `backend/data/`: Pydantic/domain data models with cache invalidation support for platform data
 - `backend/ui/` + `gui.py`: NiceGUI pages and app entry
 
 ## Project Layout
@@ -391,7 +397,7 @@ Key modules:
 - `main.py`: home dashboard page
 - `navigation.py`: shared navigation component
 - `tasks.py`: task list, add-task form, inline status update, delete action
-- `video.py`: video list sorted by published date (desc), description preview
+- `video.py`: video list with expandable rows, inline editing for video details/transcript/summary (uses ref_id)
 - `prompt.py`: prompt list table with expandable details
 
 **Jobs** (`backend/jobs/`):
@@ -406,10 +412,10 @@ Key modules:
 - `agent_factory.py`: creates AI agent instances
 - `task_factory.py`: creates task objects
 
-**Managers** (`backend/manager/`):
-- `platform_manager.py`: platform operations
-- `start_up_manager.py`: application startup logic
-- `task_manager.py`: task lifecycle management
+**Managers** (`backend/manager/`)  - *Enhanced with comprehensive logging*:
+- `platform_manager.py`: platform operations with logging
+- `start_up_manager.py`: application startup logic with lifecycle logging
+- `task_manager.py`: task lifecycle management with operation tracking
 
 ## Contributing
 
