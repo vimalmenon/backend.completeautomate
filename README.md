@@ -81,16 +81,17 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Fix tox issues
 - [x] Adding YouTubeChannel should add Video and Channel Detail (as they both use the same data)
 - [x] Need to check what this class does `PromptAnalyzerJob`
-- [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] `Service` and `Manager` can be integrated
-- [ ] Add channels as List
+- [ ] Add channels as List on start up
+- [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
-- [ ] Test all the prompts once done
+  - [ ] Test all the prompts once done
+- [ ] Improve on prompt suggester
 - [ ] Integrate with twitter
 - [ ] Agent to analyze prompts
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Find trending topic in a niche (YouTube, Google)
-- [ ] YouTube Idea suggester
+  - [ ] YouTube Idea suggester
 - [ ] Agent to review tasks (only once)
 - [ ] Add AI review step for generated answers
 - [ ] Fix transcripts for grammar and naming errors
@@ -103,13 +104,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test Coverage
   - [ ] Use Faker for data
   - [ ] Mock data from Agents (Positive and Negative)
-  - [ ] Test all the flows from Generator to Updater, Analyze
-  - [ ] Test data for DB integration
   - [ ] Mock Integration with YouTube API
+  - [ ] Test all the flows from Generator to Updater, Analyze
+  - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [x] Ability to Work Offline
   - [ ] Add YouTube Channel
   - [ ] Add Platform to GUI
-  - [x] Ability to Work Offline
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
   - [ ] Task Create or Edit
