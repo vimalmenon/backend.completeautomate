@@ -8,6 +8,7 @@ from backend.jobs import (
     ImagePromptJob,
     NoJob,
     PromptSuggesterJob,
+    TwitterJob,
     YouTubeJob,
 )
 from backend.manager import StartUpManager, TaskManager
@@ -27,6 +28,7 @@ class TaskSchedulerServices:
             JobEnum.YouTubeVideoMetadataUpdater: YouTubeJob,
             JobEnum.ImageGenerator: ImageGeneratorJob,
             JobEnum.ImagePrompt: ImagePromptJob,
+            JobEnum.TwitterPost: TwitterJob,
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 

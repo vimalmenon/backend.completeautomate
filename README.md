@@ -87,7 +87,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Test if it's able to generate YouTube Title, Description and Tags with multiple options
-- [ ] Higher (UI and Generator) should never access DB directly
+- [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Promote the YouTube MetaData to next Step
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
@@ -96,6 +96,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Improve on prompt suggester
 - [ ] Integrate with twitter
+  - [ ] Create General Tweet
+  - [ ] Post tweet
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)

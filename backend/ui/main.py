@@ -51,7 +51,7 @@ def main_page():
                 {
                     "name": "List Prompts",
                     "icon": "description",
-                    "links_to": "/prompt?page=list_prompts",
+                    "links_to": "/prompt",
                 },
             ],
         },

@@ -149,7 +149,7 @@ def render_add_prompt_form() -> None:
                 ).props("color=primary")
 
 
-def prompt_page(page: str):
+def prompt_page():
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("Prompt Management").classes("text-h4")
