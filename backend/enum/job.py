@@ -13,3 +13,4 @@ class JobEnum(str, Enum):
     ImageGenerator = "ImageGenerator"
     ImagePrompt = "ImagePrompt"
     PromptSuggester = "PromptSuggester"
+    TwitterPost = "TwitterPost"

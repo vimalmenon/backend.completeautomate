@@ -57,7 +57,7 @@ Current internal score: **7.5/10**
 
 ### Improvement areas
 
-- UI page logic has grown and can be further componentized
+- UI page logic has grown and can be further componentize
 - Some runtime configuration is still tightly coupled to environment setup
 - Need stronger end-to-end GUI flow validation for confidence in regressions
 
@@ -87,6 +87,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Test if it's able to generate YouTube Title, Description and Tags with multiple options
+- [ ] Higher (UI and Generator) should never access DB directly
 - [ ] Promote the YouTube MetaData to next Step
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
@@ -106,13 +107,14 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and variable
 - [ ] Mock data (use factory)
-- [ ] Test Coverage
   - [ ] Use Faker for data
+- [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [ ] Run app from UI
   - [ ] Add Platform to GUI
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
