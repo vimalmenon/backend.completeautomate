@@ -5,7 +5,6 @@ from backend.config.env import env
 from backend.data import TaskData
 from backend.database.task.task_db import TaskDB
 from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
-from backend.helper.start_up.start_up import StartUp
 from backend.jobs import (
     BaseJob,
     ImageGeneratorJob,
@@ -14,7 +13,7 @@ from backend.jobs import (
     PromptSuggesterJob,
     YouTubeJob,
 )
-from backend.manager import TaskManager
+from backend.manager import StartUpManager, TaskManager
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 class TaskSchedulerServices:
     def __init__(self):
         self.task_db = TaskDB()
-        StartUp()
+        StartUpManager().start()
         self.job: dict[JobEnum, type[BaseJob]] = {
             JobEnum.YouTubeChannel: YouTubeJob,
             JobEnum.YouTubeVideo: YouTubeJob,

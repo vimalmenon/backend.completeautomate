@@ -77,12 +77,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-
-- [x] Fix tox issues
-- [x] Adding YouTubeChannel should add Video and Channel Detail (as they both use the same data)
-- [x] Need to check what this class does `PromptAnalyzerJob`
+- [x] Use StartUp Manager rather than startup script
+- [x] `Service` and `Manager` can be integrated
 - [ ] Add channels as List on start up
-- [ ] `Service` and `Manager` can be integrated
+- [ ] Remove startup script once the flow is checked
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
@@ -108,8 +106,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] Ability to Work Offline
-  - [x] Add YouTube Channel
   - [ ] Add Platform to GUI
   - [ ] Mock AWS Dynamo DB Data
   - [ ] Mock AWS S3 data
