@@ -4,7 +4,7 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.data import YouTubeTranscriptDBData
-from backend.database.youtube import YouTubeVideoDB
+from backend.database.youtube import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
 
 
 def open_stats_chart_dialog(video_json: dict) -> None:
@@ -143,6 +143,39 @@ def render_multiline_field(field_name: str, text: str) -> None:
                     current_field.title(), current_text
                 ),
             ).props("flat dense").classes("self-end")
+
+
+def render_metadata_suggestions(video_id: str) -> None:
+    suggestion = YouTubeVideoMetadataSuggesterDB().fetch_suggestion(
+        channel_id=env.YOUTUBE_CHANNEL_ID,
+        video_id=video_id,
+    )
+    if not suggestion:
+        return
+
+    with ui.column().classes(
+        "w-full gap-3 mt-2 p-3 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-700"
+    ):
+        ui.label("Metadata Suggestions").classes("text-subtitle1 font-semibold")
+        if suggestion.comment:
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Comment:").classes("w-1/5 font-bold text-amber-700 text-sm")
+                ui.label(str(suggestion.comment)).classes("w-4/5 text-wrap text-sm")
+
+        for index, detail in enumerate(suggestion.video_details, start=1):
+            with ui.card().classes("w-full bg-white dark:bg-slate-800"):
+                ui.label(f"Option {index} ({detail.status.value})").classes(
+                    "text-sm font-semibold text-amber-700"
+                )
+                with ui.row().classes("w-full gap-4 items-start"):
+                    ui.label("Title:").classes("w-1/5 font-bold text-sm")
+                    ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
+                render_multiline_field("description", detail.description)
+                with ui.row().classes("w-full gap-4 items-start"):
+                    ui.label("Tags:").classes("w-1/5 font-bold text-sm")
+                    ui.label(", ".join(detail.tags) if detail.tags else "-").classes(
+                        "w-4/5 text-wrap text-sm"
+                    )
 
 
 def save_video_details(ref_id: str, title: str, description: str) -> None:
@@ -326,6 +359,12 @@ def youtube_page(page: str):
 
                 # Table rows
                 for video in videos:
+                    video_id_full = ""
+                    try:
+                        video_id_full = video.platform.video_id
+                    except Exception:
+                        video_id_full = ""
+
                     video_json = video.to_json()
                     video_id = video_json.get("ref_id", "")[:16]
                     title = video_json.get("title", "Untitled")
@@ -386,6 +425,9 @@ def youtube_page(page: str):
 
                         # Populate detail section
                         with detail_section:
+                            if video_id_full:
+                                render_metadata_suggestions(video_id_full)
+
                             with ui.row().classes("w-full justify-end gap-2"):
                                 ui.button(
                                     "View Stats",
