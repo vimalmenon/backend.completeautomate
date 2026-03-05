@@ -68,15 +68,13 @@ class TaskDB:
             }
         )
 
-    def cleanup_tasks(self) -> None:
-        logger.info("Starting cleanup of tasks with CLEAN_UP status")
+    def query_items(self, task_status: TaskStatusEnum) -> list[TaskData]:
+        logger.info(f"Querying tasks with status: {task_status.value}")
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
-            filter_expression=Attr("status").eq(TaskStatusEnum.CLEAN_UP.value),
+            filter_expression=Attr("status").eq(task_status.value),
         )
-        logger.info(f"Found {len(items)} tasks to clean up")
-        [self.delete_task(TaskData.to_cls(item)) for item in items]
-        logger.info("Task cleanup completed")
+        return [TaskData.to_cls(item) for item in items]
 
     def __update_task(self, task: TaskData) -> None:
         logger.info(

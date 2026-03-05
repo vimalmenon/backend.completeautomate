@@ -19,6 +19,7 @@ class TaskManager:
 
     def __init__(self, task: TaskData | None = None):
         self.task = task
+        self.db = TaskDB()
 
     def add_task(
         self,
@@ -76,7 +77,7 @@ class TaskManager:
             payload=payload_cls.to_json(),
             created_by=created_by,
             created_at=datetime.now(),
-            status=TaskStatusEnum.IN_PROGRESS,
+            status=TaskStatusEnum.NEW,
             trail=[],
         )
 
@@ -99,3 +100,21 @@ class TaskManager:
             status=TaskStatusEnum.IN_PROGRESS,
             trail=self.task.trail + [self.task.id],
         )
+
+    def promote_new_task(self):
+        tasks = self.db.query_items(TaskStatusEnum.NEW)
+        [self.__move_new_to_in_progress(task) for task in tasks]
+
+    def __move_new_to_in_progress(self, task: TaskData):
+        logger.info(
+            f"Promoting task to IN_PROGRESS: id={task.id}, job_type={task.job_type}"
+        )
+        task.status = TaskStatusEnum.IN_PROGRESS
+        self.db.update_task(task)
+
+    def cleanup_tasks(self):
+        logger.info("Starting cleanup of tasks with CLEAN_UP status")
+        tasks = self.db.query_items(TaskStatusEnum.CLEAN_UP)
+        [self.db.delete_task(task) for task in tasks]
+        logger.info(f"Found {len(tasks)} tasks to clean up")
+        logger.info("Task cleanup completed")

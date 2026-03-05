@@ -79,7 +79,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Remove startup script once the flow is checked
-- [ ] Need to fix the issue with platform 
+- [x] Need to fix the issue with platform
+- [ ] Improve the logger (Show proper details)
 - [ ] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done

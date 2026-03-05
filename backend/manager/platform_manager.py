@@ -33,7 +33,7 @@ class PlatformManager:
     def create_channel_data(self, channel_id: str) -> PlatformDBData:
         logger.debug(f"Creating channel data for channel_id: {channel_id}")
         platform_data = PlatformDBData(
-            platform_type=PlatformEnum.YouTubeVideo,
+            platform_type=PlatformEnum.YouTubeChannel,
             data=PlatformYouTubeChannelDBData(channel_id=channel_id),
         )
         logger.debug(f"Channel data created for channel_id: {channel_id}")

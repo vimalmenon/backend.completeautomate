@@ -12,7 +12,7 @@ from backend.jobs import (
     PromptSuggesterJob,
     YouTubeJob,
 )
-from backend.manager import StartUpManager
+from backend.manager import StartUpManager, TaskManager
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ class TaskSchedulerServices:
 
     def start(self) -> None:
         tasks = self.task_db.get_active_tasks()
+        task_manager = TaskManager()
         for task in tasks:
             job_class = self.job.get(task.job_type, NoJob)
             status, failed_count = job_class(task).execute()
@@ -44,7 +45,9 @@ class TaskSchedulerServices:
                 task.completed_at = datetime.now()
             logger.info("Task %s executed with status: %s", task.id, status)
             self.task_db.update_task(task)
-        self.task_db.cleanup_tasks()
+
+        task_manager.promote_new_task()
+        task_manager.cleanup_tasks()
 
     def delete_task(self, task: TaskData) -> TaskData:
         self.task_db.delete_task(task)
