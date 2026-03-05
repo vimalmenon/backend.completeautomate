@@ -87,6 +87,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] Test if it's able to generate YouTube Title, Description and Tags with multiple options
+- [ ] Find trending topic in a niche (YouTube, Google)
+  - [ ] YouTube Idea suggester
+- [ ] Integrate with twitter
+  - [ ] Create General Tweet
+  - [ ] Post tweet
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Promote the YouTube MetaData to next Step
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
@@ -95,15 +100,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the prompts once done
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
 - [ ] Improve on prompt suggester
-- [ ] Integrate with twitter
-  - [ ] Create General Tweet
-  - [ ] Post tweet
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Add Playlist details to YouTube Video DB
-- [ ] Find trending topic in a niche (YouTube, Google)
-  - [ ] YouTube Idea suggester
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Fix TODOs and dead code
 - [ ] Set Up GitHub Cron Job

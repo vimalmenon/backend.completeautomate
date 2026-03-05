@@ -36,6 +36,7 @@ class TaskSchedulerServices:
         task_manager = TaskManager()
         tasks = task_manager.get_active_tasks()
         for task in tasks:
+            task.payload.get("is_agent")
             job_class = self.job.get(task.job_type, NoJob)
             status, failed_count = job_class(task).execute()
             task.status = status
@@ -47,3 +48,6 @@ class TaskSchedulerServices:
 
         task_manager.promote_new_task()
         task_manager.cleanup_tasks()
+
+    def __run_in_parallel(self):
+        pass

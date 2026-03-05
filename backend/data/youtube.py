@@ -354,11 +354,10 @@ class YouTubeJobData:
 @dataclass
 class YouTubeVideoSummarizeJobData:
     ref_id: str
+    is_agent = True
 
     def to_json(self) -> dict:
-        return {
-            "ref_id": self.ref_id,
-        }
+        return {"ref_id": self.ref_id, "is_agent": self.is_agent}
 
     @classmethod
     def to_cls(cls, data) -> Self:
