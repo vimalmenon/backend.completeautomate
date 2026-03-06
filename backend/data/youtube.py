@@ -463,3 +463,28 @@ class YouTubeVideoMetadataJobData:
         from backend.database.platform.platform_database import PlatformDB
 
         return PlatformDB().get_data(self.ref_id)
+
+
+@dataclass
+class YouTubeVideoThumbnailPromptSuggesterJobData:
+    task_id: UUID
+    ref_id: str
+
+    @classmethod
+    def to_cls(cls, data: dict) -> Self:
+        return cls(
+            task_id=UUID(data["task_id"]),
+            ref_id=data["ref_id"],
+        )
+
+    def to_json(self) -> dict:
+        return {
+            "task_id": str(self.task_id),
+            "ref_id": self.ref_id,
+        }
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)

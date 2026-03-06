@@ -24,6 +24,7 @@ from backend.data.youtube import (
     YouTubeVideoMetadataDBData,
     YouTubeVideoMetadataJobData,
     YouTubeVideoSummarizeJobData,
+    YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 
 __all__ = [
@@ -51,4 +52,5 @@ __all__ = [
     "PlatformYouTubeVideoDBData",
     "PromptVersionDBData",
     "PromptSuggesterDBData",
+    "YouTubeVideoThumbnailPromptSuggesterJobData",
 ]

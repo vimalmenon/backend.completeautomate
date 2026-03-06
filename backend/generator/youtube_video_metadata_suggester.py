@@ -8,7 +8,7 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
-from backend.enum import JobStatusEnum, PromptTaskEnum, TaskStatusEnum
+from backend.enum import JobEnum, JobStatusEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
@@ -106,7 +106,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
                 title=promoted_videos[0].title,
                 description=promoted_videos[0].description,
                 tags=promoted_videos[0].tags,
-                created_by=self.task.created_by,
+                created_by=JobEnum.YouTubeVideoMetadataSuggester,
             )
             task_manager.add_task(task)
             return TaskStatusEnum.COMPLETED

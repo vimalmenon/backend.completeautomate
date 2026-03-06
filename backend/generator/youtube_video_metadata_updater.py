@@ -1,7 +1,8 @@
 from backend.data import TaskData, YouTubeVideoMetadataJobData
-from backend.enum import TaskStatusEnum
+from backend.enum import JobEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
+from backend.manager import TaskManager
 
 
 class YouTubeVideoMetadataUpdater(BaseGenerator):
@@ -17,4 +18,10 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
             description=self.job_data.description,
             tags=self.job_data.tags,
         )
+        task_manager = TaskManager(self.task)
+        next_task = task_manager.create_youtube_summarize_task(
+            ref_id=self.job_data.ref_id,
+            created_by=JobEnum.YouTubeVideoMetadataUpdater,
+        )
+        task_manager.add_task(next_task)
         return TaskStatusEnum.COMPLETED
