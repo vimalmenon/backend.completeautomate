@@ -55,7 +55,9 @@ class TaskSchedulerServices:
         task_manager = TaskManager()
         logger.debug("Fetching one-time task by task_id=%s", task_id)
         task = task_manager.get_task_by_id(task_id)
-        logger.info("Executing one-time task: id=%s job_type=%s", task.id, task.job_type)
+        logger.info(
+            "Executing one-time task: id=%s job_type=%s", task.id, task.job_type
+        )
         self.__run_task(task)
 
     def __run_task(self, task: TaskData) -> None:
