@@ -87,6 +87,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] YouTube Metadata suggester need one more Stage For Correction or (put in pending stage for correction)
+  - [ ] Promote the YouTube MetaData to Next Step
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google Trends
   - [ ] YouTube Idea suggester
@@ -94,9 +95,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Create General Tweet
   - [ ] Post tweet
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
-- [ ] Promote the YouTube MetaData to next Step
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
-- [ ] Ability to run the agent tasks in parallel
+- [ ] Ability to run the Agent tasks in parallel
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
@@ -105,7 +105,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve on prompt suggester
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Fix transcripts for grammar and naming errors
-- [ ] Fix TODOs and dead code
+- [ ] Fix TODOs and Dead code
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and variable
 - [ ] Agent to analyze result
@@ -117,12 +117,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [x] Mock AWS Dynamo DB Data
+  - [x] Mock AWS S3 data
+  - [x] Task Create or Edit
   - [ ] Page for Youtube Channel
   - [ ] Need to add UI for Youtube Channel
-  - [ ] Run `poetry run App` from UI
-  - [ ] Mock AWS Dynamo DB Data
-  - [ ] Mock AWS S3 data
-  - [ ] Task Create or Edit
+  - [ ] Run `poetry run app` from UI
   - [ ] Analytics dashboard
   - [ ] Ability to perform all tasks from GUI
 
