@@ -36,19 +36,19 @@ class YouTubeVideoSummarizer(BaseGenerator):
                     f"No transcript found for video: {self.job_data.platform.video_id}"
                 )
                 return TaskStatusEnum.COMPLETED
-            if result:
-                logger.info("Processing transcript")
-                text_transcript = self.__convert_transcript_to_text(result)
-                logger.info("Summarizing transcript")
-                summarize = self.__summarize_transcript(text_transcript)
-                logger.info(
-                    f"Successfully generated transcript and summary for video: {self.job_data.platform.video_id}"
-                )
-                data = YouTubeTranscriptDBData(
-                    transcript=text_transcript, summarize=summarize
-                )
-                self.__update_db_with_transcript(data)
-                self.__create_analysis_task()
+            logger.info("Processing transcript")
+            text_transcript = self.__convert_transcript_to_text(result)
+            logger.info("Summarizing transcript")
+            summarize = self.__summarize_transcript(text_transcript)
+            logger.info(
+                f"Successfully generated transcript and summary for video: {self.job_data.platform.video_id}"
+            )
+            data = YouTubeTranscriptDBData(
+                transcript=text_transcript, summarize=summarize
+            )
+            self.__update_db_with_transcript(data)
+            self.__create_analysis_task()
+            return TaskStatusEnum.COMPLETED
         except Exception as e:
             logger.error(
                 f"Error processing transcript for video: {self.job_data.platform.video_id}, error: {str(e)}"
@@ -56,7 +56,6 @@ class YouTubeVideoSummarizer(BaseGenerator):
             raise AppException(
                 f"Error processing transcript for video: {self.job_data.platform.video_id}, error: {str(e)}"
             )
-        return TaskStatusEnum.COMPLETED
 
     def __convert_transcript_to_text(self, result) -> str:
         logger.debug("Converting raw transcript data to text")

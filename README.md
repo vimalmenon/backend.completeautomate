@@ -117,9 +117,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] Mock AWS Dynamo DB Data
-  - [x] Mock AWS S3 data
-  - [x] Task Create or Edit
   - [ ] Page for Youtube Channel
   - [ ] Need to add UI for Youtube Channel
   - [ ] Run `poetry run app` from UI

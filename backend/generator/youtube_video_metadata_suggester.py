@@ -2,6 +2,7 @@ import logging
 
 from backend.data import (
     TaskData,
+    YouTubeVideoDBData,
     YouTubeVideoDetailDBData,
     YouTubeVideoMetadataDBData,
     YouTubeVideoSummarizeJobData,
@@ -21,7 +22,8 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
     def __init__(self, task: TaskData):
         super().__init__(task)
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
-        self.video_db = YouTubeVideoDB(self.job_data.platform.channel_id)
+        self.channel_id = self.job_data.platform.channel_id
+        self.video_db = YouTubeVideoDB(self.channel_id)
         self.analysis_db = YouTubeVideoMetadataSuggesterDB()
         logger.info("Initializing YouTubeVideoAnalyzerGenerator")
 
@@ -39,7 +41,16 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
                 "Transcript not found for video_id: %s", self.job_data.platform.video_id
             )
             return TaskStatusEnum.COMPLETED
+        suggested_video = self.analysis_db.fetch_suggestion(
+            self.job_data.platform.channel_id, self.job_data.platform.video_id
+        )
+        if not suggested_video:
+            return self.__create_metadata_suggestion(video_db)
+        return self.__check_suggested_video(suggested_video)
 
+    def __create_metadata_suggestion(
+        self, video_db: YouTubeVideoDBData
+    ) -> TaskStatusEnum:
         logger.info("Analyzing video data for task id: %s", self.task.id)
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoAnalysis,
@@ -71,6 +82,17 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             task_id=self.task.id,
             video_details=video_details,
         )
-        self.analysis_db.add_data(data)
-        logger.info("Successfully analyzed video data for task id: %s", self.task.id)
-        return TaskStatusEnum.REVIEW
+        return self.analysis_db.add_data(data)
+
+    def __check_suggested_video(
+        self, suggested_video: YouTubeVideoMetadataDBData
+    ) -> TaskStatusEnum:
+        if suggested_video.comment:
+            return TaskStatusEnum.REVIEW
+        promoted_videos = [
+            detail.status == JobStatusEnum.PROMOTE
+            for detail in suggested_video.video_details
+        ]
+        if len(promoted_videos) == 0:
+            return TaskStatusEnum.REVIEW
+        raise AppException("There is app exception")
