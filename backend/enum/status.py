@@ -3,8 +3,8 @@ from enum import Enum
 
 class TaskStatusEnum(str, Enum):
     NEW = "NEW"
-    PENDING = "PENDING"
     IN_PROGRESS = "IN_PROGRESS"
+    PENDING = "PENDING"
     REVIEW = "REVIEW"
     APPROVED = "APPROVED"
     COMPLETED = "COMPLETED"
@@ -12,7 +12,7 @@ class TaskStatusEnum(str, Enum):
     FAILED = "FAILED"
 
 
-# Explanation of the status:
+# Explanation of the status of Task:
 # NEW: Task will be IN_PROGRESS in next cycle
 # PENDING: Task is pending and waiting to for other process to complete
 # REVIEW: Task is under review by owner or agent
@@ -26,6 +26,7 @@ class TaskStatusEnum(str, Enum):
 # NEW -> IN_PROGRESS -> PENDING -> (Wait for other process to be over) -> COMPLETED
 # NEW -> IN_PROGRESS -> REVIEW -> (Wait for Owner to review) -> COMPLETED
 # NEW -> IN_PROGRESS -> FAILED -> (Process goes on)
+
 
 class JobStatusEnum(str, Enum):
     NEW = "NEW"
