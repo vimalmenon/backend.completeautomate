@@ -89,8 +89,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] YouTube metadata suggester need one more stage For Correction or (put in pending stage for correction)
-  - [ ] Promote the YouTube metadata to next step
+- [x] YouTube metadata suggester need one more stage For Correction or (put in pending stage for correction)
+  - [x] Promote the YouTube metadata to next step
+- [ ] YouTube Metadata updater should create Image Prompt Generator
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube idea suggester

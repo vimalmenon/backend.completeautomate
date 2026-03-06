@@ -10,6 +10,7 @@ from backend.generator import (
     YouTubeVideoMetadataSuggester,
     YouTubeVideoMetadataUpdater,
     YouTubeVideoSummarizer,
+    YoutubeVideoThumbnailImagePromptSuggester,
 )
 from backend.jobs.base_job import BaseJob
 
@@ -32,6 +33,11 @@ class YouTubeJob(BaseJob):
                 return (YouTubeVideoMetadataSuggester(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
                 return (YouTubeVideoMetadataUpdater(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
+                return (
+                    YoutubeVideoThumbnailImagePromptSuggester(self.task).generate(),
+                    0,
+                )
             raise AppException(f"Unsupported job type: {self.task.job_type.value}")
         except Exception:
             error_msg = traceback.format_exc()
