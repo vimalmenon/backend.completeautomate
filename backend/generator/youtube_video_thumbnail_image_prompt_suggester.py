@@ -41,7 +41,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
             task_id=str(self.task.id),
             data={
-                "image_type": self.job_data.image_type,
+                "image_type": self.job_data,
             },
         )
         agent = GeneralAgent(
@@ -60,10 +60,8 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         ]
         data = ImagePromptDBData(
             id=uuid4(),
-            prompt=self.job_data.description,
             ref_id=self.job_data.ref_id,
             task_id=self.job_data.task_id,
-            image_type=self.job_data.image_type,
             status=JobStatusEnum.REVIEW,
             prompts=prompt_response,
         )

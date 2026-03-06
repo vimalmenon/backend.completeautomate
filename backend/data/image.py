@@ -104,10 +104,8 @@ class ImagePromptJobData:
 @dataclass
 class ImagePromptDBData:
     id: UUID
-    prompt: str
     task_id: UUID
     ref_id: str
-    image_type: ImageTypeEnum
     comment: str | None = None
     status: JobStatusEnum = JobStatusEnum.NEW
     prompts: list[PromptData] = field(default_factory=list)
@@ -115,12 +113,10 @@ class ImagePromptDBData:
     def to_json(self) -> dict:
         return {
             "id": str(self.id),
-            "prompt": self.prompt,
             "task_id": str(self.task_id),
             "comment": self.comment,
             "status": self.status.value,
             "prompts": [pr.to_json() for pr in self.prompts],
-            "image_type": self.image_type.value,
             "ref_id": self.ref_id,
         }
 
@@ -128,11 +124,9 @@ class ImagePromptDBData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             id=UUID(data["id"]),
-            prompt=data["prompt"],
             task_id=UUID(data["task_id"]),
             comment=data.get("comment"),
             prompts=[PromptData.to_cls(pr) for pr in data.get("prompts", [])],
-            image_type=ImageTypeEnum(data["image_type"]),
             ref_id=data["ref_id"],
         )
 

@@ -61,10 +61,8 @@ class ImagePromptGenerator(BaseGenerator):
 
             data = ImagePromptDBData(
                 id=uuid4(),
-                prompt=self.job_data.description,
                 ref_id=self.job_data.ref_id,
                 task_id=self.job_data.task_id,
-                image_type=self.job_data.image_type,
                 status=JobStatusEnum.REVIEW,
                 prompts=prompt_response,
             )
