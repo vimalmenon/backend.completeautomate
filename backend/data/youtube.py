@@ -433,7 +433,7 @@ class YouTubeVideoMetadataDBData:
 
 @dataclass
 class YouTubeVideoMetadataJobData:
-    task_id: str
+    task_id: UUID
     ref_id: str
     title: str
     description: str
@@ -443,7 +443,7 @@ class YouTubeVideoMetadataJobData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
-            task_id=data["task_id"],
+            task_id=UUID(data["task_id"]),
             ref_id=data["ref_id"],
             title=data["title"],
             description=data["description"],
@@ -453,7 +453,7 @@ class YouTubeVideoMetadataJobData:
 
     def to_json(self) -> dict:
         return {
-            "task_id": self.task_id,
+            "task_id": str(self.task_id),
             "ref_id": self.ref_id,
             "title": self.title,
             "description": self.description,

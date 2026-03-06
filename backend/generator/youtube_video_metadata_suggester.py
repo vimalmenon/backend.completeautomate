@@ -13,6 +13,7 @@ from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
 from backend.integration.agent.general_agent import GeneralAgent
+from backend.manager import TaskManager
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -85,7 +86,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
         )
         self.analysis_db.add_data(data)
         logger.info("Successfully analyzed video data for task id: %s", self.task.id)
-        return TaskStatusEnum.REVIEW
+        return TaskStatusEnum.COMPLETED
 
     def __check_suggested_video(
         self, suggested_video: YouTubeVideoMetadataDBData
@@ -94,10 +95,19 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             # TODO Need Agent to review
             return TaskStatusEnum.REVIEW
         promoted_videos = [
-            detail.status == JobStatusEnum.PROMOTE
+            detail
             for detail in suggested_video.video_details
+            if detail.status == JobStatusEnum.PROMOTE
         ]
         if len(promoted_videos) == 1:
-            # TODO Move the job to task
-            return TaskStatusEnum.REVIEW
+            task_manager = TaskManager(self.task)
+            task = task_manager.create_youtube_metadata_updater_task(
+                ref_id=self.job_data.ref_id,
+                title=promoted_videos[0].title,
+                description=promoted_videos[0].description,
+                tags=promoted_videos[0].tags,
+                created_by=self.task.created_by,
+            )
+            task_manager.add_task(task)
+            return TaskStatusEnum.COMPLETED
         raise AppException("There is app exception")

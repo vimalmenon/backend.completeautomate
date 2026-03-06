@@ -5,10 +5,11 @@ from uuid import uuid4
 from backend.data import (
     TaskData,
     YouTubeJobData,
+    YouTubeVideoMetadataJobData,
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import TaskDB
-from backend.enum import JobEnum, TaskStatusEnum
+from backend.enum import JobEnum, JobStatusEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 
 logger = getLogger(__name__)
@@ -97,6 +98,39 @@ class TaskManager:
         return TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeVideoSummarizer,
+            payload=job.to_json(),
+            created_by=created_by,
+            created_at=datetime.now(),
+            status=TaskStatusEnum.IN_PROGRESS,
+            trail=self.task.trail + [self.task.id],
+        )
+
+    def create_youtube_metadata_updater_task(
+        self,
+        ref_id: str,
+        title: str,
+        description: str,
+        tags: list[str],
+        created_by: JobEnum,
+    ) -> TaskData:
+        if not self.task:
+            logger.warning(
+                "Cannot create YouTube metadata updater task: source task missing"
+            )
+            raise AppException(self.TASK_NOT_FOUND)
+        logger.debug(f"Creating YouTube metadata updater task for ref_id={ref_id}")
+        task_id = uuid4()
+        job = YouTubeVideoMetadataJobData(
+            task_id=task_id,
+            ref_id=ref_id,
+            title=title,
+            description=description,
+            tags=tags,
+            status=JobStatusEnum.REVIEW,
+        )
+        return TaskData(
+            id=task_id,
+            job_type=JobEnum.YouTubeVideoMetadataUpdater,
             payload=job.to_json(),
             created_by=created_by,
             created_at=datetime.now(),
