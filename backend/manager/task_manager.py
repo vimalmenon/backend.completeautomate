@@ -126,7 +126,7 @@ class TaskManager:
             title=title,
             description=description,
             tags=tags,
-            status=JobStatusEnum.REVIEW,
+            status=JobStatusEnum.IN_PROGRESS,
         )
         return TaskData(
             id=task_id,
@@ -134,7 +134,7 @@ class TaskManager:
             payload=job.to_json(),
             created_by=created_by,
             created_at=datetime.now(),
-            status=TaskStatusEnum.IN_PROGRESS,
+            status=TaskStatusEnum.REVIEW,
             trail=self.task.trail + [self.task.id],
         )
 
