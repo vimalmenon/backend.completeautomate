@@ -91,6 +91,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [x] YouTube metadata suggester need one more stage For Correction or (put in pending stage for correction)
   - [x] Promote the YouTube metadata to next step
+- [ ] Run only one task
+- [ ] Grok is not working (Need to fix)
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks

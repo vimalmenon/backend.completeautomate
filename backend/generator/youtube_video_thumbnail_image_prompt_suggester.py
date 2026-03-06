@@ -27,9 +27,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
 
     def __init__(self, task):
         super().__init__(task)
-        self.job_data = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
-            {**task.payload, "task_id": task.id}
-        )
+        self.job_data = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(task.payload)
         self.db_manager = ImagePromptDB()
         self.video_manager = YouTubeVideoManager()
         logger.info(
@@ -70,6 +68,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_data.title,
                 description=video_data.description,
+                video_summary=video_data.transcript.summarize,
             ).to_json(),
         )
         agent = GeneralAgent(

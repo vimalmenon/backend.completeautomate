@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 
+from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.jobs import (
     BaseJob,
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class TaskSchedulerServices:
     def __init__(self):
+        self.task_manager = TaskManager()
         StartUpManager().start()
         self.job: dict[JobEnum, type[BaseJob]] = {
             JobEnum.YouTubeChannel: YouTubeJob,
@@ -33,24 +35,33 @@ class TaskSchedulerServices:
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 
-    def start(self) -> None:
-        task_manager = TaskManager()
-        tasks = task_manager.get_active_tasks()
+    def start(self, task_id: str = None) -> None:
+        if task_id:
+            return self.__run_task_by_id(task_id)
+        tasks = self.task_manager.get_active_tasks()
         parallel_tasks = []
         for task in tasks:
             if task.payload.get("is_agent"):
                 parallel_tasks.append(task)
-            job_class = self.job.get(task.job_type, NoJob)
-            status, failed_count = job_class(task).execute()
-            task.status = status
-            task.failed_count = failed_count
-            if status == TaskStatusEnum.COMPLETED:
-                task.completed_at = datetime.now()
-            logger.info("Task %s executed with status: %s", task.id, status)
-            task_manager.update_task(task)
+            self.__run_task(task)
         self.__run_in_parallel(parallel_tasks)
-        task_manager.promote_new_task()
-        task_manager.cleanup_tasks()
+        self.task_manager.promote_new_task()
+        self.task_manager.cleanup_tasks()
+
+    def __run_task_by_id(self, task_id: str) -> None:
+        task_manager = TaskManager()
+        task = task_manager.get_task_by_id(task_id)
+        self.__run_task(task)
+
+    def __run_task(self, task: TaskData) -> None:
+        job_class = self.job.get(task.job_type, NoJob)
+        status, failed_count = job_class(task).execute()
+        task.status = status
+        task.failed_count = failed_count
+        if status == TaskStatusEnum.COMPLETED:
+            task.completed_at = datetime.now()
+        logger.info("Task %s executed with status: %s", task.id, status)
+        self.task_manager.update_task(task)
 
     def __run_in_parallel(self, parallel_tasks: list):
         # TODO Need to implement

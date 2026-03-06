@@ -93,9 +93,11 @@ class PromptSuggesterDBData:
 class YouTubeThumbnailImageGenerationPromptData:
     title: str
     description: str
+    video_summary: str
 
     def to_json(self) -> dict:
         return {
             "title": self.title,
             "description": self.description,
+            "video_summary": self.video_summary,
         }

@@ -39,6 +39,14 @@ class TaskManager:
         logger.debug(f"Fetched active tasks count: {len(tasks)}")
         return tasks
 
+    def get_task_by_id(self, task_id: str) -> TaskData:
+        logger.debug(f"Fetching task by id: {task_id}")
+        task = TaskDB().get_task_by_id(task_id)
+        if not task:
+            logger.warning(f"Task with id {task_id} not found")
+            raise AppException(self.TASK_NOT_FOUND)
+        return task
+
     def create_youtube_analysis_task(
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:
