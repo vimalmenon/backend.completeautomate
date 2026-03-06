@@ -82,17 +82,21 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             task_id=self.task.id,
             video_details=video_details,
         )
-        return self.analysis_db.add_data(data)
+        self.analysis_db.add_data(data)
+        logger.info("Successfully analyzed video data for task id: %s", self.task.id)
+        return TaskStatusEnum.REVIEW
 
     def __check_suggested_video(
         self, suggested_video: YouTubeVideoMetadataDBData
     ) -> TaskStatusEnum:
         if suggested_video.comment:
+            # TODO Need Agent to review
             return TaskStatusEnum.REVIEW
         promoted_videos = [
             detail.status == JobStatusEnum.PROMOTE
             for detail in suggested_video.video_details
         ]
-        if len(promoted_videos) == 0:
+        if len(promoted_videos) == 1:
+            # TODO Move the job to task
             return TaskStatusEnum.REVIEW
         raise AppException("There is app exception")
