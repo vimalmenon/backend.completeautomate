@@ -89,9 +89,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] YouTube Metadata suggester need one more Stage For Correction or (put in pending stage for correction)
   - [ ] Promote the YouTube MetaData to Next Step
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
-  - [ ] Use Google Trends
-  - [ ] YouTube Idea suggester
-- [ ] Integrate with twitter
+  - [ ] Use Google trends
+  - [ ] YouTube idea suggester
+- [ ] Twitter Integrate
   - [ ] Create General Tweet
   - [ ] Post tweet
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
