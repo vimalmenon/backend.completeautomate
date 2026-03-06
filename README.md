@@ -91,7 +91,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [x] YouTube metadata suggester need one more stage For Correction or (put in pending stage for correction)
   - [x] Promote the YouTube metadata to next step
-- [ ] YouTube Metadata updater should create Image Prompt Generator
+- [ ] Test if it's able to generate good image prompts with multiple options
+  - [ ] Test all the prompts once done
+  - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
+  - [ ] YouTube Metadata updater should create Image Prompt Generator
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube idea suggester
@@ -100,11 +103,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Post tweets
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
-- [ ] Ability to run the Agent tasks in parallel
-- [ ] Create Short Videos
-- [ ] Test if it's able to generate good image prompts with multiple options
-  - [ ] Test all the prompts once done
-  - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
+- [ ] Ability to run the agent tasks in parallel
+- [ ] Create short videos
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
 - [ ] Improve on prompt suggester
