@@ -19,7 +19,7 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
             tags=self.job_data.tags,
         )
         task_manager = TaskManager(self.task)
-        next_task = task_manager.create_youtube_summarize_task(
+        next_task = task_manager.create_youtube_thumbnail_prompt_suggester_task(
             ref_id=self.job_data.ref_id,
             created_by=JobEnum.YouTubeVideoMetadataUpdater,
         )
