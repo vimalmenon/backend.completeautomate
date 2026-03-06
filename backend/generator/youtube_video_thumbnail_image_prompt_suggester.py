@@ -70,11 +70,13 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         self.db_manager.save_to_db(data)
         return TaskStatusEnum.REVIEW
 
-    def __update_image_prompt_suggestion(self, prompts) -> TaskStatusEnum:
+    def __update_image_prompt_suggestion(
+        self, prompts: list[ImagePromptDBData]
+    ) -> TaskStatusEnum:
         if len(prompts) == 1:
-            prompt = prompts[0]
-            prompt.prompts = self.__filter_prompt_responses(prompt.prompts)
-            self.db_manager.update_data(prompt)
+            # prompt = prompts[0]
+            # prompt.prompts = self.__filter_prompt_responses(prompt.prompts)
+            # self.db_manager.update_data(prompt)
             return TaskStatusEnum.REVIEW
 
         raise AppException("There is app exception")
