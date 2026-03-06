@@ -10,7 +10,12 @@ from backend.data.platform import (
     PlatformYouTubeChannelDBData,
     PlatformYouTubeVideoDBData,
 )
-from backend.data.prompt import PromptDBData, PromptSuggesterDBData, PromptVersionDBData
+from backend.data.prompt import (
+    PromptDBData,
+    PromptSuggesterDBData,
+    PromptVersionDBData,
+    YouTubeThumbnailImageGenerationPromptData,
+)
 from backend.data.s3 import S3Data
 from backend.data.task import TaskData
 from backend.data.team import GraphicDesignerClsData, SocialMediaManagerData
@@ -53,4 +58,5 @@ __all__ = [
     "PromptVersionDBData",
     "PromptSuggesterDBData",
     "YouTubeVideoThumbnailPromptSuggesterJobData",
+    "YouTubeThumbnailImageGenerationPromptData",
 ]

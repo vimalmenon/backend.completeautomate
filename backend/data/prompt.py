@@ -87,3 +87,15 @@ class PromptSuggesterDBData:
                 for version in data.get("versions", [])
             ],
         )
+
+
+@dataclass
+class YouTubeThumbnailImageGenerationPromptData:
+    title: str
+    description: str
+
+    def to_json(self) -> dict:
+        return {
+            "title": self.title,
+            "description": self.description,
+        }

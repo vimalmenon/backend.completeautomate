@@ -4,6 +4,7 @@ from uuid import uuid4
 from backend.data import (
     ImagePromptDBData,
     PromptData,
+    YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 from backend.database.image.image_prompt_db import ImagePromptDB
@@ -16,6 +17,7 @@ from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import ImagePromptsListRequest
 from backend.integration.agent.general_agent import GeneralAgent
+from backend.manager import YouTubeVideoManager
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -29,6 +31,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             {**task.payload, "task_id": task.id}
         )
         self.db_manager = ImagePromptDB()
+        self.video_manager = YouTubeVideoManager()
         logger.info(
             "Initialized thumbnail image prompt suggester for task_id=%s ref_id=%s",
             self.job_data.task_id,
@@ -51,12 +54,23 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         logger.info(
             "Creating new thumbnail prompt suggestions for task_id=%s", self.task.id
         )
+        video_data = self.video_manager.get_video_by_id(
+            self.job_data.platform.channel_id, self.job_data.platform.video_id
+        )
+        if not video_data:
+            logger.error(
+                "Video data not found for channel_id=%s video_id=%s",
+                self.job_data.platform.channel_id,
+                self.job_data.platform.video_id,
+            )
+            raise AppException("Video data not found")
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
             task_id=str(self.task.id),
-            data={
-                "image_type": self.job_data,
-            },
+            data=YouTubeThumbnailImageGenerationPromptData(
+                title=video_data.title,
+                description=video_data.description,
+            ).to_json(),
         )
         agent = GeneralAgent(
             service,
@@ -113,3 +127,8 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             self.task.id,
         )
         raise AppException("There is app exception")
+
+    # def __fetch_video_details(self):
+    #     video_db = YouTubeVideoDB()
+    #     video_details = video_db.
+    #     return video_details
