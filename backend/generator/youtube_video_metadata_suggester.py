@@ -52,9 +52,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
         self, video_db: YouTubeVideoDBData
     ) -> TaskStatusEnum:
         logger.info("Analyzing video data for task id: %s", self.task.id)
-        if not video_db.transcript:
-            logger.warning("Transcript is None for task id: %s", self.task.id)
-            return TaskStatusEnum.COMPLETED
+        assert video_db.transcript is not None, "Transcript should not be None"
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoAnalysis,
             task_id=str(self.task.id),
