@@ -86,7 +86,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [x] Test if it's able to generate YouTube Title, Description and Tags with multiple options
 - [ ] YouTube Metadata suggester need one more Stage For Correction or (put in pending stage for correction)
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google Trends
@@ -118,9 +117,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] YouTube stats graphs
-  - [x] Need to add Graph for stats for YouTube
-  - [x] Show Graph next to Edit button to show Graph
   - [ ] Page for Youtube Channel
   - [ ] Need to add UI for Youtube Channel
   - [ ] Run `poetry run App` from UI
