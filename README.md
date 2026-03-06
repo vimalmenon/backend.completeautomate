@@ -35,11 +35,12 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - Offline mode support with Moto-mocked AWS services
 - Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
 - Tasks dashboard: add task form, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
-- Videos dashboard: newest-first by published date, expandable rows, inline editing for title/description/transcript/summary
+- Videos dashboard: newest-first by published date, expandable rows, inline editing for title/description/transcript/summary, interactive Plotly stats charts (views/likes/comments over time)
 - Prompt dashboard: expandable prompt table with task/role/model metadata
 - Comprehensive logging across managers and services for debugging and monitoring
 - Test suite with unit and integration markers
 - Cache invalidation support for platform data models
+- Interactive data visualization with Plotly for YouTube video analytics
 
 ## Project Health
 
@@ -54,6 +55,8 @@ Current internal score: **7.5/10**
 - Comprehensive logging in manager layer for operational visibility
 - Lazy import pattern prevents circular dependencies in data models
 - Cache invalidation methods for platform data freshness
+- Type-safe code with mypy validation and assert-based type guards
+- Plotly integration for rich data visualization in YouTube analytics
 
 ### Improvement areas
 
