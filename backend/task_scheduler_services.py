@@ -35,9 +35,12 @@ class TaskSchedulerServices:
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 
-    def start(self, task_id: str = None) -> None:
+    def start(self, task_id: str | None = None) -> None:
         if task_id:
-            return self.__run_task_by_id(task_id)
+            logger.info("Starting one-time task execution for task_id=%s", task_id)
+            self.__run_task_by_id(task_id)
+            logger.info("Completed one-time task execution for task_id=%s", task_id)
+            return
         tasks = self.task_manager.get_active_tasks()
         parallel_tasks = []
         for task in tasks:
@@ -50,7 +53,9 @@ class TaskSchedulerServices:
 
     def __run_task_by_id(self, task_id: str) -> None:
         task_manager = TaskManager()
+        logger.debug("Fetching one-time task by task_id=%s", task_id)
         task = task_manager.get_task_by_id(task_id)
+        logger.info("Executing one-time task: id=%s job_type=%s", task.id, task.job_type)
         self.__run_task(task)
 
     def __run_task(self, task: TaskData) -> None:

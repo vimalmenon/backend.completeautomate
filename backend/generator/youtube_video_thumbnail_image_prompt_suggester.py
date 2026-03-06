@@ -62,6 +62,13 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
                 self.job_data.platform.video_id,
             )
             raise AppException("Video data not found")
+        if not video_data.transcript:
+            logger.error(
+                "Transcript not found for channel_id=%s video_id=%s",
+                self.job_data.platform.channel_id,
+                self.job_data.platform.video_id,
+            )
+            raise AppException("Transcript not found")
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
             task_id=str(self.task.id),

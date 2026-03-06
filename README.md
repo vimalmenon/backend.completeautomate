@@ -277,6 +277,14 @@ Notes:
 poetry run app
 ```
 
+Run a single task by ID (one-time execution):
+
+```sh
+poetry run app --task-id <task_id>
+```
+
+When `--task-id` is provided, the scheduler executes only that task and exits.
+
 ### 4) Run the dashboard
 
 ```sh
