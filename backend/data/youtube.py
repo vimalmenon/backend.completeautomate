@@ -438,7 +438,6 @@ class YouTubeVideoMetadataJobData:
     title: str
     description: str
     tags: list[str]
-    status: JobStatusEnum = JobStatusEnum.IN_PROGRESS
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
@@ -448,7 +447,6 @@ class YouTubeVideoMetadataJobData:
             title=data["title"],
             description=data["description"],
             tags=data["tags"],
-            status=JobStatusEnum(data["status"]),
         )
 
     def to_json(self) -> dict:
@@ -458,7 +456,6 @@ class YouTubeVideoMetadataJobData:
             "title": self.title,
             "description": self.description,
             "tags": self.tags,
-            "status": self.status.value,
         }
 
     @cached_property

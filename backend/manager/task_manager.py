@@ -9,7 +9,7 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import TaskDB
-from backend.enum import JobEnum, JobStatusEnum, TaskStatusEnum
+from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 
 logger = getLogger(__name__)
@@ -126,7 +126,6 @@ class TaskManager:
             title=title,
             description=description,
             tags=tags,
-            status=JobStatusEnum.IN_PROGRESS,
         )
         return TaskData(
             id=task_id,
