@@ -86,17 +86,18 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] YouTube Metadata suggester need one more Stage For Correction or (put in pending stage for correction)
-  - [ ] Promote the YouTube MetaData to Next Step
+- [ ] YouTube metadata suggester need one more stage For Correction or (put in pending stage for correction)
+  - [ ] Promote the YouTube metadata to next Step
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube idea suggester
 - [ ] Twitter Integrate
-  - [ ] Create General Tweet
-  - [ ] Post tweet
+  - [ ] Create Tweet for YouTube Post
+  - [ ] Post tweets
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the Agent tasks in parallel
+- [ ] Create Short Videos
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
@@ -130,6 +131,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Analyzer (Analysis the data)
   - Generator (Generate Image / Video Sound)
   - Add Post to TikTok
+  - Add Instagram
 
 ### YouTube Workflow Pipeline
 
