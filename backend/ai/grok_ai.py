@@ -7,13 +7,13 @@ from backend.enum.ai import AICreativityLevelEnum
 
 
 class ModelEnum(Enum):
-    GROK_4 = "grok-4"
+    GROK_3 = "grok-3"
 
 
 class GrokAI:
     def __init__(
         self,
-        model: ModelEnum = ModelEnum.GROK_4,
+        model: ModelEnum = ModelEnum.GROK_3,
         creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW,
     ):
         self.llm = ChatXAI(
