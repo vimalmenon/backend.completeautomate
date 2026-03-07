@@ -33,7 +33,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
     # LLM Provider Keys (mock values)
     os.environ["OPENAI_API_KEY"] = "test-openai-key"
-    os.environ["GROQ_API_KEY"] = "test-groq-key"
+    os.environ["GROK_API_KEY"] = "test-grok-key"
     os.environ["DEEPSEEK_API_KEY"] = "test-deepseek-key"
     os.environ["ANTHROPIC_API_KEY"] = "test-anthropic-key"
     os.environ["OPEN_ROUTE_API_KEY"] = "test-openrouter-key"
