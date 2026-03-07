@@ -36,3 +36,18 @@ class PromptDB:
             Key(DbKeysEnum.Primary.value).eq(self.TABLE)
         )
         return [PromptDBData.to_cls(item) for item in items]
+
+    def update_prompt(self, prompt_task: PromptTaskEnum, channel: dict) -> None:
+        update_expression = []
+        expression_attribute_values = {}
+        for item, value in channel.items():
+            update_expression.append(f"{item} = :{item}")
+            expression_attribute_values[f":{item}"] = value
+        self.db_manager.update_item(
+            Key={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: prompt_task.value,
+            },
+            UpdateExpression=f"SET {', '.join(update_expression)}",
+            ExpressionAttributeValues=expression_attribute_values,
+        )

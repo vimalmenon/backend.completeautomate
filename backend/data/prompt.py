@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
-from typing import Self
+from typing import Any, Self
 
 from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum
 
@@ -37,6 +37,16 @@ class PromptDBData:
             version=data.get("version", "LATEST"),
             last_updated=datetime.fromisoformat(data["last_updated"]),
         )
+
+    def copy(self) -> Self:
+        """Create a shallow copy of this PromptDBData object."""
+        return replace(self)
+
+    def values_to_update(self, result: Self) -> dict[str, Any]:
+        updated_values: dict[str, Any] = {}
+        if self.ai != result.ai:
+            updated_values["ai"] = self.ai
+        return updated_values
 
 
 @dataclass
