@@ -154,6 +154,26 @@ def run_task_now(task_id: str) -> None:
         ui.notify("Failed to run task", type="negative")
 
 
+def show_run_task_confirmation(task_id: str) -> None:
+    """Show confirmation dialog before running a task."""
+    with ui.dialog() as dialog, ui.card().classes("w-96"):
+        ui.label("Confirm Task Execution").classes("text-h6 mb-4")
+        ui.label("Are you sure you want to run this task?").classes("mb-4")
+        
+        with ui.row().classes("w-full justify-end gap-2"):
+            ui.button(
+                "Cancel",
+                on_click=dialog.close,
+            ).props("flat")
+            ui.button(
+                "Confirm",
+                on_click=lambda: [dialog.close(), run_task_now(task_id)],
+                color="primary",
+            )
+    
+    dialog.open()
+
+
 def render_add_task_form() -> None:
     job_options = [job.value for job in JobEnum]
     team_options = [team.role for team in TeamEnum]
@@ -305,7 +325,7 @@ def tasks_page():
                             ):
                                 ui.button(
                                     icon="play_arrow",
-                                    on_click=lambda current_task_id=task_id: run_task_now(
+                                    on_click=lambda current_task_id=task_id: show_run_task_confirmation(
                                         current_task_id
                                     ),
                                 ).props(
@@ -337,7 +357,7 @@ def task_detail_page(task_id: str) -> None:
                 ui.button(
                     "Run Task",
                     icon="play_arrow",
-                    on_click=lambda current_task_id=task_id: run_task_now(
+                    on_click=lambda current_task_id=task_id: show_run_task_confirmation(
                         current_task_id
                     ),
                 ).props("flat")
