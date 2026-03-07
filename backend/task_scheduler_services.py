@@ -35,11 +35,16 @@ class TaskSchedulerServices:
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 
-    def start(self, task_id: str | None = None) -> None:
+    def start(self, task_id: str | None = None, transform: bool | None = False) -> None:
         if task_id:
             logger.info("Starting one-time task execution for task_id=%s", task_id)
             self.__run_task_by_id(task_id)
             logger.info("Completed one-time task execution for task_id=%s", task_id)
+            return
+        if transform:
+            logger.info("Starting task transformation process")
+            self.task_manager.transform_tasks()
+            logger.info("Completed task transformation process")
             return
         tasks = self.task_manager.get_active_tasks()
         parallel_tasks = []

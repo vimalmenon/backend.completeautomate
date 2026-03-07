@@ -47,6 +47,9 @@ class TaskManager:
             raise AppException(self.TASK_NOT_FOUND)
         return task
 
+    def transform_tasks(self) -> None:
+        return None
+
     def create_youtube_analysis_task(
         self, ref_id: str, created_by: JobEnum
     ) -> TaskData:

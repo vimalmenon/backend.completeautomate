@@ -90,7 +90,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [x] YouTube Metadata updater should create Image Prompt Generator
-- [ ] Job data to have class name to identify it can load up
+- [x] Job data to have class name to identify which data it can load up
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
 - [ ] Need to set up Qwen  
@@ -282,6 +282,14 @@ poetry run app --task-id <task_id>
 ```
 
 When `--task-id` is provided, the scheduler executes only that task and exits.
+
+Run one-time transformation and exit:
+
+```sh
+poetry run app --transform true
+```
+
+Use `--transform true` for a one-time transformation run.
 
 ### 4) Run the dashboard
 
