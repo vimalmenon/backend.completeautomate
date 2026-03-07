@@ -117,7 +117,7 @@ def render_add_prompt_form() -> None:
                 ai_input = (
                     ui.select(
                         options=ai_options,
-                        value=AIModelEnum.Groq.value,
+                        value=AIModelEnum.Grok.value,
                         label="AI",
                     )
                     .props("outlined dense")

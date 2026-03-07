@@ -24,7 +24,7 @@ class TestAgentService:
             system_message="You are a {{ role }} assistant.",
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
-            ai=AIModelEnum.Groq,
+            ai=AIModelEnum.Grok,
             last_updated=datetime.now(),
         )
 
@@ -46,7 +46,7 @@ class TestAgentService:
             system_message="You are a content expert",
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
-            ai=AIModelEnum.Groq,
+            ai=AIModelEnum.Grok,
             last_updated=datetime.now(),
         )
 

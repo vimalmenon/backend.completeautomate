@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined, Template, TemplateError
 
-from backend.ai import DeepseekAI, GroqAI, PerplexityAI
+from backend.ai import DeepseekAI, GrokAI, PerplexityAI
 from backend.database import PromptDB
 from backend.enum import AIModelEnum, PromptTaskEnum
 from backend.exception.app_exception import AppException
@@ -29,8 +29,8 @@ class AgentService:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
         if self.prompt_data.ai == AIModelEnum.Deepseek:
             return DeepseekAI().get_model()
-        elif self.prompt_data.ai == AIModelEnum.Groq:
-            return GroqAI().get_model()
+        elif self.prompt_data.ai == AIModelEnum.Grok:
+            return GrokAI().get_model()
         elif self.prompt_data.ai == AIModelEnum.Perplexity:
             return PerplexityAI().get_model()
         else:

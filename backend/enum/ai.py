@@ -11,4 +11,4 @@ class AIModelEnum(str, Enum):
     Deepseek = "Deepseek"
     Perplexity = "Perplexity"
     QWEN = "QWEN"
-    Groq = "Groq"
+    Grok = "Grok"

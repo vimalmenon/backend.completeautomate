@@ -20,7 +20,7 @@ class Env:
     AWS_TABLE: str = os.environ["AWS_TABLE"]
     AWS_S3_BUCKET: str = os.environ["AWS_S3_BUCKET"]
     AWS_OUTPUT = "output"
-    GROQ_API_KEY: SecretStr = SecretStr(os.environ["GROQ_API_KEY"])
+    GROK_API_KEY: SecretStr = SecretStr(os.environ["GROK_API_KEY"])
     PPLX_API_KEY: SecretStr = SecretStr(os.environ["PPLX_API_KEY"])
     OPEN_ROUTE_API_KEY: SecretStr = SecretStr(os.environ["OPEN_ROUTE_API_KEY"])
     OPENAI_API_KEY: SecretStr = SecretStr(os.environ["OPENAI_API_KEY"])
