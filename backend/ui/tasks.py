@@ -6,6 +6,7 @@ from nicegui import ui
 
 from backend.data.task import TaskData
 from backend.database.task.task_db import TaskDB
+from backend.enum.image import ImageTypeEnum
 from backend.enum.job import JobEnum
 from backend.enum.status import TaskStatusEnum
 from backend.enum.team import TeamEnum
@@ -27,6 +28,119 @@ TASK_STATUS_PRIORITY = {
     TaskStatusEnum.FAILED.value: 2,
     TaskStatusEnum.IN_PROGRESS.value: 3,
     TaskStatusEnum.COMPLETED.value: 4,
+}
+
+# Job Type Payload Field Definitions
+JOB_PAYLOAD_FIELDS = {
+    JobEnum.YouTubeChannel.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "poll_frequency_in_days",
+            "label": "Poll Frequency (Days)",
+            "type": "number",
+            "required": False,
+            "default": 7,
+        },
+    ],
+    JobEnum.YouTubeVideo.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "poll_frequency_in_days",
+            "label": "Poll Frequency (Days)",
+            "type": "number",
+            "required": False,
+            "default": 7,
+        },
+    ],
+    JobEnum.YouTubeThumbnailUpdater.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "poll_frequency_in_days",
+            "label": "Poll Frequency (Days)",
+            "type": "number",
+            "required": False,
+            "default": 7,
+        },
+    ],
+    JobEnum.YouTubeVideoSummarizer.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "is_agent",
+            "label": "Is Agent",
+            "type": "checkbox",
+            "required": False,
+            "default": True,
+        },
+    ],
+    JobEnum.YouTubeVideoMetadataSuggester.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+    ],
+    JobEnum.YouTubeVideoMetadataUpdater.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+    ],
+    JobEnum.YouTubeVideoThumbnailPromptSuggester.value: [
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "is_agent",
+            "label": "Is Agent",
+            "type": "checkbox",
+            "required": False,
+            "default": True,
+        },
+    ],
+    JobEnum.ImagePrompt.value: [
+        {
+            "name": "description",
+            "label": "Description",
+            "type": "text",
+            "required": True,
+        },
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+        {
+            "name": "image_type",
+            "label": "Image Type",
+            "type": "select",
+            "required": True,
+            "options": [it.value for it in ImageTypeEnum],
+            "default": ImageTypeEnum.YouTube.value,
+        },
+    ],
+    JobEnum.ImageGenerator.value: [
+        {"name": "prompt", "label": "Prompt", "type": "textarea", "required": True},
+        {
+            "name": "name",
+            "label": "Image Name",
+            "type": "text",
+            "required": True,
+        },
+        {
+            "name": "image_type",
+            "label": "Image Type",
+            "type": "select",
+            "required": True,
+            "options": [it.value for it in ImageTypeEnum],
+            "default": ImageTypeEnum.YouTube.value,
+        },
+        {"name": "ref_id", "label": "Reference ID", "type": "text", "required": True},
+    ],
+    JobEnum.PromptSuggester.value: [
+        {
+            "name": "description",
+            "label": "Description",
+            "type": "text",
+            "required": True,
+        },
+    ],
+    JobEnum.TwitterPost.value: [
+        {
+            "name": "content",
+            "label": "Tweet Content",
+            "type": "textarea",
+            "required": True,
+        },
+    ],
+    JobEnum.OWNER.value: [],
+    JobEnum.TrendingIdeaSuggester.value: [],
 }
 
 
@@ -79,6 +193,98 @@ def update_task_status(event, current_task):
         ui.notify("Failed to update task status", type="negative")
 
 
+def build_payload_from_fields(job_type: str, field_values: dict) -> dict:
+    """Build payload dictionary from form field values."""
+    payload = {}
+    fields = JOB_PAYLOAD_FIELDS.get(job_type, [])
+    
+    for field in fields:
+        field_name = field["name"]
+        if field_name in field_values:
+            value = field_values[field_name]
+            # Handle type conversions
+            if field["type"] == "number" and value:
+                payload[field_name] = int(value) if value else field.get("default")
+            elif field["type"] == "checkbox":
+                payload[field_name] = bool(value)
+            elif value is not None and value != "":
+                payload[field_name] = value
+    
+    return payload
+
+
+def render_payload_fields(
+    job_type_select: ui.select, fields_container: ui.element
+) -> None:
+    """Dynamically render payload input fields based on selected job type."""
+    fields_container.clear()
+    job_type = job_type_select.value
+    fields = JOB_PAYLOAD_FIELDS.get(job_type, [])
+    
+    # Clear field inputs dictionary
+    if hasattr(fields_container, "_field_inputs"):
+        fields_container._field_inputs.clear()
+    
+    with fields_container:
+        if not fields:
+            ui.label("No additional fields required for this job type").classes(
+                "text-gray-500 italic"
+            )
+            return
+        
+        for field in fields:
+            field_name = field["name"]
+            field_type = field["type"]
+            label = field["label"]
+            
+            if field_type == "text":
+                input_field = (
+                    ui.input(label=label)
+                    .props("outlined dense")
+                    .classes("w-full")
+                )
+                fields_container._field_inputs[field_name] = input_field
+                
+            elif field_type == "number":
+                input_field = (
+                    ui.number(
+                        label=label,
+                        value=field.get("default", 0),
+                        min=1,
+                    )
+                    .props("outlined dense")
+                    .classes("w-full")
+                )
+                fields_container._field_inputs[field_name] = input_field
+                
+            elif field_type == "textarea":
+                input_field = (
+                    ui.textarea(label=label)
+                    .props("outlined autogrow")
+                    .classes("w-full")
+                )
+                fields_container._field_inputs[field_name] = input_field
+                
+            elif field_type == "checkbox":
+                input_field = ui.checkbox(
+                    label,
+                    value=field.get("default", False),
+                )
+                fields_container._field_inputs[field_name] = input_field
+                
+            elif field_type == "select":
+                input_field = (
+                    ui.select(
+                        options=field.get("options", []),
+                        value=field.get("default"),
+                        label=label,
+                    )
+                    .props("outlined dense")
+                    .classes("w-full")
+                )
+                fields_container._field_inputs[field_name] = input_field
+
+
 def render_task_detail_rows(task_json: dict, detail_section) -> None:
     with detail_section:
         for key, value in task_json.items():
@@ -109,19 +315,31 @@ def add_task(
     selected_job_type: str,
     selected_created_by: str,
     selected_status: str,
-    payload_text: str,
+    fields_container,
 ) -> None:
     try:
-        payload = json.loads(payload_text.strip()) if payload_text.strip() else {}
-    except json.JSONDecodeError:
-        ui.notify("Payload must be valid JSON", type="negative")
-        return
-
-    if not isinstance(payload, dict):
-        ui.notify("Payload must be a JSON object", type="negative")
-        return
-
-    try:
+        # Build payload from dynamic fields
+        field_values = {}
+        if hasattr(fields_container, "_field_inputs") and fields_container._field_inputs:
+            for field_name, field_input in fields_container._field_inputs.items():
+                try:
+                    field_values[field_name] = field_input.value
+                except AttributeError:
+                    # Skip fields that don't have a value attribute
+                    pass
+        
+        payload = build_payload_from_fields(selected_job_type, field_values)
+        
+        # Validate required fields
+        fields = JOB_PAYLOAD_FIELDS.get(selected_job_type, [])
+        for field in fields:
+            if field.get("required") and field["name"] not in payload:
+                ui.notify(
+                    f"Required field '{field['label']}' is missing",
+                    type="negative",
+                )
+                return
+        
         status = TaskStatusEnum(selected_status)
         task = TaskData(
             id=uuid4(),
@@ -138,8 +356,11 @@ def add_task(
         ui.run_javascript(
             "window.location.href = window.location.pathname + window.location.search"
         )
-    except (ValueError, AppException):
-        ui.notify("Failed to create task", type="negative")
+    except Exception as e:
+        import traceback
+        error_msg = traceback.format_exc()
+        print(f"Error creating task: {error_msg}")
+        ui.notify(f"Failed to create task: {str(e)}", type="negative")
 
 
 def run_task_now(task_id: str) -> None:
@@ -210,10 +431,16 @@ def render_add_task_form() -> None:
                     .classes("w-1/4")
                 )
 
-            payload_input = (
-                ui.textarea(label="Payload (JSON object)", value="{}")
-                .props("outlined autogrow")
-                .classes("w-full mt-3")
+            # Container for dynamic payload fields with field storage
+            fields_container = ui.column().classes("w-full mt-3")
+            fields_container._field_inputs = {}  # Store field references
+            
+            # Initial rendering of payload fields
+            render_payload_fields(job_type_input, fields_container)
+            
+            # Update fields when job type changes
+            job_type_input.on_value_change(
+                lambda: render_payload_fields(job_type_input, fields_container)
             )
 
             with ui.row().classes("w-full justify-end mt-3"):
@@ -224,9 +451,10 @@ def render_add_task_form() -> None:
                         str(job_type_input.value),
                         str(created_by_input.value),
                         str(status_input.value),
-                        str(payload_input.value),
+                        fields_container,
                     ),
                 ).props("color=primary")
+
 
 
 def tasks_page():
