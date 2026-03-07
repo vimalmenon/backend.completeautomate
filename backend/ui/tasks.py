@@ -10,6 +10,7 @@ from backend.enum.job import JobEnum
 from backend.enum.status import TaskStatusEnum
 from backend.enum.team import TeamEnum
 from backend.exception.app_exception import AppException
+from backend.task_scheduler_services import TaskSchedulerServices
 
 DETAIL_EXCLUDED_KEYS = {
     "id",
@@ -141,6 +142,18 @@ def add_task(
         ui.notify("Failed to create task", type="negative")
 
 
+def run_task_now(task_id: str) -> None:
+    try:
+        ui.notify(f"Running task: {task_id}", type="info")
+        TaskSchedulerServices().start(task_id=task_id)
+        ui.notify("Task run completed", type="positive")
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
+    except Exception:
+        ui.notify("Failed to run task", type="negative")
+
+
 def render_add_task_form() -> None:
     job_options = [job.value for job in JobEnum]
     team_options = [team.role for team in TeamEnum]
@@ -246,7 +259,7 @@ def tasks_page():
                     ui.label("Created By").classes("w-1/8")
                     ui.label("Created At").classes("w-1/8")
                     ui.label("Completed At").classes("w-1/8")
-                    ui.label("Actions").classes("w-1/12 text-center shrink-0")
+                    ui.label("Actions").classes("w-1/6 text-center shrink-0")
 
                 # Table rows
                 for task in tasks:
@@ -286,10 +299,18 @@ def tasks_page():
                             ui.label(created_at).classes("w-1/8 text-sm font-medium")
                             ui.label(completed_at).classes("w-1/8 text-sm font-medium")
 
-                            # Expand cell
+                            # Action cell
                             with ui.row().classes(
-                                "w-1/12 justify-center items-center shrink-0"
+                                "w-1/6 justify-center items-center gap-1 shrink-0"
                             ):
+                                ui.button(
+                                    icon="play_arrow",
+                                    on_click=lambda current_task_id=task_id: run_task_now(
+                                        current_task_id
+                                    ),
+                                ).props(
+                                    'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                                )
                                 ui.button(
                                     icon="open_in_new",
                                     on_click=lambda current_task_id=task_id: ui.run_javascript(
@@ -313,6 +334,13 @@ def task_detail_page(task_id: str) -> None:
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("Task Details").classes("text-h4")
             with ui.row().classes("gap-2"):
+                ui.button(
+                    "Run Task",
+                    icon="play_arrow",
+                    on_click=lambda current_task_id=task_id: run_task_now(
+                        current_task_id
+                    ),
+                ).props("flat")
                 ui.button(
                     "Back to Tasks",
                     icon="arrow_back",
