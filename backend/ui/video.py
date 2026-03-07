@@ -4,6 +4,7 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.data import YouTubeTranscriptDBData
+from backend.database.image.image_prompt_db import ImagePromptDB
 from backend.database.youtube import (
     YouTubeChannelDB,
     YouTubeVideoDB,
@@ -282,6 +283,38 @@ def update_metadata_option_status(
         ui.notify("Failed to update option status", type="negative")
 
 
+def _get_image_prompt_options(task_id: str) -> dict[str, str]:
+    try:
+        image_prompt_rows = ImagePromptDB().get_by_task_id(task_id)
+    except Exception:
+        return {}
+
+    options: dict[str, str] = {}
+    for row_index, row in enumerate(image_prompt_rows, start=1):
+        for prompt_index, prompt in enumerate(row.prompts, start=1):
+            option_key = f"{row.id}:{prompt_index}"
+            options[option_key] = (
+                f"{prompt.name} ({prompt.status.value}) [set {row_index}.{prompt_index}]"
+            )
+    return options
+
+
+def _mark_thumbnail_created(
+    video_id: str,
+    option_index: int,
+    selected_prompt_value: str,
+) -> None:
+    if not selected_prompt_value:
+        ui.notify("Select an image prompt from ImagePromptDB first", type="warning")
+        return
+
+    update_metadata_option_status(
+        video_id=video_id,
+        option_index=option_index,
+        status_value=JobStatusEnum.PROMOTE.value,
+    )
+
+
 def render_metadata_suggestions(video_id: str) -> None:
     suggestion = YouTubeVideoMetadataSuggesterDB().fetch_suggestion(
         channel_id=env.YOUTUBE_CHANNEL_ID,
@@ -290,10 +323,20 @@ def render_metadata_suggestions(video_id: str) -> None:
     if not suggestion:
         return
 
+    image_prompt_options = _get_image_prompt_options(str(suggestion.task_id))
+
     with ui.column().classes(
         "w-full gap-3 mt-2 p-3 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-700"
     ):
         ui.label("Metadata Suggestions").classes("text-subtitle1 font-semibold")
+        if image_prompt_options:
+            ui.label("ImagePromptDB options available for thumbnail selection").classes(
+                "text-xs text-amber-700"
+            )
+        else:
+            ui.label("No ImagePromptDB records found for this task").classes(
+                "text-xs text-gray-500"
+            )
         if suggestion.comment:
             with ui.row().classes("w-full gap-4 items-start"):
                 ui.label("Comment:").classes("w-1/5 font-bold text-amber-700 text-sm")
@@ -305,6 +348,17 @@ def render_metadata_suggestions(video_id: str) -> None:
                     "text-sm font-semibold text-amber-700"
                 )
                 with ui.row().classes("w-full justify-end items-center gap-2"):
+                    image_prompt_input = None
+                    if image_prompt_options:
+                        image_prompt_input = (
+                            ui.select(
+                                label="Image Prompt (ImagePromptDB)",
+                                options=image_prompt_options,
+                            )
+                            .props("outlined dense")
+                            .classes("w-80")
+                        )
+
                     status_input = (
                         ui.select(
                             label="Status",
@@ -323,6 +377,20 @@ def render_metadata_suggestions(video_id: str) -> None:
                             status_value=str(current_status.value),
                         ),
                     ).props("color=primary")
+                    ui.button(
+                        "Thumbnail Created",
+                        icon="image",
+                        on_click=lambda current_video_id=video_id, current_index=index - 1, current_image_prompt=image_prompt_input: _mark_thumbnail_created(
+                            video_id=current_video_id,
+                            option_index=current_index,
+                            selected_prompt_value=(
+                                str(current_image_prompt.value)
+                                if current_image_prompt
+                                and current_image_prompt.value is not None
+                                else ""
+                            ),
+                        ),
+                    ).props("flat color=positive")
                 with ui.row().classes("w-full gap-4 items-start"):
                     ui.label("Title:").classes("w-1/5 font-bold text-sm")
                     ui.label(detail.title).classes("w-4/5 text-wrap text-sm")

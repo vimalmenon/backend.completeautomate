@@ -35,8 +35,8 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - Offline mode support with Moto-mocked AWS services
 - Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
 - Tasks dashboard: dynamic payload fields based on job type, task execution confirmation dialog, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
-- Videos dashboard: newest-first by published date, expandable rows, inline editing for title/description/transcript/summary, interactive Plotly stats charts (views/likes/comments over time)
-- Prompt dashboard: expandable prompt table with task/role/model metadata
+- Videos dashboard: newest-first by published date, detail-page navigation, inline editing for title/description/transcript/summary, interactive Plotly stats charts (views/likes/comments over time), improved thumbnail rendering, and metadata option status updates with ImagePromptDB selection
+- Prompt dashboard: prompt list with detail-page navigation (`/prompt/{task_id}`), task/role/model metadata, and inline edit support from detail view
 - Comprehensive logging across managers and services for debugging and monitoring
 - Test suite with unit and integration markers
 - Cache invalidation support for platform data models
@@ -89,6 +89,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
+- [ ] Update the title, Description in DB after Metadata suggestion updated
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
 - [ ] Need to set up Qwen  
@@ -308,7 +309,10 @@ Dashboard pages:
 - Home: `http://localhost:8080/`
 - Tasks: `http://localhost:8080/tasks`
 - YouTube: `http://localhost:8080/youtube`
+- Channel Details: `http://localhost:8080/channel/{channel_id}`
+- Video Details: `http://localhost:8080/video/{ref_id}`
 - Prompts: `http://localhost:8080/prompt`
+- Prompt Details: `http://localhost:8080/prompt/{task_id}`
 
 ## YouTube OAuth Notes
 
@@ -475,8 +479,8 @@ Key modules:
 - `main.py`: home dashboard page
 - `navigation.py`: shared navigation component
 - `tasks.py`: task list with dynamic payload forms (11 job types), task execution confirmation dialog, inline status updates, delete action, expandable payload JSON viewer
-- `video.py`: video list with expandable rows, inline editing for video details/transcript/summary (uses ref_id)
-- `prompt.py`: prompt list table with expandable details
+- `video.py`: video list with detail-page navigation, channel detail page (`/channel/{channel_id}`), inline editing for video details/transcript/summary, video/channel Plotly stats dialogs, and ImagePromptDB-backed thumbnail workflow actions
+- `prompt.py`: prompt list with detail-page navigation (`/prompt/{task_id}`) and edit support
 
 **Jobs** (`backend/jobs/`):
 - `base_job.py`: base job class
