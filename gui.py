@@ -7,6 +7,7 @@ from backend.config.env import env
 from backend.config.logging_config import setup_logging
 from backend.config.session import set_offline_mode
 from backend.ui import (
+    channel_detail_page,
     main_page,
     prompt_detail_page,
     prompt_page,
@@ -90,6 +91,7 @@ def root():
                 "/task/{task_id}": task_detail_page,
                 "/youtube": youtube_page,
                 "/video/{ref_id}": video_detail_page,
+                "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,
                 "/prompt/{task_id}": prompt_detail_page,
                 "/loading": loading_page,

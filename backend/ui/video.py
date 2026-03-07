@@ -4,7 +4,11 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.data import YouTubeTranscriptDBData
-from backend.database.youtube import YouTubeVideoDB, YouTubeVideoMetadataSuggesterDB
+from backend.database.youtube import (
+    YouTubeChannelDB,
+    YouTubeVideoDB,
+    YouTubeVideoMetadataSuggesterDB,
+)
 from backend.enum import JobStatusEnum
 
 
@@ -126,6 +130,117 @@ def open_text_dialog(title: str, text: str) -> None:
             ui.label(text).classes("whitespace-pre-wrap text-sm")
         with ui.row().classes("w-full justify-end"):
             ui.button("Close", on_click=dialog.close).props("flat")
+    dialog.open()
+
+
+def open_channel_stats_chart_dialog(channel_json: dict) -> None:
+    """Open a dialog with line chart showing channel stats over time."""
+    stats = channel_json.get("stats", [])
+
+    if not stats:
+        ui.notify("No stats data available", type="warning")
+        return
+
+    # Parse stats data
+    timestamps = []
+    subscribers = []
+    views = []
+    videos = []
+
+    for stat in stats:
+        try:
+            timestamp_str = stat.get("timestamp", "")
+            timestamps.append(datetime.fromisoformat(timestamp_str))
+            subscribers.append(int(stat.get("subscriber_count", 0)))
+            views.append(int(stat.get("view_count", 0)))
+            videos.append(int(stat.get("video_count", 0)))
+        except (ValueError, TypeError):
+            continue
+
+    if not timestamps:
+        ui.notify("No valid stats data to display", type="warning")
+        return
+
+    # Format timestamps for display
+    time_labels = [ts.strftime("%Y-%m-%d %H:%M") for ts in timestamps]
+
+    with ui.dialog() as dialog, ui.card().classes("w-[1100px] max-w-full"):
+        ui.label(f"Stats for: {channel_json.get('title', 'Channel')}").classes(
+            "text-h6 mb-4"
+        )
+
+        # Create plotly chart
+        import plotly.graph_objects as go
+
+        fig = go.Figure()
+
+        # Add traces for each metric
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=subscribers,
+                mode="lines+markers",
+                name="Subscribers",
+                line=dict(color="#2196F3", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=views,
+                mode="lines+markers",
+                name="Views",
+                line=dict(color="#4CAF50", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=videos,
+                mode="lines+markers",
+                name="Videos",
+                line=dict(color="#FF9800", width=2),
+                marker=dict(size=6),
+            )
+        )
+
+        # Update layout
+        fig.update_layout(
+            title="Channel Statistics Over Time",
+            xaxis_title="Date/Time",
+            yaxis_title="Count",
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+            height=500,
+        )
+
+        ui.plotly(fig).classes("w-full")
+
+        # Summary stats
+        with ui.row().classes("w-full gap-4 mt-4"):
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Subscribers").classes("text-sm text-gray-600")
+                ui.label(f"{subscribers[-1]:,}").classes(
+                    "text-2xl font-bold text-blue-600"
+                )
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Views").classes("text-sm text-gray-600")
+                ui.label(f"{views[-1]:,}").classes("text-2xl font-bold text-green-600")
+            with ui.card().classes("flex-1"):
+                ui.label("Latest Videos").classes("text-sm text-gray-600")
+                ui.label(f"{videos[-1]:,}").classes(
+                    "text-2xl font-bold text-orange-600"
+                )
+
+        with ui.row().classes("w-full justify-end mt-4"):
+            ui.button("Close", on_click=dialog.close).props("flat")
+
     dialog.open()
 
 
@@ -506,6 +621,13 @@ def youtube_page():
             ui.label("YouTube Videos").classes("text-h4")
             with ui.row().classes("gap-2"):
                 ui.button(
+                    "View Channel",
+                    icon="live_tv",
+                    on_click=lambda: ui.run_javascript(
+                        f'window.location.href = "/channel/{env.YOUTUBE_CHANNEL_ID}"'
+                    ),
+                ).props("color=primary")
+                ui.button(
                     icon="refresh",
                     on_click=lambda: ui.run_javascript(
                         "window.location.href = window.location.pathname + window.location.search"
@@ -585,3 +707,144 @@ def video_detail_page(ref_id: str) -> None:
 
         _render_video_action_buttons(video_json, video_id_full)
         _render_video_json_details(video_json)
+
+
+def channel_detail_page(channel_id: str) -> None:
+    try:
+        channel = YouTubeChannelDB(channel_id=channel_id).query_channel()
+    except Exception:
+        channel = None
+
+    if not channel:
+        with ui.card().classes("w-full page-transition"):
+            with ui.row().classes("items-center justify-between w-full mb-4"):
+                ui.label("Channel Details").classes("text-h4")
+                with ui.row().classes("gap-2"):
+                    ui.button(
+                        "Back to Videos",
+                        icon="arrow_back",
+                        on_click=lambda: ui.run_javascript(
+                            'window.location.href = "/youtube"'
+                        ),
+                    ).props("flat")
+                    ui.button(
+                        icon="home",
+                        on_click=lambda: ui.run_javascript(
+                            'window.location.href = "/"'
+                        ),
+                    ).props("flat")
+
+            ui.separator()
+            with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
+                ui.label(f"Channel not found for id: {channel_id}").classes(
+                    "text-negative text-subtitle1"
+                )
+        return
+
+    channel_json = channel.to_json()
+
+    with ui.card().classes("w-full page-transition"):
+        with ui.row().classes("items-center justify-between w-full mb-4"):
+            ui.label("Channel Details").classes("text-h4")
+            with ui.row().classes("gap-2"):
+                if channel_json.get("stats"):
+                    ui.button(
+                        "View Stats",
+                        icon="bar_chart",
+                        on_click=lambda: open_channel_stats_chart_dialog(channel_json),
+                    ).props("color=primary")
+                ui.button(
+                    "Back to Videos",
+                    icon="arrow_back",
+                    on_click=lambda: ui.run_javascript(
+                        'window.location.href = "/youtube"'
+                    ),
+                ).props("flat")
+                ui.button(
+                    icon="home",
+                    on_click=lambda: ui.run_javascript('window.location.href = "/"'),
+                ).props("flat")
+
+        ui.separator()
+
+        # Channel banner if available
+        if channel_json.get("banner_image_url"):
+            with ui.image(channel_json["banner_image_url"]).classes(
+                "w-full h-48 object-cover mb-4"
+            ):
+                pass
+
+        # Channel header with thumbnail
+        with ui.row().classes("w-full gap-4 items-start"):
+            if channel_json.get("thumbnail_url"):
+                ui.image(channel_json["thumbnail_url"]).classes(
+                    "w-24 h-24 rounded-full"
+                )
+
+            with ui.column().classes("flex-1"):
+                ui.label(channel_json.get("title", "")).classes("text-h5 font-bold")
+                if channel_json.get("custom_url"):
+                    ui.label(f"Custom URL: {channel_json['custom_url']}").classes(
+                        "text-sm text-gray-600"
+                    )
+                if channel_json.get("country"):
+                    ui.label(f"Country: {channel_json['country']}").classes(
+                        "text-sm text-gray-600"
+                    )
+
+        ui.separator()
+
+        # Channel metadata
+        with ui.card().classes("w-full dark:bg-slate-800"):
+            ui.label("Metadata").classes("text-h6 mb-3")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Status:").classes("w-1/4 font-bold")
+                ui.label(channel_json.get("privacy_status", "")).classes("w-3/4")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Made for Kids:").classes("w-1/4 font-bold")
+                ui.label(str(channel_json.get("made_for_kids", False))).classes("w-3/4")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Published:").classes("w-1/4 font-bold")
+                ui.label(channel_json.get("published_at", "")).classes("w-3/4")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Last Updated:").classes("w-1/4 font-bold")
+                ui.label(channel_json.get("last_updated_at", "")).classes("w-3/4")
+
+        # Channel description
+        if channel_json.get("description"):
+            with ui.card().classes("w-full dark:bg-slate-800"):
+                ui.label("Description").classes("text-h6 mb-3")
+                ui.label(channel_json["description"]).classes(
+                    "w-full text-wrap text-sm"
+                )
+
+        # Channel statistics
+        if channel_json.get("stats"):
+            with ui.card().classes("w-full dark:bg-slate-800"):
+                ui.label("Statistics").classes("text-h6 mb-3")
+
+                latest_stats = (
+                    channel_json["stats"][-1] if channel_json["stats"] else {}
+                )
+                with ui.row().classes("w-full gap-4"):
+                    with ui.card().classes("w-1/3 bg-blue-50 dark:bg-blue-900/20"):
+                        ui.label("Subscribers").classes("text-sm text-gray-600")
+                        ui.label(
+                            f"{latest_stats.get('subscriber_count', 0):,}"
+                        ).classes("text-h6 font-bold")
+
+                    with ui.card().classes("w-1/3 bg-green-50 dark:bg-green-900/20"):
+                        ui.label("Views").classes("text-sm text-gray-600")
+                        ui.label(f"{latest_stats.get('view_count', 0):,}").classes(
+                            "text-h6 font-bold"
+                        )
+
+                    with ui.card().classes("w-1/3 bg-purple-50 dark:bg-purple-900/20"):
+                        ui.label("Videos").classes("text-sm text-gray-600")
+                        ui.label(f"{latest_stats.get('video_count', 0):,}").classes(
+                            "text-h6 font-bold"
+                        )

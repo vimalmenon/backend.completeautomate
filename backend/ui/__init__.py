@@ -2,12 +2,13 @@ from backend.ui.main import main_page
 from backend.ui.navigation import create_nav_link, navigate_with_loading
 from backend.ui.prompt import prompt_detail_page, prompt_page
 from backend.ui.tasks import task_detail_page, tasks_page
-from backend.ui.video import video_detail_page, youtube_page
+from backend.ui.video import channel_detail_page, video_detail_page, youtube_page
 
 __all__ = [
     "main_page",
     "youtube_page",
     "video_detail_page",
+    "channel_detail_page",
     "tasks_page",
     "task_detail_page",
     "prompt_page",

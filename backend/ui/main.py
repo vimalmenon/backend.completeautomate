@@ -2,6 +2,8 @@ from typing import TypedDict
 
 from nicegui import ui
 
+from backend.config.env import env
+
 
 class MenuItem(TypedDict):
     name: str
@@ -40,7 +42,7 @@ def main_page():
                 {
                     "name": "List Channel",
                     "icon": "live_tv",
-                    "links_to": "/youtube",
+                    "links_to": f"/channel/{env.YOUTUBE_CHANNEL_ID}",
                 },
             ],
         },
