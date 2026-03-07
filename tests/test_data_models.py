@@ -5,6 +5,7 @@ from uuid import uuid4
 import pytest
 
 from backend.data.image import ImagePromptJobData
+from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
 from backend.data.youtube import (
     YouTubeJobData,
@@ -13,9 +14,11 @@ from backend.data.youtube import (
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
-from backend.enum import ImageTypeEnum
+from backend.enum import AIModelEnum, ImageTypeEnum
+from backend.enum.prompt import PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.enum.status import TaskStatusEnum
+from backend.enum.team import TeamEnum
 
 
 @pytest.mark.unit
@@ -233,3 +236,55 @@ class TestImageJobDataNames:
             }
         )
         assert loaded.name == "ImagePromptJobData"
+
+
+@pytest.mark.unit
+class TestPromptDBDataCopy:
+    """Ensure PromptDBData.copy() creates proper shallow copies."""
+
+    def test_prompt_db_data_copy(self) -> None:
+        """Test that copy creates a new instance with same values."""
+        original = PromptDBData(
+            prompt="test prompt",
+            system_message="test system message",
+            task=PromptTaskEnum.YouTubeVideoSummarization,
+            role=TeamEnum.OWNER,
+            ai=AIModelEnum.Grok,
+            version="1.0",
+        )
+
+        # Create a copy
+        copied = original.copy()
+
+        # Verify it's a different object
+        assert copied is not original
+
+        # Verify all values are the same
+        assert copied.prompt == original.prompt
+        assert copied.system_message == original.system_message
+        assert copied.task == original.task
+        assert copied.role == original.role
+        assert copied.ai == original.ai
+        assert copied.version == original.version
+        assert copied.last_updated == original.last_updated
+
+    def test_prompt_db_data_copy_modification(self) -> None:
+        """Test that modifying copy doesn't affect original."""
+        original = PromptDBData(
+            prompt="test prompt",
+            system_message="test system message",
+            task=PromptTaskEnum.YouTubeVideoAnalysis,
+            role=TeamEnum.OWNER,
+            ai=AIModelEnum.Deepseek,
+            version="1.0",
+        )
+
+        # Create a copy
+        copied = original.copy()
+
+        # Modify the copy
+        copied.ai = AIModelEnum.Grok
+
+        # Verify original is unchanged
+        assert original.ai == AIModelEnum.Deepseek
+        assert copied.ai == AIModelEnum.Grok
