@@ -134,26 +134,18 @@ class TestYouTubeVideoThumbnailPromptSuggesterJobData:
 
         assert json_data["name"] == "YouTubeVideoThumbnailPromptSuggesterJobData"
 
-    def test_to_cls_preserves_or_defaults_class_name(self) -> None:
-        """Ensure deserialization keeps or defaults to the class name."""
+    def test_to_cls_ignores_custom_name(self) -> None:
+        """Ensure deserialization enforces the class name and ignores input overrides."""
         task_id = uuid4()
 
-        with_name = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
+        loaded = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
             {
                 "task_id": str(task_id),
                 "ref_id": "sample_ref",
                 "name": "CustomName",
             }
         )
-        assert with_name.name == "CustomName"
-
-        without_name = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
-            {
-                "task_id": str(task_id),
-                "ref_id": "sample_ref",
-            }
-        )
-        assert without_name.name == "YouTubeVideoThumbnailPromptSuggesterJobData"
+        assert loaded.name == "YouTubeVideoThumbnailPromptSuggesterJobData"
 
 
 @pytest.mark.unit
@@ -173,6 +165,7 @@ class TestYouTubeJobDataNames:
                 "data": data.data.to_json(),
                 "status": TaskStatusEnum.NEW.value,
                 "ref_id": "sample_ref",
+                "name": "CustomName",
             }
         )
         assert loaded.name == "YouTubeThumbnailJobData"
@@ -181,14 +174,18 @@ class TestYouTubeJobDataNames:
         data = YouTubeJobData(ref_id="sample_ref")
         assert data.to_json()["name"] == "YouTubeJobData"
 
-        loaded = YouTubeJobData.to_cls({"ref_id": "sample_ref"})
+        loaded = YouTubeJobData.to_cls(
+            {"ref_id": "sample_ref", "name": "CustomName"}
+        )
         assert loaded.name == "YouTubeJobData"
 
     def test_youtube_video_summarize_job_data_name_reflection(self) -> None:
         data = YouTubeVideoSummarizeJobData(ref_id="sample_ref")
         assert data.to_json()["name"] == "YouTubeVideoSummarizeJobData"
 
-        loaded = YouTubeVideoSummarizeJobData.to_cls({"ref_id": "sample_ref"})
+        loaded = YouTubeVideoSummarizeJobData.to_cls(
+            {"ref_id": "sample_ref", "name": "CustomName"}
+        )
         assert loaded.name == "YouTubeVideoSummarizeJobData"
 
     def test_youtube_video_metadata_job_data_name_reflection(self) -> None:
@@ -208,6 +205,7 @@ class TestYouTubeJobDataNames:
                 "title": "Sample Title",
                 "description": "Sample Description",
                 "tags": ["tag1", "tag2"],
+                "name": "CustomName",
             }
         )
         assert loaded.name == "YouTubeVideoMetadataJobData"
@@ -233,6 +231,7 @@ class TestImageJobDataNames:
                 "description": "thumbnail prompt",
                 "ref_id": "sample_ref",
                 "image_type": ImageTypeEnum.YouTube.value,
+                "name": "CustomName",
             }
         )
         assert loaded.name == "ImagePromptJobData"

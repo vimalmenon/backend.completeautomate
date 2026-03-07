@@ -76,7 +76,10 @@ class ImagePromptJobData:
     description: str
     ref_id: str
     image_type: ImageTypeEnum
-    name: str = "ImagePromptJobData"
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     def to_json(self) -> dict:
         return {
@@ -94,7 +97,6 @@ class ImagePromptJobData:
             description=data["description"],
             image_type=ImageTypeEnum(data["image_type"]),
             ref_id=data["ref_id"],
-            name=data.get("name", cls.__name__),
         )
 
     @cached_property

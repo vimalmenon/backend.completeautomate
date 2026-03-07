@@ -303,7 +303,10 @@ class YouTubeThumbnailJobData:
     data: S3Data
     status: TaskStatusEnum
     ref_id: str
-    name: str = "YouTubeThumbnailJobData"
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     def to_json(self) -> dict:
         return {
@@ -319,7 +322,6 @@ class YouTubeThumbnailJobData:
             data=S3Data.to_cls(data["data"]),
             status=TaskStatusEnum(data["status"]),
             ref_id=data["ref_id"],
-            name=data.get("name", cls.__name__),
         )
 
     @cached_property
@@ -333,7 +335,10 @@ class YouTubeThumbnailJobData:
 class YouTubeJobData:
     ref_id: str
     poll_frequency_in_days: int = 7
-    name: str = "YouTubeJobData"
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     def to_json(self) -> dict:
         return {
@@ -347,7 +352,6 @@ class YouTubeJobData:
         return cls(
             ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 7),
-            name=data.get("name", cls.__name__),
         )
 
     @cached_property
@@ -360,8 +364,11 @@ class YouTubeJobData:
 @dataclass
 class YouTubeVideoSummarizeJobData:
     ref_id: str
-    name: str = "YouTubeVideoSummarizeJobData"
     is_agent = True
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     def to_json(self) -> dict:
         return {
@@ -374,7 +381,6 @@ class YouTubeVideoSummarizeJobData:
     def to_cls(cls, data) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            name=data.get("name", cls.__name__),
         )
 
     @cached_property
@@ -450,7 +456,10 @@ class YouTubeVideoMetadataJobData:
     title: str
     description: str
     tags: list[str]
-    name: str = "YouTubeVideoMetadataJobData"
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
@@ -460,7 +469,6 @@ class YouTubeVideoMetadataJobData:
             title=data["title"],
             description=data["description"],
             tags=data["tags"],
-            name=data.get("name", cls.__name__),
         )
 
     def to_json(self) -> dict:
@@ -484,14 +492,16 @@ class YouTubeVideoMetadataJobData:
 class YouTubeVideoThumbnailPromptSuggesterJobData:
     task_id: UUID
     ref_id: str
-    name: str = "YouTubeVideoThumbnailPromptSuggesterJobData"
+
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             task_id=UUID(data["task_id"]),
             ref_id=data["ref_id"],
-            name=data.get("name", cls.__name__),
         )
 
     def to_json(self) -> dict:
