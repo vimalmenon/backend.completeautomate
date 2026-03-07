@@ -90,6 +90,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Update the title, Description in DB after Metadata suggestion updated
+- [ ] Put all the generated image prompt to review
 - [ ] Use Grok to create image
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
