@@ -89,14 +89,14 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [ ] Update the title, Description in DB after Metadata suggestion updated
+- [ ] Need to set up Qwen
+  - [ ] Check if image model is working
+  - [ ] Check if chat model is working
+- [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Use Grok to create image
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
-- [ ] Need to set up Qwen
-  - [ ] Check if image model is working
-  - [ ] Check if chat model is working
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
