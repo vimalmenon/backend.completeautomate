@@ -9,6 +9,7 @@ from backend.config.session import set_offline_mode
 from backend.ui import (
     main_page,
     prompt_page,
+    task_detail_page,
     tasks_page,
     video_detail_page,
     youtube_page,
@@ -85,6 +86,7 @@ def root():
             {
                 "/": main_page,
                 "/tasks": tasks_page,
+                "/task/{task_id}": task_detail_page,
                 "/youtube": youtube_page,
                 "/video/{ref_id}": video_detail_page,
                 "/prompt": prompt_page,

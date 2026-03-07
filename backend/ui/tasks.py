@@ -78,20 +78,6 @@ def update_task_status(event, current_task):
         ui.notify("Failed to update task status", type="negative")
 
 
-def toggle_row(section, header, expand_button):
-    is_hidden = "hidden" in section.classes
-    if is_hidden:
-        section.classes(remove="hidden")
-        expand_button.props("icon=expand_less")
-        expand_button.update()
-        header.classes(add="ring-1 ring-inset ring-blue-300")
-    else:
-        section.classes(add="hidden")
-        expand_button.props("icon=expand_more")
-        expand_button.update()
-        header.classes(remove="ring-1 ring-inset ring-blue-300")
-
-
 def render_task_detail_rows(task_json: dict, detail_section) -> None:
     with detail_section:
         for key, value in task_json.items():
@@ -246,7 +232,7 @@ def tasks_page():
         if tasks:
             ui.label(f"Found {len(tasks)} task(s)").classes("text-subtitle1 mb-4")
 
-            # Create custom expandable table
+            # Create custom table
             with ui.column().classes(
                 "w-full gap-0 border border-gray-300 dark:border-slate-600 rounded"
             ):
@@ -260,7 +246,7 @@ def tasks_page():
                     ui.label("Created By").classes("w-1/8")
                     ui.label("Created At").classes("w-1/8")
                     ui.label("Completed At").classes("w-1/8")
-                    ui.label("Expand").classes("w-1/12 text-center shrink-0")
+                    ui.label("Actions").classes("w-1/12 text-center shrink-0")
 
                 # Table rows
                 for task in tasks:
@@ -277,10 +263,10 @@ def tasks_page():
                     with ui.column().classes(
                         "w-full gap-0 border-b border-gray-200 dark:border-slate-700"
                     ):
-                        # Clickable row header
+                        # Row header
                         with ui.row().classes(
                             f"w-full p-3 items-center flex-nowrap {row_status_class}"
-                        ) as row_header:
+                        ):
                             ui.label(task_id).classes("w-1/5 text-sm")
                             ui.label(task_type).classes("w-1/8 text-sm")
                             (
@@ -304,27 +290,70 @@ def tasks_page():
                             with ui.row().classes(
                                 "w-1/12 justify-center items-center shrink-0"
                             ):
-                                expand_button = ui.button(icon="expand_more").props(
+                                ui.button(
+                                    icon="open_in_new",
+                                    on_click=lambda current_task_id=task_id: ui.run_javascript(
+                                        f'window.location.href = "/task/{current_task_id}"'
+                                    ),
+                                ).props(
                                     'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                                 )
-
-                        # Expandable details section
-                        detail_section = ui.column().classes(
-                            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3 hidden"
-                        )
-
-                        expand_button.on(
-                            "click",
-                            lambda s=detail_section, h=row_header, eb=expand_button: toggle_row(
-                                s, h, eb
-                            ),
-                        )
-
-                        # Populate detail section
-                        render_task_detail_rows(task_json, detail_section)
         else:
             with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
                 ui.icon("inbox", size="xl").classes("text-gray-400")
                 ui.label("No tasks found").classes("text-h6 text-gray-500")
 
         ui.separator().classes("my-4")
+
+
+def task_detail_page(task_id: str) -> None:
+    task = TaskDB().get_task_by_id(task_id)
+
+    with ui.card().classes("w-full page-transition"):
+        with ui.row().classes("items-center justify-between w-full mb-4"):
+            ui.label("Task Details").classes("text-h4")
+            with ui.row().classes("gap-2"):
+                ui.button(
+                    "Back to Tasks",
+                    icon="arrow_back",
+                    on_click=lambda: ui.run_javascript(
+                        'window.location.href = "/tasks"'
+                    ),
+                ).props("flat")
+                ui.button(
+                    icon="home",
+                    on_click=lambda: ui.run_javascript('window.location.href = "/"'),
+                ).props("flat")
+
+        ui.separator()
+
+        if not task:
+            with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
+                ui.label(f"Task not found for id: {task_id}").classes(
+                    "text-negative text-subtitle1"
+                )
+            return
+
+        status_options = [status.value for status in TaskStatusEnum]
+        with ui.row().classes("w-full items-end gap-3 mb-4"):
+            ui.label(f"Task ID: {task.id}").classes("text-subtitle1 font-medium")
+            (
+                ui.select(
+                    label="Status",
+                    options=status_options,
+                    value=task.status.value,
+                    on_change=lambda e, current_task=task: update_task_status(
+                        e, current_task
+                    ),
+                )
+                .props(
+                    f'dense outlined options-dense color="{get_status_color(task.status.value)}"'
+                )
+                .classes("w-56")
+            )
+
+        task_json = task.to_json()
+        detail_section = ui.column().classes(
+            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3"
+        )
+        render_task_detail_rows(task_json, detail_section)
