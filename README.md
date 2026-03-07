@@ -89,7 +89,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><b>TODO Items</b> (click to expand)</summary>
 
 
-- [x] Grok is not working (Need to fix)
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] YouTube Metadata updater should create Image Prompt Generator
