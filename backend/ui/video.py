@@ -299,22 +299,6 @@ def _get_image_prompt_options(task_id: str) -> dict[str, str]:
     return options
 
 
-def _mark_thumbnail_created(
-    video_id: str,
-    option_index: int,
-    selected_prompt_value: str,
-) -> None:
-    if not selected_prompt_value:
-        ui.notify("Select an image prompt from ImagePromptDB first", type="warning")
-        return
-
-    update_metadata_option_status(
-        video_id=video_id,
-        option_index=option_index,
-        status_value=JobStatusEnum.PROMOTE.value,
-    )
-
-
 def render_metadata_suggestions(video_id: str) -> None:
     suggestion = YouTubeVideoMetadataSuggesterDB().fetch_suggestion(
         channel_id=env.YOUTUBE_CHANNEL_ID,
@@ -348,16 +332,11 @@ def render_metadata_suggestions(video_id: str) -> None:
                     "text-sm font-semibold text-amber-700"
                 )
                 with ui.row().classes("w-full justify-end items-center gap-2"):
-                    image_prompt_input = None
                     if image_prompt_options:
-                        image_prompt_input = (
-                            ui.select(
-                                label="Image Prompt (ImagePromptDB)",
-                                options=image_prompt_options,
-                            )
-                            .props("outlined dense")
-                            .classes("w-80")
-                        )
+                        ui.select(
+                            label="Image Prompt (ImagePromptDB)",
+                            options=image_prompt_options,
+                        ).props("outlined dense").classes("w-80")
 
                     status_input = (
                         ui.select(
@@ -377,20 +356,6 @@ def render_metadata_suggestions(video_id: str) -> None:
                             status_value=str(current_status.value),
                         ),
                     ).props("color=primary")
-                    ui.button(
-                        "Thumbnail Created",
-                        icon="image",
-                        on_click=lambda current_video_id=video_id, current_index=index - 1, current_image_prompt=image_prompt_input: _mark_thumbnail_created(
-                            video_id=current_video_id,
-                            option_index=current_index,
-                            selected_prompt_value=(
-                                str(current_image_prompt.value)
-                                if current_image_prompt
-                                and current_image_prompt.value is not None
-                                else ""
-                            ),
-                        ),
-                    ).props("flat color=positive")
                 with ui.row().classes("w-full gap-4 items-start"):
                     ui.label("Title:").classes("w-1/5 font-bold text-sm")
                     ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
