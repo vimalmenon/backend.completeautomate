@@ -538,23 +538,65 @@ def _render_video_action_buttons(video_json: dict, video_id: str = "") -> None:
         ).props("flat")
 
 
+def _resolve_video_thumbnail_url(thumbnail_url: str) -> str:
+    if not thumbnail_url:
+        return ""
+
+    # Upgrade common YouTube thumbnail variants to a better quality image.
+    known_suffixes = (
+        "/default.jpg",
+        "/mqdefault.jpg",
+        "/hqdefault.jpg",
+        "/sddefault.jpg",
+        "/maxresdefault.jpg",
+    )
+    for suffix in known_suffixes:
+        if thumbnail_url.endswith(suffix):
+            return thumbnail_url[: -len(suffix)] + "/hqdefault.jpg"
+    return thumbnail_url
+
+
 def _render_video_json_details(video_json: dict) -> None:
+    thumbnail_url = _resolve_video_thumbnail_url(
+        str(video_json.get("thumbnail", "")).strip()
+    )
+    metadata_items: list[tuple[str, str]] = []
+    transcript_text = ""
+    summarize_text = ""
+
     for key, value in video_json.items():
+        if key == "thumbnail":
+            continue
+
         if key == "transcript" and isinstance(value, dict):
             transcript_text = str(value.get("transcript", ""))
             summarize_text = str(value.get("summarize", ""))
-
-            render_multiline_field("transcript", transcript_text)
-            render_multiline_field("summarize", summarize_text)
             continue
 
         if value is not None and not isinstance(value, list):
             display_val = (
                 str(value)[:100] + "..." if len(str(value)) > 100 else str(value)
             )
-            with ui.row().classes("w-full gap-4 items-start"):
-                ui.label(f"**{key}:**").classes("w-1/5 font-bold text-blue-600 text-sm")
-                ui.label(display_val).classes("w-4/5 text-wrap text-sm")
+            metadata_items.append((key, display_val))
+
+    with ui.row().classes("w-full gap-4 items-start flex-wrap lg:flex-nowrap"):
+        with ui.column().classes("w-full lg:flex-1"):
+            for key, display_val in metadata_items:
+                with ui.row().classes("w-full gap-4 items-start"):
+                    ui.label(f"{key}:").classes("w-1/5 font-bold text-blue-600 text-sm")
+                    ui.label(display_val).classes("w-4/5 text-wrap text-sm")
+
+        if thumbnail_url:
+            with ui.column().classes("w-full lg:w-[360px] lg:shrink-0"):
+                with ui.image(thumbnail_url).classes(
+                    "w-full aspect-video object-cover rounded border border-gray-200 dark:border-slate-700"
+                ):
+                    pass
+
+    if transcript_text:
+        render_multiline_field("transcript", transcript_text)
+    if summarize_text:
+        render_multiline_field("summarize", summarize_text)
 
 
 def _render_video_row(video) -> None:
