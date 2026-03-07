@@ -107,7 +107,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
 - [ ] Improve on prompt suggester
-- [ ] Add Playlist details to YouTube Video DB
 - [ ] Fix TODOs and Dead code
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and variable
@@ -126,7 +125,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Analytics dashboard
   - [ ] Ability to perform all tasks from GUI
 - [ ] Fix transcripts for grammar and naming errors
-
+- [ ] Add Playlist details to YouTube Video DB
 
 - Naming convention for generator
   - Updater (Update data to source)
