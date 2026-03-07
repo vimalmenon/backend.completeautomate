@@ -90,9 +90,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Update the title, Description in DB after Metadata suggestion updated
+- [ ] Use Grok to create image
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
-- [ ] Need to set up Qwen  
+- [ ] Need to set up Qwen
+  - [ ] Check if image model is working
+  - [ ] Check if chat model is working
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
@@ -119,11 +122,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] Page for Youtube Channel
-  - [x] Need to add UI for Youtube Channel
-  - [x] Run a task from UI
-  - [x] Analytics dashboard
-  - [ ] Run `poetry run app` from UI
+  - [x] Run `poetry run one task` from UI
   - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add Playlist details to YouTube Video DB
