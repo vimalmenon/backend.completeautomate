@@ -261,7 +261,7 @@ def prompt_page():
                                 if value is not None and not isinstance(value, list):
                                     display_val = str(value)
                                     with ui.row().classes("w-full gap-4 items-start"):
-                                        ui.label(f"**{key}:**").classes(
+                                        ui.label(f"{key}:").classes(
                                             "w-1/5 font-bold text-blue-600 text-sm"
                                         )
                                         ui.label(display_val).classes(
