@@ -34,7 +34,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - AWS-backed persistence (DynamoDB + S3)
 - Offline mode support with Moto-mocked AWS services
 - Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
-- Tasks dashboard: add task form, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
+- Tasks dashboard: dynamic payload fields based on job type, task execution confirmation dialog, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
 - Videos dashboard: newest-first by published date, expandable rows, inline editing for title/description/transcript/summary, interactive Plotly stats charts (views/likes/comments over time)
 - Prompt dashboard: expandable prompt table with task/role/model metadata
 - Comprehensive logging across managers and services for debugging and monitoring
@@ -51,7 +51,7 @@ Current internal score: **7.5/10**
 - Clear modular architecture (`ai`, `data`, `database`, `jobs`, `integration`, `ui`)
 - Practical developer workflow (`Makefile`, pytest markers, lint/type checks)
 - Functional NiceGUI dashboards with live task operations
-- Good momentum with iterative UI improvements (status updates, row actions, sorting, JSON payload rendering)
+- Good momentum with iterative UI improvements (dynamic payload forms, confirmation dialogs, status updates, row actions, sorting, JSON payload rendering)
 - Comprehensive logging in manager layer for operational visibility
 - Lazy import pattern prevents circular dependencies in data models
 - Cache invalidation methods for platform data freshness
@@ -71,7 +71,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Extract shared reusable table utilities/components for `tasks.py`, `video.py`, and `prompt.py`
 - [ ] Add explicit confirmation dialog before task deletion
 - [ ] Add sorting controls in Tasks table (not just static ordering)
-- [ ] Add field-level payload templates/validators for common `JobEnum` task types
+- [x] Add field-level payload templates/validators for common `JobEnum` task types
 - [ ] Add page-level error states for missing env/config with actionable guidance
 - [ ] Add UI smoke tests for core flows (create/update/delete task, expand details, load prompt/video pages)
 - [ ] Add CI job for GUI smoke test execution
@@ -476,7 +476,7 @@ Key modules:
 **UI pages** (`backend/ui/`):
 - `main.py`: home dashboard page
 - `navigation.py`: shared navigation component
-- `tasks.py`: task list, add-task form, inline status update, delete action
+- `tasks.py`: task list with dynamic payload forms (11 job types), task execution confirmation dialog, inline status updates, delete action, expandable payload JSON viewer
 - `video.py`: video list with expandable rows, inline editing for video details/transcript/summary (uses ref_id)
 - `prompt.py`: prompt list table with expandable details
 
