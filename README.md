@@ -119,11 +119,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [ ] Page for Youtube Channel
-  - [ ] Need to add UI for Youtube Channel
+  - [x] Page for Youtube Channel
+  - [x] Need to add UI for Youtube Channel
+  - [x] Run a task from UI
+  - [x] Analytics dashboard
   - [ ] Run `poetry run app` from UI
-  - [ ] Analytics dashboard
-  - [ ] Ability to perform all tasks from GUI
+  - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add Playlist details to YouTube Video DB
 
