@@ -1,8 +1,11 @@
 """Unit tests for data models"""
 
+from uuid import uuid4
+
 import pytest
 
 from backend.data.s3 import S3Data
+from backend.data.youtube import YouTubeVideoThumbnailPromptSuggesterJobData
 from backend.enum.s3 import S3ContentTypeEnum
 
 
@@ -105,3 +108,40 @@ class TestS3Data:
         assert s3_data.name == "photo.png"
         assert s3_data.key is None
         assert s3_data.content_type == S3ContentTypeEnum.PNG
+
+
+@pytest.mark.unit
+class TestYouTubeVideoThumbnailPromptSuggesterJobData:
+    """Test cases for YouTubeVideoThumbnailPromptSuggesterJobData model"""
+
+    def test_to_json_includes_class_name(self) -> None:
+        """Ensure name reflects the class name in JSON output."""
+        data = YouTubeVideoThumbnailPromptSuggesterJobData(
+            task_id=uuid4(),
+            ref_id="sample_ref",
+        )
+
+        json_data = data.to_json()
+
+        assert json_data["name"] == "YouTubeVideoThumbnailPromptSuggesterJobData"
+
+    def test_to_cls_preserves_or_defaults_class_name(self) -> None:
+        """Ensure deserialization keeps or defaults to the class name."""
+        task_id = uuid4()
+
+        with_name = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
+            {
+                "task_id": str(task_id),
+                "ref_id": "sample_ref",
+                "name": "CustomName",
+            }
+        )
+        assert with_name.name == "CustomName"
+
+        without_name = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(
+            {
+                "task_id": str(task_id),
+                "ref_id": "sample_ref",
+            }
+        )
+        assert without_name.name == "YouTubeVideoThumbnailPromptSuggesterJobData"

@@ -469,18 +469,21 @@ class YouTubeVideoMetadataJobData:
 class YouTubeVideoThumbnailPromptSuggesterJobData:
     task_id: UUID
     ref_id: str
+    name: str = "YouTubeVideoThumbnailPromptSuggesterJobData"
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             task_id=UUID(data["task_id"]),
             ref_id=data["ref_id"],
+            name=data.get("name", cls.__name__),
         )
 
     def to_json(self) -> dict:
         return {
             "task_id": str(self.task_id),
             "ref_id": self.ref_id,
+            "name": self.name,
         }
 
     @cached_property
