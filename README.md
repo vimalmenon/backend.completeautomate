@@ -92,7 +92,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
   - [ ] YouTube Metadata updater should create Image Prompt Generator
-- [ ] Add one-shot / few-shot prompt examples for image and other generation tasks
+- [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube idea suggester
