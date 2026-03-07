@@ -1,5 +1,5 @@
-import json
 from datetime import datetime
+from typing import Any
 from uuid import uuid4
 
 from nicegui import ui
@@ -193,58 +193,60 @@ def update_task_status(event, current_task):
         ui.notify("Failed to update task status", type="negative")
 
 
-def build_payload_from_fields(job_type: str, field_values: dict) -> dict:
+def build_payload_from_fields(
+    job_type: str, field_values: dict[str, Any]
+) -> dict[str, Any]:
     """Build payload dictionary from form field values."""
-    payload = {}
+    payload: dict[str, Any] = {}
     fields = JOB_PAYLOAD_FIELDS.get(job_type, [])
-    
+
     for field in fields:
-        field_name = field["name"]
+        field_name: str = str(field.get("name", ""))
+        field_type: str = str(field.get("type", ""))
         if field_name in field_values:
             value = field_values[field_name]
             # Handle type conversions
-            if field["type"] == "number" and value:
+            if field_type == "number" and value:
                 payload[field_name] = int(value) if value else field.get("default")
-            elif field["type"] == "checkbox":
+            elif field_type == "checkbox":
                 payload[field_name] = bool(value)
             elif value is not None and value != "":
                 payload[field_name] = value
-    
+
     return payload
 
 
-def render_payload_fields(
-    job_type_select: ui.select, fields_container: ui.element
-) -> None:
+def render_payload_fields(job_type_select: Any, fields_container: Any) -> None:
     """Dynamically render payload input fields based on selected job type."""
     fields_container.clear()
-    job_type = job_type_select.value
-    fields = JOB_PAYLOAD_FIELDS.get(job_type, [])
-    
-    # Clear field inputs dictionary
-    if hasattr(fields_container, "_field_inputs"):
+    job_type: Any = job_type_select.value
+    fields: list[dict[str, Any]] = JOB_PAYLOAD_FIELDS.get(job_type, [])
+
+    # Initialize field inputs dictionary if not present
+    if not hasattr(fields_container, "_field_inputs"):
+        fields_container._field_inputs = {}
+    else:
         fields_container._field_inputs.clear()
-    
+
     with fields_container:
         if not fields:
             ui.label("No additional fields required for this job type").classes(
                 "text-gray-500 italic"
             )
             return
-        
+
         for field in fields:
-            field_name = field["name"]
-            field_type = field["type"]
-            label = field["label"]
-            
+            field_name: str = str(field.get("name", ""))
+            field_type: str = str(field.get("type", ""))
+            label: str = str(field.get("label", ""))
+
+            input_field: Any = None
+
             if field_type == "text":
                 input_field = (
-                    ui.input(label=label)
-                    .props("outlined dense")
-                    .classes("w-full")
+                    ui.input(label=label).props("outlined dense").classes("w-full")
                 )
-                fields_container._field_inputs[field_name] = input_field
-                
+
             elif field_type == "number":
                 input_field = (
                     ui.number(
@@ -255,23 +257,20 @@ def render_payload_fields(
                     .props("outlined dense")
                     .classes("w-full")
                 )
-                fields_container._field_inputs[field_name] = input_field
-                
+
             elif field_type == "textarea":
                 input_field = (
                     ui.textarea(label=label)
                     .props("outlined autogrow")
                     .classes("w-full")
                 )
-                fields_container._field_inputs[field_name] = input_field
-                
+
             elif field_type == "checkbox":
                 input_field = ui.checkbox(
                     label,
                     value=field.get("default", False),
                 )
-                fields_container._field_inputs[field_name] = input_field
-                
+
             elif field_type == "select":
                 input_field = (
                     ui.select(
@@ -282,6 +281,8 @@ def render_payload_fields(
                     .props("outlined dense")
                     .classes("w-full")
                 )
+
+            if input_field is not None:
                 fields_container._field_inputs[field_name] = input_field
 
 
@@ -320,16 +321,19 @@ def add_task(
     try:
         # Build payload from dynamic fields
         field_values = {}
-        if hasattr(fields_container, "_field_inputs") and fields_container._field_inputs:
+        if (
+            hasattr(fields_container, "_field_inputs")
+            and fields_container._field_inputs
+        ):
             for field_name, field_input in fields_container._field_inputs.items():
                 try:
                     field_values[field_name] = field_input.value
                 except AttributeError:
                     # Skip fields that don't have a value attribute
                     pass
-        
+
         payload = build_payload_from_fields(selected_job_type, field_values)
-        
+
         # Validate required fields
         fields = JOB_PAYLOAD_FIELDS.get(selected_job_type, [])
         for field in fields:
@@ -339,7 +343,7 @@ def add_task(
                     type="negative",
                 )
                 return
-        
+
         status = TaskStatusEnum(selected_status)
         task = TaskData(
             id=uuid4(),
@@ -358,6 +362,7 @@ def add_task(
         )
     except Exception as e:
         import traceback
+
         error_msg = traceback.format_exc()
         print(f"Error creating task: {error_msg}")
         ui.notify(f"Failed to create task: {str(e)}", type="negative")
@@ -380,7 +385,11 @@ def show_run_task_confirmation(task_id: str) -> None:
     with ui.dialog() as dialog, ui.card().classes("w-96"):
         ui.label("Confirm Task Execution").classes("text-h6 mb-4")
         ui.label("Are you sure you want to run this task?").classes("mb-4")
-        
+
+        def on_confirm() -> None:
+            dialog.close()
+            run_task_now(task_id)
+
         with ui.row().classes("w-full justify-end gap-2"):
             ui.button(
                 "Cancel",
@@ -388,10 +397,10 @@ def show_run_task_confirmation(task_id: str) -> None:
             ).props("flat")
             ui.button(
                 "Confirm",
-                on_click=lambda: [dialog.close(), run_task_now(task_id)],
+                on_click=on_confirm,
                 color="primary",
             )
-    
+
     dialog.open()
 
 
@@ -432,17 +441,17 @@ def render_add_task_form() -> None:
                 )
 
             # Container for dynamic payload fields with field storage
-            fields_container = ui.column().classes("w-full mt-3")
-            fields_container._field_inputs = {}  # Store field references
-            
+            fields_container: Any = ui.column().classes("w-full mt-3")
+            fields_container._field_inputs = {}
+
             # Initial rendering of payload fields
             render_payload_fields(job_type_input, fields_container)
-            
-            # Update fields when job type changes
-            job_type_input.on_value_change(
-                lambda: render_payload_fields(job_type_input, fields_container)
-            )
 
+            # Update fields when job type changes
+            def on_job_type_change() -> None:
+                render_payload_fields(job_type_input, fields_container)
+
+            job_type_input.on_value_change(on_job_type_change)
             with ui.row().classes("w-full justify-end mt-3"):
                 ui.button(
                     "Create Task",
@@ -454,7 +463,6 @@ def render_add_task_form() -> None:
                         fields_container,
                     ),
                 ).props("color=primary")
-
 
 
 def tasks_page():
