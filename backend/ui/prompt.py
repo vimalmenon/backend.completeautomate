@@ -194,8 +194,7 @@ def prompt_page():
                     ui.label("Role").classes("w-1/6")
                     ui.label("AI").classes("w-1/6")
                     ui.label("Updated").classes("w-1/3")
-                    ui.label("Actions").classes("w-1/24 text-center shrink-0")
-                    ui.label("Expand").classes("w-1/24 text-center shrink-0")
+                    ui.label("Action").classes("w-1/6 text-center")
 
                 for prompt in prompts:
                     prompt_json = prompt.to_json()
@@ -204,72 +203,104 @@ def prompt_page():
                     ai = prompt_json.get("ai", "")
                     last_updated = prompt_json.get("last_updated", "")
 
-                    with ui.column().classes(
-                        "w-full gap-0 border-b border-gray-200 dark:border-slate-700"
+                    with ui.row().classes(
+                        "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700 cursor-pointer gap-3"
                     ):
+                        ui.label(task).classes("w-1/4 text-sm font-medium")
+                        ui.label(role).classes("w-1/6 text-sm")
+                        ui.label(ai).classes("w-1/6 text-sm")
+                        ui.label(last_updated).classes("w-1/3 text-sm")
                         with ui.row().classes(
-                            "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap"
-                        ) as row_header:
-                            ui.label(task).classes("w-1/4 text-sm font-medium")
-                            ui.label(role).classes("w-1/6 text-sm")
-                            ui.label(ai).classes("w-1/6 text-sm")
-                            ui.label(last_updated).classes("w-1/3 text-sm")
-                            with ui.row().classes(
-                                "w-1/24 justify-center items-center shrink-0"
-                            ):
-                                ui.button(
-                                    icon="edit",
-                                    on_click=lambda _=None, current_prompt=prompt: open_edit_prompt_dialog(
-                                        current_prompt
-                                    ),
-                                ).props(
-                                    'flat dense color="primary" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
-                                )
-                            with ui.row().classes(
-                                "w-1/24 justify-center items-center shrink-0"
-                            ):
-                                expand_button = ui.button(icon="expand_more").props(
-                                    'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
-                                )
-
-                        detail_section = ui.column().classes(
-                            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3 hidden"
-                        )
-
-                        def toggle_row(section, header, expand_btn):
-                            is_hidden = "hidden" in section.classes
-                            if is_hidden:
-                                section.classes(remove="hidden")
-                                expand_btn.props("icon=expand_less")
-                                expand_btn.update()
-                                header.classes(add="bg-blue-100 dark:bg-blue-900/40")
-                            else:
-                                section.classes(add="hidden")
-                                expand_btn.props("icon=expand_more")
-                                expand_btn.update()
-                                header.classes(remove="bg-blue-100 dark:bg-blue-900/40")
-
-                        expand_button.on(
-                            "click",
-                            lambda s=detail_section, h=row_header, eb=expand_button: toggle_row(
-                                s, h, eb
-                            ),
-                        )
-
-                        with detail_section:
-                            for key, value in prompt_json.items():
-                                if value is not None and not isinstance(value, list):
-                                    display_val = str(value)
-                                    with ui.row().classes("w-full gap-4 items-start"):
-                                        ui.label(f"{key}:").classes(
-                                            "w-1/5 font-bold text-blue-600 text-sm"
-                                        )
-                                        ui.label(display_val).classes(
-                                            "w-4/5 text-wrap text-sm"
-                                        )
+                            "w-1/6 justify-center items-center gap-2"
+                        ):
+                            ui.button(
+                                icon="open_in_new",
+                                on_click=lambda task_val=task: ui.run_javascript(
+                                    f'window.location.href = "/prompt/{task_val}"'
+                                ),
+                            ).props("flat dense color=primary").tooltip("View Details")
         else:
             with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
                 ui.icon("article", size="xl").classes("text-gray-400")
                 ui.label("No prompts found").classes("text-h6 text-gray-500")
 
         ui.separator().classes("my-4")
+
+
+def prompt_detail_page(task_id: str) -> None:
+    try:
+        prompt = PromptDB().get_prompt_by_task(PromptTaskEnum(task_id))
+    except (ValueError, AppException):
+        prompt = None
+
+    with ui.card().classes("w-full page-transition"):
+        with ui.row().classes("items-center justify-between w-full mb-4"):
+            ui.label("Prompt Details").classes("text-h4")
+            with ui.row().classes("gap-2"):
+                ui.button(
+                    "Back to Prompts",
+                    icon="arrow_back",
+                    on_click=lambda: ui.run_javascript(
+                        'window.location.href = "/prompt"'
+                    ),
+                ).props("flat")
+                ui.button(
+                    icon="home",
+                    on_click=lambda: ui.run_javascript('window.location.href = "/"'),
+                ).props("flat")
+
+        ui.separator()
+
+        if not prompt:
+            with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
+                ui.label(f"Prompt not found for task: {task_id}").classes(
+                    "text-negative text-subtitle1"
+                )
+            return
+
+        prompt_json = prompt.to_json()
+
+        with ui.card().classes("w-full dark:bg-slate-800"):
+            ui.label("Metadata").classes("text-h6 mb-3")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Task:").classes("w-1/4 font-bold")
+                ui.label(prompt_json.get("task", "")).classes("w-3/4 text-wrap")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Role:").classes("w-1/4 font-bold")
+                ui.label(prompt_json.get("role", "")).classes("w-3/4 text-wrap")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("AI:").classes("w-1/4 font-bold")
+                ui.label(prompt_json.get("ai", "")).classes("w-3/4 text-wrap")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Version:").classes("w-1/4 font-bold")
+                ui.label(prompt_json.get("version", "")).classes("w-3/4 text-wrap")
+
+            with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Last Updated:").classes("w-1/4 font-bold")
+                ui.label(prompt_json.get("last_updated", "")).classes("w-3/4 text-wrap")
+
+        with ui.card().classes("w-full dark:bg-slate-800"):
+            ui.label("Prompt").classes("text-h6 mb-3")
+            ui.label(prompt_json.get("prompt", "")).classes("w-full text-wrap text-sm")
+
+        with ui.card().classes("w-full dark:bg-slate-800"):
+            ui.label("System Message").classes("text-h6 mb-3")
+            ui.label(prompt_json.get("system_message", "")).classes(
+                "w-full text-wrap text-sm"
+            )
+
+        with ui.row().classes("w-full justify-end gap-2 mt-4"):
+            ui.button(
+                "Edit",
+                icon="edit",
+                on_click=lambda: open_edit_prompt_dialog(prompt),
+            ).props("color=primary")
+            ui.button(
+                "Back to Prompts",
+                icon="arrow_back",
+                on_click=lambda: ui.run_javascript('window.location.href = "/prompt"'),
+            ).props("flat")

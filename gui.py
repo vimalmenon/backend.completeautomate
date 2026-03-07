@@ -8,6 +8,7 @@ from backend.config.logging_config import setup_logging
 from backend.config.session import set_offline_mode
 from backend.ui import (
     main_page,
+    prompt_detail_page,
     prompt_page,
     task_detail_page,
     tasks_page,
@@ -90,6 +91,7 @@ def root():
                 "/youtube": youtube_page,
                 "/video/{ref_id}": video_detail_page,
                 "/prompt": prompt_page,
+                "/prompt/{task_id}": prompt_detail_page,
                 "/loading": loading_page,
             }
         ).classes("w-full p-4")
