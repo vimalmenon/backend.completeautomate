@@ -35,12 +35,12 @@ def main_page():
                 {
                     "name": "List Videos",
                     "icon": "ondemand_video",
-                    "links_to": "/youtube?page=youtube_videos",
+                    "links_to": "/youtube",
                 },
                 {
                     "name": "List Channel",
                     "icon": "live_tv",
-                    "links_to": "/youtube?page=youtube_channel",
+                    "links_to": "/youtube",
                 },
             ],
         },

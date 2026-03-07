@@ -219,6 +219,25 @@ def render_metadata_suggestions(video_id: str) -> None:
                     )
 
 
+def open_metadata_suggestions_dialog(video_id: str) -> None:
+    suggestion = YouTubeVideoMetadataSuggesterDB().fetch_suggestion(
+        channel_id=env.YOUTUBE_CHANNEL_ID,
+        video_id=video_id,
+    )
+    if not suggestion:
+        ui.notify("No metadata suggestions found", type="warning")
+        return
+
+    with ui.dialog() as dialog, ui.card().classes("w-[1100px] max-w-full"):
+        with ui.row().classes("w-full items-center justify-between"):
+            ui.label("Metadata Suggestions").classes("text-h6")
+            ui.button("Close", on_click=dialog.close).props("flat")
+        ui.separator()
+        render_metadata_suggestions(video_id)
+
+    dialog.open()
+
+
 def save_video_details(ref_id: str, title: str, description: str) -> None:
     try:
         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_video_details(
@@ -287,7 +306,7 @@ def open_edit_video_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_video_details(
-                    str(video_json.get("ref_id", "")),
+                    _get_video_db_id(video_json),
                     str(title_input.value),
                     str(description_input.value),
                 ),
@@ -314,7 +333,7 @@ def open_edit_transcript_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_transcript(
-                    str(video_json.get("ref_id", "")),
+                    _get_video_db_id(video_json),
                     str(transcript_input.value),
                     current_summarize,
                 ),
@@ -341,7 +360,7 @@ def open_edit_summarize_dialog(video_json: dict) -> None:
                 "Save",
                 icon="save",
                 on_click=lambda: save_summarize(
-                    str(video_json.get("ref_id", "")),
+                    _get_video_db_id(video_json),
                     current_transcript,
                     str(summarize_input.value),
                 ),
@@ -357,8 +376,23 @@ def _get_video_id_from_platform(video) -> str:
         return ""
 
 
-def _render_video_action_buttons(video_json: dict) -> None:
+def _get_video_db_id(video_json: dict) -> str:
+    video_id = str(video_json.get("video_id", "")).strip()
+    if video_id:
+        return video_id
+    return str(video_json.get("ref_id", "")).strip()
+
+
+def _render_video_action_buttons(video_json: dict, video_id: str = "") -> None:
     with ui.row().classes("w-full justify-end gap-2"):
+        if video_id:
+            ui.button(
+                "Metadata Suggestions",
+                icon="tips_and_updates",
+                on_click=lambda current_video_id=video_id: open_metadata_suggestions_dialog(
+                    current_video_id
+                ),
+            ).props("flat")
         ui.button(
             "View Stats",
             icon="show_chart",
@@ -408,31 +442,12 @@ def _render_video_json_details(video_json: dict) -> None:
                 ui.label(display_val).classes("w-4/5 text-wrap text-sm")
 
 
-def _bind_expand_behavior(detail_section, row_header, expand_button) -> None:
-    def toggle_row(section, header, expand_btn):
-        """Toggle row expansion"""
-        is_hidden = "hidden" in section.classes
-        if is_hidden:
-            section.classes(remove="hidden")
-            expand_btn.props("icon=expand_less")
-            expand_btn.update()
-            header.classes(add="bg-blue-100 dark:bg-blue-900/40")
-        else:
-            section.classes(add="hidden")
-            expand_btn.props("icon=expand_more")
-            expand_btn.update()
-            header.classes(remove="bg-blue-100 dark:bg-blue-900/40")
-
-    expand_button.on(
-        "click",
-        lambda s=detail_section, h=row_header, eb=expand_button: toggle_row(s, h, eb),
-    )
-
-
 def _render_video_row(video) -> None:
-    video_id_full = _get_video_id_from_platform(video)
     video_json = video.to_json()
-    video_id = video_json.get("ref_id", "")[:16]
+    ref_id = str(video_json.get("ref_id", ""))
+    video_id_full = _get_video_id_from_platform(video)
+    route_id = video_id_full or ref_id
+    video_id = route_id[:16]
     title = video_json.get("title", "Untitled")
     description = video_json.get("description", "")
     short_description = (
@@ -445,27 +460,25 @@ def _render_video_row(video) -> None:
     ):
         with ui.row().classes(
             "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap"
-        ) as row_header:
+        ):
             ui.label(video_id).classes("w-1/6 text-sm")
             ui.label(title).classes("w-1/4 text-sm font-medium")
-            ui.label(short_description).classes("w-1/3 text-sm")
+            ui.label(short_description).classes("w-1/4 text-sm")
             ui.label(published).classes("w-1/6 text-sm")
-            with ui.row().classes("w-1/12 justify-center items-center shrink-0"):
-                expand_button = ui.button(icon="expand_more").props(
-                    'flat dense onclick="event.stopPropagation()" '
-                    'onmousedown="event.stopPropagation()"'
-                )
-
-        detail_section = ui.column().classes(
-            "w-full bg-blue-50 dark:bg-slate-800 p-4 gap-3 hidden"
-        )
-        _bind_expand_behavior(detail_section, row_header, expand_button)
-
-        with detail_section:
-            if video_id_full:
-                render_metadata_suggestions(video_id_full)
-            _render_video_action_buttons(video_json)
-            _render_video_json_details(video_json)
+            with ui.row().classes("w-1/6 justify-center items-center gap-1 shrink-0"):
+                if video_id_full:
+                    ui.button(
+                        icon="tips_and_updates",
+                        on_click=lambda current_video_id=video_id_full: open_metadata_suggestions_dialog(
+                            current_video_id
+                        ),
+                    ).props("flat dense")
+                ui.button(
+                    icon="open_in_new",
+                    on_click=lambda current_route_id=route_id: ui.run_javascript(
+                        f'window.location.href = "/video/{current_route_id}"'
+                    ),
+                ).props("flat dense")
 
 
 def _render_video_table(videos: list) -> None:
@@ -479,15 +492,15 @@ def _render_video_table(videos: list) -> None:
         ):
             ui.label("Ref ID").classes("w-1/6")
             ui.label("Title").classes("w-1/4")
-            ui.label("Description").classes("w-1/3")
+            ui.label("Description").classes("w-1/4")
             ui.label("Published").classes("w-1/6")
-            ui.label("Expand").classes("w-1/12 text-center shrink-0")
+            ui.label("Actions").classes("w-1/6 text-center shrink-0")
 
         for video in videos:
             _render_video_row(video)
 
 
-def youtube_page(page: str):
+def youtube_page():
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("YouTube Videos").classes("text-h4")
@@ -527,3 +540,48 @@ def youtube_page(page: str):
                 ui.label("No videos found").classes("text-h6 text-gray-500")
 
         ui.separator().classes("my-4")
+
+
+def video_detail_page(ref_id: str) -> None:
+    video_db = YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID)
+    video = video_db.fetch_video_from_db(video_id=ref_id)
+
+    # Backward compatibility for old ref_id-based URLs.
+    if not video:
+        for candidate in video_db.get_all_videos_from_db():
+            candidate_video_id = _get_video_id_from_platform(candidate)
+            if ref_id == candidate.ref_id or ref_id == candidate_video_id:
+                video = candidate
+                break
+
+    with ui.card().classes("w-full page-transition"):
+        with ui.row().classes("items-center justify-between w-full mb-4"):
+            ui.label("Video Details").classes("text-h4")
+            with ui.row().classes("gap-2"):
+                ui.button(
+                    "Back to Videos",
+                    icon="arrow_back",
+                    on_click=lambda: ui.run_javascript(
+                        'window.location.href = "/youtube"'
+                    ),
+                ).props("flat")
+                ui.button(
+                    icon="home",
+                    on_click=lambda: ui.run_javascript('window.location.href = "/"'),
+                ).props("flat")
+
+        ui.separator()
+
+        if not video:
+            with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
+                ui.label(f"Video not found for ref_id: {ref_id}").classes(
+                    "text-negative text-subtitle1"
+                )
+            return
+
+        video_id_full = _get_video_id_from_platform(video)
+        video_json = video.to_json()
+        video_json["video_id"] = video_id_full
+
+        _render_video_action_buttons(video_json, video_id_full)
+        _render_video_json_details(video_json)

@@ -6,7 +6,13 @@ from nicegui import ui
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
 from backend.config.session import set_offline_mode
-from backend.ui import main_page, prompt_page, tasks_page, youtube_page
+from backend.ui import (
+    main_page,
+    prompt_page,
+    tasks_page,
+    video_detail_page,
+    youtube_page,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +86,7 @@ def root():
                 "/": main_page,
                 "/tasks": tasks_page,
                 "/youtube": youtube_page,
+                "/video/{ref_id}": video_detail_page,
                 "/prompt": prompt_page,
                 "/loading": loading_page,
             }
