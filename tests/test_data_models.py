@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 
+from backend.data.image import ImagePromptJobData
 from backend.data.s3 import S3Data
 from backend.data.youtube import (
     YouTubeJobData,
@@ -12,6 +13,7 @@ from backend.data.youtube import (
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
+from backend.enum import ImageTypeEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.enum.status import TaskStatusEnum
 
@@ -209,3 +211,28 @@ class TestYouTubeJobDataNames:
             }
         )
         assert loaded.name == "YouTubeVideoMetadataJobData"
+
+
+@pytest.mark.unit
+class TestImageJobDataNames:
+    """Ensure image JobData classes expose name metadata."""
+
+    def test_image_prompt_job_data_name_reflection(self) -> None:
+        data = ImagePromptJobData(
+            task_id=uuid4(),
+            description="thumbnail prompt",
+            ref_id="sample_ref",
+            image_type=ImageTypeEnum.YouTube,
+        )
+
+        assert data.to_json()["name"] == "ImagePromptJobData"
+
+        loaded = ImagePromptJobData.to_cls(
+            {
+                "task_id": str(data.task_id),
+                "description": "thumbnail prompt",
+                "ref_id": "sample_ref",
+                "image_type": ImageTypeEnum.YouTube.value,
+            }
+        )
+        assert loaded.name == "ImagePromptJobData"
