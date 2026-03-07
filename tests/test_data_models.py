@@ -174,9 +174,7 @@ class TestYouTubeJobDataNames:
         data = YouTubeJobData(ref_id="sample_ref")
         assert data.to_json()["name"] == "YouTubeJobData"
 
-        loaded = YouTubeJobData.to_cls(
-            {"ref_id": "sample_ref", "name": "CustomName"}
-        )
+        loaded = YouTubeJobData.to_cls({"ref_id": "sample_ref", "name": "CustomName"})
         assert loaded.name == "YouTubeJobData"
 
     def test_youtube_video_summarize_job_data_name_reflection(self) -> None:
