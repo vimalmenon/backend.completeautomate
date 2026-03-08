@@ -67,31 +67,72 @@ class QwenImageGeneration:
 
     def _extract_image_payload(self, response: Any) -> dict[str, str]:
         # DashScope SDK responses are object-like; handle both object and dict structures.
-        if hasattr(response, "output"):
-            output = response.output
-            choices = getattr(output, "choices", None)
-            if choices:
-                message = choices[0].get("message", {})
-                content = message.get("content", [])
-                for item in content:
-                    if isinstance(item, dict):
-                        if "image" in item and isinstance(item["image"], str):
-                            return {"url": item["image"]}
-                        if "url" in item and isinstance(item["url"], str):
-                            return {"url": item["url"]}
-                        if "b64_json" in item and isinstance(item["b64_json"], str):
-                            return {"b64_json": item["b64_json"]}
+        output = getattr(response, "output", None)
+        if output is None:
+            return {}
 
-            results = getattr(output, "results", None)
-            if results:
-                first = results[0]
-                if isinstance(first, dict):
-                    b64_json = first.get("b64_json")
-                    url = first.get("url")
-                    if isinstance(b64_json, str):
-                        return {"b64_json": b64_json}
-                    if isinstance(url, str):
-                        return {"url": url}
+        from_choices = self._extract_from_choices(getattr(output, "choices", None))
+        if from_choices:
+            return from_choices
+
+        return self._extract_from_results(getattr(output, "results", None))
+
+    def _extract_from_choices(self, choices: Any) -> dict[str, str]:
+        if not choices:
+            return {}
+
+        first_choice = choices[0]
+        if not isinstance(first_choice, dict):
+            return {}
+
+        message = first_choice.get("message", {})
+        if not isinstance(message, dict):
+            return {}
+
+        content = message.get("content", [])
+        if not isinstance(content, list):
+            return {}
+
+        for item in content:
+            payload = self._extract_from_content_item(item)
+            if payload:
+                return payload
+
+        return {}
+
+    def _extract_from_content_item(self, item: Any) -> dict[str, str]:
+        if not isinstance(item, dict):
+            return {}
+
+        image_value = item.get("image")
+        if isinstance(image_value, str) and image_value:
+            return {"url": image_value}
+
+        url_value = item.get("url")
+        if isinstance(url_value, str) and url_value:
+            return {"url": url_value}
+
+        b64_value = item.get("b64_json")
+        if isinstance(b64_value, str) and b64_value:
+            return {"b64_json": b64_value}
+
+        return {}
+
+    def _extract_from_results(self, results: Any) -> dict[str, str]:
+        if not results:
+            return {}
+
+        first = results[0]
+        if not isinstance(first, dict):
+            return {}
+
+        b64_json = first.get("b64_json")
+        if isinstance(b64_json, str) and b64_json:
+            return {"b64_json": b64_json}
+
+        url = first.get("url")
+        if isinstance(url, str) and url:
+            return {"url": url}
 
         return {}
 
