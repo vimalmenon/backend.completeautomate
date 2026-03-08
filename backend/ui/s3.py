@@ -7,7 +7,7 @@ from backend.integration.storage.s3_storage import S3Storage
 
 def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
     """Render breadcrumb navigation.
-    
+
     Args:
         items: List of (label, url) tuples. Last item is current page (no link).
     """
@@ -15,7 +15,7 @@ def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
         for index, (label, url) in enumerate(items):
             if index > 0:
                 ui.label("/").classes("text-gray-400")
-            
+
             if index == len(items) - 1:
                 # Current page - no link
                 ui.label(label).classes("text-gray-600 dark:text-gray-400 font-medium")

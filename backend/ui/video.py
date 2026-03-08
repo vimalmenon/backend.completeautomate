@@ -21,7 +21,7 @@ from backend.enum import JobEnum, JobStatusEnum, TaskStatusEnum
 
 def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
     """Render breadcrumb navigation.
-    
+
     Args:
         items: List of (label, url) tuples. Last item is current page (no link).
     """
@@ -29,7 +29,7 @@ def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
         for index, (label, url) in enumerate(items):
             if index > 0:
                 ui.label("/").classes("text-gray-400")
-            
+
             if index == len(items) - 1:
                 # Current page - no link
                 ui.label(label).classes("text-gray-600 dark:text-gray-400 font-medium")
@@ -833,12 +833,16 @@ async def video_detail_page(ref_id: str) -> None:
 
         # Fetch video title for breadcrumb
         video_title = video.title if video else ref_id
-        breadcrumb_title = video_title[:30] + "..." if len(video_title) > 30 else video_title
-        render_breadcrumbs([
-            ("Home", "/"), 
-            ("YouTube Videos", "/youtube"), 
-            (breadcrumb_title, f"/video/{ref_id}")
-        ])
+        breadcrumb_title = (
+            video_title[:30] + "..." if len(video_title) > 30 else video_title
+        )
+        render_breadcrumbs(
+            [
+                ("Home", "/"),
+                ("YouTube Videos", "/youtube"),
+                (breadcrumb_title, f"/video/{ref_id}"),
+            ]
+        )
         ui.separator()
 
         if not video:
@@ -969,7 +973,13 @@ async def channel_detail_page(channel_id: str) -> None:
     if not channel:
         with ui.card().classes("w-full page-transition"):
             _render_channel_page_header()
-            render_breadcrumbs([("Home", "/"), ("YouTube Videos", "/youtube"), ("Channel", f"/channel/{channel_id}")])
+            render_breadcrumbs(
+                [
+                    ("Home", "/"),
+                    ("YouTube Videos", "/youtube"),
+                    ("Channel", f"/channel/{channel_id}"),
+                ]
+            )
             ui.separator()
             with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
                 ui.label(f"Channel not found for id: {channel_id}").classes(
@@ -979,10 +989,18 @@ async def channel_detail_page(channel_id: str) -> None:
 
     channel_json = channel.to_json()
     channel_title = channel_json.get("title", "Channel")
-    breadcrumb_title = channel_title[:30] + "..." if len(channel_title) > 30 else channel_title
+    breadcrumb_title = (
+        channel_title[:30] + "..." if len(channel_title) > 30 else channel_title
+    )
     with ui.card().classes("w-full page-transition"):
         _render_channel_page_header(channel_json)
-        render_breadcrumbs([("Home", "/"), ("YouTube Videos", "/youtube"), (breadcrumb_title, f"/channel/{channel_id}")])
+        render_breadcrumbs(
+            [
+                ("Home", "/"),
+                ("YouTube Videos", "/youtube"),
+                (breadcrumb_title, f"/channel/{channel_id}"),
+            ]
+        )
         ui.separator()
         _render_channel_identity(channel_json)
         ui.separator()
