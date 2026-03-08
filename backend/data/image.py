@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Self
+from typing import Optional, Self
 from uuid import UUID
 
 from backend.data.platform import PlatformDBData
@@ -20,9 +20,10 @@ class ImageGeneratorJobData:
     ref_id: str
     task_id: UUID
     data: S3Data
+    model: Optional[str] = None  # Optional model selection (e.g., "GROK", "FLUX")
 
     def to_json(self) -> dict:
-        return {
+        json_data = {
             "id": str(self.id),
             "prompt": self.prompt,
             "name": self.name,
@@ -31,6 +32,9 @@ class ImageGeneratorJobData:
             "data": self.data.to_json(),
             "ref_id": self.ref_id,
         }
+        if self.model:
+            json_data["model"] = self.model
+        return json_data
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
@@ -42,6 +46,7 @@ class ImageGeneratorJobData:
             image_type=ImageTypeEnum(data["image_type"]),
             data=S3Data.to_cls(data["data"]),
             ref_id=data["ref_id"],
+            model=data.get("model"),  # Optional model parameter
         )
 
 

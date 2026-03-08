@@ -2,7 +2,7 @@ from backend.data import ImageGeneratorJobData, S3Data, TaskData
 from backend.database.image.image_generator_db import ImageGeneratorDB
 from backend.enum.status import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
-from backend.integration.image_generation.image_model import ImageModel
+from backend.integration.image_generation.image_model import ImageModel, ImageModelList
 from backend.integration.storage.s3_storage import S3Storage
 
 
@@ -19,7 +19,16 @@ class ImageGenerator(BaseGenerator):
         )
 
     def generate(self) -> TaskStatusEnum:
-        image = ImageModel().generate(self.job_data.prompt)
+        # Use specified model or default to FLUX
+        model = ImageModelList.FLUX  # Default
+        if self.job_data.model:
+            try:
+                model = ImageModelList[self.job_data.model.upper()]
+            except KeyError:
+                # If invalid model specified, fall back to default
+                pass
+
+        image = ImageModel(model=model).generate(self.job_data.prompt)
         S3Storage().upload_data(self.job_data.data, image)
         ImageGeneratorDB().save_to_db(self.job_data)
         return TaskStatusEnum.REVIEW

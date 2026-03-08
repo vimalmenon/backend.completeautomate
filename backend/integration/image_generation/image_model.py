@@ -12,6 +12,7 @@ from backend.exception.app_exception import AppException
 class ImageModelList(Enum):
     GEMINI_THREE_PRO_IMAGE = "google/gemini-3-pro-image-preview"
     FLUX = "black-forest-labs/flux.2-flex"
+    GROK = "grok-vision-beta"  # xAI Grok image generation
 
 
 class ImageModel:
@@ -19,6 +20,13 @@ class ImageModel:
         self.model = model
 
     def __initialize_model(self):
+        # Use xAI endpoint for Grok models
+        if self.model == ImageModelList.GROK:
+            return OpenAI(
+                base_url="https://api.x.ai/v1",
+                api_key=env.GROK_API_KEY.get_secret_value(),
+            )
+        # Use OpenRouter for other models
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=env.OPEN_ROUTE_API_KEY.get_secret_value(),
@@ -34,6 +42,18 @@ class ImageModel:
     # Private method
     def __generate_image(self, prompt: str) -> Any:
         client = self.__initialize_model()
+
+        # Grok uses native image generation API
+        if self.model == ImageModelList.GROK:
+            return client.images.generate(
+                prompt=prompt,
+                model=self.model.value,
+                n=1,
+                size="1024x1024",
+                response_format="b64_json",
+            )
+
+        # Other models use chat completion with image modality
         return client.chat.completions.create(
             model=self.model.value,
             messages=[
@@ -46,6 +66,16 @@ class ImageModel:
         )
 
     def __parse_response(self, response) -> bytes:
+        # Handle Grok's image generation response
+        if self.model == ImageModelList.GROK:
+            if not response.data:
+                raise AppException("No image data found in Grok response.")
+            image_data = response.data[0]
+            if hasattr(image_data, "b64_json") and image_data.b64_json:
+                return self.__convert_base64_to_bytes(image_data.b64_json)
+            raise AppException("No valid b64_json data in Grok response.")
+
+        # Handle OpenRouter chat completion response
         response = response.choices[0].message
         if response.images:
             for image in response.images:
