@@ -21,16 +21,6 @@ from backend.ui import (
 logger = logging.getLogger(__name__)
 
 
-def loading_page():
-    """Loading page displayed during navigation"""
-    with ui.column().classes(
-        "w-full h-screen items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600"
-    ):
-        ui.spinner(size="xl", color="white")
-        ui.label("Loading...").classes("text-h4 mt-4 text-white font-bold")
-        ui.label("Please wait while we fetch your data").classes("text-white mt-2")
-
-
 def root():
     def toggle_offline(is_offline: bool) -> None:
         os.environ["OFFLINE"] = "true" if is_offline else "false"
@@ -101,7 +91,6 @@ def root():
                 "/prompt": prompt_page,
                 "/prompt/{task_id}": prompt_detail_page,
                 "/s3": s3_bucket_page,
-                "/loading": loading_page,
             }
         ).classes("w-full p-4")
 
