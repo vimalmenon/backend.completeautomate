@@ -5,6 +5,27 @@ from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
 
 
+def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
+    """Render breadcrumb navigation.
+    
+    Args:
+        items: List of (label, url) tuples. Last item is current page (no link).
+    """
+    with ui.row().classes("items-center gap-2 mb-3 text-sm"):
+        for index, (label, url) in enumerate(items):
+            if index > 0:
+                ui.label("/").classes("text-gray-400")
+            
+            if index == len(items) - 1:
+                # Current page - no link
+                ui.label(label).classes("text-gray-600 dark:text-gray-400 font-medium")
+            else:
+                # Clickable breadcrumb
+                ui.link(label, url).classes(
+                    "text-blue-600 dark:text-blue-400 hover:underline"
+                )
+
+
 async def s3_bucket_page() -> None:
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
@@ -21,6 +42,7 @@ async def s3_bucket_page() -> None:
                     on_click=lambda: ui.run_javascript('window.location.href = "/"'),
                 ).props("flat")
 
+        render_breadcrumbs([("Home", "/"), ("S3 Bucket", "/s3")])
         ui.separator()
 
         with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
