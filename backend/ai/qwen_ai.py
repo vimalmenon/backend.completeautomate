@@ -7,22 +7,21 @@ from backend.enum.ai import AICreativityLevelEnum
 
 
 class ModelEnum(Enum):
-    QWEN_CODER_FREE = "qwen/qwen3-coder:free"
-    QWEN_CODER = "qwen/qwen3-coder"
+    QWEN_3_5_PLUS = "qwen3.5-plus"
 
 
 class QwenAI:
     def __init__(
         self,
-        model: ModelEnum = ModelEnum.QWEN_CODER,
+        model: ModelEnum = ModelEnum.QWEN_3_5_PLUS,
         creativity_level: AICreativityLevelEnum = AICreativityLevelEnum.LOW,
     ):
 
         self.llm = ChatQwen(
             model=model.value,
             temperature=creativity_level.value,
-            base_url="https://openrouter.ai/api/v1",
-            api_key=env.OPEN_ROUTE_API_KEY,
+            api_key=env.QWEN_API_KEY,
+            extra_body={"enable_thinking": True},
         )
 
     def get_model(self):
