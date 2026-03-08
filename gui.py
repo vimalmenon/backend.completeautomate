@@ -116,7 +116,7 @@ def main() -> None:
         root,
         title="CompleteAutomate",
         favicon="🤖",
-        storage_secret="completeautomate-secret-key-2024",  # Required for app.storage.user
+        storage_secret="completeautomate-secret-key",  # Required for app.storage.user
     )
 
 

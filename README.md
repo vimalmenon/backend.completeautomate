@@ -93,7 +93,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Need to set up Qwen
   - [x] Check if image model is working
 - [ ] Standardize the Image Generation
-  - [ ] Make the Image generation more Generic to be used
+  - [ ] Make the Image generation more generic to be used
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Test if it's able to generate good image prompts with multiple options
@@ -193,6 +193,20 @@ YouTubeChannelCreator (Initial Task)
 
 
 </details>
+
+
+## UI Routes
+
+Main                          /
+tasks                         /tasks
+YouTube Channels              /youtube
+Channel Id                    /youtube/{channel_id}
+YouTube Videos                /youtube/{channel_id}/videos
+YouTube Video detail          /youtube/{channel_id}/videos/{video_id}
+S3 Storage                    /storage
+Prompt                        /prompts
+Prompt Detail                 /prompts/{prompt_id}
+
 
 ## Requirements
 
