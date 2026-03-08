@@ -71,7 +71,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Extract shared reusable table utilities/components for `tasks.py`, `video.py`, and `prompt.py`
 - [ ] Add explicit confirmation dialog before task deletion
 - [ ] Add sorting controls in Tasks table (not just static ordering)
-- [x] Add field-level payload templates/validators for common `JobEnum` task types
 - [ ] Add page-level error states for missing env/config with actionable guidance
 - [ ] Add UI smoke tests for core flows (create/update/delete task, expand details, load prompt/video pages)
 - [ ] Add CI job for GUI smoke test execution
@@ -90,7 +89,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Need to set up Qwen
-  - [x] Check if chat model is working
   - [ ] Check if image model is working
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
@@ -123,7 +121,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [x] Run `poetry run one task` from UI
   - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add Playlist details to YouTube Video DB
