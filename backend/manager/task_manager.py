@@ -33,6 +33,13 @@ class TaskManager:
         logger.info(f"Adding task: job_type={task.job_type}")
         TaskDB().add_task(task)
 
+    def get_tasks(self) -> list[TaskData]:
+        tasks = self.db.get_tasks()
+        if not tasks:
+            logger.warning("No tasks found")
+            raise AppException(self.TASK_NOT_FOUND)
+        return tasks
+
     def get_all_active_tasks(self) -> list[TaskData]:
         logger.debug("Fetching all active tasks")
         tasks = TaskDB().get_active_tasks()

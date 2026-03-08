@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from nicegui import ui
+from nicegui import run, ui
 
 from backend.data.prompt import PromptDBData
 from backend.database import PromptDB
@@ -149,7 +149,7 @@ def render_add_prompt_form() -> None:
                 ).props("color=primary")
 
 
-def prompt_page():
+async def prompt_page():
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("Prompt Management").classes("text-h4")
@@ -174,7 +174,7 @@ def prompt_page():
             ui.label("Loading prompts...")
 
         try:
-            prompts = PromptDB().get_all_prompts()
+            prompts = await run.io_bound(PromptDB().get_all_prompts)
         except AppException:
             prompts = []
             ui.notify("Failed to load prompts", type="negative")
@@ -227,9 +227,11 @@ def prompt_page():
         ui.separator().classes("my-4")
 
 
-def prompt_detail_page(task_id: str) -> None:
+async def prompt_detail_page(task_id: str) -> None:
     try:
-        prompt = PromptDB().get_prompt_by_task(PromptTaskEnum(task_id))
+        prompt = await run.io_bound(
+            PromptDB().get_prompt_by_task, PromptTaskEnum(task_id)
+        )
     except (ValueError, AppException):
         prompt = None
 

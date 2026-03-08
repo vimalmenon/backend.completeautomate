@@ -1,11 +1,11 @@
-from nicegui import ui
+from nicegui import run, ui
 
 from backend.config.env import env
 from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
 
 
-def s3_bucket_page() -> None:
+async def s3_bucket_page() -> None:
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("S3 Bucket Items").classes("text-h4")
@@ -36,7 +36,7 @@ def s3_bucket_page() -> None:
             )
             table_container = ui.column().classes("w-full")
 
-            def load_items() -> None:
+            async def load_items() -> None:
                 table_container.clear()
 
                 prefix = str(prefix_input.value or "").strip()
@@ -48,7 +48,9 @@ def s3_bucket_page() -> None:
                     return
 
                 try:
-                    items = S3Storage().list_items(prefix=prefix, max_keys=max_keys)
+                    items = await run.io_bound(
+                        S3Storage().list_items, prefix=prefix, max_keys=max_keys
+                    )
                 except AppException:
                     with table_container:
                         ui.label(
@@ -103,4 +105,4 @@ def s3_bucket_page() -> None:
                 "color=primary"
             )
 
-        load_items()
+            await load_items()

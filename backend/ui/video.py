@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import uuid4
 
-from nicegui import ui
+from nicegui import run, ui
 
 from backend.config.env import env
 from backend.data import (
@@ -731,7 +731,7 @@ def _render_video_table(videos: list) -> None:
             _render_video_row(video)
 
 
-def youtube_page():
+async def youtube_page():
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("YouTube Videos").classes("text-h4")
@@ -761,10 +761,10 @@ def youtube_page():
             ui.spinner(size="lg", color="primary")
             ui.label("Loading YouTube videos...")
 
-        # Fetch videos
-        videos = YouTubeVideoDB(
-            channel_id=env.YOUTUBE_CHANNEL_ID
-        ).get_all_videos_from_db()
+            # Fetch videos (non-blocking)
+            videos = await run.io_bound(
+                YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).get_all_videos_from_db
+            )
         videos = sorted(videos, key=lambda video: video.published_at, reverse=True)
 
         # Remove loading spinner and row
@@ -780,13 +780,14 @@ def youtube_page():
         ui.separator().classes("my-4")
 
 
-def video_detail_page(ref_id: str) -> None:
+async def video_detail_page(ref_id: str) -> None:
     video_db = YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID)
-    video = video_db.fetch_video_from_db(video_id=ref_id)
+    video = await run.io_bound(video_db.fetch_video_from_db, video_id=ref_id)
 
     # Backward compatibility for old ref_id-based URLs.
     if not video:
-        for candidate in video_db.get_all_videos_from_db():
+        all_videos = await run.io_bound(video_db.get_all_videos_from_db)
+        for candidate in all_videos:
             candidate_video_id = _get_video_id_from_platform(candidate)
             if ref_id == candidate.ref_id or ref_id == candidate_video_id:
                 video = candidate
@@ -927,9 +928,11 @@ def _render_channel_statistics(channel_json: dict) -> None:
                 )
 
 
-def channel_detail_page(channel_id: str) -> None:
+async def channel_detail_page(channel_id: str) -> None:
     try:
-        channel = YouTubeChannelDB(channel_id=channel_id).query_channel()
+        channel = await run.io_bound(
+            YouTubeChannelDB(channel_id=channel_id).query_channel
+        )
     except Exception:
         channel = None
 

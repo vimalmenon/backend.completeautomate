@@ -6,17 +6,17 @@ from nicegui import ui
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
 from backend.config.session import set_offline_mode
-from backend.ui import (
+from backend.ui import (  # tasks_page,
     channel_detail_page,
     main_page,
     prompt_detail_page,
     prompt_page,
     s3_bucket_page,
     task_detail_page,
-    tasks_page,
     video_detail_page,
     youtube_page,
 )
+from backend.ui.view import tasks_page
 
 logger = logging.getLogger(__name__)
 
