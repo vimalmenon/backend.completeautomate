@@ -11,6 +11,9 @@ class ImagePromptResponse(BaseModel):
     )
     prompt: str = Field(description="The generated image prompt")
     description: str = Field(description="A description of the image prompt")
+    negative_prompt: str | None = Field(
+        default=None, description="The generated negative image prompt"
+    )
 
 
 class ImagePromptsListRequest(BaseModel):

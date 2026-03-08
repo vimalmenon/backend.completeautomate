@@ -13,7 +13,6 @@ from backend.jobs import (
     YouTubeJob,
 )
 from backend.manager import StartUpManager, TaskManager
-from backend.ai import QwenAI
 
 logger = logging.getLogger(__name__)
 

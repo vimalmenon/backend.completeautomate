@@ -51,6 +51,7 @@ class PromptData:
     prompt: str
     description: str
     status: JobStatusEnum = JobStatusEnum.NEW
+    negative_prompt: str | None = None
 
     def to_json(self) -> dict:
         return {
@@ -58,6 +59,7 @@ class PromptData:
             "prompt": self.prompt,
             "description": self.description,
             "status": self.status.value,
+            "negative_prompt": self.negative_prompt,
         }
 
     @classmethod
@@ -67,6 +69,7 @@ class PromptData:
             prompt=data["prompt"],
             description=data["description"],
             status=JobStatusEnum(data.get("status", JobStatusEnum.NEW.value)),
+            negative_prompt=data.get("negative_prompt"),
         )
 
 

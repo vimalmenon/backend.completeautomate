@@ -83,13 +83,16 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             response_format=ImagePromptsListRequest,
         )
         result = agent.invoke()
-        structured_response = result.get("structured_response", [])
+        structured_response: ImagePromptsListRequest = result.get(
+            "structured_response", []
+        )
         logger.debug("Agent response received for task_id=%s", self.task.id)
         prompt_response = [
             PromptData(
                 name=data.name,
                 prompt=data.prompt,
                 description=data.description,
+                negative_prompt=data.negative_prompt,
             )
             for data in structured_response.image_prompts
         ]
