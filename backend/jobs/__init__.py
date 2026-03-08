@@ -1,6 +1,5 @@
 from backend.jobs.base_job import BaseJob
 from backend.jobs.image_generator_job import ImageGeneratorJob
-from backend.jobs.image_prompt_job import ImagePromptJob
 from backend.jobs.no_job import NoJob
 from backend.jobs.prompt_suggester_job import PromptSuggesterJob
 from backend.jobs.twitter_job import TwitterJob
@@ -10,7 +9,6 @@ __all__ = [
     "BaseJob",
     "TwitterJob",
     "ImageGeneratorJob",
-    "ImagePromptJob",
     "NoJob",
     "YouTubeJob",
     "PromptSuggesterJob",

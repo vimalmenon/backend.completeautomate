@@ -6,20 +6,6 @@ import pytest
 
 
 @pytest.mark.unit
-class TestImagePromptGenerator:
-    """Test cases for ImagePromptGenerator"""
-
-    @patch("backend.generator.image_prompt_generator.ImagePromptGenerator")
-    def test_generate_prompt(self, mock_generator: MagicMock) -> None:
-        """Test generating image prompt"""
-        mock_generator.generate.return_value = "A beautiful sunset over mountains"
-
-        result = mock_generator.generate()
-        assert isinstance(result, str)
-        assert len(result) > 0
-
-
-@pytest.mark.unit
 class TestYouTubeVideoGenerator:
     """Test cases for YouTubeVideoGenerator"""
 
