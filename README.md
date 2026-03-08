@@ -124,6 +124,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [ ] Main Page to show IN_PROGRESS, IN REVIEW, Failed tasks
+  - [ ] Tasks should redirect to correct Place
+  - [ ] Channel to show both channel details and videos
+  - [ ] Ability to change status of the task (Give Edit Button)
   - [ ] Use Correct URL
   - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
@@ -197,15 +201,14 @@ YouTubeChannelCreator (Initial Task)
 
 ## UI Routes
 
-Main                          /
-tasks                         /tasks
-YouTube Channels              /youtube
-Channel Id                    /youtube/{channel_id}
-YouTube Videos                /youtube/{channel_id}/videos
-YouTube Video detail          /youtube/{channel_id}/videos/{video_id}
-S3 Storage                    /storage
-Prompt                        /prompts
-Prompt Detail                 /prompts/{prompt_id}
+Main                            /
+tasks                           /tasks
+YouTube Channels                /youtube
+Channel Id & YouTube Videos     /youtube/{channel_id}
+YouTube Video detail            /youtube/{channel_id}/{video_id}
+S3 Storage                      /storage
+Prompt                          /prompts
+Prompt Detail                   /prompts/{prompt_id}
 
 
 ## Requirements
