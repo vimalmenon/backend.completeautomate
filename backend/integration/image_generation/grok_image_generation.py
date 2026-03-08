@@ -15,12 +15,12 @@ class GrokImageGeneration:
     See: https://docs.x.ai/docs/api-reference/image-generation
     """
 
-    def __init__(self, model: str = "grok-vision-beta"):
+    def __init__(self, model: str = "grok-imagine-image"):
         """Initialize Grok image generation.
 
         Args:
             model: The Grok model to use for image generation.
-                   Default is "grok-vision-beta".
+                   Default is "grok-imagine-image".
         """
         self.model = model
         self.client = self._initialize_client()
@@ -32,12 +32,11 @@ class GrokImageGeneration:
             base_url="https://api.x.ai/v1",
         )
 
-    def generate(self, prompt: str, size: str = "1024x1024") -> bytes:
+    def generate(self, prompt: str) -> bytes:
         """Generate an image from a text prompt.
 
         Args:
             prompt: The text description of the image to generate.
-            size: The size of the image (e.g., "1024x1024", "512x512").
 
         Returns:
             The generated image as bytes.
@@ -46,26 +45,24 @@ class GrokImageGeneration:
             AppException: If image generation fails.
         """
         try:
-            response = self._generate_image(prompt, size)
+            response = self._generate_image(prompt)
             return self._parse_response(response)
         except Exception as e:
             raise AppException(f"Grok image generation error: {str(e)}")
 
-    def _generate_image(self, prompt: str, size: str) -> Any:
+    def _generate_image(self, prompt: str) -> Any:
         """Call Grok API to generate image.
 
         Args:
             prompt: The text prompt for image generation.
-            size: The desired image size.
 
         Returns:
             API response object.
         """
-        response = self.client.images.generate(  # type: ignore[call-overload]
+        response = self.client.images.generate(
             prompt=prompt,
             model=self.model,
             n=1,
-            size=size,
             response_format="b64_json",
         )
         return response

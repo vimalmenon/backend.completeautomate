@@ -1,18 +1,22 @@
 import base64
 import binascii
 from enum import Enum
-from typing import Any
+from typing import Any, cast
 
 from openai import OpenAI
 
 from backend.config.env import env
 from backend.exception.app_exception import AppException
+from backend.integration.image_generation.qwen_image_generation import (
+    QwenImageGeneration,
+)
 
 
 class ImageModelList(Enum):
     GEMINI_THREE_PRO_IMAGE = "google/gemini-3-pro-image-preview"
     FLUX = "black-forest-labs/flux.2-flex"
-    GROK = "grok-vision-beta"  # xAI Grok image generation
+    GROK = "grok-imagine-image"  # xAI Grok image generation
+    QWEN = "qwen-image-max"  # Alibaba Cloud Qwen image generation
 
 
 class ImageModel:
@@ -34,6 +38,8 @@ class ImageModel:
 
     def generate(self, prompt: str) -> bytes:
         try:
+            if self.model == ImageModelList.QWEN:
+                return QwenImageGeneration(model=self.model.value).generate(prompt)
             response = self.__generate_image(prompt)
             return self.__parse_response(response)
         except Exception as e:
@@ -49,7 +55,6 @@ class ImageModel:
                 prompt=prompt,
                 model=self.model.value,
                 n=1,
-                size="1024x1024",
                 response_format="b64_json",
             )
 
@@ -66,14 +71,18 @@ class ImageModel:
         )
 
     def __parse_response(self, response) -> bytes:
-        # Handle Grok's image generation response
+        # Handle Grok image generation response
         if self.model == ImageModelList.GROK:
             if not response.data:
-                raise AppException("No image data found in Grok response.")
+                raise AppException(
+                    f"No image data found in {self.model.name.title()} response."
+                )
             image_data = response.data[0]
             if hasattr(image_data, "b64_json") and image_data.b64_json:
                 return self.__convert_base64_to_bytes(image_data.b64_json)
-            raise AppException("No valid b64_json data in Grok response.")
+            raise AppException(
+                f"No valid image data found in {self.model.name.title()} response."
+            )
 
         # Handle OpenRouter chat completion response
         response = response.choices[0].message
@@ -90,3 +99,13 @@ class ImageModel:
             return base64.b64decode(payload, validate=True)
         except (binascii.Error, ValueError) as e:
             raise AppException(f"Invalid base64 image data: {str(e)}")
+
+    def __download_image_bytes(self, image_url: str) -> bytes:
+        from urllib.request import Request, urlopen
+
+        try:
+            request = Request(image_url, headers={"User-Agent": "completeautomate/1.0"})
+            with urlopen(request, timeout=30) as response:
+                return cast(bytes, response.read())
+        except Exception as e:
+            raise AppException(f"Failed to download image URL data: {str(e)}")
