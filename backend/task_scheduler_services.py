@@ -13,6 +13,7 @@ from backend.jobs import (
     YouTubeJob,
 )
 from backend.manager import StartUpManager, TaskManager
+from backend.ai import QwenAI
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,7 @@ class TaskSchedulerServices:
         transform: bool | None = False,
         test: bool | None = False,
     ) -> None:
+        breakpoint()
         if task_id:
             logger.info("Starting one-time task execution for task_id=%s", task_id)
             self.__run_task_by_id(task_id)

@@ -288,8 +288,15 @@ Run one-time transformation and exit:
 ```sh
 poetry run app --transform true
 ```
-
 Use `--transform true` for a one-time transformation run.
+
+Run one-time test script and exit:
+
+```sh
+poetry run app --test test
+```
+
+
 
 ### 4) Run the dashboard
 
@@ -353,6 +360,7 @@ Pytest config and markers live in `pytest.ini`.
 Examples:
 
 ```sh
+poetry run app --test test
 poetry run pytest -m unit
 poetry run pytest -m integration
 poetry run pytest tests/test_s3_storage.py
