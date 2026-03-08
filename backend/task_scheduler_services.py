@@ -39,7 +39,6 @@ class TaskSchedulerServices:
         transform: bool | None = False,
         test: bool | None = False,
     ) -> None:
-        breakpoint()
         if task_id:
             logger.info("Starting one-time task execution for task_id=%s", task_id)
             self.__run_task_by_id(task_id)
