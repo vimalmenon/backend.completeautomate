@@ -35,7 +35,12 @@ class TaskSchedulerServices:
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
 
-    def start(self, task_id: str | None = None, transform: bool | None = False) -> None:
+    def start(
+        self,
+        task_id: str | None = None,
+        transform: bool | None = False,
+        test: bool | None = False,
+    ) -> None:
         if task_id:
             logger.info("Starting one-time task execution for task_id=%s", task_id)
             self.__run_task_by_id(task_id)
@@ -45,6 +50,11 @@ class TaskSchedulerServices:
             logger.info("Starting task transformation process")
             self.task_manager.transform_tasks()
             logger.info("Completed task transformation process")
+            return
+        if test:
+            logger.info("Starting test script execution")
+            self.__run_test_script()
+            logger.info("Completed test script execution")
             return
         tasks = self.task_manager.get_active_tasks()
         parallel_tasks = []
@@ -75,6 +85,9 @@ class TaskSchedulerServices:
         logger.info("Task %s executed with status: %s", task.id, status)
         self.task_manager.update_task(task)
 
-    def __run_in_parallel(self, parallel_tasks: list):
+    def __run_test_script(self) -> bool:
+        return False
+
+    def __run_in_parallel(self, parallel_tasks: list) -> bool:
         # TODO Need to implement
-        pass
+        return False

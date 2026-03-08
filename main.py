@@ -17,9 +17,12 @@ def main():
 
     parser.add_argument("--task-id", dest="task_id", required=False)
     parser.add_argument("--transform", dest="transform", required=False)
+    parser.add_argument("--test", dest="test", required=False)
     args = parser.parse_args()
 
-    TaskSchedulerServices().start(task_id=args.task_id, transform=args.transform)
+    TaskSchedulerServices().start(
+        task_id=args.task_id, transform=args.transform, test=args.test
+    )
 
     logger.info("Application completed successfully")
 
