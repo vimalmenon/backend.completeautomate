@@ -1,2 +1,2 @@
-def youtube_video_page():
+def youtube_videos_page():
     pass
