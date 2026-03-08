@@ -493,7 +493,6 @@ def tasks_page():
         # Fetch tasks
         tasks = TaskDB().get_tasks()
         tasks = sort_tasks_by_priority(tasks)
-        status_options = [status.value for status in TaskStatusEnum]
 
         # Remove loading spinner and row
         loading_row.delete()
@@ -537,20 +536,8 @@ def tasks_page():
                             f"w-full p-3 items-center flex-nowrap {row_status_class}"
                         ):
                             ui.label(task_id).classes("w-1/5 text-sm")
-                            ui.label(task_type).classes("w-1/8 text-sm")
-                            (
-                                ui.select(
-                                    options=status_options,
-                                    value=status,
-                                    on_change=lambda e, current_task=task: update_task_status(
-                                        e, current_task
-                                    ),
-                                )
-                                .props(
-                                    f'dense outlined options-dense color="{get_status_color(status)}" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
-                                )
-                                .classes("w-1/8 text-sm")
-                            )
+                            ui.label(task_type[:20]).classes("w-1/8 text-sm")
+                            ui.label(status).classes("w-1/8 text-sm")
                             ui.label(created_by).classes("w-1/8 text-sm")
                             ui.label(created_at).classes("w-1/8 text-sm font-medium")
                             ui.label(completed_at).classes("w-1/8 text-sm font-medium")
