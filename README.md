@@ -177,6 +177,7 @@ YouTubeChannelCreator (Initial Task)
 **Ideas / Low Priority:**
 
 - Add topic suggestions for next week
+- Need an mobile APP / Website
 - Dockerfile + DockerHub CD
 - Local text-to-speech
 - Instagram/Twitter posting integration

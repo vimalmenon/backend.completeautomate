@@ -1,16 +1,22 @@
 from datetime import datetime
+from uuid import uuid4
 
 from nicegui import ui
 
 from backend.config.env import env
-from backend.data import YouTubeTranscriptDBData
+from backend.data import (
+    TaskData,
+    YouTubeTranscriptDBData,
+    YouTubeVideoThumbnailPromptSuggesterJobData,
+)
+from backend.database import TaskDB
 from backend.database.image.image_prompt_db import ImagePromptDB
 from backend.database.youtube import (
     YouTubeChannelDB,
     YouTubeVideoDB,
     YouTubeVideoMetadataSuggesterDB,
 )
-from backend.enum import JobStatusEnum
+from backend.enum import JobEnum, JobStatusEnum, TaskStatusEnum
 
 
 def open_stats_chart_dialog(video_json: dict) -> None:
@@ -431,6 +437,28 @@ def save_summarize(ref_id: str, transcript_text: str, summarize_text: str) -> No
         ui.notify("Failed to update summary", type="negative")
 
 
+def create_thumbnail_suggestion_task(video_id: str) -> None:
+    try:
+        task_id = uuid4()
+        payload = YouTubeVideoThumbnailPromptSuggesterJobData(
+            task_id=task_id,
+            ref_id=video_id,
+        ).to_json()
+        task = TaskData(
+            id=task_id,
+            job_type=JobEnum.YouTubeVideoThumbnailPromptSuggester,
+            payload=payload,
+            created_by=JobEnum.OWNER,
+            created_at=datetime.now(),
+            status=TaskStatusEnum.NEW,
+            trail=[],
+        )
+        TaskDB().add_task(task)
+        ui.notify("Thumbnail suggestion task created", type="positive")
+    except Exception:
+        ui.notify("Failed to create thumbnail suggestion task", type="negative")
+
+
 def open_edit_video_dialog(video_json: dict) -> None:
     with ui.dialog() as dialog, ui.card().classes("w-[900px] max-w-full"):
         ui.label("Edit Video").classes("text-h6")
@@ -534,6 +562,13 @@ def _get_video_db_id(video_json: dict) -> str:
 def _render_video_action_buttons(video_json: dict, video_id: str = "") -> None:
     with ui.row().classes("w-full justify-end gap-2"):
         if video_id:
+            ui.button(
+                "Suggest Thumbnail",
+                icon="image_search",
+                on_click=lambda current_video_id=video_id: create_thumbnail_suggestion_task(
+                    current_video_id
+                ),
+            ).props("flat")
             ui.button(
                 "Metadata Suggestions",
                 icon="tips_and_updates",
@@ -657,6 +692,12 @@ def _render_video_row(video) -> None:
             ui.label(published).classes("w-1/6 text-sm")
             with ui.row().classes("w-1/6 justify-center items-center gap-1 shrink-0"):
                 if video_id_full:
+                    ui.button(
+                        icon="image_search",
+                        on_click=lambda current_video_id=video_id_full: create_thumbnail_suggestion_task(
+                            current_video_id
+                        ),
+                    ).props("flat dense")
                     ui.button(
                         icon="tips_and_updates",
                         on_click=lambda current_video_id=video_id_full: open_metadata_suggestions_dialog(
