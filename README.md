@@ -90,8 +90,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
 - [ ] Need to set up Qwen
+  - [x] Check if chat model is working
   - [ ] Check if image model is working
-  - [ ] Check if chat model is working
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Use Grok to create image
