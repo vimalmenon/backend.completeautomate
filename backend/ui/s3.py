@@ -1,4 +1,4 @@
-from nicegui import run, ui
+from nicegui import app, run, ui
 
 from backend.config.env import env
 from backend.exception.app_exception import AppException
@@ -55,14 +55,22 @@ async def s3_bucket_page() -> None:
         )
         ui.separator()
 
+        # Load saved state from app.storage.user
+        saved_prefix = app.storage.user.get("s3_prefix", "")
+        saved_max_keys = app.storage.user.get("s3_max_keys", 200)
+
         with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
             prefix_input = (
-                ui.input(label="Prefix", placeholder="images/ or json/")
+                ui.input(
+                    label="Prefix",
+                    placeholder="images/ or json/",
+                    value=saved_prefix,
+                )
                 .props("outlined clearable dense")
                 .classes("min-w-[260px]")
             )
             max_keys_input = (
-                ui.number(label="Max Keys", value=200, min=1, max=5000)
+                ui.number(label="Max Keys", value=saved_max_keys, min=1, max=5000)
                 .props("outlined dense")
                 .classes("w-40")
             )
@@ -78,6 +86,10 @@ async def s3_bucket_page() -> None:
                 except (TypeError, ValueError):
                     ui.notify("Max Keys must be a valid number", type="negative")
                     return
+
+                # Save current state to app.storage.user
+                app.storage.user["s3_prefix"] = prefix
+                app.storage.user["s3_max_keys"] = max_keys
 
                 try:
                     items = await run.io_bound(

@@ -112,7 +112,12 @@ def main() -> None:
     # Initialize logging
     setup_logging(log_dir="logs")
     logger.info("Starting CompleteAutomate GUI")
-    ui.run(root, title="CompleteAutomate", favicon="🤖")
+    ui.run(
+        root,
+        title="CompleteAutomate",
+        favicon="🤖",
+        storage_secret="completeautomate-secret-key-2024",  # Required for app.storage.user
+    )
 
 
 if __name__ in {"__main__", "__mp_main__"}:

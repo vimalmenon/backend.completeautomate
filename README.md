@@ -87,12 +87,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-
+- [ ] Set up image generation
+  - [ ] Use Qwen
+  - [ ] Use Grok
 - [ ] Need to set up Qwen
   - [ ] Check if image model is working
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
-- [ ] Use Grok to create image
 - [ ] Test if it's able to generate good image prompts with multiple options
   - [ ] Test all the prompts once done
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
@@ -111,7 +112,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve on prompt suggester
 - [ ] Fix TODOs and Dead code
 - [ ] Set Up GitHub Cron Job
-  - [ ] Set up Env and variable
+  - [ ] Set up Env and Variable
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
@@ -121,6 +122,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
+  - [ ] Use Correct URL
   - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add Playlist details to YouTube Video DB
