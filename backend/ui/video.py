@@ -19,25 +19,32 @@ from backend.database.youtube import (
 from backend.enum import JobEnum, JobStatusEnum, TaskStatusEnum
 
 
-def render_breadcrumbs(items: list[tuple[str, str]]) -> None:
+def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
     """Render breadcrumb navigation.
 
     Args:
         items: List of (label, url) tuples. Last item is current page (no link).
+        right_text: Optional text to display on the right side.
     """
-    with ui.row().classes("items-center gap-2 mb-3 text-sm"):
-        for index, (label, url) in enumerate(items):
-            if index > 0:
-                ui.label("/").classes("text-gray-400")
+    with ui.row().classes("items-center justify-between w-full mb-3 text-sm"):
+        with ui.row().classes("items-center gap-2"):
+            for index, (label, url) in enumerate(items):
+                if index > 0:
+                    ui.label("/").classes("text-gray-400")
 
-            if index == len(items) - 1:
-                # Current page - no link
-                ui.label(label).classes("text-gray-600 dark:text-gray-400 font-medium")
-            else:
-                # Clickable breadcrumb
-                ui.link(label, url).classes(
-                    "text-blue-600 dark:text-blue-400 hover:underline"
-                )
+                if index == len(items) - 1:
+                    # Current page - no link
+                    ui.label(label).classes(
+                        "text-gray-600 dark:text-gray-400 font-medium"
+                    )
+                else:
+                    # Clickable breadcrumb
+                    ui.link(label, url).classes(
+                        "text-blue-600 dark:text-blue-400 hover:underline"
+                    )
+
+        if right_text:
+            ui.label(right_text).classes("text-gray-500 dark:text-gray-400 text-xs")
 
 
 def open_stats_chart_dialog(video_json: dict) -> None:
@@ -775,7 +782,10 @@ async def youtube_page():
                     on_click=lambda: ui.run_javascript('window.location.href = "/"'),
                 ).props("flat")
 
-        render_breadcrumbs([("Home", "/"), ("YouTube Videos", "/youtube")])
+        render_breadcrumbs(
+            [("Home", "/"), ("YouTube Videos", "/youtube")],
+            right_text=f"Channel: {env.YOUTUBE_CHANNEL_ID}",
+        )
         ui.separator()
 
         # Show loading spinner while fetching data
@@ -836,12 +846,14 @@ async def video_detail_page(ref_id: str) -> None:
         breadcrumb_title = (
             video_title[:30] + "..." if len(video_title) > 30 else video_title
         )
+        video_status = "Published" if video and video.published_at else "Draft"
         render_breadcrumbs(
             [
                 ("Home", "/"),
                 ("YouTube Videos", "/youtube"),
                 (breadcrumb_title, f"/video/{ref_id}"),
-            ]
+            ],
+            right_text=f"Status: {video_status}",
         )
         ui.separator()
 
@@ -978,7 +990,8 @@ async def channel_detail_page(channel_id: str) -> None:
                     ("Home", "/"),
                     ("YouTube Videos", "/youtube"),
                     ("Channel", f"/channel/{channel_id}"),
-                ]
+                ],
+                right_text="Channel not found",
             )
             ui.separator()
             with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
@@ -994,12 +1007,14 @@ async def channel_detail_page(channel_id: str) -> None:
     )
     with ui.card().classes("w-full page-transition"):
         _render_channel_page_header(channel_json)
+        subscriber_count = channel_json.get("subscriber_count", "N/A")
         render_breadcrumbs(
             [
                 ("Home", "/"),
                 ("YouTube Videos", "/youtube"),
                 (breadcrumb_title, f"/channel/{channel_id}"),
-            ]
+            ],
+            right_text=f"Subscribers: {subscriber_count}",
         )
         ui.separator()
         _render_channel_identity(channel_json)
