@@ -28,9 +28,9 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Highlights
 
 - Multi-agent orchestration for content and automation tasks
-- Multiple LLM providers via LangChain integrations (OpenAI, Groq, DeepSeek, Perplexity, OpenRouter, Qwen)
+- Multiple AI providers (OpenAI, DeepSeek, Perplexity, OpenRouter, xAI Grok, Alibaba Cloud Qwen via DashScope)
 - YouTube automation (channel/video sync, transcript workflows, thumbnail updates)
-- Image generation + prompt pipelines
+- Image generation + prompt pipelines (FLUX, Grok, Qwen)
 - AWS-backed persistence (DynamoDB + S3)
 - Offline mode support with Moto-mocked AWS services
 - Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
@@ -87,11 +87,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-- [ ] Set up image generation
-  - [ ] Use Qwen
-  - [ ] Use Grok
-- [ ] Need to set up Qwen
-  - [ ] Check if image model is working
+- [x] Set up image generation
+  - [x] Use Qwen
+  - [x] Use Grok
+- [x] Need to set up Qwen
+  - [x] Check if image model is working
+- [ ] Standardize the Image Generation
+  - [ ] Make the Image generation more Generic to be used
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Test if it's able to generate good image prompts with multiple options
@@ -228,7 +230,7 @@ AWS_TABLE=...
 AWS_S3_BUCKET=...
 OFFLINE=false
 
-GROQ_API_KEY=...
+QWEN_API_KEY=...
 PPLX_API_KEY=...
 OPEN_ROUTE_API_KEY=...
 OPENAI_API_KEY=...
@@ -260,9 +262,10 @@ If `OFFLINE` is not set, the app defaults to `false`.
 | `YOUTUBE_CHANNEL_ID` | Required for default channel workflows | Primary channel identifier. |
 | `OPENAI_API_KEY` | Optional | Enables OpenAI-backed generation paths. |
 | `DEEPSEEK_API_KEY` | Optional | Enables DeepSeek-backed generation paths. |
-| `GROQ_API_KEY` | Optional | Enables Groq-backed generation paths. |
+| `QWEN_API_KEY` | Optional | Enables Alibaba Cloud DashScope Qwen text and image generation paths. |
 | `PPLX_API_KEY` | Optional | Enables Perplexity-backed generation paths. |
 | `OPEN_ROUTE_API_KEY` | Optional | Enables OpenRouter-backed generation paths. |
+| `GROK_API_KEY` | Optional | Enables xAI Grok generation paths. |
 
 Notes:
 
@@ -293,8 +296,22 @@ Use `--transform true` for a one-time transformation run.
 Run one-time test script and exit:
 
 ```sh
-poetry run app --test test
+poetry run app --test true
 ```
+
+## Image Generation Models
+
+The backend currently supports these image providers/models:
+
+- `FLUX` via OpenRouter (`black-forest-labs/flux.2-flex`)
+- `GROK` via xAI (`grok-imagine-image`)
+- `QWEN` via DashScope (`qwen-image-max`)
+
+Qwen image generation uses DashScope `MultiModalConversation` with:
+
+- Base URL: `https://dashscope-intl.aliyuncs.com/api/v1`
+- API key env var: `QWEN_API_KEY`
+- Default image size: `1328*1328`
 
 
 
@@ -360,7 +377,7 @@ Pytest config and markers live in `pytest.ini`.
 Examples:
 
 ```sh
-poetry run app --test test
+poetry run app --test true
 poetry run pytest -m unit
 poetry run pytest -m integration
 poetry run pytest tests/test_s3_storage.py
