@@ -6,7 +6,6 @@ from backend.enum import JobEnum, TaskStatusEnum
 from backend.jobs import (
     BaseJob,
     ImageGeneratorJob,
-    ImagePromptJob,
     NoJob,
     PromptSuggesterJob,
     TwitterJob,
@@ -30,7 +29,6 @@ class TaskSchedulerServices:
             JobEnum.YouTubeVideoMetadataUpdater: YouTubeJob,
             JobEnum.YouTubeVideoThumbnailPromptSuggester: YouTubeJob,
             JobEnum.ImageGenerator: ImageGeneratorJob,
-            JobEnum.ImagePrompt: ImagePromptJob,
             JobEnum.TwitterPost: TwitterJob,
             JobEnum.PromptSuggester: PromptSuggesterJob,
         }
