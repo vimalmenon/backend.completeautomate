@@ -70,6 +70,20 @@ def main_page():
                 },
             ],
         },
+        {
+            "category": "Storage",
+            "icon": "cloud",
+            "description": "Browse objects currently stored in the S3 bucket",
+            "color": "orange",
+            "items": [
+                {
+                    "name": "S3 Bucket Items",
+                    "icon": "folder_open",
+                    "links_to": "/s3",
+                    "description": "List and inspect bucket object paths",
+                },
+            ],
+        },
     ]
 
     # Hero Section
@@ -89,6 +103,7 @@ def main_page():
             {"label": "Active Tasks", "icon": "schedule", "color": "bg-blue-500"},
             {"label": "YouTube Videos", "icon": "video_library", "color": "bg-red-500"},
             {"label": "AI Prompts", "icon": "psychology", "color": "bg-green-500"},
+            {"label": "S3 Objects", "icon": "cloud", "color": "bg-orange-500"},
         ]
         for stat in stat_cards:
             with ui.card().classes(
@@ -107,7 +122,7 @@ def main_page():
     with ui.grid(columns="1 sm:2 lg:3").classes("w-full gap-4"):
         for section in menu_items:
             with ui.card().classes(
-                f"shadow-md hover:shadow-xl transition-all hover:scale-[1.02] cursor-pointer "
+                # f"shadow-md hover:shadow-xl transition-all hover:scale-[1.02] cursor-pointer "
                 f"border-t-4 border-{section['color']}-500"
             ):
                 with ui.column().classes("gap-3 p-2"):

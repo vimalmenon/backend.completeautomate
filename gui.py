@@ -11,6 +11,7 @@ from backend.ui import (
     main_page,
     prompt_detail_page,
     prompt_page,
+    s3_bucket_page,
     task_detail_page,
     tasks_page,
     video_detail_page,
@@ -69,6 +70,11 @@ def root():
                 on_click=lambda: ui.run_javascript('window.location.href = "/prompt"'),
             ).props("flat"):
                 ui.tooltip("Prompts")
+            with ui.button(
+                icon="cloud",
+                on_click=lambda: ui.run_javascript('window.location.href = "/s3"'),
+            ).props("flat"):
+                ui.tooltip("S3 Bucket")
 
             ui.separator().props("vertical")
             ui.switch(
@@ -94,6 +100,7 @@ def root():
                 "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,
                 "/prompt/{task_id}": prompt_detail_page,
+                "/s3": s3_bucket_page,
                 "/loading": loading_page,
             }
         ).classes("w-full p-4")
