@@ -17,7 +17,8 @@ class TestEnums:
         """Test AIModelEnum enum values"""
         assert AIModelEnum.Deepseek is not None
         assert AIModelEnum.Perplexity is not None
-        assert AIModelEnum.QWEN is not None
+        assert AIModelEnum.Qwen is not None
+        assert AIModelEnum.Grok is not None
 
     def test_ai_creativity_level_enum(self) -> None:
         """Test AICreativityLevelEnum enum values"""

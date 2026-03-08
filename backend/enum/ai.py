@@ -10,5 +10,5 @@ class AICreativityLevelEnum(str, Enum):
 class AIModelEnum(str, Enum):
     Deepseek = "Deepseek"
     Perplexity = "Perplexity"
-    QWEN = "QWEN"
+    Qwen = "Qwen"
     Grok = "Grok"
