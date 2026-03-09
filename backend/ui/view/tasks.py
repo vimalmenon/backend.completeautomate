@@ -2,7 +2,9 @@ from nicegui import run, ui
 
 from backend.data import TaskData
 from backend.enum import TaskStatusEnum
+from backend.exception.app_exception import AppException
 from backend.manager import TaskManager
+from backend.task_scheduler_services import TaskSchedulerServices
 from backend.ui.common.component_common import (
     render_breadcrumbs,
     render_common_header,
@@ -75,6 +77,79 @@ def make_tasks_navigation_handler(status: str):
         ui.run_javascript(f'window.location.href = "{target}"')
 
     return _handler
+
+
+def run_task_now(task_id: str) -> None:
+    try:
+        ui.notify(f"Running task: {task_id}", type="info")
+        TaskSchedulerServices().start(task_id=task_id)
+        ui.notify("Task run completed", type="positive")
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
+    except Exception:
+        ui.notify("Failed to run task", type="negative")
+
+
+def show_run_task_confirmation(task_id: str) -> None:
+    """Show confirmation dialog before running a task."""
+    with ui.dialog() as dialog, ui.card().classes("w-96"):
+        ui.label("Confirm Task Execution").classes("text-h6 mb-4")
+        ui.label("Are you sure you want to run this task?").classes("mb-4")
+
+        def on_confirm() -> None:
+            dialog.close()
+            run_task_now(task_id)
+
+        with ui.row().classes("w-full justify-end gap-2"):
+            ui.button(
+                "Cancel",
+                on_click=dialog.close,
+            ).props("flat")
+            ui.button(
+                "Confirm",
+                on_click=on_confirm,
+                color="primary",
+            )
+
+    dialog.open()
+
+
+def show_edit_status_dialog(task: TaskData) -> None:
+    with ui.dialog() as dialog, ui.card().classes("w-96"):
+        ui.label("Edit Task Status").classes("text-h6 mb-2")
+        ui.label(f"Task ID: {task.id}").classes("text-caption text-gray-600 mb-2")
+
+        status_options = [status.value for status in TaskStatusEnum]
+        status_input = (
+            ui.select(
+                options=status_options,
+                value=task.status.value,
+                label="Status",
+            )
+            .props("outlined dense")
+            .classes("w-full")
+        )
+
+        def on_save() -> None:
+            old_status = task.status
+            try:
+                task.status = TaskStatusEnum(str(status_input.value))
+                TaskManager().update_task(task)
+                ui.notify("Task status updated", type="positive")
+                dialog.close()
+                ui.run_javascript(
+                    "window.location.href = window.location.pathname + window.location.search"
+                )
+            except (ValueError, AppException):
+                task.status = old_status
+                ui.notify("Failed to update task status", type="negative")
+
+        with ui.row().classes("w-full justify-end gap-2 mt-4"):
+            ui.button("Cancel", on_click=dialog.close).props("flat")
+            ui.button("Save", icon="save", on_click=on_save).props("color=primary")
+
+    dialog.open()
 
 
 async def tasks_page(status: str = ""):
@@ -168,13 +243,22 @@ async def tasks_page(status: str = ""):
                             "w-1/6 justify-end items-center gap-1 shrink-0"
                         ):
                             ui.button(
-                                icon="play_arrow",
-                                # on_click=lambda current_task_id=task_id: show_run_task_confirmation(
-                                #     current_task_id
-                                # ),
+                                icon="edit",
+                                on_click=lambda current_task=task: show_edit_status_dialog(
+                                    current_task
+                                ),
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
+                            if task_status == TaskStatusEnum.IN_PROGRESS.value:
+                                ui.button(
+                                    icon="play_arrow",
+                                    on_click=lambda current_task_id=task_id: show_run_task_confirmation(
+                                        current_task_id
+                                    ),
+                                ).props(
+                                    'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                                )
                             ui.button(
                                 icon="open_in_new",
                                 # on_click=lambda current_task_id=task_id: ui.run_javascript(

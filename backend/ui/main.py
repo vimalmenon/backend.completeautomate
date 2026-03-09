@@ -4,6 +4,7 @@ from typing import TypedDict
 from nicegui import ui
 
 from backend.config.env import env
+from backend.enum import TaskStatusEnum
 from backend.manager import TaskManager
 from backend.ui.service.work_offline import load_initial_data
 
@@ -27,23 +28,28 @@ tasks_cards = [
     {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
     {
         "label": "IN PROGRESS",
-        "value": "IN_PROGRESS",
+        "value": TaskStatusEnum.IN_PROGRESS.value,
         "icon": "schedule",
         "color": "blue",
     },
     {
         "label": "COMPLETED",
-        "value": "COMPLETED",
+        "value": TaskStatusEnum.COMPLETED.value,
         "icon": "check_circle",
         "color": "green",
     },
     {
         "label": "IN REVIEW",
-        "value": "REVIEW",
+        "value": TaskStatusEnum.REVIEW.value,
         "icon": "hourglass_empty",
         "color": "gray",
     },
-    {"label": "FAILED", "value": "FAILED", "icon": "error", "color": "red"},
+    {
+        "label": "FAILED",
+        "value": TaskStatusEnum.FAILED.value,
+        "icon": "error",
+        "color": "red",
+    },
 ]
 
 

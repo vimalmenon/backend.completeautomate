@@ -98,7 +98,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
   - [x] Tasks should redirect to correct page
   - [x] Tasks should show correct status
-  - [ ] Edit Task to dhange the Status (Give Edit Button)
+  - [ ] Edit Task to change the Status (Give Edit Button)
   - [ ] Add new Task
   - [ ] Channel to show both channel details and videos
   - [ ] Use new URL
