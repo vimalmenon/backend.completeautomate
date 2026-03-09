@@ -94,6 +94,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Check if image model is working
 - [x] Test if it's able to generate good image prompts with multiple options
 - [ ] Test all the prompts once done
+- [ ] Improve on prompt suggester
+- [ ] Agent to analyze result
+  - [ ] Add AI review step for generated answers
+  - [ ] Agent to review tasks (only once)
 - [ ] Standardize the Image Generation
   - [ ] Make the Image generation more generic to be used
 - [ ] Improve Task
@@ -105,22 +109,18 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube idea suggester
+  - [ ] Pointer for Video to create
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
-- [ ] Create short videos
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
-- [ ] Improve on prompt suggester
 - [ ] Fix TODOs and Dead code
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
-- [ ] Agent to analyze result
-  - [ ] Add AI review step for generated answers
-  - [ ] Agent to review tasks (only once)
 - [ ] Test Coverage
   - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Mock Integration with YouTube API
@@ -202,6 +202,7 @@ YouTubeChannelCreator (Initial Task)
 - Need an mobile APP / Website
 - Remove teams as it looks of no use
 - Correct transcript
+- Create Videos
 - Notify user on `REVIEW` via email, Telegram or WhatsApp
 - Scrape websites for contact and potential client
 - Tailor made email with video for potential client
@@ -215,8 +216,8 @@ YouTubeChannelCreator (Initial Task)
 Main                            /
 tasks                           /tasks
 YouTube Channels                /youtube
-Channel Id & YouTube Videos     /youtube/{channel_id}?page={channel / videos}
-YouTube Video detail            /youtube/{channel_id}/{video_id}
+Channel Id & YouTube Videos     /youtube/{channel_id}?tab={channel / videos} default to channel
+YouTube Video detail            /youtube/{channel_id}/{video_id}?section={metadata_review | thumbnail_review}
 S3 Storage                      /storage
 Prompt                          /prompts
 Prompt Detail                   /prompts/{prompt_id}
