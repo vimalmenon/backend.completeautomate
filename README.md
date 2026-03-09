@@ -95,8 +95,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Check if image model is working
 - [x] Test if it's able to generate good image prompts with multiple options
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
-  - [ ] Tasks should redirect to correct page
+  - [x] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
+  - [x] Tasks should redirect to correct page
+  - [ ] Tasks should show correct status
   - [ ] Channel to show both channel details and videos
   - [ ] Ability to change status of the task (Give Edit Button)
   - [ ] Use new URL
