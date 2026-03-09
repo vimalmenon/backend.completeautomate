@@ -92,15 +92,15 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Use Grok
 - [x] Need to set up Qwen
   - [x] Check if image model is working
+- [x] Test if it's able to generate good image prompts with multiple options
+- [ ] Test all the prompts once done
 - [ ] Standardize the Image Generation
   - [ ] Make the Image generation more generic to be used
 - [ ] Improve Task
-  - [ ] Need to find something better than `OWNER`
+  - [ ] Need to find something better than `OWNER` in JobEnum
   - [ ] Do we need `created by` or maybe use str in `TaskData`
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
-- [ ] Test if it's able to generate good image prompts with multiple options
-  - [ ] Test all the prompts once done
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
@@ -127,14 +127,14 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
 - [ ] GUI Enhancements
-  - [ ] Main Page to show IN_PROGRESS, IN REVIEW, Failed tasks
-  - [ ] Tasks should redirect to correct Place
+  - [ ] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
+  - [ ] Tasks should redirect to correct page
   - [ ] Channel to show both channel details and videos
   - [ ] Ability to change status of the task (Give Edit Button)
-  - [ ] Use Correct URL
-  - [ ] Show Channel and Video in tabs
+  - [ ] Use new URL
+  - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
-- [ ] Fix transcripts for grammar and naming errors
+- [ ] Fix transcripts for grammar and other errors
 - [ ] Add Playlist details to YouTube Video DB
 
 - Naming convention for generator
@@ -189,19 +189,22 @@ YouTubeChannelCreator (Initial Task)
 - Local text-to-speech
 - Identify next week topic
 - Dockerfile + DockerHub CD
-- App Integration
+- App / API Integration
   - Instagram
   - Twitter
   - Redit
   - TikTok
+  - LinkedIn
+  - Email
+  - Signal
+  - WhatsApp
 - YouTube comments analysis
 - Need an mobile APP / Website
 - Remove teams as it looks of no use
 - Correct transcript
-- Notify user on `REVIEW` via email or Telegram
+- Notify user on `REVIEW` via email, Telegram or WhatsApp
 - Scrape websites for contact and potential client
 - Tailor made email with video for potential client
-- Explore LinkedIn API
 - Adopt GIT branching strategies
 
 </details>
@@ -212,7 +215,7 @@ YouTubeChannelCreator (Initial Task)
 Main                            /
 tasks                           /tasks
 YouTube Channels                /youtube
-Channel Id & YouTube Videos     /youtube/{channel_id}
+Channel Id & YouTube Videos     /youtube/{channel_id}?page={channel / videos}
 YouTube Video detail            /youtube/{channel_id}/{video_id}
 S3 Storage                      /storage
 Prompt                          /prompts
