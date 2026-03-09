@@ -94,6 +94,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Check if image model is working
 - [ ] Standardize the Image Generation
   - [ ] Make the Image generation more generic to be used
+- [ ] Improve Task
+  - [ ] Need to find something better than `OWNER`
+  - [ ] Do we need `created by` or maybe use str in `TaskData`
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Test if it's able to generate good image prompts with multiple options
@@ -140,8 +143,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Creator (Create Data on DB)
   - Analyzer (Analysis the data)
   - Generator (Generate Image / Video Sound)
-  - Add Post to TikTok
-  - Add Instagram
 
 ### YouTube Workflow Pipeline
 
@@ -185,20 +186,23 @@ YouTubeChannelCreator (Initial Task)
 
 **Ideas / Low Priority:**
 
-- Add topic suggestions for next week
-- Need an mobile APP / Website
-- Dockerfile + DockerHub CD
 - Local text-to-speech
-- Instagram/Twitter posting integration
+- Identify next week topic
+- Dockerfile + DockerHub CD
+- App Integration
+  - Instagram
+  - Twitter
+  - Redit
+  - TikTok
 - YouTube comments analysis
-- Adopt GIT branching strategies
-- Remove Teams as it looks of no use
-- Upload Corrected Transcript
+- Need an mobile APP / Website
+- Remove teams as it looks of no use
+- Correct transcript
 - Notify user on `REVIEW` via email or Telegram
-- Scrape websites for contact
-- Tailor made website for potential Client
+- Scrape websites for contact and potential client
+- Tailor made email with video for potential client
 - Explore LinkedIn API
-
+- Adopt GIT branching strategies
 
 </details>
 
