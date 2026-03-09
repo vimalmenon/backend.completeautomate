@@ -39,7 +39,7 @@ stat_cards = [
     },
     {
         "label": "IN REVIEW",
-        "value": "IN_REVIEW",
+        "value": "REVIEW",
         "icon": "hourglass_empty",
         "color": "gray",
     },
@@ -145,7 +145,16 @@ def main_page():
                 .classes(
                     f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
                 )
-                .on("click", lambda: ui.notify(f"{stat['label']} clicked"))
+                .on(
+                    "click",
+                    (
+                        lambda s=stat["value"]: lambda: ui.run_javascript(
+                            f"window.location.href = '/tasks?status={s}'"
+                            if s
+                            else "window.location.href = '/tasks'"
+                        )
+                    )(),
+                )
             ):
                 with ui.avatar(color=stat["color"], text_color="white", size="md"):
                     ui.icon(stat["icon"], size="md")

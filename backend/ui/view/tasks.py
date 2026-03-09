@@ -8,7 +8,8 @@ from backend.ui.common.component_common import (
 )
 
 
-async def tasks_page():
+async def tasks_page(status: str = ""):
+    print(status)
     with ui.card().classes("w-full page-transition"):
         render_common_header(page_title="Task Management")
         render_breadcrumbs(
