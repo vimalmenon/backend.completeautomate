@@ -9,9 +9,11 @@ async def youtube_channel_page(tab="channel"):
         ui.spinner(size="lg", color="primary")
         ui.label("Loading tasks...")
 
-        await run.io_bound(
-            YouTubeVideoManager().get_all_videos(channel_id=""),
-            YouTubeChannelManager(channel_id="").get_channel_details(),
+        channel, videos = await run.io_bound(
+            lambda: (
+                YouTubeChannelManager(channel_id="").get_channel_details(),
+                YouTubeVideoManager().get_all_videos(channel_id=""),
+            )
         )
 
     # Remove loading indicator

@@ -96,25 +96,36 @@ def main_page():
             ui.label("Your AI-Powered Content Automation Platform").classes(
                 "text-h6 opacity-90"
             )
+    ui.separator()
 
+    with ui.row().classes("items-center"):
+        with ui.avatar(color="blue", text_color="white", size="lg"):
+            ui.icon("task", size="md")
+        with ui.column().classes("gap-0"):
+            ui.label("Tasks").classes("text-h6 font-bold")
+            ui.label("Manage and schedule automated content creation tasks").classes(
+                "text-caption text-gray-600"
+            )
     # Quick Stats Section (placeholder for future metrics)
     with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
         stat_cards = [
-            {"label": "Active Tasks", "icon": "schedule", "color": "bg-blue-500"},
-            {"label": "YouTube Videos", "icon": "video_library", "color": "bg-red-500"},
-            {"label": "AI Prompts", "icon": "psychology", "color": "bg-green-500"},
-            {"label": "S3 Objects", "icon": "cloud", "color": "bg-orange-500"},
+            {"label": "All Tasks", "icon": "hourglass_empty", "color": "bg-blue-500"},
+            {"label": "IN PROGRESS", "icon": "schedule", "color": "bg-blue-500"},
+            {"label": "COMPLETED", "icon": "check_circle", "color": "bg-blue-500"},
+            {"label": "IN REVIEW", "icon": "hourglass_empty", "color": "blue"},
+            {"label": "FAILED", "icon": "error", "color": "red"},
+            # {"label": "YouTube Videos", "icon": "video_library", "color": "bg-red-500"},
+            # {"label": "AI Prompts", "icon": "psychology", "color": "bg-green-500"},
         ]
         for stat in stat_cards:
             with ui.card().classes(
-                "flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow"
+                f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
             ):
-                with ui.row().classes("items-center gap-3 w-full"):
-                    with ui.avatar(color=stat["color"], text_color="white", size="lg"):
-                        ui.icon(stat["icon"])
-                    with ui.column().classes("gap-0"):
-                        ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
-                        ui.label("--").classes("text-h5 font-bold")
+                with ui.avatar(color=stat["color"], text_color="white", size="md"):
+                    ui.icon(stat["icon"], size="md")
+                with ui.column().classes("gap-0 "):
+                    ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
+                    ui.label("--").classes("text-h5 font-bold")
 
     # Navigation Sections
     ui.label("Navigation").classes("text-h5 font-bold mt-8 mb-4")
