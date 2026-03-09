@@ -95,13 +95,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Check if image model is working
 - [x] Test if it's able to generate good image prompts with multiple options
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Add new Task
+  - [x] Add new Task
   - [ ] Channel to show both channel details and videos
   - [ ] Use new URL
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
   - [ ] View Images from S3 and Local
-  - [ ] Button to Download to local
+  - [ ] Button to Download S3 Object to local
 - [ ] Test all the prompts once done
 - [ ] Improve on prompt suggester
 - [ ] Agent to analyze result

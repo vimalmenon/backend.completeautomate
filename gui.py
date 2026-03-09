@@ -15,7 +15,7 @@ from backend.ui import (  # tasks_page,
     youtube_page,
 )
 from backend.ui.service.work_offline import toggle_offline_mode
-from backend.ui.view import tasks_page
+from backend.ui.view import tasks_page, youtube_video_page
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +80,7 @@ def root():
                 "/tasks": tasks_page,
                 "/task/{task_id}": task_detail_page,
                 "/youtube": youtube_page,
+                "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/video/{ref_id}": video_detail_page,
                 "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,

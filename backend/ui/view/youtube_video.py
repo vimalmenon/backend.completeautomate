@@ -7,7 +7,7 @@ from backend.ui.common.component_common import (
 )
 
 
-async def youtube_videos_page(
+async def youtube_video_page(
     channel_id: str, video_id: str, section: str | None = None
 ):
     render_common_header(page_title="YouTube Videos")
