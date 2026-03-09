@@ -1,3 +1,5 @@
+from faker import Faker
+
 from backend.data import (
     PlatformDBData,
     PlatformYouTubeChannelDBData,
@@ -5,12 +7,16 @@ from backend.data import (
 )
 from backend.enum import PlatformEnum
 
+faker = Faker()
+
 
 def platform_channel_factory(**kwargs) -> PlatformDBData:
 
     return PlatformDBData(
         platform_type=PlatformEnum.YouTubeChannel,
-        data=PlatformYouTubeChannelDBData(channel_id=kwargs.get("channel_id")),
+        data=PlatformYouTubeChannelDBData(
+            channel_id=kwargs.get("channel_id") or str(faker.uuid4())
+        ),
     )
 
 
