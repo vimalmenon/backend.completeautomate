@@ -1,7 +1,11 @@
+import json
+from datetime import datetime
+from uuid import uuid4
+
 from nicegui import run, ui
 
 from backend.data import TaskData
-from backend.enum import TaskStatusEnum
+from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.manager import TaskManager
 from backend.task_scheduler_services import TaskSchedulerServices
@@ -152,8 +156,101 @@ def show_edit_status_dialog(task: TaskData) -> None:
     dialog.open()
 
 
+def add_task(
+    selected_job_type: str,
+    selected_created_by: str,
+    selected_status: str,
+    payload_text: str,
+) -> None:
+    try:
+        payload = json.loads(payload_text.strip() or "{}")
+        if not isinstance(payload, dict):
+            ui.notify("Payload must be a JSON object", type="negative")
+            return
+
+        status = TaskStatusEnum(selected_status)
+        task = TaskData(
+            id=uuid4(),
+            job_type=JobEnum(selected_job_type),
+            payload=payload,
+            created_by=JobEnum(selected_created_by),
+            created_at=datetime.now(),
+            status=status,
+            completed_at=datetime.now() if status == TaskStatusEnum.COMPLETED else None,
+            trail=[],
+        )
+        TaskManager().add_task(task)
+        ui.notify("Task created", type="positive")
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
+    except json.JSONDecodeError:
+        ui.notify("Invalid payload JSON", type="negative")
+    except Exception as ex:
+        ui.notify(f"Failed to create task: {ex}", type="negative")
+
+
+def render_add_task_form() -> None:
+    job_options = [job.value for job in JobEnum]
+    status_options = [status.value for status in TaskStatusEnum]
+
+    with ui.dialog() as add_task_dialog, ui.card().classes("w-[720px] max-w-full"):
+        ui.label("Add New Task").classes("text-h6 mb-2")
+
+        with ui.row().classes("w-full gap-3 items-end flex-wrap"):
+            job_type_input = (
+                ui.select(
+                    options=job_options,
+                    value=JobEnum.OWNER.value,
+                    label="Job Type",
+                )
+                .props("outlined dense")
+                .classes("w-1/3 min-w-[200px]")
+            )
+            created_by_input = (
+                ui.select(
+                    options=job_options,
+                    value=JobEnum.OWNER.value,
+                    label="Created By",
+                )
+                .props("outlined dense")
+                .classes("w-1/3 min-w-[200px]")
+            )
+            status_input = (
+                ui.select(
+                    options=status_options,
+                    value=TaskStatusEnum.NEW.value,
+                    label="Status",
+                )
+                .props("outlined dense")
+                .classes("w-1/3 min-w-[200px]")
+            )
+
+        payload_input = (
+            ui.textarea(label="Payload (JSON)", value="{}")
+            .props("outlined autogrow")
+            .classes("w-full mt-3")
+        )
+
+        with ui.row().classes("w-full justify-end mt-3 gap-2"):
+            ui.button("Cancel", on_click=add_task_dialog.close).props("flat")
+            ui.button(
+                "Create Task",
+                icon="add",
+                on_click=lambda: add_task(
+                    str(job_type_input.value),
+                    str(created_by_input.value),
+                    str(status_input.value),
+                    str(payload_input.value),
+                ),
+            ).props("color=primary")
+
+    ui.button("Add Task", icon="add", on_click=add_task_dialog.open).props(
+        "color=primary"
+    ).classes("my-3")
+
+
 async def tasks_page(status: str = ""):
-    print(status)
     with ui.card().classes("w-full gap-0 page-transition"):
         render_common_header(page_title="Task Management")
         render_breadcrumbs(
@@ -177,6 +274,8 @@ async def tasks_page(status: str = ""):
 
         if status:
             ui.label(f"Active filter: {status}").classes("text-caption text-gray-600")
+
+        render_add_task_form()
 
         # Show loading spinner while fetching tasks
         with ui.row().classes("w-full items-center my-4") as loading_row:
@@ -250,7 +349,10 @@ async def tasks_page(status: str = ""):
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
-                            if task_status == TaskStatusEnum.IN_PROGRESS.value:
+                            if task_status in [
+                                TaskStatusEnum.IN_PROGRESS.value,
+                                TaskStatusEnum.FAILED.value,
+                            ]:
                                 ui.button(
                                     icon="play_arrow",
                                     on_click=lambda current_task_id=task_id: show_run_task_confirmation(
