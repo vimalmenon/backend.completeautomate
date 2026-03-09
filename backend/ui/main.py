@@ -122,7 +122,7 @@ def main_page():
                     ui.icon(stat["icon"], size="md")
                 with ui.column().classes("gap-0 "):
                     ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
-                    ui.label(get_status_counts(stat["label"])).classes(
+                    ui.label(str(get_status_counts(stat["label"]))).classes(
                         "text-h5 font-bold"
                     )
 
