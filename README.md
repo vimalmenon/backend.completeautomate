@@ -102,6 +102,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Use new URL
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
+  - [ ] View Images from S3 and Local
+  - [ ] Button to Download to local
 - [ ] Test all the prompts once done
 - [ ] Improve on prompt suggester
 - [ ] Agent to analyze result
