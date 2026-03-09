@@ -59,12 +59,21 @@ def get_cached_tasks():
     return tuple(TaskManager().get_tasks())
 
 
+def make_tasks_navigation_handler(status: str):
+    def _handler() -> None:
+        target = f"/tasks?status={status}" if status else "/tasks"
+        ui.run_javascript(f'window.location.href = "{target}"')
+
+    return _handler
+
+
 def main_page():
     # Load initial data for offline mode
     load_initial_data()
 
     # Refresh cache per page render, then reuse cached tasks for all stat cards.
     get_cached_tasks.cache_clear()
+
     menu_items: list[MenuSection] = [
         {
             "category": "YouTube",
@@ -145,16 +154,7 @@ def main_page():
                 .classes(
                     f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
                 )
-                .on(
-                    "click",
-                    (
-                        lambda s=stat["value"]: lambda: ui.run_javascript(
-                            f"window.location.href = '/tasks?status={s}'"
-                            if s
-                            else "window.location.href = '/tasks'"
-                        )
-                    )(),
-                )
+                .on("click", make_tasks_navigation_handler(stat["value"]))
             ):
                 with ui.avatar(color=stat["color"], text_color="white", size="md"):
                     ui.icon(stat["icon"], size="md")
