@@ -97,9 +97,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] GUI Enhancements (Top priority)
   - [x] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
   - [x] Tasks should redirect to correct page
-  - [ ] Tasks should show correct status
+  - [x] Tasks should show correct status
+  - [ ] Edit Task to dhange the Status (Give Edit Button)
+  - [ ] Add new Task
   - [ ] Channel to show both channel details and videos
-  - [ ] Ability to change status of the task (Give Edit Button)
   - [ ] Use new URL
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI

@@ -17,6 +17,34 @@ TASK_STATUS_PRIORITY = {
     TaskStatusEnum.COMPLETED.value: 4,
 }
 
+tasks_cards = [
+    {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
+    {
+        "label": "IN PROGRESS",
+        "value": TaskStatusEnum.IN_PROGRESS.value,
+        "icon": "schedule",
+        "color": "blue",
+    },
+    {
+        "label": "COMPLETED",
+        "value": TaskStatusEnum.COMPLETED.value,
+        "icon": "check_circle",
+        "color": "green",
+    },
+    {
+        "label": "IN REVIEW",
+        "value": TaskStatusEnum.REVIEW.value,
+        "icon": "hourglass_empty",
+        "color": "gray",
+    },
+    {
+        "label": "FAILED",
+        "value": TaskStatusEnum.FAILED.value,
+        "icon": "error",
+        "color": "red",
+    },
+]
+
 
 def sort_tasks_by_priority(tasks: list[TaskData]) -> list[TaskData]:
     return sorted(
@@ -41,6 +69,14 @@ def get_status_row_class(status_value: str) -> str:
     return "hover:bg-blue-50 dark:hover:bg-blue-900/40"
 
 
+def make_tasks_navigation_handler(status: str):
+    def _handler() -> None:
+        target = f"/tasks?status={status}" if status else "/tasks"
+        ui.run_javascript(f'window.location.href = "{target}"')
+
+    return _handler
+
+
 async def tasks_page(status: str = ""):
     print(status)
     with ui.card().classes("w-full gap-0 page-transition"):
@@ -50,6 +86,23 @@ async def tasks_page(status: str = ""):
         )
         render_separator()
 
+        with ui.row().classes("w-full gap-4 mb-4 flex-wrap"):
+            for stat in tasks_cards:
+                with (
+                    ui.card()
+                    .classes(
+                        f"flex-1 min-w-[180px] shadow-sm hover:shadow-md transition-shadow border-t-4 border-{stat['color']}-500 cursor-pointer"
+                    )
+                    .on("click", make_tasks_navigation_handler(stat["value"]))
+                ):
+                    with ui.avatar(color=stat["color"], text_color="white", size="sm"):
+                        ui.icon(stat["icon"], size="sm")
+                    with ui.column().classes("gap-0"):
+                        ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
+
+        if status:
+            ui.label(f"Active filter: {status}").classes("text-caption text-gray-600")
+
         # Show loading spinner while fetching tasks
         with ui.row().classes("w-full items-center my-4") as loading_row:
             ui.spinner(size="lg", color="primary")
@@ -58,7 +111,12 @@ async def tasks_page(status: str = ""):
             # Fetch tasks from database (non-blocking)
             tasks = await run.io_bound(TaskManager().get_tasks)
             tasks = sort_tasks_by_priority(
-                [task for task in tasks if not status or task.status == status]
+                [
+                    task
+                    for task in tasks
+                    if not status
+                    or str(getattr(task.status, "value", task.status)) == status
+                ]
             )
 
         # Remove loading indicator
@@ -91,17 +149,17 @@ async def tasks_page(status: str = ""):
                     task_json = task.to_json()
                     task_id = task_json.get("id", "")
                     task_type = task_json.get("job_type", "")
-                    status = task_json.get("status", "")
+                    task_status = task_json.get("status", "")
                     created_by = task_json.get("created_by", "")
                     created_at = task_json.get("created_at", "")[:19]
-                    row_status_class = get_status_row_class(status)
+                    row_status_class = get_status_row_class(task_status)
 
                     with ui.row().classes(
                         f"w-full gap-0 p-3 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700 {row_status_class}"
                     ):
                         ui.label(task_id).classes("w-1/5 text-sm")
                         ui.label(task_type[:20]).classes("w-1/5 text-sm")
-                        ui.label(status).classes("w-1/8 text-sm")
+                        ui.label(task_status).classes("w-1/8 text-sm")
                         ui.label(created_by).classes("w-1/8 text-sm")
                         ui.label(created_at).classes("w-1/8 text-sm font-medium")
 

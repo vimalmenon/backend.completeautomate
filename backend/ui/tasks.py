@@ -30,6 +30,34 @@ TASK_STATUS_PRIORITY = {
     TaskStatusEnum.COMPLETED.value: 4,
 }
 
+stat_cards = [
+    {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
+    {
+        "label": "IN PROGRESS",
+        "value": TaskStatusEnum.IN_PROGRESS.value,
+        "icon": "schedule",
+        "color": "blue",
+    },
+    {
+        "label": "COMPLETED",
+        "value": TaskStatusEnum.COMPLETED.value,
+        "icon": "check_circle",
+        "color": "green",
+    },
+    {
+        "label": "IN REVIEW",
+        "value": TaskStatusEnum.REVIEW.value,
+        "icon": "hourglass_empty",
+        "color": "gray",
+    },
+    {
+        "label": "FAILED",
+        "value": TaskStatusEnum.FAILED.value,
+        "icon": "error",
+        "color": "red",
+    },
+]
+
 # Job Type Payload Field Definitions
 JOB_PAYLOAD_FIELDS = {
     JobEnum.YouTubeChannel.value: [
@@ -175,6 +203,14 @@ def sort_tasks_by_priority(tasks: list[TaskData]) -> list[TaskData]:
         ),
         reverse=False,
     )
+
+
+def make_tasks_navigation_handler(status: str):
+    def _handler() -> None:
+        target = f"/tasks?status={status}" if status else "/tasks"
+        ui.run_javascript(f'window.location.href = "{target}"')
+
+    return _handler
 
 
 def update_task_status(event, current_task):
@@ -465,7 +501,7 @@ def render_add_task_form() -> None:
                 ).props("color=primary")
 
 
-def tasks_page():
+def tasks_page(status: str = ""):
     with ui.card().classes("w-full page-transition"):
         with ui.row().classes("items-center justify-between w-full mb-4"):
             ui.label("Task Management").classes("text-h4")
@@ -483,6 +519,25 @@ def tasks_page():
 
         ui.separator()
 
+        with ui.row().classes("w-full gap-4 my-4 flex-wrap"):
+            for stat in stat_cards:
+                with (
+                    ui.card()
+                    .classes(
+                        f"flex-1 min-w-[180px] shadow-sm hover:shadow-md transition-shadow border-t-4 border-{stat['color']}-500"
+                    )
+                    .on("click", make_tasks_navigation_handler(stat["value"]))
+                ):
+                    with ui.avatar(color=stat["color"], text_color="white", size="sm"):
+                        ui.icon(stat["icon"], size="sm")
+                    with ui.column().classes("gap-0"):
+                        ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
+
+            if status:
+                ui.label(f"Active filter: {status}").classes(
+                    "text-caption text-gray-600"
+                )
+
         render_add_task_form()
 
         # Show loading spinner while fetching data
@@ -492,6 +547,12 @@ def tasks_page():
 
         # Fetch tasks
         tasks = TaskDB().get_tasks()
+        if status:
+            tasks = [
+                task
+                for task in tasks
+                if str(getattr(task.status, "value", task.status)) == status
+            ]
         tasks = sort_tasks_by_priority(tasks)
 
         # Remove loading spinner and row

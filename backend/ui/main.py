@@ -23,7 +23,7 @@ class MenuSection(TypedDict):
     items: list[MenuItem]
 
 
-stat_cards = [
+tasks_cards = [
     {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
     {
         "label": "IN PROGRESS",
@@ -148,7 +148,7 @@ def main_page():
     # Quick Stats Section (placeholder for future metrics)
     with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
 
-        for stat in stat_cards:
+        for stat in tasks_cards:
             with (
                 ui.card()
                 .classes(
