@@ -129,6 +129,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Channel to show both channel details and videos
   - [ ] Ability to change status of the task (Give Edit Button)
   - [ ] Use Correct URL
+  - [ ] Show Channel and Video in tabs
   - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and naming errors
 - [ ] Add Playlist details to YouTube Video DB
@@ -194,6 +195,9 @@ YouTubeChannelCreator (Initial Task)
 - Remove Teams as it looks of no use
 - Upload Corrected Transcript
 - Notify user on `REVIEW` via email or Telegram
+- Scrape websites for contact
+- Tailor made website for potential Client
+- Explore LinkedIn API
 
 
 </details>
