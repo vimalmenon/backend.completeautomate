@@ -3,7 +3,7 @@ import os
 from nicegui import app
 
 from backend.config.session import set_offline_mode
-from backend.ui.common.notify_common import render_notify
+from backend.ui.common.component_common import render_notify
 
 
 def toggle_offline_mode(is_offline: bool):
@@ -20,3 +20,9 @@ def load_initial_data():
     is_offline = app.storage.user.get("OFFLINE", False)
     os.environ["OFFLINE"] = is_offline
     set_offline_mode(is_offline)
+    if is_offline:
+        load_mock_data()
+
+
+def load_mock_data():
+    pass

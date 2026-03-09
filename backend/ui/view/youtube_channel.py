@@ -1,2 +1,2 @@
-def youtube_channel_page():
+def youtube_channel_page(tab="channel"):
     pass

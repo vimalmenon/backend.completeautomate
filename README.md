@@ -87,12 +87,21 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
+
 - [x] Set up image generation
   - [x] Use Qwen
   - [x] Use Grok
 - [x] Need to set up Qwen
   - [x] Check if image model is working
 - [x] Test if it's able to generate good image prompts with multiple options
+- [ ] GUI Enhancements (Top priority)
+  - [ ] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
+  - [ ] Tasks should redirect to correct page
+  - [ ] Channel to show both channel details and videos
+  - [ ] Ability to change status of the task (Give Edit Button)
+  - [ ] Use new URL
+  - [ ] Show channel detail and videos in tabs
+  - [ ] Ability to perform all actions from GUI
 - [ ] Test all the prompts once done
 - [ ] Improve on prompt suggester
 - [ ] Agent to analyze result
@@ -126,14 +135,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [ ] GUI Enhancements
-  - [ ] Main Page to show `IN_PROGRESS`, `IN REVIEW`, `FAILED` tasks
-  - [ ] Tasks should redirect to correct page
-  - [ ] Channel to show both channel details and videos
-  - [ ] Ability to change status of the task (Give Edit Button)
-  - [ ] Use new URL
-  - [ ] Show channel detail and videos in tabs
-  - [ ] Ability to perform all actions from GUI
 - [ ] Fix transcripts for grammar and other errors
 - [ ] Add Playlist details to YouTube Video DB
 

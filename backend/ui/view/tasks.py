@@ -1,56 +1,20 @@
 from nicegui import run, ui
 
 from backend.manager import TaskManager
-
-
-def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
-    """Render breadcrumb navigation.
-
-    Args:
-        items: List of (label, url) tuples. Last item is current page (no link).
-        right_text: Optional text to display on the right side.
-    """
-    with ui.row().classes("items-center justify-between w-full mb-3 text-sm"):
-        with ui.row().classes("items-center gap-2"):
-            for index, (label, url) in enumerate(items):
-                if index > 0:
-                    ui.label("/").classes("text-gray-400")
-
-                if index == len(items) - 1:
-                    # Current page - no link
-                    ui.label(label).classes(
-                        "text-gray-600 dark:text-gray-400 font-medium"
-                    )
-                else:
-                    # Clickable breadcrumb
-                    ui.link(label, url).classes(
-                        "text-blue-600 dark:text-blue-400 hover:underline"
-                    )
-
-        if right_text:
-            ui.label(right_text).classes("text-gray-500 dark:text-gray-400 text-xs")
+from backend.ui.common.component_common import (
+    render_breadcrumbs,
+    render_common_header,
+    render_separator,
+)
 
 
 async def tasks_page():
     with ui.card().classes("w-full page-transition"):
-        with ui.row().classes("items-center justify-between w-full mb-4"):
-            ui.label("Task Management").classes("text-h4")
-            with ui.row().classes("gap-2"):
-                ui.button(
-                    icon="refresh",
-                    on_click=lambda: ui.run_javascript(
-                        "window.location.href = window.location.pathname + window.location.search"
-                    ),
-                ).props("flat")
-                ui.button(
-                    icon="home",
-                    on_click=lambda: ui.run_javascript('window.location.href = "/"'),
-                ).props("flat")
-
+        render_common_header(page_title="Task Management")
         render_breadcrumbs(
             [("Home", "/"), ("Tasks", "/tasks")], "Manage scheduled tasks"
         )
-        ui.separator()
+        render_separator()
 
         # Show loading spinner while fetching tasks
         with ui.row().classes("w-full items-center my-4") as loading_row:
