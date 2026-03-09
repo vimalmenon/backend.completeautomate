@@ -3,6 +3,7 @@ from typing import TypedDict
 from nicegui import ui
 
 from backend.config.env import env
+from backend.manager import TaskManager
 
 
 class MenuItem(TypedDict):
@@ -20,22 +21,22 @@ class MenuSection(TypedDict):
     items: list[MenuItem]
 
 
+stat_cards = [
+    {"label": "All Tasks", "icon": "hourglass_empty", "color": "violet"},
+    {"label": "IN PROGRESS", "icon": "schedule", "color": "blue"},
+    {"label": "COMPLETED", "icon": "check_circle", "color": "green"},
+    {"label": "IN REVIEW", "icon": "hourglass_empty", "color": "gray"},
+    {"label": "FAILED", "icon": "error", "color": "red"},
+]
+
+
+def get_status_counts(status: str) -> int:
+    tasks = TaskManager().get_tasks()
+    return sum(1 for task in tasks if task.status == status)
+
+
 def main_page():
     menu_items: list[MenuSection] = [
-        {
-            "category": "Tasks",
-            "icon": "task",
-            "description": "Manage and schedule automated content creation tasks",
-            "color": "blue",
-            "items": [
-                {
-                    "name": "List Tasks",
-                    "icon": "list_alt",
-                    "links_to": "/tasks",
-                    "description": "View all scheduled tasks",
-                },
-            ],
-        },
         {
             "category": "YouTube",
             "icon": "video_library",
@@ -108,24 +109,22 @@ def main_page():
             )
     # Quick Stats Section (placeholder for future metrics)
     with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
-        stat_cards = [
-            {"label": "All Tasks", "icon": "hourglass_empty", "color": "bg-blue-500"},
-            {"label": "IN PROGRESS", "icon": "schedule", "color": "bg-blue-500"},
-            {"label": "COMPLETED", "icon": "check_circle", "color": "bg-blue-500"},
-            {"label": "IN REVIEW", "icon": "hourglass_empty", "color": "blue"},
-            {"label": "FAILED", "icon": "error", "color": "red"},
-            # {"label": "YouTube Videos", "icon": "video_library", "color": "bg-red-500"},
-            # {"label": "AI Prompts", "icon": "psychology", "color": "bg-green-500"},
-        ]
+
         for stat in stat_cards:
-            with ui.card().classes(
-                f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
+            with (
+                ui.card()
+                .classes(
+                    f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
+                )
+                .on("click", lambda: ui.notify(f"{stat['label']} clicked"))
             ):
                 with ui.avatar(color=stat["color"], text_color="white", size="md"):
                     ui.icon(stat["icon"], size="md")
                 with ui.column().classes("gap-0 "):
                     ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
-                    ui.label("--").classes("text-h5 font-bold")
+                    ui.label(get_status_counts(stat["label"])).classes(
+                        "text-h5 font-bold"
+                    )
 
     # Navigation Sections
     ui.label("Navigation").classes("text-h5 font-bold mt-8 mb-4")
