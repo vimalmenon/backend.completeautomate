@@ -97,7 +97,7 @@ def main_page():
             ui.label("Your AI-Powered Content Automation Platform").classes(
                 "text-h6 opacity-90"
             )
-    ui.separator()
+    ui.separator().classes("my-6")
 
     with ui.row().classes("items-center"):
         with ui.avatar(color="blue", text_color="white", size="lg"):
@@ -125,9 +125,9 @@ def main_page():
                     ui.label(str(get_status_counts(stat["label"]))).classes(
                         "text-h5 font-bold"
                     )
-
+    ui.separator().classes("my-6")
     # Navigation Sections
-    ui.label("Navigation").classes("text-h5 font-bold mt-8 mb-4")
+    ui.label("Navigation").classes("text-h5 font-bold mb-4")
 
     with ui.grid(columns="1 sm:2 lg:3").classes("w-full gap-4"):
         for section in menu_items:
