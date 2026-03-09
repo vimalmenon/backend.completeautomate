@@ -24,17 +24,32 @@ class MenuSection(TypedDict):
 
 
 stat_cards = [
-    {"label": "All Tasks", "icon": "hourglass_empty", "color": "violet"},
-    {"label": "IN PROGRESS", "icon": "schedule", "color": "blue"},
-    {"label": "COMPLETED", "icon": "check_circle", "color": "green"},
-    {"label": "IN REVIEW", "icon": "hourglass_empty", "color": "gray"},
-    {"label": "FAILED", "icon": "error", "color": "red"},
+    {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
+    {
+        "label": "IN PROGRESS",
+        "value": "IN_PROGRESS",
+        "icon": "schedule",
+        "color": "blue",
+    },
+    {
+        "label": "COMPLETED",
+        "value": "COMPLETED",
+        "icon": "check_circle",
+        "color": "green",
+    },
+    {
+        "label": "IN REVIEW",
+        "value": "IN_REVIEW",
+        "icon": "hourglass_empty",
+        "color": "gray",
+    },
+    {"label": "FAILED", "value": "FAILED", "icon": "error", "color": "red"},
 ]
 
 
 def get_status_counts(status: str) -> int:
     tasks = get_cached_tasks()
-    if status == "All Tasks":
+    if status == "":
         return len(tasks)
     return sum(1 for task in tasks if task.status == status)
 
@@ -136,7 +151,7 @@ def main_page():
                     ui.icon(stat["icon"], size="md")
                 with ui.column().classes("gap-0 "):
                     ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
-                    ui.label(str(get_status_counts(stat["label"]))).classes(
+                    ui.label(str(get_status_counts(stat["value"]))).classes(
                         "text-h5 font-bold"
                     )
     ui.separator().classes("my-6")

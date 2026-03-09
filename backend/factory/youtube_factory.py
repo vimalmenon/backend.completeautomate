@@ -1,5 +1,7 @@
-from faker import Faker
 from uuid import UUID
+
+from faker import Faker
+
 from backend.data import YouTubeChannelDBData
 
 faker = Faker()
