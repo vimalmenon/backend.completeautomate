@@ -11,7 +11,6 @@ faker = Faker()
 
 
 def platform_channel_factory(**kwargs) -> PlatformDBData:
-
     return PlatformDBData(
         platform_type=PlatformEnum.YouTubeChannel,
         data=PlatformYouTubeChannelDBData(

@@ -1,11 +1,9 @@
 import logging
-import os
 
 from nicegui import ui
 
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
-from backend.config.session import set_offline_mode
 from backend.ui import (  # tasks_page,
     channel_detail_page,
     main_page,
@@ -16,17 +14,13 @@ from backend.ui import (  # tasks_page,
     video_detail_page,
     youtube_page,
 )
+from backend.ui.service.work_offline import toggle_offline_mode
 from backend.ui.view import tasks_page
 
 logger = logging.getLogger(__name__)
 
 
 def root():
-    def toggle_offline(is_offline: bool) -> None:
-        os.environ["OFFLINE"] = "true" if is_offline else "false"
-        set_offline_mode(is_offline)
-        mode = "Offline (Moto mock AWS)" if is_offline else "Online (real AWS)"
-        ui.notify(f"Mode switched: {mode}", type="positive", position="top")
 
     # Dark mode toggle
     dark = ui.dark_mode()
@@ -70,7 +64,7 @@ def root():
             ui.switch(
                 "Offline",
                 value=env.OFFLINE,
-                on_change=lambda e: toggle_offline(bool(e.value)),
+                on_change=lambda e: toggle_offline_mode(bool(e.value)),
             ).props("dense")
             ui.switch("Dark").bind_value(dark).props("dense")
 

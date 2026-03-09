@@ -1,5 +1,5 @@
 from faker import Faker
-
+from uuid import UUID
 from backend.data import YouTubeChannelDBData
 
 faker = Faker()
@@ -18,6 +18,6 @@ def youtube_channel_factory() -> YouTubeChannelDBData:
         banner_image_url=faker.image_url(),
         privacy_status=faker.word(),
         made_for_kids=faker.boolean(),
-        task_id=faker.uuid4(),
+        task_id=UUID(faker.uuid4()),
         stats=[],
     )

@@ -5,6 +5,7 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.manager import TaskManager
+from backend.ui.service.work_offline import load_initial_data
 
 
 class MenuItem(TypedDict):
@@ -44,6 +45,9 @@ def get_cached_tasks():
 
 
 def main_page():
+    # Load initial data for offline mode
+    load_initial_data()
+
     # Refresh cache per page render, then reuse cached tasks for all stat cards.
     get_cached_tasks.cache_clear()
     menu_items: list[MenuSection] = [

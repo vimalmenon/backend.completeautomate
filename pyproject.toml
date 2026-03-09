@@ -31,6 +31,7 @@ playwright = "^1.54.0"
 nicegui = "^3.8.0"
 plotly = "^6.6.0"
 dashscope = "^1.24.6"
+faker = "^40.8.0"
 
 [tool.poetry.scripts]
 app = "main:main"
@@ -52,6 +53,7 @@ google-api-python-client-stubs = "^1.32.0"
 types-jinja2 = "^2.11.9"
 pyfaker = "^0.1"
 tox = "^4.49.0"
+faker = "^40.8.0"
 
 [tool.black]
 line-length = 88
