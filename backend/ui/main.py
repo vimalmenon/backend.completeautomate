@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import TypedDict
 
 from nicegui import ui
@@ -31,11 +32,20 @@ stat_cards = [
 
 
 def get_status_counts(status: str) -> int:
-    tasks = TaskManager().get_tasks()
+    tasks = get_cached_tasks()
+    if status == "All Tasks":
+        return len(tasks)
     return sum(1 for task in tasks if task.status == status)
 
 
+@lru_cache(maxsize=1)
+def get_cached_tasks():
+    return tuple(TaskManager().get_tasks())
+
+
 def main_page():
+    # Refresh cache per page render, then reuse cached tasks for all stat cards.
+    get_cached_tasks.cache_clear()
     menu_items: list[MenuSection] = [
         {
             "category": "YouTube",
