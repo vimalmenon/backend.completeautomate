@@ -91,11 +91,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [x] Set up image generation
   - [x] Use Qwen
   - [x] Use Grok
-- [x] Need to set up Qwen
+  - [x] Need to set up Qwen
   - [x] Check if image model is working
 - [x] Test if it's able to generate good image prompts with multiple options
 - [ ] GUI Enhancements (Top priority)
   - [x] Add new Task
+  - [x] Work Offline with DB
   - [ ] Channel to show both channel details and videos
   - [ ] Use new URL
   - [ ] Show channel detail and videos in tabs

@@ -8,7 +8,7 @@ from backend.data import (
     YouTubeVideoDBData,
 )
 from backend.database import PlatformDB, YouTubeVideoDB
-from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager
@@ -63,7 +63,7 @@ class YouTubeVideoCreator(BaseGenerator):
     def __create_task_for_transcript(self, video_id: str, ref_id: str) -> None:
         manager = TaskManager(self.task)
         task = manager.create_youtube_summarize_task(
-            ref_id=ref_id, created_by=JobEnum.YouTubeVideo
+            ref_id=ref_id, created_by="YouTubeVideoCreator"
         )
         manager.add_task(task)
         logger.info(

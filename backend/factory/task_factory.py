@@ -10,7 +10,7 @@ def create_task_factory(**kwargs) -> TaskData:
         id=kwargs.get("id", uuid4()),
         job_type=kwargs.get("job_type", JobEnum.YouTubeChannel),
         payload=kwargs.get("payload", {}),
-        created_by=kwargs.get("created_by", JobEnum.OWNER),
+        created_by=kwargs.get("created_by", JobEnum.OWNER.value),
         created_at=kwargs.get("created_at", datetime.now()),
         status=kwargs.get("status", TaskStatusEnum.NEW),
     )

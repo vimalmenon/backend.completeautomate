@@ -53,9 +53,7 @@ class TaskManager:
     def transform_tasks(self) -> None:
         return None
 
-    def create_youtube_analysis_task(
-        self, ref_id: str, created_by: JobEnum
-    ) -> TaskData:
+    def create_youtube_analysis_task(self, ref_id: str, created_by: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube analysis task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -71,7 +69,7 @@ class TaskManager:
             trail=self.task.trail + [self.task.id],
         )
 
-    def create_youtube_video_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
+    def create_youtube_video_task(self, ref_id: str, created_by: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube video task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -87,7 +85,7 @@ class TaskManager:
             trail=[],
         )
 
-    def create_youtube_channel_task(self, ref_id: str, created_by: JobEnum) -> TaskData:
+    def create_youtube_channel_task(self, ref_id: str, created_by: str) -> TaskData:
         logger.debug(f"Creating YouTube channel task for ref_id={ref_id}")
         payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
@@ -100,9 +98,7 @@ class TaskManager:
             trail=[],
         )
 
-    def create_youtube_summarize_task(
-        self, ref_id: str, created_by: JobEnum
-    ) -> TaskData:
+    def create_youtube_summarize_task(self, ref_id: str, created_by: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube summarize task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -126,7 +122,7 @@ class TaskManager:
         title: str,
         description: str,
         tags: list[str],
-        created_by: JobEnum,
+        created_by: str,
     ) -> TaskData:
         if not self.task:
             logger.warning(
@@ -153,7 +149,7 @@ class TaskManager:
         )
 
     def create_youtube_thumbnail_prompt_suggester_task(
-        self, ref_id: str, created_by: JobEnum
+        self, ref_id: str, created_by: str
     ) -> TaskData:
         if not self.task:
             logger.warning(

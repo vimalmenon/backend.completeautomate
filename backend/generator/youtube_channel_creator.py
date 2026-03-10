@@ -3,7 +3,7 @@ import logging
 from backend.config.env import env
 from backend.data import YouTubeChannelDBData, YouTubeJobData
 from backend.database import YouTubeChannelDB
-from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager
@@ -30,7 +30,7 @@ class YouTubeChannelCreator(BaseGenerator):
             self.db.add_channel(channel_from_api)
             task = self.manager.create_youtube_video_task(
                 ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
-                created_by=JobEnum.YouTubeChannel,
+                created_by="YouTubeChannelCreator",
             )
             self.manager.add_task(task)
             logger.info(
