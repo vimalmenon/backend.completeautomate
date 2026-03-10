@@ -10,7 +10,7 @@ def youtube_channel_factory(**kwargs) -> YouTubeChannelDBData:
         title=faker.name(),
         description=faker.text(),
         custom_url=fake_url(),
-        published_at=faker.date_time(),
+        published_at=fake_date(),
         last_updated_at=fake_date(),
         country=faker.country(),
         thumbnail_url=faker.image_url(),
@@ -25,8 +25,8 @@ def youtube_channel_factory(**kwargs) -> YouTubeChannelDBData:
 def youtube_video_factory(**kwargs) -> YouTubeVideoDBData:
     return YouTubeVideoDBData(
         ref_id=kwargs.get("ref_id") or faker.str(),
-        published_at=faker.date_time(),
-        last_updated_at=faker.date_time(),
+        published_at=fake_date(),
+        last_updated_at=fake_date(),
         title=faker.text(),
         description=faker.name(),
         thumbnail=faker.text(),
