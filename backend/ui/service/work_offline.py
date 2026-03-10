@@ -5,7 +5,13 @@ from nicegui import app
 
 from backend.config.env import env
 from backend.config.session import set_offline_mode
-from backend.factory import platform_channel_factory, platform_video_factory
+from backend.factory import (
+    platform_channel_factory,
+    platform_video_factory,
+    youtube_channel_factory,
+    youtube_video_factory,
+)
+from backend.manager import PlatformManager, YouTubeChannelManager, YouTubeVideoManager
 from backend.ui.common.component_common import render_notify
 
 
@@ -28,7 +34,13 @@ def load_initial_data():
 
 
 def load_mock_data():
-    channel_id = uuid4()
-    channel = platform_channel_factory(channel_id=str(channel_id))
-    video = platform_video_factory(channel_id=str(channel_id))
-    print(channel, video)
+    channel_id = str(uuid4())
+    platform_manager = PlatformManager()
+    channel_platform = platform_channel_factory(channel_id=channel_id)
+    video_platform = platform_video_factory(channel_id=channel_id)
+    platform_manager.save_data(channel_platform)
+    platform_manager.save_data(video_platform)
+    channel = youtube_channel_factory(ref_id=channel_platform.ref_id)
+    video = youtube_video_factory(ref_id=video_platform.ref_id)
+    YouTubeChannelManager(channel_id).save_data(channel)
+    YouTubeVideoManager(channel_id).save_data(video)

@@ -3,7 +3,7 @@ from nicegui import run, ui
 from backend.manager import YouTubeChannelManager, YouTubeVideoManager
 
 
-async def youtube_channel_page(tab="channel"):
+async def youtube_channel_page(channel_id: str, tab="channel"):
 
     with ui.row().classes("w-full items-center my-4") as loading_row:
         ui.spinner(size="lg", color="primary")
@@ -11,8 +11,8 @@ async def youtube_channel_page(tab="channel"):
 
         channel, videos = await run.io_bound(
             lambda: (
-                YouTubeChannelManager(channel_id="").get_channel_details(),
-                YouTubeVideoManager().get_all_videos(channel_id=""),
+                YouTubeChannelManager(channel_id).get_channel_details(),
+                YouTubeVideoManager(channel_id).get_all_videos(),
             )
         )
 

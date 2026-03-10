@@ -3,8 +3,6 @@ from typing import Any
 
 from backend.data import (
     PlatformDBData,
-    PlatformYouTubeChannelDBData,
-    PlatformYouTubeVideoDBData,
 )
 from backend.database.dynamo_database import DbManager
 from backend.enum import DbKeysEnum
@@ -34,22 +32,12 @@ class PlatformDB:
         raise AppException(f"data with reference : {ref_id} not found")
 
     def save_data(self, data: PlatformDBData) -> str:
-        secondary = None
-
-        if isinstance(data.data, PlatformYouTubeVideoDBData):
-            secondary = f"{data.platform_type.value}#{data.channel_id}#{data.video_id}"
-        if isinstance(data.data, PlatformYouTubeChannelDBData):
-            secondary = f"{data.platform_type.value}#{data.channel_id}"
-        if not secondary:
-            raise AppException(
-                f"Platform with value : {data.platform_type.value} not found"
-            )
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: secondary,
+                DbKeysEnum.Secondary.value: data.ref_id,
                 **data.to_json(),
             }
         )
         self._get_item_cached.cache_clear()
-        return secondary
+        return data.ref_id

@@ -4,10 +4,14 @@ from backend.database import YouTubeVideoDB
 
 class YouTubeVideoManager:
 
-    def get_video_by_id(
-        self, channel_id: str, video_id: str
-    ) -> YouTubeVideoDBData | None:
-        return YouTubeVideoDB(channel_id).fetch_video_from_db(video_id)
+    def __init__(self, channel_id: str):
+        self.channel_id = channel_id
 
-    def get_all_videos(self, channel_id: str) -> list[YouTubeVideoDBData]:
-        return YouTubeVideoDB(channel_id).get_all_videos_from_db()
+    def get_video_by_id(self, video_id: str) -> YouTubeVideoDBData | None:
+        return YouTubeVideoDB(channel_id=self.channel_id).fetch_video_from_db(video_id)
+
+    def get_all_videos(self) -> list[YouTubeVideoDBData]:
+        return YouTubeVideoDB(channel_id=self.channel_id).get_all_videos_from_db()
+
+    def save_data(self, data: YouTubeVideoDBData) -> None:
+        return YouTubeVideoDB(channel_id=self.channel_id).add_video(data)

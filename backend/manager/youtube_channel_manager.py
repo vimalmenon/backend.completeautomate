@@ -8,3 +8,6 @@ class YouTubeChannelManager:
 
     def get_channel_details(self) -> YouTubeChannelDBData | None:
         return YouTubeChannelDB(channel_id=self.channel_id).query_channel()
+
+    def save_data(self, data: YouTubeChannelDBData) -> None:
+        return YouTubeChannelDB(channel_id=self.channel_id).add_channel(data)

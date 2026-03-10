@@ -19,7 +19,7 @@ async def youtube_video_page(
         ui.label("Loading tasks...")
 
         video = await run.io_bound(
-            lambda: YouTubeVideoManager().get_video_by_id(channel_id, video_id)
+            lambda: YouTubeVideoManager(channel_id).get_video_by_id(video_id)
         )
 
     # Remove loading indicator
