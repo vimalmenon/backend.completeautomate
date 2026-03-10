@@ -108,6 +108,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Ability to perform all actions from GUI
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
+- [ ] YouTube Video
+  - [x] Get transcript while getting data from API
+  - [x] Summarize in next stage
+  - [ ] Fix transcripts for grammar and other errors in DB
+  - [ ] Job only to fix transcript or do it while getting videos
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
@@ -118,11 +123,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
-- [ ] YouTube Video
-  - [x] Get transcript while getting data from API
-  - [ ] Summarize in next stage
-  - [ ] Fix transcripts for grammar and other errors
-  - [ ] Job only to fix transcript or do it while getting videos
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
