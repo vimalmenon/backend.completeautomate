@@ -111,8 +111,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Standardize the Image Generation
   - [ ] Make the Image generation more generic to be used
 - [ ] Improve Task
-  - [ ] Need to find something better than `OWNER` in JobEnum
-  - [ ] Do we need `created by` or maybe use str in `TaskData`
+  - [x] Need to find something better than `OWNER` in JobEnum
+  - [x] Do we need `created by` or maybe use str in `TaskData`
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks

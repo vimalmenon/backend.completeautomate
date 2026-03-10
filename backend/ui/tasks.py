@@ -167,7 +167,6 @@ JOB_PAYLOAD_FIELDS = {
             "required": True,
         },
     ],
-    JobEnum.OWNER.value: [],
     JobEnum.TrendingIdeaSuggester.value: [],
 }
 
@@ -451,7 +450,7 @@ def render_add_task_form() -> None:
                 job_type_input = (
                     ui.select(
                         options=job_options,
-                        value=JobEnum.OWNER.value,
+                        value="OWNER",
                         label="Job Type",
                     )
                     .props("outlined dense")
@@ -460,7 +459,7 @@ def render_add_task_form() -> None:
                 created_by_input = (
                     ui.select(
                         options=team_options,
-                        value=TeamEnum.OWNER.role,
+                        value="OWNER",
                         label="Created By",
                     )
                     .props("outlined dense")

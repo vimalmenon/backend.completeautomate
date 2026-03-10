@@ -201,7 +201,7 @@ def render_add_task_form() -> None:
             job_type_input = (
                 ui.select(
                     options=job_options,
-                    value=JobEnum.OWNER.value,
+                    value="OWNER",
                     label="Job Type",
                 )
                 .props("outlined dense")
@@ -210,7 +210,7 @@ def render_add_task_form() -> None:
             created_by_input = (
                 ui.select(
                     options=job_options,
-                    value=JobEnum.OWNER.value,
+                    value="OWNER",
                     label="Created By",
                 )
                 .props("outlined dense")

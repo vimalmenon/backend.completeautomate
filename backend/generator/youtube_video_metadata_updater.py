@@ -1,5 +1,5 @@
 from backend.data import TaskData, YouTubeVideoMetadataJobData
-from backend.enum import JobEnum, TaskStatusEnum
+from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager
