@@ -98,13 +98,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Need to set up Qwen
   - [x] Check if image model is working
   - [x] Test if it's able to generate good image prompts with multiple options
-  - [ ] Standardize the Image Generation
-  - [ ] Make the Image generation more generic to be used
+  - [ ] Standardize the image generation
+  - [ ] Make the image generation more generic to be used
 - [ ] GUI Enhancements (Top priority)
   - [x] Add new Task
   - [x] Work Offline with DB
   - [ ] Move to new routes
-  - [ ] Clicking on Task should route to correct Page
+  - [ ] Clicking on `Task` should route to correct page
   - [ ] Channel to show both channel details and videos
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
