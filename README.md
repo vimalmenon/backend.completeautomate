@@ -126,8 +126,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
+- [ ] Job only to fix transcript or do it while getting videos
 - [ ] Fix transcripts for grammar and other errors
-- [ ] Job only to fix transcript 
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Complete TODOs
 - [ ] Remove Deadcode
