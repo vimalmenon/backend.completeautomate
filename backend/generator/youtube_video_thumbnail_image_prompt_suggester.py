@@ -73,7 +73,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_data.title,
                 description=video_data.description,
-                video_summary=video_data.transcript.summarize,
+                video_summary=video_data.summarized_transcript or "",
             ).to_json(),
         )
         agent = GeneralAgent(

@@ -6,7 +6,6 @@ from nicegui import run, ui
 from backend.config.env import env
 from backend.data import (
     TaskData,
-    YouTubeTranscriptDBData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 from backend.database import TaskDB
@@ -433,36 +432,36 @@ def save_video_details(ref_id: str, title: str, description: str) -> None:
         ui.notify("Failed to update video", type="negative")
 
 
-def save_transcript(ref_id: str, transcript_text: str, summarize_text: str) -> None:
-    try:
-        transcript = YouTubeTranscriptDBData(
-            transcript=transcript_text,
-            summarize=summarize_text,
-        )
-        YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
-            video_id=ref_id,
-            transcript=transcript,
-        )
-        ui.notify("Transcript updated", type="positive")
-        ui.run_javascript('window.location.href = "/youtube"')
-    except Exception:
-        ui.notify("Failed to update transcript", type="negative")
+# def save_transcript(ref_id: str, transcript_text: str, summarize_text: str) -> None:
+#     try:
+#         transcript = YouTubeTranscriptDBData(
+#             transcript=transcript_text,
+#             summarize=summarize_text,
+#         )
+#         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
+#             video_id=ref_id,
+#             transcript=transcript,
+#         )
+#         ui.notify("Transcript updated", type="positive")
+#         ui.run_javascript('window.location.href = "/youtube"')
+#     except Exception:
+#         ui.notify("Failed to update transcript", type="negative")
 
 
-def save_summarize(ref_id: str, transcript_text: str, summarize_text: str) -> None:
-    try:
-        transcript = YouTubeTranscriptDBData(
-            transcript=transcript_text,
-            summarize=summarize_text,
-        )
-        YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
-            video_id=ref_id,
-            transcript=transcript,
-        )
-        ui.notify("Summary updated", type="positive")
-        ui.run_javascript('window.location.href = "/youtube"')
-    except Exception:
-        ui.notify("Failed to update summary", type="negative")
+# def save_summarize(ref_id: str, transcript_text: str, summarize_text: str) -> None:
+#     try:
+#         transcript = YouTubeTranscriptDBData(
+#             transcript=transcript_text,
+#             summarize=summarize_text,
+#         )
+#         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_transcript(
+#             video_id=ref_id,
+#             transcript=transcript,
+#         )
+#         ui.notify("Summary updated", type="positive")
+#         ui.run_javascript('window.location.href = "/youtube"')
+#     except Exception:
+#         ui.notify("Failed to update summary", type="negative")
 
 
 def create_thumbnail_suggestion_task(video_id: str) -> None:
@@ -519,57 +518,57 @@ def open_edit_video_dialog(video_json: dict) -> None:
 
 
 def open_edit_transcript_dialog(video_json: dict) -> None:
-    transcript = video_json.get("transcript") or {}
-    current_transcript = str(transcript.get("transcript", ""))
-    current_summarize = str(transcript.get("summarize", ""))
+    # transcript = video_json.get("transcript") or {}
+    # current_transcript = str(transcript.get("transcript", ""))
+    # current_summarize = str(transcript.get("summarize", ""))
 
     with ui.dialog() as dialog, ui.card().classes("w-[1000px] max-w-full"):
         ui.label("Edit Transcript").classes("text-h6")
-        transcript_input = (
-            ui.textarea(label="Transcript", value=current_transcript)
-            .props("outlined autogrow")
-            .classes("w-full")
-        )
+        # transcript_input = (
+        #     ui.textarea(label="Transcript", value=current_transcript)
+        #     .props("outlined autogrow")
+        #     .classes("w-full")
+        # )
 
         with ui.row().classes("w-full justify-end gap-2"):
             ui.button("Cancel", on_click=dialog.close).props("flat")
             ui.button(
                 "Save",
                 icon="save",
-                on_click=lambda: save_transcript(
-                    _get_video_db_id(video_json),
-                    str(transcript_input.value),
-                    current_summarize,
-                ),
+                # on_click=lambda: save_transcript(
+                #     _get_video_db_id(video_json),
+                #     str(transcript_input.value),
+                #     current_summarize,
+                # ),
             ).props("color=primary")
     dialog.open()
 
 
-def open_edit_summarize_dialog(video_json: dict) -> None:
-    transcript = video_json.get("transcript") or {}
-    current_transcript = str(transcript.get("transcript", ""))
-    current_summarize = str(transcript.get("summarize", ""))
+# def open_edit_summarize_dialog(video_json: dict) -> None:
+#     transcript = video_json.get("transcript") or {}
+#     current_transcript = str(transcript.get("transcript", ""))
+#     current_summarize = str(transcript.get("summarize", ""))
 
-    with ui.dialog() as dialog, ui.card().classes("w-[1000px] max-w-full"):
-        ui.label("Edit Summarize").classes("text-h6")
-        summarize_input = (
-            ui.textarea(label="Summarize", value=current_summarize)
-            .props("outlined autogrow")
-            .classes("w-full")
-        )
+#     with ui.dialog() as dialog, ui.card().classes("w-[1000px] max-w-full"):
+#         ui.label("Edit Summarize").classes("text-h6")
+#         # summarize_input = (
+#         #     ui.textarea(label="Summarize", value=current_summarize)
+#         #     .props("outlined autogrow")
+#         #     .classes("w-full")
+#         # )
 
-        with ui.row().classes("w-full justify-end gap-2"):
-            ui.button("Cancel", on_click=dialog.close).props("flat")
-            ui.button(
-                "Save",
-                icon="save",
-                on_click=lambda: save_summarize(
-                    _get_video_db_id(video_json),
-                    current_transcript,
-                    str(summarize_input.value),
-                ),
-            ).props("color=primary")
-    dialog.open()
+#         with ui.row().classes("w-full justify-end gap-2"):
+#             ui.button("Cancel", on_click=dialog.close).props("flat")
+#             ui.button(
+#                 "Save",
+#                 icon="save",
+#                 # on_click=lambda: save_summarize(
+#                 #     _get_video_db_id(video_json),
+#                 #     current_transcript,
+#                 #     str(summarize_input.value),
+#                 # ),
+#             ).props("color=primary")
+#     dialog.open()
 
 
 def _get_video_id_from_platform(video) -> str:
@@ -628,9 +627,9 @@ def _render_video_action_buttons(video_json: dict, video_id: str = "") -> None:
         ui.button(
             "Edit Summarize",
             icon="summarize",
-            on_click=lambda current_video=video_json: open_edit_summarize_dialog(
-                current_video
-            ),
+            # on_click=lambda current_video=video_json: open_edit_summarize_dialog(
+            #     current_video
+            # ),
         ).props("flat")
 
 

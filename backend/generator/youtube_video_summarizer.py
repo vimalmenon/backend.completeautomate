@@ -3,7 +3,6 @@ from typing import Any
 
 from backend.data import (
     TaskData,
-    YouTubeTranscriptDBData,
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB
@@ -11,8 +10,7 @@ from backend.enum import JobEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.agent.general_agent import GeneralAgent
-from backend.integration.youtube.youtube_api import YouTubeAPI
-from backend.manager import TaskManager
+from backend.manager import TaskManager, YouTubeVideoManager
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -24,29 +22,31 @@ class YouTubeVideoSummarizer(BaseGenerator):
         super().__init__(task)
         logger.info(f"Initializing YouTubeVideoSummarizeGenerator for video: {task.id}")
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
-        self.youtube_api = YouTubeAPI()
         self.db = YouTubeVideoDB(self.job_data.platform.channel_id)
+        self.db_manager = YouTubeVideoManager(self.job_data.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:
         logger.info(f"Fetching transcript for video: {self.job_data.platform.video_id}")
         try:
-            result = self.youtube_api.get_transcript(self.job_data.platform.video_id)
-            if not result:
+            video = self.db_manager.get_video_by_id(self.job_data.platform.video_id)
+            if not video:
                 logger.warning(
-                    f"No transcript found for video: {self.job_data.platform.video_id}"
+                    f"Video not found in DB for id: {self.job_data.platform.video_id}"
                 )
                 return TaskStatusEnum.COMPLETED
-            logger.info("Processing transcript")
-            text_transcript = self.__convert_transcript_to_text(result)
-            logger.info("Summarizing transcript")
-            summarize = self.__summarize_transcript(text_transcript)
+            if not video.transcript:
+                logger.warning(
+                    f"Video not found in DB for id: {self.job_data.platform.video_id}"
+                )
+                return TaskStatusEnum.COMPLETED
             logger.info(
                 f"Successfully generated transcript and summary for video: {self.job_data.platform.video_id}"
             )
-            data = YouTubeTranscriptDBData(
-                transcript=text_transcript, summarize=summarize
+            summarize = self.__summarize_transcript(video.transcript)
+            self.db_manager.update_summarized_transcript(
+                video_id=self.job_data.platform.video_id,
+                summarized_transcript=summarize,
             )
-            self.__update_db_with_transcript(data)
             self.__create_analysis_task()
             return TaskStatusEnum.COMPLETED
         except Exception as e:
@@ -56,32 +56,6 @@ class YouTubeVideoSummarizer(BaseGenerator):
             raise AppException(
                 f"Error processing transcript for video: {self.job_data.platform.video_id}, error: {str(e)}"
             )
-
-    def __convert_transcript_to_text(self, result) -> str:
-        logger.debug("Converting raw transcript data to text")
-        text = [self.__process_transcript(snippet) for snippet in result.snippets]
-        return "\n".join(text)
-
-    def __process_transcript(self, snippet: Any) -> str:
-        text = (
-            snippet.get("text", "")
-            if isinstance(snippet, dict)
-            else getattr(snippet, "text", "")
-        )
-        start = float(
-            snippet.get("start", 0.0)
-            if isinstance(snippet, dict)
-            else getattr(snippet, "start", 0.0)
-        )
-        duration = float(
-            snippet.get("duration", 0.0)
-            if isinstance(snippet, dict)
-            else getattr(snippet, "duration", 0.0)
-        )
-        end = start + duration
-
-        logger.debug("Processing transcript snippet from %.3f to %.3f", start, end)
-        return f"[{start:.3f} {end:.3f}] {text}"
 
     def __summarize_transcript(self, text_transcript: str) -> Any:
         logger.debug(
@@ -99,12 +73,6 @@ class YouTubeVideoSummarizer(BaseGenerator):
         )
         result = agent.invoke()
         return result["messages"][-1].content
-
-    def __update_db_with_transcript(self, transcript: YouTubeTranscriptDBData) -> None:
-        logger.info(
-            f"Updating database with transcript for video: {self.job_data.platform.video_id}"
-        )
-        self.db.update_transcript(self.job_data.platform.video_id, transcript)
 
     def __create_analysis_task(self):
         manager = TaskManager(self.task)

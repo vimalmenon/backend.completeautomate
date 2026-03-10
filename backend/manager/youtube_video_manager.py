@@ -15,3 +15,10 @@ class YouTubeVideoManager:
 
     def save_data(self, data: YouTubeVideoDBData) -> None:
         return YouTubeVideoDB(channel_id=self.channel_id).add_video(data)
+
+    def update_summarized_transcript(
+        self, video_id: str, summarized_transcript: str
+    ) -> None:
+        YouTubeVideoDB(channel_id=self.channel_id).update_transcript(
+            video_id, summarized_transcript
+        )

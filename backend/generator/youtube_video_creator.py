@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from backend.data import (
     PlatformDBData,
@@ -47,6 +48,10 @@ class YouTubeVideoCreator(BaseGenerator):
             youtube_data = YouTubeVideoDBData.to_cls_from_response(
                 {**youtube_response, "task_id": str(self.task.id), "ref_id": ref_id}
             )
+            transcript = self.youtube_api.get_transcript(
+                self.job_data.platform.video_id
+            )
+            youtube_data.transcript = self.__convert_transcript_to_text(transcript)
             self.db.add_video(youtube_data)
             self.__create_task_for_transcript(video_id, ref_id)
 
@@ -59,6 +64,32 @@ class YouTubeVideoCreator(BaseGenerator):
                 {**youtube_response, "task_id": str(self.task.id)}
             )
             self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
+
+    def __convert_transcript_to_text(self, result) -> str:
+        logger.debug("Converting raw transcript data to text")
+        text = [self.__process_transcript(snippet) for snippet in result.snippets]
+        return "\n".join(text)
+
+    def __process_transcript(self, snippet: Any) -> str:
+        text = (
+            snippet.get("text", "")
+            if isinstance(snippet, dict)
+            else getattr(snippet, "text", "")
+        )
+        start = float(
+            snippet.get("start", 0.0)
+            if isinstance(snippet, dict)
+            else getattr(snippet, "start", 0.0)
+        )
+        duration = float(
+            snippet.get("duration", 0.0)
+            if isinstance(snippet, dict)
+            else getattr(snippet, "duration", 0.0)
+        )
+        end = start + duration
+
+        logger.debug("Processing transcript snippet from %.3f to %.3f", start, end)
+        return f"[{start:.3f} {end:.3f}] {text}"
 
     def __create_task_for_transcript(self, video_id: str, ref_id: str) -> None:
         manager = TaskManager(self.task)

@@ -2,7 +2,7 @@ from logging import getLogger
 
 from boto3.dynamodb.conditions import Key
 
-from backend.data import YouTubeTranscriptDBData, YouTubeVideoDBData
+from backend.data import YouTubeVideoDBData
 from backend.data.platform import PlatformYouTubeVideoDBData
 from backend.database import DbManager
 from backend.enum import DbKeysEnum
@@ -71,16 +71,14 @@ class YouTubeVideoDB:
             ExpressionAttributeValues=expression_attribute_values,
         )
 
-    def update_transcript(
-        self, video_id: str, transcript: YouTubeTranscriptDBData
-    ) -> None:
+    def update_transcript(self, video_id: str, summarized_transcript: str) -> None:
         self.db_manager.update_item(
             Key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
             },
-            UpdateExpression="SET transcript = :transcript",
-            ExpressionAttributeValues={":transcript": transcript.to_json()},
+            UpdateExpression="SET summarized_transcript = :summarized_transcript",
+            ExpressionAttributeValues={":summarized_transcript": summarized_transcript},
         )
         logger.info(f"Updated transcript for video id: {video_id}")
 

@@ -186,25 +186,6 @@ class YouTubeVideoDBStats:
 
 
 @dataclass
-class YouTubeTranscriptDBData:
-    transcript: str
-    summarize: str
-
-    def to_json(self):
-        return {
-            "transcript": self.transcript,
-            "summarize": self.summarize,
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            transcript=data["transcript"],
-            summarize=data["summarize"],
-        )
-
-
-@dataclass
 class YouTubeVideoDBData:
     ref_id: str
     published_at: datetime
@@ -216,7 +197,8 @@ class YouTubeVideoDBData:
     language: str
     task_id: UUID
     stats: list[YouTubeVideoDBStats]
-    transcript: YouTubeTranscriptDBData | None = None
+    transcript: str | None = None
+    summarized_transcript: str | None = None
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -235,11 +217,8 @@ class YouTubeVideoDBData:
             thumbnail=data["thumbnail"],
             tags=data["tags"],
             language=data["language"],
-            transcript=(
-                YouTubeTranscriptDBData.to_cls(data["transcript"])
-                if data["transcript"]
-                else None
-            ),
+            transcript=data.get("transcript"),
+            summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
             stats=stats,
             task_id=UUID(data["task_id"]),
@@ -274,7 +253,8 @@ class YouTubeVideoDBData:
             "task_id": str(self.task_id),
             "last_updated_at": self.last_updated_at.isoformat(),
             "stats": [stat.to_json() for stat in self.stats],
-            "transcript": self.transcript.to_json() if self.transcript else None,
+            "transcript": self.transcript,
+            "summarized_transcript": self.summarized_transcript,
         }
 
     def past_update_time(self, days: int = 7) -> bool:

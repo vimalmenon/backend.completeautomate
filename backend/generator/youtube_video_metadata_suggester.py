@@ -58,7 +58,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             prompt_task=PromptTaskEnum.YouTubeVideoAnalysis,
             task_id=str(self.task.id),
             data={
-                "transcript": video_db.transcript.summarize,
+                "transcript": video_db.summarized_transcript,
             },
         )
         agent = GeneralAgent(
