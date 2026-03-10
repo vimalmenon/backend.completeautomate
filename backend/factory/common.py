@@ -1,6 +1,17 @@
+from uuid import UUID
+
 from faker import Faker
 
 faker = Faker()
 
 
-fake_date = faker.date_time
+def fake_date():
+    return faker.date_time()
+
+
+def fake_uuid() -> UUID:
+    return UUID(faker.uuid4())
+
+
+def fake_url():
+    return faker.url()
