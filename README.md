@@ -103,12 +103,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] GUI Enhancements (Top priority)
   - [x] Add new Task
   - [x] Work Offline with DB
-  - [ ] Channel to show both channel details and videos
   - [ ] Move to new routes
+  - [ ] Channel to show both channel details and videos
+  - [ ] Show right page on click of task
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
-  - [ ] View Images from S3 and Local
-  - [ ] Button to Download S3 Object to local
+  - [ ] View images from S3 and Local
+  - [ ] Button to download S3 Object to local
 - [ ] Test all the prompts once done
 - [ ] Improve on prompt suggester
 - [ ] Agent to analyze result
@@ -119,7 +120,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
-  - [ ] YouTube idea suggester
+  - [ ] YouTube Idea suggester
   - [ ] Pointer for Video to create
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
@@ -127,9 +128,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
+- [ ] Fix transcripts for grammar and other errors
+- [ ] Job only to fix transcript 
+- [ ] Add Playlist details to YouTube Video DB
+- [ ] Complete TODOs
+- [ ] Dead code
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
-- [ ] Fix TODOs and Dead code
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
 - [ ] Test Coverage
@@ -137,8 +142,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [ ] Fix transcripts for grammar and other errors
-- [ ] Add Playlist details to YouTube Video DB
 
 - Naming convention for generator
   - Updater (Update data to source)
