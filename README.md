@@ -20,6 +20,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - [YouTube OAuth Notes](#youtube-oauth-notes)
 - [Development Commands](#development-commands)
 - [Testing](#testing)
+- [Mock Data Factories](#mock-data-factories)
 - [Architecture Overview](#architecture-overview)
 - [Response Formats](#response-formats)
 - [Project Layout](#project-layout)
@@ -422,6 +423,30 @@ Available markers:
 - `aws`
 - `youtube`
 
+## Mock Data Factories
+
+The project uses `faker` for synthetic data generation in shared test/factory helpers.
+
+Current helpers live in `backend/factory/common.py`:
+
+- `fake_date()`
+- `fake_uuid()`
+- `fake_url()`
+
+Example usage:
+
+```python
+from backend.factory.common import fake_date, fake_url, fake_uuid
+
+payload = {
+  "task_id": fake_uuid(),
+  "created_at": fake_date(),
+  "source_url": fake_url(),
+}
+```
+
+Tip: seed Faker in tests when deterministic values are needed.
+
 ## Architecture Overview
 
 - `backend/task_scheduler_services.py`: scheduler loop and job routing
@@ -430,6 +455,7 @@ Available markers:
 - `backend/generator/`: workflow generators and domain logic
 - `backend/services/agent_service.py`: model/prompt orchestration
 - `backend/manager/`: manager layer with comprehensive logging for platform, startup, and task operations
+- `backend/factory/common.py`: shared Faker-backed helpers for generating mock values
 - `backend/ai/`: provider adapters
 - `backend/database/`: DynamoDB access layer
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
