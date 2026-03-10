@@ -1,10 +1,7 @@
 from uuid import UUID
 
-from faker import Faker
-
 from backend.data import YouTubeChannelDBData, YouTubeVideoDBData
-
-faker = Faker()
+from backend.factory.common import fake_date, faker
 
 
 def youtube_channel_factory(**kwargs) -> YouTubeChannelDBData:
@@ -14,7 +11,7 @@ def youtube_channel_factory(**kwargs) -> YouTubeChannelDBData:
         description=faker.text(),
         custom_url=faker.url(),
         published_at=faker.date_time(),
-        last_updated_at=faker.date_time(),
+        last_updated_at=fake_date(),
         country=faker.country(),
         thumbnail_url=faker.image_url(),
         banner_image_url=faker.image_url(),

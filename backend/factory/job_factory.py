@@ -1,8 +1,5 @@
-from faker import Faker
-
 from backend.data import YouTubeJobData
-
-faker = Faker()
+from backend.factory.common import faker
 
 
 def create_youtube_channel_job_factory(**kwargs) -> YouTubeJobData:

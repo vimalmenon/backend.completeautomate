@@ -1,13 +1,10 @@
-from faker import Faker
-
 from backend.data import (
     PlatformDBData,
     PlatformYouTubeChannelDBData,
     PlatformYouTubeVideoDBData,
 )
 from backend.enum import PlatformEnum
-
-faker = Faker()
+from backend.factory.common import faker
 
 
 def platform_channel_factory(**kwargs) -> PlatformDBData:

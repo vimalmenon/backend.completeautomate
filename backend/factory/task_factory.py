@@ -1,8 +1,8 @@
-from datetime import datetime
 from uuid import uuid4
 
 from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum
+from backend.factory.common import faker
 
 
 def create_task_factory(**kwargs) -> TaskData:
@@ -11,7 +11,7 @@ def create_task_factory(**kwargs) -> TaskData:
         job_type=kwargs.get("job_type", JobEnum.YouTubeChannel),
         payload=kwargs.get("payload", {}),
         created_by=kwargs.get("created_by", "OWNER"),
-        created_at=kwargs.get("created_at", datetime.now()),
+        created_at=kwargs.get("created_at", faker.date_time()),
         status=kwargs.get("status", TaskStatusEnum.NEW),
     )
 
