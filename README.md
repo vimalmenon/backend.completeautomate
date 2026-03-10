@@ -87,10 +87,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-- [x] Improve Task
-  - [x] Need to find something better than `OWNER` in JobEnum
-  - [x] Do we need `created by` or maybe use str in `TaskData`
-  - [x] Removed Owner
+- [ ] Improve Task
   - [ ] `Created By` seems redundant as there is already trails
 - [x] Set up image generation
   - [x] Use Qwen
