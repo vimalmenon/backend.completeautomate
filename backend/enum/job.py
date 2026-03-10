@@ -15,4 +15,3 @@ class JobEnum(str, Enum):
     PromptSuggester = "PromptSuggester"
     # TODO Need to implement
     TwitterPost = "TwitterPost"
-    TrendingIdeaSuggester = "TrendingIdeaSuggester"

@@ -93,15 +93,14 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] YouTube Video
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Job only to fix transcript or do it while getting videos
+- [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
+  - [ ] YouTube topic suggester
+  - [ ] Pointer for video to create
+  - [ ] Find next week topic
+  - [ ] Use Google trends
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
-- [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
-  - [ ] Find next week topic
-  - [ ] Give Pointers and Suggestions
-  - [ ] Use Google trends
-  - [ ] YouTube Idea suggester
-  - [ ] Pointer for Video to create
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
@@ -176,7 +175,6 @@ YouTubeChannelCreator (Initial Task)
 **Ideas / Low Priority:**
 
 - Local text-to-speech
-- Identify next week topic
 - Dockerfile + DockerHub CD
 - App / API Integration
   - Instagram
