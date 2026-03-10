@@ -16,7 +16,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 	- [2) Configure environment](#2-configure-environment)
 	- [3) Run the app](#3-run-the-app)
 	- [4) Run the dashboard](#4-run-the-dashboard)
-- [Environment Variables At A Glance](#environment-variables-at-a-glance)
 - [YouTube OAuth Notes](#youtube-oauth-notes)
 - [Development Commands](#development-commands)
 - [Testing](#testing)
@@ -28,20 +27,13 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 
 ## Highlights
 
-- Multi-agent orchestration for content and automation tasks
-- Multiple AI providers (OpenAI, DeepSeek, Perplexity, OpenRouter, xAI Grok, Alibaba Cloud Qwen via DashScope)
-- YouTube automation (channel/video sync, transcript workflows, thumbnail updates)
-- Image generation + prompt pipelines (FLUX, Grok, Qwen)
-- AWS-backed persistence (DynamoDB + S3)
-- Offline mode support with Moto-mocked AWS services
-- Web dashboard built with NiceGUI (`/`, `/tasks`, `/youtube`, `/prompt`)
-- Tasks dashboard: dynamic payload fields based on job type, task execution confirmation dialog, inline status updates, status-colored rows, delete action, expandable payload JSON viewer
-- Videos dashboard: newest-first by published date, detail-page navigation, inline editing for title/description/transcript/summary, interactive Plotly stats charts (views/likes/comments over time), improved thumbnail rendering, and metadata option status updates with ImagePromptDB selection
-- Prompt dashboard: prompt list with detail-page navigation (`/prompt/{task_id}`), task/role/model metadata, and inline edit support from detail view
-- Comprehensive logging across managers and services for debugging and monitoring
-- Test suite with unit and integration markers
-- Cache invalidation support for platform data models
-- Interactive data visualization with Plotly for YouTube video analytics
+- Multi-agent backend for task scheduling and automation workflows
+- Multi-provider AI support (OpenAI, DeepSeek, Perplexity, OpenRouter, xAI Grok, Qwen)
+- End-to-end YouTube workflow automation: channel/video sync, analysis, metadata, and thumbnails
+- Image generation and prompt pipelines (FLUX, Grok, Qwen)
+- NiceGUI dashboard for tasks, videos, channels, prompts, and operations
+- AWS persistence with DynamoDB + S3, plus offline mode via Moto mocks
+- Strong developer ergonomics: logging, typed models, cache invalidation, and unit/integration tests
 
 ## Project Health
 
@@ -49,15 +41,11 @@ Current internal score: **7.5/10**
 
 ### What is working well
 
-- Clear modular architecture (`ai`, `data`, `database`, `jobs`, `integration`, `ui`)
-- Practical developer workflow (`Makefile`, pytest markers, lint/type checks)
-- Functional NiceGUI dashboards with live task operations
-- Good momentum with iterative UI improvements (dynamic payload forms, confirmation dialogs, status updates, row actions, sorting, JSON payload rendering)
-- Comprehensive logging in manager layer for operational visibility
-- Lazy import pattern prevents circular dependencies in data models
-- Cache invalidation methods for platform data freshness
-- Type-safe code with mypy validation and assert-based type guards
-- Plotly integration for rich data visualization in YouTube analytics
+- Modular architecture with clear separation across AI, data, database, jobs, integrations, and UI
+- Solid developer workflow with Make targets, pytest markers, linting, and type checking
+- Functional NiceGUI dashboards with active task/video/prompt operations and ongoing UX improvements
+- Strong observability and reliability patterns: manager-layer logging, lazy imports, and cache invalidation
+- Typed codebase with mypy validation and Plotly-powered YouTube analytics visualization
 
 ### Improvement areas
 
@@ -86,7 +74,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 ## Roadmap
 
 <details>
-<summary><b>TODO Items</b> (click to expand)</summary>
+<summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve Task
   - [ ] `Created By` seems redundant as there is already trails
@@ -127,7 +115,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve on prompt suggester
 - [ ] Standardize update data in DB
 - [ ] Mock data (use factory)
-  - [x] Use Faker for data
   - [ ] All data needs to be mocked
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
@@ -274,33 +261,6 @@ Set `OFFLINE=true` to run AWS integrations against local Moto mocks (S3 + Dynamo
 without requiring internet or real AWS credentials.
 
 If `OFFLINE` is not set, the app defaults to `false`.
-
-## Environment Variables At A Glance
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `VERSION` | Yes | Runtime label (for example `local`, `dev`, `prod`). |
-| `COMPANY_NAME` | Yes | Branding/display name used in UI and logs. |
-| `AWS_CLIENT_ID` | Yes (online mode) | AWS access key ID. |
-| `AWS_SECRET` | Yes (online mode) | AWS secret access key. |
-| `AWS_REGION` | Yes | AWS region for DynamoDB/S3 resources. |
-| `AWS_SECRET_MANAGER` | Optional | Secret manager key/path if used in your deployment. |
-| `AWS_TABLE` | Yes | DynamoDB table name for app data. |
-| `AWS_S3_BUCKET` | Yes | S3 bucket for persisted output assets. |
-| `OFFLINE` | Optional | Local Moto mode flag (`true/1/yes/on` enables offline mode). |
-| `YOUTUBE_API_KEY` | Required for YouTube API workflows | Server-to-server YouTube API calls. |
-| `YOUTUBE_CHANNEL_ID` | Required for default channel workflows | Primary channel identifier. |
-| `OPENAI_API_KEY` | Optional | Enables OpenAI-backed generation paths. |
-| `DEEPSEEK_API_KEY` | Optional | Enables DeepSeek-backed generation paths. |
-| `QWEN_API_KEY` | Optional | Enables Alibaba Cloud DashScope Qwen text and image generation paths. |
-| `PPLX_API_KEY` | Optional | Enables Perplexity-backed generation paths. |
-| `OPEN_ROUTE_API_KEY` | Optional | Enables OpenRouter-backed generation paths. |
-| `GROK_API_KEY` | Optional | Enables xAI Grok generation paths. |
-
-Notes:
-
-- In offline mode, AWS calls are routed to Moto and bootstrap local resources automatically.
-- You only need to provide API keys for providers you actually use.
 
 ### 3) Run the app
 
