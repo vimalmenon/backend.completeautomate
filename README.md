@@ -87,7 +87,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><b>TODO Items</b> (click to expand)</summary>
 
-
+- [x] Improve Task
+  - [x] Need to find something better than `OWNER` in JobEnum
+  - [x] Do we need `created by` or maybe use str in `TaskData`
+  - [x] Removed Owner
+  - [ ] `Created By` seems redundant as there is already trails
 - [x] Set up image generation
   - [x] Use Qwen
   - [x] Use Grok
@@ -100,7 +104,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Add new Task
   - [x] Work Offline with DB
   - [ ] Channel to show both channel details and videos
-  - [ ] Use new URL
+  - [ ] Move to new routes
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
   - [ ] View Images from S3 and Local
@@ -110,11 +114,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
-
-- [x] Improve Task
-  - [x] Need to find something better than `OWNER` in JobEnum
-  - [x] Do we need `created by` or maybe use str in `TaskData`
-  - [x] Removed Owner
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Put all the generated image prompt to review
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
