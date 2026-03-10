@@ -130,6 +130,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Remove Deadcode
 - [ ] Test all the prompts once done
 - [ ] Improve on prompt suggester
+- [ ] Standardize update data
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
 - [ ] Set Up GitHub Cron Job
