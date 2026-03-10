@@ -89,18 +89,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve Task
   - [ ] `Created By` seems redundant as there is already trails
-- [x] Set up image generation
-  - [x] Use Qwen
-  - [x] Use Grok
-  - [x] Need to set up Qwen
-  - [x] Check if image model is working
-  - [x] Test if it's able to generate good image prompts with multiple options
+- [ ] Set up image generation
   - [ ] Standardize the image generation
   - [ ] Make the image generation more generic to be used
   - [ ] Put all the generated image prompt to review
 - [ ] GUI Enhancements (Top priority)
-  - [x] Add new Task
-  - [x] Work Offline with DB
   - [ ] Move to new routes
   - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Channel to show both channel details and videos
@@ -109,8 +102,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
 - [ ] YouTube Video
-  - [x] Get transcript while getting data from API
-  - [x] Summarize in next stage
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Job only to fix transcript or do it while getting videos
 - [ ] Agent to analyze result
