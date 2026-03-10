@@ -6,12 +6,19 @@ from nicegui import app
 from backend.config.env import env
 from backend.config.session import set_offline_mode
 from backend.factory import (
+    create_task_factory,
+    create_youtube_channel_job_factory,
     platform_channel_factory,
     platform_video_factory,
     youtube_channel_factory,
     youtube_video_factory,
 )
-from backend.manager import PlatformManager, YouTubeChannelManager, YouTubeVideoManager
+from backend.manager import (
+    PlatformManager,
+    TaskManager,
+    YouTubeChannelManager,
+    YouTubeVideoManager,
+)
 from backend.ui.common.component_common import render_notify
 
 
@@ -44,3 +51,8 @@ def load_mock_data():
     video = youtube_video_factory(ref_id=video_platform.ref_id)
     YouTubeChannelManager(channel_id).save_data(channel)
     YouTubeVideoManager(channel_id).save_data(video)
+
+    ## Adding Tasks
+    payload = create_youtube_channel_job_factory(ref_id=channel_platform.ref_id)
+    task = create_task_factory(payload=payload.to_json())
+    TaskManager().add_task(task)

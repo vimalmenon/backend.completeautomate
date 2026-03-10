@@ -1,3 +1,4 @@
+from backend.factory.job_factory import create_youtube_channel_job_factory
 from backend.factory.platform import platform_channel_factory, platform_video_factory
 from backend.factory.task_factory import create_task_factory, create_tasks_factory
 from backend.factory.youtube_factory import (
@@ -12,4 +13,5 @@ __all__ = [
     "platform_channel_factory",
     "platform_video_factory",
     "youtube_video_factory",
+    "create_youtube_channel_job_factory",
 ]

@@ -34,11 +34,7 @@ class TaskManager:
         TaskDB().add_task(task)
 
     def get_tasks(self) -> list[TaskData]:
-        tasks = self.db.get_tasks()
-        if not tasks:
-            logger.warning("No tasks found")
-            raise AppException(self.TASK_NOT_FOUND)
-        return tasks
+        return self.db.get_tasks()
 
     def get_all_active_tasks(self) -> list[TaskData]:
         logger.debug("Fetching all active tasks")
