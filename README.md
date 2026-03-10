@@ -102,7 +102,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Add new Task
   - [x] Work Offline with DB
   - [ ] Move to new routes
-  - [ ] Clicking on `Task` should route to correct page
+  - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Channel to show both channel details and videos
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
@@ -135,7 +135,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve on prompt suggester
 - [ ] Standardize update data in DB
 - [ ] Mock data (use factory)
-  - [ ] Use Faker for data
+  - [x] Use Faker for data
+  - [ ] All data needs to be mocked
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
 - [ ] Test Coverage
@@ -214,6 +215,7 @@ YouTubeChannelCreator (Initial Task)
 - Scrape websites for contact and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
+- Backup data to S3
 
 </details>
 
