@@ -93,7 +93,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Use Grok
   - [x] Need to set up Qwen
   - [x] Check if image model is working
-- [x] Test if it's able to generate good image prompts with multiple options
+  - [x] Test if it's able to generate good image prompts with multiple options
+  - [ ] Standardize the Image Generation
+  - [ ] Make the Image generation more generic to be used
 - [ ] GUI Enhancements (Top priority)
   - [x] Add new Task
   - [x] Work Offline with DB
@@ -108,8 +110,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
-- [ ] Standardize the Image Generation
-  - [ ] Make the Image generation more generic to be used
+
 - [x] Improve Task
   - [x] Need to find something better than `OWNER` in JobEnum
   - [x] Do we need `created by` or maybe use str in `TaskData`
