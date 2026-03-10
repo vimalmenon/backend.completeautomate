@@ -93,9 +93,7 @@ class YouTubeVideoCreator(BaseGenerator):
 
     def __create_task_for_transcript(self, video_id: str, ref_id: str) -> None:
         manager = TaskManager(self.task)
-        task = manager.create_youtube_summarize_task(
-            ref_id=ref_id, created_by="YouTubeVideoCreator"
-        )
+        task = manager.create_youtube_summarize_task_video_creator(ref_id=ref_id)
         manager.add_task(task)
         logger.info(
             "Created summarize task for video id: %s with task id: %s",

@@ -98,7 +98,7 @@ class TaskManager:
             trail=[],
         )
 
-    def create_youtube_summarize_task(self, ref_id: str, created_by: str) -> TaskData:
+    def create_youtube_summarize_task_video_creator(self, ref_id: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube summarize task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -110,9 +110,9 @@ class TaskManager:
             id=uuid4(),
             job_type=JobEnum.YouTubeVideoSummarizer,
             payload=job.to_json(),
-            created_by=created_by,
+            created_by="YouTubeVideoCreator",
             created_at=datetime.now(),
-            status=TaskStatusEnum.IN_PROGRESS,
+            status=TaskStatusEnum.REVIEW,
             trail=self.task.trail + [self.task.id],
         )
 
