@@ -104,20 +104,15 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Add new Task
   - [x] Work Offline with DB
   - [ ] Move to new routes
+  - [ ] Clicking on Task should route to correct Page
   - [ ] Channel to show both channel details and videos
-  - [ ] Show right page on click of task
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
-- [ ] Test all the prompts once done
-- [ ] Improve on prompt suggester
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
-- [ ] Update the title, description in DB after Metadata suggestion updated
-- [ ] Put all the generated image prompt to review
-- [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] Use Google trends
   - [ ] YouTube Idea suggester
@@ -125,6 +120,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
+- [ ] Update the title, description in DB after Metadata suggestion updated
+- [ ] Put all the generated image prompt to review
+- [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Higher lvl component (UI and Generator) should never access DB directly
 - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
@@ -132,7 +130,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Job only to fix transcript 
 - [ ] Add Playlist details to YouTube Video DB
 - [ ] Complete TODOs
-- [ ] Dead code
+- [ ] Remove Deadcode
+- [ ] Test all the prompts once done
+- [ ] Improve on prompt suggester
 - [ ] Mock data (use factory)
   - [ ] Use Faker for data
 - [ ] Set Up GitHub Cron Job
