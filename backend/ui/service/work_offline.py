@@ -1,5 +1,4 @@
 import os
-from uuid import uuid4
 
 from nicegui import app
 
@@ -8,6 +7,7 @@ from backend.config.session import set_offline_mode
 from backend.factory import (
     create_task_factory,
     create_youtube_channel_job_factory,
+    fake_uuid,
     platform_channel_factory,
     platform_video_factory,
     youtube_channel_factory,
@@ -41,7 +41,7 @@ def load_initial_data():
 
 
 def load_mock_data():
-    channel_id = str(uuid4())
+    channel_id = str(fake_uuid())
     platform_manager = PlatformManager()
     channel_platform = platform_channel_factory(channel_id=channel_id)
     video_platform = platform_video_factory(channel_id=channel_id)

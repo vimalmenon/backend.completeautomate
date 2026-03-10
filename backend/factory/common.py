@@ -13,5 +13,5 @@ def fake_uuid() -> UUID:
     return UUID(faker.uuid4())
 
 
-def fake_url():
+def fake_url() -> str:
     return faker.url()
