@@ -9,6 +9,7 @@ class JobEnum(str, Enum):
     YouTubeVideoMetadataSuggester = "YouTubeVideoMetadataSuggester"
     YouTubeVideoMetadataUpdater = "YouTubeVideoMetadataUpdater"
     YouTubeVideoThumbnailPromptSuggester = "YouTubeVideoThumbnailPromptSuggester"
+    YouTubeTopicSuggester = "YouTubeTopicSuggester"
     ImageGenerator = "ImageGenerator"
     ImagePrompt = "ImagePrompt"
     PromptSuggester = "PromptSuggester"

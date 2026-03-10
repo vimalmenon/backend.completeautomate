@@ -97,6 +97,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
+  - [ ] Find next week topic
+  - [ ] Give Pointers and Suggestions
   - [ ] Use Google trends
   - [ ] YouTube Idea suggester
   - [ ] Pointer for Video to create
@@ -545,3 +547,16 @@ Key modules:
 1. Create a branch from `develop`
 2. Run `make check`
 3. Open a PR to `develop`
+
+
+### Links
+
+```
+https://docs.resemble.ai/getting-started/quickstart
+https://leonardo.ai/pricing/
+https://aistudio.google.com/app/
+https://docs.langchain.com/oss/python/integrations/chat
+https://platform.deepseek.com/usage
+https://smith.langchain.com/o/aa8cfe1a-75c1-4fff-bf0c-187edfa443ee/projects
+https://console.groq.com/dashboard/usage
+```
