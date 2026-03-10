@@ -34,7 +34,6 @@ class StartUpManager:
             logger.info("No active YouTubeChannel task found, creating bootstrap task")
             task = manager.create_youtube_channel_task(
                 ref_id=f"{PlatformEnum.YouTubeChannel.value}#{env.YOUTUBE_CHANNEL_ID}",
-                created_by="OWNER",
             )
             manager.add_task(task)
             logger.info("Bootstrap YouTubeChannel task created and added")

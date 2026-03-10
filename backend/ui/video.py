@@ -475,7 +475,6 @@ def create_thumbnail_suggestion_task(video_id: str) -> None:
             id=task_id,
             job_type=JobEnum.YouTubeVideoThumbnailPromptSuggester,
             payload=payload,
-            created_by="OWNER",
             created_at=datetime.now(),
             status=TaskStatusEnum.NEW,
             trail=[],

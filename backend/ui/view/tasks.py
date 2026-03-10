@@ -158,7 +158,6 @@ def show_edit_status_dialog(task: TaskData) -> None:
 
 def add_task(
     selected_job_type: str,
-    selected_created_by: str,
     selected_status: str,
     payload_text: str,
 ) -> None:
@@ -173,7 +172,6 @@ def add_task(
             id=uuid4(),
             job_type=JobEnum(selected_job_type),
             payload=payload,
-            created_by=selected_created_by,
             created_at=datetime.now(),
             status=status,
             completed_at=datetime.now() if status == TaskStatusEnum.COMPLETED else None,
@@ -207,15 +205,6 @@ def render_add_task_form() -> None:
                 .props("outlined dense")
                 .classes("w-1/3 min-w-[200px]")
             )
-            created_by_input = (
-                ui.select(
-                    options=job_options,
-                    value="OWNER",
-                    label="Created By",
-                )
-                .props("outlined dense")
-                .classes("w-1/3 min-w-[200px]")
-            )
             status_input = (
                 ui.select(
                     options=status_options,
@@ -239,7 +228,6 @@ def render_add_task_form() -> None:
                 icon="add",
                 on_click=lambda: add_task(
                     str(job_type_input.value),
-                    str(created_by_input.value),
                     str(status_input.value),
                     str(payload_input.value),
                 ),

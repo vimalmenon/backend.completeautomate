@@ -76,8 +76,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-- [ ] Improve Task
-  - [ ] `Created By` seems redundant as there is already trails
+- [ ] Improve features
+  - [x] `Created By` seems redundant as there is already trails
+  - [ ] Higher lvl component (UI and Generator) should never access DB directly
+  - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Set up image generation
   - [ ] Standardize the image generation
   - [ ] Make the image generation more generic to be used
@@ -106,10 +108,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Post tweets
 - [ ] Update the title, description in DB after Metadata suggestion updated
 - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-- [ ] Higher lvl component (UI and Generator) should never access DB directly
-- [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
 - [ ] Ability to run the agent tasks in parallel
-- [ ] Add Playlist details to YouTube Video DB
+- [ ] Add playlist details to YouTube Video DB
 - [ ] Complete TODOs
 - [ ] Remove Deadcode
 - [ ] Test all the prompts once done

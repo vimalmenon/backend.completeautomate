@@ -6,7 +6,7 @@ from backend.data import (
     YouTubeVideoSummarizeJobData,
 )
 from backend.database import YouTubeVideoDB
-from backend.enum import JobEnum, PromptTaskEnum, TaskStatusEnum
+from backend.enum import PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.agent.general_agent import GeneralAgent
@@ -76,7 +76,5 @@ class YouTubeVideoSummarizer(BaseGenerator):
 
     def __create_analysis_task(self):
         manager = TaskManager(self.task)
-        data = manager.create_youtube_analysis_task(
-            ref_id=self.job_data.ref_id, created_by=JobEnum.YouTubeVideoSummarizer
-        )
+        data = manager.create_youtube_analysis_task(ref_id=self.job_data.ref_id)
         manager.add_task(data)

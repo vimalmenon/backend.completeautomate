@@ -53,7 +53,7 @@ class TaskManager:
     def transform_tasks(self) -> None:
         return None
 
-    def create_youtube_analysis_task(self, ref_id: str, created_by: str) -> TaskData:
+    def create_youtube_analysis_task(self, ref_id: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube analysis task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -63,13 +63,12 @@ class TaskManager:
             id=uuid4(),
             job_type=JobEnum.YouTubeVideoMetadataSuggester,
             payload=payload_cls.to_json(),
-            created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.IN_PROGRESS,
             trail=self.task.trail + [self.task.id],
         )
 
-    def create_youtube_video_task(self, ref_id: str, created_by: str) -> TaskData:
+    def create_youtube_video_task(self, ref_id: str) -> TaskData:
         if not self.task:
             logger.warning("Cannot create YouTube video task: source task missing")
             raise AppException(self.TASK_NOT_FOUND)
@@ -79,20 +78,18 @@ class TaskManager:
             id=uuid4(),
             job_type=JobEnum.YouTubeVideo,
             payload=payload_cls.to_json(),
-            created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.IN_PROGRESS,
             trail=[],
         )
 
-    def create_youtube_channel_task(self, ref_id: str, created_by: str) -> TaskData:
+    def create_youtube_channel_task(self, ref_id: str) -> TaskData:
         logger.debug(f"Creating YouTube channel task for ref_id={ref_id}")
         payload_cls = YouTubeJobData(ref_id=ref_id)
         return TaskData(
             id=uuid4(),
             job_type=JobEnum.YouTubeChannel,
             payload=payload_cls.to_json(),
-            created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.NEW,
             trail=[],
@@ -110,7 +107,6 @@ class TaskManager:
             id=uuid4(),
             job_type=JobEnum.YouTubeVideoSummarizer,
             payload=job.to_json(),
-            created_by="YouTubeVideoCreator",
             created_at=datetime.now(),
             status=TaskStatusEnum.REVIEW,
             trail=self.task.trail + [self.task.id],
@@ -142,7 +138,6 @@ class TaskManager:
             id=task_id,
             job_type=JobEnum.YouTubeVideoMetadataUpdater,
             payload=job.to_json(),
-            created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.REVIEW,
             trail=self.task.trail + [self.task.id],
@@ -168,7 +163,6 @@ class TaskManager:
             id=task_id,
             job_type=JobEnum.YouTubeVideoThumbnailPromptSuggester,
             payload=job.to_json(),
-            created_by=created_by,
             created_at=datetime.now(),
             status=TaskStatusEnum.IN_PROGRESS,
             trail=self.task.trail + [self.task.id],

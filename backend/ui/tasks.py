@@ -167,7 +167,6 @@ JOB_PAYLOAD_FIELDS = {
             "required": True,
         },
     ],
-    JobEnum.TrendingIdeaSuggester.value: [],
 }
 
 
@@ -384,7 +383,6 @@ def add_task(
             id=uuid4(),
             job_type=JobEnum(selected_job_type),
             payload=payload,
-            created_by=JobEnum(selected_created_by),
             created_at=datetime.now(),
             status=status,
             completed_at=datetime.now() if status == TaskStatusEnum.COMPLETED else None,
