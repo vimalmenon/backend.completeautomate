@@ -312,7 +312,6 @@ async def tasks_page(status: str = ""):
                     task_id = task_json.get("id", "")
                     task_type = task_json.get("job_type", "")
                     task_status = task_json.get("status", "")
-                    created_by = task_json.get("created_by", "")
                     created_at = task_json.get("created_at", "")[:19]
                     row_status_class = get_status_row_class(task_status)
 
@@ -322,7 +321,6 @@ async def tasks_page(status: str = ""):
                         ui.label(task_id).classes("w-1/5 text-sm")
                         ui.label(task_type[:20]).classes("w-1/5 text-sm")
                         ui.label(task_status).classes("w-1/8 text-sm")
-                        ui.label(created_by).classes("w-1/8 text-sm")
                         ui.label(created_at).classes("w-1/8 text-sm font-medium")
 
                         # Action cell

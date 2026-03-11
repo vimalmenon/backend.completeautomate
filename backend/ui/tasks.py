@@ -9,14 +9,12 @@ from backend.database.task.task_db import TaskDB
 from backend.enum.image import ImageTypeEnum
 from backend.enum.job import JobEnum
 from backend.enum.status import TaskStatusEnum
-from backend.enum.team import TeamEnum
 from backend.exception.app_exception import AppException
 from backend.task_scheduler_services import TaskSchedulerServices
 
 DETAIL_EXCLUDED_KEYS = {
     "id",
     "job_type",
-    "created_by",
     "created_at",
     "completed_at",
     "status",
@@ -348,7 +346,6 @@ def render_task_detail_rows(task_json: dict, detail_section) -> None:
 
 def add_task(
     selected_job_type: str,
-    selected_created_by: str,
     selected_status: str,
     fields_container,
 ) -> None:
@@ -439,7 +436,6 @@ def show_run_task_confirmation(task_id: str) -> None:
 
 def render_add_task_form() -> None:
     job_options = [job.value for job in JobEnum]
-    team_options = [team.role for team in TeamEnum]
     status_options = [status.value for status in TaskStatusEnum]
 
     with ui.expansion("Add New Task", icon="add_circle").classes("w-full my-3"):
@@ -450,15 +446,6 @@ def render_add_task_form() -> None:
                         options=job_options,
                         value="OWNER",
                         label="Job Type",
-                    )
-                    .props("outlined dense")
-                    .classes("w-1/4")
-                )
-                created_by_input = (
-                    ui.select(
-                        options=team_options,
-                        value="OWNER",
-                        label="Created By",
                     )
                     .props("outlined dense")
                     .classes("w-1/4")
@@ -491,7 +478,6 @@ def render_add_task_form() -> None:
                     icon="add",
                     on_click=lambda: add_task(
                         str(job_type_input.value),
-                        str(created_by_input.value),
                         str(status_input.value),
                         fields_container,
                     ),
@@ -580,7 +566,6 @@ def tasks_page(status: str = ""):
                     task_id = task_json.get("id", "")
                     task_type = task_json.get("job_type", "")
                     status = task_json.get("status", "")
-                    created_by = task_json.get("created_by", "")
                     created_at = task_json.get("created_at", "")[:19]
                     completed_at = (task_json.get("completed_at") or "")[:19]
                     row_status_class = get_status_row_class(status)
@@ -596,7 +581,6 @@ def tasks_page(status: str = ""):
                             ui.label(task_id).classes("w-1/5 text-sm")
                             ui.label(task_type[:20]).classes("w-1/8 text-sm")
                             ui.label(status).classes("w-1/8 text-sm")
-                            ui.label(created_by).classes("w-1/8 text-sm")
                             ui.label(created_at).classes("w-1/8 text-sm font-medium")
                             ui.label(completed_at).classes("w-1/8 text-sm font-medium")
 
