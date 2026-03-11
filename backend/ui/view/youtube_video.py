@@ -22,7 +22,7 @@ async def youtube_video_page(
     # Show loading spinner while fetching tasks
     with ui.row().classes("w-full items-center my-4") as loading_row:
         ui.spinner(size="lg", color="primary")
-        ui.label("Loading tasks...")
+        ui.label("Loading video...")
 
         video = await run.io_bound(
             lambda: YouTubeVideoManager(ref_id=platform.ref_id).get_video()
@@ -32,4 +32,13 @@ async def youtube_video_page(
     loading_row.delete()
 
     if not video:
+        with ui.row().classes("w-full"):
+            ui.label(f"No video found with {video_id}")
+        return
+
+    # TODO Show Video Status
+    # TODO Edit Video
+    # TODO Show VIDEO Details
+    # TODO Edit transcript
+    if video:
         pass

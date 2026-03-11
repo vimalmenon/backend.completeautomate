@@ -1,12 +1,11 @@
 from logging import getLogger
 
 from backend.config.env import env
-from backend.data.s3 import S3Data
+from backend.data import S3Data
 from backend.enum import JobEnum, PlatformEnum
 from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
-from backend.manager.platform_manager import PlatformManager
-from backend.manager.task_manager import TaskManager
+from backend.manager import PlatformManager, PromptManager, TaskManager
 
 logger = getLogger(__name__)
 
@@ -65,5 +64,8 @@ class StartUpManager:
         return False
 
     def __sync_prompts(self) -> bool:
+        prompts = PromptManager().get_prompts()
+        prompts_data = [prompt.to_json() for prompt in prompts]
+        print(prompts_data)
         # Placeholder for syncing prompt templates or other necessary data during startup
         return False

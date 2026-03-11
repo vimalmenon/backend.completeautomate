@@ -51,3 +51,10 @@ def render_common_header(page_title: str):
                 icon="home",
                 on_click=lambda: ui.run_javascript('window.location.href = "/"'),
             ).props("flat")
+
+
+def render_not_found_message(message: str, icon: str | None = None):
+    with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
+        if icon:
+            ui.icon("inbox", size="xl").classes("text-gray-400")
+        ui.label(message).classes("text-h6 text-gray-500")

@@ -1,2 +1,8 @@
+from backend.data import PromptDBData
+from backend.database import PromptDB
+
+
 class PromptManager:
-    pass
+
+    def get_prompts(self) -> list[PromptDBData]:
+        return PromptDB().get_all_prompts()
