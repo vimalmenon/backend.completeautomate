@@ -77,7 +77,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve features
-  - [x] Simplified update data in DB
   - [x] Can we use ref_id for all the secondary key in `Database`
   - [x] Put all the TASK in NEW to begin
   - [x] Job only to fix transcript or do it while getting videos
