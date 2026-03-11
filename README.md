@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Metadata updated will update the DB
   - [x] Update the title, description in DB after Metadata suggestion updated
   - [x] Simplified update data in DB
+  - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
   - [ ] Can we use ref_id for all the secondary key in `Database`
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
