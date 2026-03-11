@@ -89,8 +89,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
-  - [ ] Should be able to get `Scheduled` videos
-  - [ ] Update metadata before it's scheduled for release
   - [ ] Test all the prompts once done
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
