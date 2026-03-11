@@ -77,9 +77,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve features
-  - [x] `Created By` seems redundant as there is already trails
-  - [x] Metadata updated will update the DB
-  - [x] Update the title, description in DB after Metadata suggestion updated
   - [x] Simplified update data in DB
   - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
   - [ ] Can we use ref_id for all the secondary key in `Database`

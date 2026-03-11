@@ -12,7 +12,6 @@ from backend.task_scheduler_services import TaskSchedulerServices
 from backend.ui.common.component_common import (
     render_breadcrumbs,
     render_common_header,
-    render_separator,
 )
 
 TASK_STATUS_PRIORITY = {

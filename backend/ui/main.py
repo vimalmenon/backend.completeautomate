@@ -186,7 +186,9 @@ def main_page():
         if channel_detail:
             with ui.card().classes("w-full flex-wrap border-t-4 border-red-500"):
                 with ui.row().classes("gap-0"):
-                    ui.image(channel_detail.thumbnail_url).classes("w-32 h-32 rounded")
+                    ui.image(channel_detail.thumbnail_url).classes(
+                        "w-25 h-25 rounded-full"
+                    )
                     with ui.column().classes("gap-2 justify-center align-start"):
                         ui.label(channel_detail.title).classes("text-h6 font-bold")
                         ui.label(channel_detail.description).classes(
