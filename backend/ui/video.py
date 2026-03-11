@@ -422,9 +422,7 @@ def open_metadata_suggestions_dialog(video_id: str) -> None:
 def save_video_details(ref_id: str, title: str, description: str) -> None:
     try:
         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_video_details(
-            video_id=ref_id,
-            title=title,
-            description=description,
+            video_id=ref_id, title=title, description=description, tags=[]
         )
         ui.notify("Video updated", type="positive")
         ui.run_javascript('window.location.href = "/youtube"')

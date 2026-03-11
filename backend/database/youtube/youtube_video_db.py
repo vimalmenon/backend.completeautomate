@@ -82,16 +82,19 @@ class YouTubeVideoDB:
         )
         logger.info(f"Updated transcript for video id: {video_id}")
 
-    def update_video_details(self, video_id: str, title: str, description: str) -> None:
+    def update_video_details(
+        self, video_id: str, title: str, description: str, tags: list[str]
+    ) -> None:
         self.db_manager.update_item(
             Key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
             },
-            UpdateExpression="SET title = :title, description = :description",
+            UpdateExpression="SET title = :title, description = :description, tags = :tags",
             ExpressionAttributeValues={
                 ":title": title,
                 ":description": description,
+                ":tags": tags,
             },
         )
         logger.info(f"Updated video details for video id: {video_id}")

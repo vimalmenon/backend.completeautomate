@@ -26,8 +26,9 @@ class YouTubeVideoManager:
     def update_metadata(
         self, video_id: str, title: str, description: str, tags: list[str]
     ):
-        # TODO Need to implement
-        pass
+        YouTubeVideoDB(channel_id=self.channel_id).update_video_details(
+            video_id=video_id, title=title, description=description, tags=tags
+        )
 
     def update_transcript(self):
         # TODO Need to implement
