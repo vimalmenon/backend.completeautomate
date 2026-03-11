@@ -244,7 +244,6 @@ async def tasks_page(status: str = ""):
         render_breadcrumbs(
             [("Home", "/"), ("Tasks", "/tasks")], "Manage scheduled tasks"
         )
-        render_separator()
 
         with ui.row().classes("w-full gap-4 mb-4 flex-wrap"):
             for stat in tasks_cards:
