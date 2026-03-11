@@ -29,7 +29,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         super().__init__(task)
         self.job_data = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(task.payload)
         self.db_manager = ImagePromptDB()
-        self.video_manager = YouTubeVideoManager(self.job_data.platform.channel_id)
+        self.video_manager = YouTubeVideoManager(ref_id=self.job_data.ref_id)
         logger.info(
             "Initialized thumbnail image prompt suggester for task_id=%s ref_id=%s",
             self.job_data.task_id,
@@ -52,7 +52,7 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         logger.info(
             "Creating new thumbnail prompt suggestions for task_id=%s", self.task.id
         )
-        video_data = self.video_manager.get_video_by_id(self.job_data.platform.video_id)
+        video_data = self.video_manager.get_video()
         if not video_data:
             logger.error(
                 "Video data not found for channel_id=%s video_id=%s",

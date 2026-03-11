@@ -24,12 +24,12 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
         super().__init__(task)
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.channel_id = self.job_data.platform.channel_id
-        self.video_db = YouTubeVideoDB(self.channel_id)
+        self.video_db = YouTubeVideoDB(ref_id=self.job_data.ref_id)
         self.analysis_db = YouTubeVideoMetadataSuggesterDB()
         logger.info("Initializing YouTubeVideoAnalyzerGenerator")
 
     def generate(self) -> TaskStatusEnum:
-        video_db = self.video_db.fetch_video_from_db(self.job_data.platform.video_id)
+        video_db = self.video_db.fetch_video_from_db()
         if not video_db:
             logger.error(
                 "Video not found for video_id: %s", self.job_data.platform.video_id

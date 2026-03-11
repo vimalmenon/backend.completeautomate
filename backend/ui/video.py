@@ -419,15 +419,15 @@ def open_metadata_suggestions_dialog(video_id: str) -> None:
     dialog.open()
 
 
-def save_video_details(ref_id: str, title: str, description: str) -> None:
-    try:
-        YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_video_details(
-            video_id=ref_id, title=title, description=description, tags=[]
-        )
-        ui.notify("Video updated", type="positive")
-        ui.run_javascript('window.location.href = "/youtube"')
-    except Exception:
-        ui.notify("Failed to update video", type="negative")
+# def save_video_details(ref_id: str, title: str, description: str) -> None:
+#     try:
+#         YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).update_video_details(
+#             video_id=ref_id, title=title, description=description, tags=[]
+#         )
+#         ui.notify("Video updated", type="positive")
+#         ui.run_javascript('window.location.href = "/youtube"')
+#     except Exception:
+#         ui.notify("Failed to update video", type="negative")
 
 
 # def save_transcript(ref_id: str, transcript_text: str, summarize_text: str) -> None:
@@ -486,30 +486,30 @@ def create_thumbnail_suggestion_task(ref_id: str) -> None:
 def open_edit_video_dialog(video_json: dict) -> None:
     with ui.dialog() as dialog, ui.card().classes("w-[900px] max-w-full"):
         ui.label("Edit Video").classes("text-h6")
-        title_input = (
-            ui.input(label="Title", value=str(video_json.get("title", "")))
-            .props("outlined")
-            .classes("w-full")
-        )
-        description_input = (
-            ui.textarea(
-                label="Description",
-                value=str(video_json.get("description", "")),
-            )
-            .props("outlined autogrow")
-            .classes("w-full")
-        )
+        # title_input = (
+        #     ui.input(label="Title", value=str(video_json.get("title", "")))
+        #     .props("outlined")
+        #     .classes("w-full")
+        # )
+        # description_input = (
+        #     ui.textarea(
+        #         label="Description",
+        #         value=str(video_json.get("description", "")),
+        #     )
+        #     .props("outlined autogrow")
+        #     .classes("w-full")
+        # )
 
         with ui.row().classes("w-full justify-end gap-2"):
             ui.button("Cancel", on_click=dialog.close).props("flat")
             ui.button(
                 "Save",
                 icon="save",
-                on_click=lambda: save_video_details(
-                    _get_video_db_id(video_json),
-                    str(title_input.value),
-                    str(description_input.value),
-                ),
+                # on_click=lambda: save_video_details(
+                #     _get_video_db_id(video_json),
+                #     str(title_input.value),
+                #     str(description_input.value),
+                # ),
             ).props("color=primary")
     dialog.open()
 
@@ -794,7 +794,7 @@ async def youtube_page():
 
             # Fetch videos (non-blocking)
             videos = await run.io_bound(
-                YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID).get_all_videos_from_db
+                YouTubeVideoDB(ref_id=env.YOUTUBE_CHANNEL_ID).get_all_videos_from_db
             )
         videos = sorted(videos, key=lambda video: video.published_at, reverse=True)
 
@@ -812,8 +812,8 @@ async def youtube_page():
 
 
 async def video_detail_page(ref_id: str) -> None:
-    video_db = YouTubeVideoDB(channel_id=env.YOUTUBE_CHANNEL_ID)
-    video = await run.io_bound(video_db.fetch_video_from_db, video_id=ref_id)
+    video_db = YouTubeVideoDB(ref_id=ref_id)
+    video = await run.io_bound(video_db.fetch_video_from_db)
 
     # Backward compatibility for old ref_id-based URLs.
     if not video:
@@ -975,9 +975,7 @@ def _render_channel_statistics(channel_json: dict) -> None:
 
 async def channel_detail_page(channel_id: str) -> None:
     try:
-        channel = await run.io_bound(
-            YouTubeChannelDB(channel_id=channel_id).query_channel
-        )
+        channel = await run.io_bound(YouTubeChannelDB(ref_id=channel_id).query_channel)
     except Exception:
         channel = None
 

@@ -8,11 +8,10 @@ from backend.data import (
     YouTubeJobData,
     YouTubeVideoDBData,
 )
-from backend.database import PlatformDB, YouTubeVideoDB
 from backend.enum import PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
-from backend.manager import TaskManager
+from backend.manager import PlatformManager, TaskManager, YouTubeVideoManager
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,6 @@ class YouTubeVideoCreator(BaseGenerator):
         logger.info("Initializing YouTubeVideoGenerator")
         self.youtube_api = YouTubeAPI()
         self.job_data = YouTubeJobData.to_cls(task.payload)
-        self.db = YouTubeVideoDB(self.job_data.platform.channel_id)
 
     def generate(self) -> TaskStatusEnum:
         logger.info(
@@ -39,7 +37,8 @@ class YouTubeVideoCreator(BaseGenerator):
 
     def __update_video(self, video_id: str) -> None:
         logger.info("Updating video data for id: %s", video_id)
-        video_from_db = self.db.fetch_video_from_db(video_id)
+        platform_data = self.__get_platform_data(video_id)
+        video_from_db = YouTubeVideoManager(platform_data.ref_id).get_video()
         if not video_from_db:
             logger.info("Video not found in DB. Fetching details from API.")
             youtube_response = self.youtube_api.fetch_video_details(video_id)
@@ -52,7 +51,7 @@ class YouTubeVideoCreator(BaseGenerator):
                 self.job_data.platform.video_id
             )
             youtube_data.transcript = self.__convert_transcript_to_text(transcript)
-            self.db.add_video(youtube_data)
+            YouTubeVideoManager(ref_id=ref_id).save_data(youtube_data)
             self.__create_task_for_transcript(video_id, ref_id)
 
         if video_from_db and video_from_db.past_update_time(
@@ -63,7 +62,9 @@ class YouTubeVideoCreator(BaseGenerator):
             latest_youtube_data = YouTubeVideoDBData.to_cls_from_response(
                 {**youtube_response, "task_id": str(self.task.id)}
             )
-            self.db.update_video(latest_youtube_data.values_to_update(video_from_db))
+            YouTubeVideoManager(platform_data.ref_id).update_video(
+                latest_youtube_data.values_to_update(video_from_db)
+            )
 
     def __convert_transcript_to_text(self, result) -> str:
         logger.debug("Converting raw transcript data to text")
@@ -102,15 +103,18 @@ class YouTubeVideoCreator(BaseGenerator):
         )
 
     def __create_platform_data(self, video_id: str) -> str:
-        data = PlatformDBData(
-            platform_type=PlatformEnum.YouTubeVideo,
-            data=PlatformYouTubeVideoDBData(
-                channel_id=self.job_data.platform.channel_id, video_id=video_id
-            ),
-        )
+        data = self.__get_platform_data(video_id)
         logger.info(
             "Saving platform data for video id: %s to database with ref_id: %s",
             video_id,
             self.job_data.ref_id,
         )
-        return PlatformDB().save_data(data)
+        return PlatformManager().save_data(data)
+
+    def __get_platform_data(self, video_id: str) -> PlatformDBData:
+        return PlatformDBData(
+            platform_type=PlatformEnum.YouTubeVideo,
+            data=PlatformYouTubeVideoDBData(
+                channel_id=self.job_data.platform.channel_id, video_id=video_id
+            ),
+        )

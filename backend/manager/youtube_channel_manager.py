@@ -3,11 +3,17 @@ from backend.database import YouTubeChannelDB
 
 
 class YouTubeChannelManager:
-    def __init__(self, channel_id: str):
-        self.channel_id = channel_id
+    def __init__(self, ref_id: str):
+        self.channel_db = YouTubeChannelDB(ref_id=ref_id)
+
+    def add_channel(self, data: YouTubeChannelDBData) -> None:
+        return self.channel_db.add_channel(data)
 
     def get_channel_details(self) -> YouTubeChannelDBData | None:
-        return YouTubeChannelDB(channel_id=self.channel_id).query_channel()
+        return self.channel_db.query_channel()
 
     def save_data(self, data: YouTubeChannelDBData) -> None:
-        return YouTubeChannelDB(channel_id=self.channel_id).add_channel(data)
+        return self.channel_db.add_channel(data)
+
+    def update_channel(self, value: dict):
+        self.channel_db.update_channel(value)

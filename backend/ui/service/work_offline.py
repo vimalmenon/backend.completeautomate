@@ -50,7 +50,7 @@ def load_mock_data():
     channel = youtube_channel_factory(ref_id=channel_platform.ref_id)
     video = youtube_video_factory(ref_id=video_platform.ref_id)
     YouTubeChannelManager(channel_id).save_data(channel)
-    YouTubeVideoManager(channel_id).save_data(video)
+    YouTubeVideoManager(ref_id=video_platform.ref_id).save_data(video)
 
     # Adding Tasks
     payload = create_youtube_channel_job_factory(ref_id=channel_platform.ref_id)

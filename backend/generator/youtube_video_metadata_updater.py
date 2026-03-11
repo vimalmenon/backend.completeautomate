@@ -10,7 +10,7 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
         super().__init__(task)
         self.job_data = YouTubeVideoMetadataJobData.to_cls(task.payload)
         self.youtube_api = YouTubeAPI()
-        self.youtube_db = YouTubeVideoManager(self.job_data.platform.channel_id)
+        self.youtube_db = YouTubeVideoManager(ref_id=self.job_data.ref_id)
         self.task_manager = TaskManager(self.task)
 
     def generate(self) -> TaskStatusEnum:

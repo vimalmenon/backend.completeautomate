@@ -80,7 +80,7 @@ class TaskManager:
             job_type=JobEnum.YouTubeVideo,
             payload=payload_cls.to_json(),
             created_at=datetime.now(),
-            status=TaskStatusEnum.IN_PROGRESS,
+            status=TaskStatusEnum.NEW,
             trail=[],
         )
 

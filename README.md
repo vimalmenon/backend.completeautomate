@@ -78,8 +78,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [x] Simplified update data in DB
+  - [x] Can we use ref_id for all the secondary key in `Database`
+  - [ ] Put all the TASK in NEW to begin
+  - [ ] Upload and download prompts during startup
   - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
-  - [ ] Can we use ref_id for all the secondary key in `Database`
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 

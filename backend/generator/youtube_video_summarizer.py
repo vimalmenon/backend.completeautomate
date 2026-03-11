@@ -5,7 +5,6 @@ from backend.data import (
     TaskData,
     YouTubeVideoSummarizeJobData,
 )
-from backend.database import YouTubeVideoDB
 from backend.enum import PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
@@ -22,13 +21,12 @@ class YouTubeVideoSummarizer(BaseGenerator):
         super().__init__(task)
         logger.info(f"Initializing YouTubeVideoSummarizeGenerator for video: {task.id}")
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
-        self.db = YouTubeVideoDB(self.job_data.platform.channel_id)
-        self.db_manager = YouTubeVideoManager(self.job_data.platform.channel_id)
+        self.db_manager = YouTubeVideoManager(ref_id=self.job_data.ref_id)
 
     def generate(self) -> TaskStatusEnum:
         logger.info(f"Fetching transcript for video: {self.job_data.platform.video_id}")
         try:
-            video = self.db_manager.get_video_by_id(self.job_data.platform.video_id)
+            video = self.db_manager.get_video()
             if not video:
                 logger.warning(
                     f"Video not found in DB for id: {self.job_data.platform.video_id}"
@@ -36,7 +34,7 @@ class YouTubeVideoSummarizer(BaseGenerator):
                 return TaskStatusEnum.COMPLETED
             if not video.transcript:
                 logger.warning(
-                    f"Video not found in DB for id: {self.job_data.platform.video_id}"
+                    f"Transcript not found for video id: {self.job_data.platform.video_id}"
                 )
                 return TaskStatusEnum.COMPLETED
             logger.info(

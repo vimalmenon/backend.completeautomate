@@ -12,15 +12,15 @@ logger = getLogger(__name__)
 class YouTubeVideoDB:
     TABLE = "CA#YOUTUBE_VIDEO"
 
-    def __init__(self, channel_id: str):
+    def __init__(self, ref_id: str):
         self.db_manager = DbManager()
-        self.channel_id = channel_id
+        self.ref_id = ref_id
 
-    def fetch_video_from_db(self, video_id: str) -> YouTubeVideoDBData | None:
+    def fetch_video_from_db(self) -> YouTubeVideoDBData | None:
         item = self.db_manager.get_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             }
         )
         if item:
@@ -31,7 +31,7 @@ class YouTubeVideoDB:
         self.db_manager.remove_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             }
         )
         logger.info(f"Deleted video with id: {video_id}")
@@ -43,11 +43,10 @@ class YouTubeVideoDB:
         return [YouTubeVideoDBData.to_cls(result) for result in results]
 
     def add_video(self, video: YouTubeVideoDBData) -> None:
-        video_data = video.platform
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{video_data.channel_id}#{video_data.video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
                 **video.to_json(),
             }
         )
@@ -57,7 +56,7 @@ class YouTubeVideoDB:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{self.channel_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             },
             values=values,
         )
@@ -66,7 +65,7 @@ class YouTubeVideoDB:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             },
             values={"summarized_transcript": summarized_transcript},
         )
@@ -78,7 +77,7 @@ class YouTubeVideoDB:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             },
             values={
                 "title": title,

@@ -18,6 +18,7 @@ class StartUpManager:
         ref_id = self.__create_ref_id_if_not_exists()
         self.__add_channel_if_not_exists(ref_id)
         self.__transform_data()
+        self.__sync_prompts()
         logger.info("Startup manager flow completed")
 
     def __add_channel_if_not_exists(self, ref_id: str) -> None:
@@ -61,4 +62,8 @@ class StartUpManager:
 
     def __transform_data(self) -> bool:
         # Placeholder for any future data transformation logic needed during startup
+        return False
+
+    def __sync_prompts(self) -> bool:
+        # Placeholder for syncing prompt templates or other necessary data during startup
         return False
