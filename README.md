@@ -79,13 +79,14 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [x] Simplified update data in DB
   - [x] Can we use ref_id for all the secondary key in `Database`
-  - [ ] Put all the TASK in NEW to begin
+  - [x] Put all the TASK in NEW to begin
   - [ ] Upload and download prompts during startup
   - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
+    - [x] Tested till summarization
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
-      - [ ] Good points
+      - [ ] What went well
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
