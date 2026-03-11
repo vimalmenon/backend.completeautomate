@@ -84,6 +84,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Standardize update data in DB
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Job only to fix transcript or do it while getting videos
+  - [ ] Should be able to get `Scheduled` videos
+  - [ ] Update metadata before it's scheduled for release
 - [ ] Set up image generation
   - [ ] Standardize the image generation
   - [ ] Make the image generation more generic to be used
