@@ -82,7 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Update the title, description in DB after Metadata suggestion updated
   - [x] Simplified update data in DB
   - [ ] Can we use ref_id for all the secondary key in `Database`
-  - [ ] Review the raw Transcript and rate the video based on it 
+  - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] Good points
