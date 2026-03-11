@@ -3,7 +3,6 @@ from logging import getLogger
 from boto3.dynamodb.conditions import Key
 
 from backend.data import YouTubeVideoDBData
-from backend.data.platform import PlatformYouTubeVideoDBData
 from backend.database import DbManager
 from backend.enum import DbKeysEnum
 
@@ -44,7 +43,7 @@ class YouTubeVideoDB:
         return [YouTubeVideoDBData.to_cls(result) for result in results]
 
     def add_video(self, video: YouTubeVideoDBData) -> None:
-        video_data = video.platform.data
+        video_data = video.platform
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
