@@ -8,6 +8,8 @@ from backend.enum import TaskStatusEnum
 from backend.manager import TaskManager
 from backend.ui.service.work_offline import load_initial_data
 
+channels = [env.YOUTUBE_CHANNEL_ID]
+
 
 class MenuItem(TypedDict):
     name: str
@@ -153,26 +155,34 @@ def main_page():
             )
     # Quick Stats Section (placeholder for future metrics)
     with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
-
-        for stat in tasks_cards:
+        for task in tasks_cards:
             with (
                 ui.card()
                 .classes(
-                    f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{stat['color']}-500"
+                    f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{task['color']}-500"
                 )
-                .on("click", make_tasks_navigation_handler(stat["value"]))
+                .on("click", make_tasks_navigation_handler(task["value"]))
             ):
-                with ui.avatar(color=stat["color"], text_color="white", size="md"):
-                    ui.icon(stat["icon"], size="md")
+                with ui.avatar(color=task["color"], text_color="white", size="md"):
+                    ui.icon(task["icon"], size="md")
                 with ui.column().classes("gap-0 "):
-                    ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
-                    ui.label(str(get_status_counts(stat["value"]))).classes(
+                    ui.label(task["label"]).classes("text-subtitle2 text-gray-600")
+                    ui.label(str(get_status_counts(task["value"]))).classes(
                         "text-h5 font-bold"
                     )
     ui.separator().classes("my-6")
     # Navigation Sections
-    ui.label("Navigation").classes("text-h5 font-bold mb-4")
 
+    ui.label("YouTube Channels").classes("text-h5 font-bold mb-4")
+    for channel in channels:
+        with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
+            with ui.column().classes("gap-0"):
+                ui.label(channel).classes("text-h6 font-bold")
+                ui.label(
+                    "Manage and schedule automated content creation tasks"
+                ).classes("text-caption text-gray-600")
+
+    ui.label("Navigation").classes("text-h5 font-bold mb-4")
     with ui.grid(columns="1 sm:2 lg:3").classes("w-full gap-4"):
         for section in menu_items:
             with ui.card().classes(

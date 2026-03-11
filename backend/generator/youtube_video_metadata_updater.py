@@ -2,7 +2,7 @@ from backend.data import TaskData, YouTubeVideoMetadataJobData
 from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.youtube_api import YouTubeAPI
-from backend.manager import TaskManager
+from backend.manager import TaskManager, YouTubeVideoManager
 
 
 class YouTubeVideoMetadataUpdater(BaseGenerator):
@@ -10,17 +10,23 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
         super().__init__(task)
         self.job_data = YouTubeVideoMetadataJobData.to_cls(task.payload)
         self.youtube_api = YouTubeAPI()
+        self.youtube_db = YouTubeVideoManager(self.job_data.platform.channel_id)
+        self.task_manager = TaskManager(self.task)
 
     def generate(self) -> TaskStatusEnum:
+        video_id = self.job_data.platform.video_id
+        title = self.job_data.title
+        description = self.job_data.description
+        tags = self.job_data.tags
         self.youtube_api.update_video_metadata(
             video_id=self.job_data.platform.video_id,
             title=self.job_data.title,
             description=self.job_data.description,
             tags=self.job_data.tags,
         )
-        task_manager = TaskManager(self.task)
-        next_task = task_manager.create_youtube_thumbnail_prompt_suggester_task(
+        self.youtube_db.update_metadata(video_id, title, description, tags)
+        next_task = self.task_manager.create_youtube_thumbnail_prompt_suggester_task(
             ref_id=self.job_data.ref_id,
         )
-        task_manager.add_task(next_task)
+        self.task_manager.add_task(next_task)
         return TaskStatusEnum.COMPLETED

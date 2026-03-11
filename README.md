@@ -78,19 +78,17 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [x] `Created By` seems redundant as there is already trails
+  - [ ] Job only to fix transcript or do it while getting videos
+  - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Standardize update data in DB
-  - [ ] Fix transcripts for grammar and other errors in DB
-  - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Should be able to get `Scheduled` videos
   - [ ] Update metadata before it's scheduled for release
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-- [ ] Set up image generation
-  - [ ] Standardize the image generation
-  - [ ] Make the image generation more generic to be used
-  - [ ] Put all the generated image prompt to review
+  - [ ] Improve on prompt suggester
+  - [ ] Test all the prompts once done
 - [ ] GUI Enhancements (Top priority)
   - [ ] Update the title, description in DB after Metadata suggestion updated
   - [ ] Move to new routes
@@ -101,27 +99,31 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
+- [ ] Set up image generation
+  - [ ] Standardize the image generation
+  - [ ] Make the image generation more generic to be used
+  - [ ] Put all the generated image prompt to review
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
+  - [ ] Use Google trends
   - [ ] API to search the `Trends`
   - [ ] Pointer for video to create
   - [ ] Find next week topic
-  - [ ] Use Google trends
+- [ ] Agent to analyze result
+  - [ ] Add AI review step for generated answers
+  - [ ] Agent to review tasks (only once)
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
   - [ ] Basic Pages
   - [ ] Update Workflow
-- [ ] Agent to analyze result
-  - [ ] Add AI review step for generated answers
-  - [ ] Agent to review tasks (only once)
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
-- [ ] Ability to run the agent tasks in parallel
-- [ ] Complete TODOs
-- [ ] Remove Deadcode
-- [ ] Test all the prompts once done
-- [ ] Improve on prompt suggester
+- [ ] Workflow improvement
+  - [ ] Ability to run the agent tasks in parallel
+- [ ] Code improvement
+  - [ ] Complete TODOs
+  - [ ] Remove Deadcode
 - [ ] Mock data (use factory)
   - [ ] All data needs to be mocked
 - [ ] Set Up GitHub Cron Job
