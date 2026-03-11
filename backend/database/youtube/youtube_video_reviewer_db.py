@@ -8,4 +8,6 @@ class YouTubeVideoReviewerDB:
         return None
 
     def save_data(self) -> None:
-        pass
+        # TODO Need to implement
+        return None
+        
