@@ -5,7 +5,7 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.enum import TaskStatusEnum
-from backend.manager import TaskManager
+from backend.manager import TaskManager, YouTubeChannelManager, YouTubeVideoManager
 from backend.ui.service.work_offline import load_initial_data
 
 channels = [env.YOUTUBE_CHANNEL_ID]
@@ -173,14 +173,39 @@ def main_page():
     ui.separator().classes("my-6")
     # Navigation Sections
 
-    ui.label("YouTube Channels").classes("text-h5 font-bold mb-4")
+    ui.label("YouTube Channels").classes("text-h5 font-bold")
     for channel in channels:
-        with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
-            with ui.column().classes("gap-0"):
-                ui.label(channel).classes("text-h6 font-bold")
-                ui.label(
-                    "Manage and schedule automated content creation tasks"
-                ).classes("text-caption text-gray-600")
+        channel_detail = YouTubeChannelManager(channel).get_channel_details()
+        channel_videos = YouTubeVideoManager(channel).get_all_videos()
+        if not channel_detail:
+            with ui.row().classes("w-full gap-4 items-center"):
+                ui.icon("error", color="red").classes("text-xl")
+                ui.label(f"Channel ID {channel} not found").classes(
+                    "text-subtitle2 text-gray-600"
+                )
+        if channel_detail:
+            with ui.card().classes("w-full flex-wrap border-t-4 border-red-500"):
+                with ui.row().classes("gap-0"):
+                    ui.image(channel_detail.thumbnail_url).classes("w-32 h-32 rounded")
+                    with ui.column().classes("gap-2 justify-center align-start"):
+                        ui.label(channel_detail.title).classes("text-h6 font-bold")
+                        ui.label(channel_detail.description).classes(
+                            "text-caption text-gray-600"
+                        )
+                    # ui.label(f"{channel_detail.subscriber_count} subscribers").classes(
+                    #     "text-caption text-gray-600"
+                    # )
+            with ui.column().classes("gap-0 items-end"):
+                ui.label(f"{len(channel_videos)} videos").classes(
+                    "text-subtitle2 text-gray-600"
+                )
+                ui.button(
+                    "View Channel",
+                    icon="chevron_right",
+                    on_click=lambda target=channel: ui.run_javascript(
+                        f'window.location.href = "/youtube/{target}"'
+                    ),
+                ).props("flat color=primary")
 
     ui.label("Navigation").classes("text-h5 font-bold mb-4")
     with ui.grid(columns="1 sm:2 lg:3").classes("w-full gap-4"):
