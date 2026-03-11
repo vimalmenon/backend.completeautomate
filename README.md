@@ -79,6 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [x] `Created By` seems redundant as there is already trails
   - [x] Metadata updated will update the DB
+  - [x] Update the title, description in DB after Metadata suggestion updated
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
@@ -91,7 +92,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Update the title, description in DB after Metadata suggestion updated
   - [ ] Move to new routes
   - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Channel to show both channel details and videos
