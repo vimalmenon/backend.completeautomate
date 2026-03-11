@@ -102,9 +102,14 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Button to download S3 Object to local
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
+  - [ ] API to search the `Trends`
   - [ ] Pointer for video to create
   - [ ] Find next week topic
   - [ ] Use Google trends
+- [ ] Build an Mobile APP
+  - [ ] Basic Auth
+  - [ ] Basic Pages
+  - [ ] Update Workflow 
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
@@ -196,7 +201,7 @@ YouTubeChannelCreator (Initial Task)
 - Scrape websites for contact and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
-- Backup data to S3
+- Backup DB data to S3
 
 </details>
 
