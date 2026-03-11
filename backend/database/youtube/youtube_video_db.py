@@ -55,46 +55,38 @@ class YouTubeVideoDB:
             }
         )
 
-    def update_video(self, channel: dict) -> None:
-        update_expression = []
-        expression_attribute_values = {}
-        for item, value in channel.items():
-            update_expression.append(f"{item} = :{item}")
-            expression_attribute_values[f":{item}"] = value
-            logger.info(f"Updating {item} from {value}")
-        self.db_manager.update_item(
-            Key={
+    def update_video(self, values: dict) -> None:
+
+        self.db_manager.update_data(
+            key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: f"{self.channel_id}#{self.channel_id}",
             },
-            UpdateExpression=f"SET {', '.join(update_expression)}",
-            ExpressionAttributeValues=expression_attribute_values,
+            values=values,
         )
 
     def update_transcript(self, video_id: str, summarized_transcript: str) -> None:
-        self.db_manager.update_item(
-            Key={
+        self.db_manager.update_data(
+            key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
             },
-            UpdateExpression="SET summarized_transcript = :summarized_transcript",
-            ExpressionAttributeValues={":summarized_transcript": summarized_transcript},
+            values={"summarized_transcript": summarized_transcript},
         )
         logger.info(f"Updated transcript for video id: {video_id}")
 
     def update_video_details(
         self, video_id: str, title: str, description: str, tags: list[str]
     ) -> None:
-        self.db_manager.update_item(
-            Key={
+        self.db_manager.update_data(
+            key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: f"{self.channel_id}#{video_id}",
             },
-            UpdateExpression="SET title = :title, description = :description, tags = :tags",
-            ExpressionAttributeValues={
-                ":title": title,
-                ":description": description,
-                ":tags": tags,
+            values={
+                "title": title,
+                "description": description,
+                "tags": tags,
             },
         )
         logger.info(f"Updated video details for video id: {video_id}")
