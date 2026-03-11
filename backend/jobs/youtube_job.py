@@ -1,5 +1,6 @@
 import logging
 import traceback
+from typing import Type
 
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
@@ -21,30 +22,25 @@ logger = logging.getLogger(__name__)
 
 class YouTubeJob(BaseJob):
 
+    HANDLERS: dict[JobEnum, Type] = {
+        JobEnum.YouTubeChannel: YouTubeChannelCreator,
+        JobEnum.YouTubeVideo: YouTubeVideoCreator,
+        JobEnum.YouTubeVideoSummarizer: YouTubeVideoSummarizer,
+        JobEnum.YouTubeThumbnailUpdater: YouTubeThumbnailUpdater,
+        JobEnum.YouTubeVideoMetadataSuggester: YouTubeVideoMetadataSuggester,
+        JobEnum.YouTubeVideoMetadataUpdater: YouTubeVideoMetadataUpdater,
+        JobEnum.YouTubeTopicSuggester: YouTubeTopicSuggester,
+        JobEnum.YouTubeVideoReviewer: YouTubeVideoReviewer,
+        JobEnum.YouTubeVideoThumbnailPromptSuggester: YoutubeVideoThumbnailImagePromptSuggester,
+    }
+
     def execute(self) -> tuple[TaskStatusEnum, int]:
         try:
-            if self.task.job_type == JobEnum.YouTubeChannel:
-                return (YouTubeChannelCreator(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideo:
-                return (YouTubeVideoCreator(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoSummarizer:
-                return (YouTubeVideoSummarizer(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeThumbnailUpdater:
-                return (YouTubeThumbnailUpdater(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
-                return (YouTubeVideoMetadataSuggester(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoMetadataUpdater:
-                return (YouTubeVideoMetadataUpdater(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeTopicSuggester:
-                return (YouTubeTopicSuggester(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoReviewer:
-                return (YouTubeVideoReviewer(self.task).generate(), 0)
-            if self.task.job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
-                return (
-                    YoutubeVideoThumbnailImagePromptSuggester(self.task).generate(),
-                    0,
-                )
-            raise AppException(f"Unsupported job type: {self.task.job_type.value}")
+            generator_cls = self.HANDLERS.get(self.task.job_type)
+            if generator_cls is None:
+                raise AppException(f"Unsupported job type: {self.task.job_type.value}")
+
+            return (generator_cls(self.task).generate(), 0)
         except Exception:
             error_msg = traceback.format_exc()
             logger.error("Error executing YouTube task %s: %s", self.task.id, error_msg)
