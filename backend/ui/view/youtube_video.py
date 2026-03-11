@@ -16,7 +16,7 @@ async def youtube_video_page(
         platform_type=PlatformEnum.YouTubeVideo,
         data=PlatformYouTubeVideoDBData(channel_id=channel_id, video_id=video_id),
     )
-    render_common_header(page_title="YouTube Videos")
+    render_common_header(page_title=f"YouTube Videos {video_id}")
     render_separator()
 
     # Show loading spinner while fetching tasks
@@ -36,9 +36,9 @@ async def youtube_video_page(
             ui.label(f"No video found with {video_id}")
         return
 
-    # TODO Show Video Status
-    # TODO Edit Video
+    # TODO Show Video Status Progress
     # TODO Show VIDEO Details
     # TODO Edit transcript
+    # TODO Show Options to select Title Options and Thumbnail Options
     if video:
         pass

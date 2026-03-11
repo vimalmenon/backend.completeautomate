@@ -81,11 +81,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Put all the TASK in NEW to begin
   - [x] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB (This to be done manually)
-  - [ ] Upload and download prompts during startup
+  - [ ] Upload and download prompts during startup if there is any change
   - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [x] Make the Workflow as complete if the transcript is not available
     - [ ] Test remaining workflow
+    - [ ] Fix the failing test
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
@@ -96,7 +97,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the prompts once done
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
+  - [ ] Delete the `Completed` Tasks and send email
+  - [ ] Send email or Signal Notification 
 - [ ] GUI Enhancements (Top priority)
+  - [ ] Button to edit transcript and move to next stage
   - [ ] Move to new routes
   - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Channel to show both channel details and videos
