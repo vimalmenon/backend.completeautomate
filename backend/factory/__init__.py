@@ -7,7 +7,7 @@ from backend.factory.task_factory import (
     create_tasks_factory,
     create_video_task_factor,
 )
-from backend.factory.youtube_factory import (
+from backend.factory.youtube_channel_factory import (
     youtube_channel_factory,
     youtube_video_factory,
 )

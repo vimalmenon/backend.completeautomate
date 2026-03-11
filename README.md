@@ -82,6 +82,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Standardize update data in DB
+  - [ ] Fix transcripts for grammar and other errors in DB
+  - [ ] Job only to fix transcript or do it while getting videos
 - [ ] Set up image generation
   - [ ] Standardize the image generation
   - [ ] Make the image generation more generic to be used
@@ -93,11 +95,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Channel to show both channel details and videos
   - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
+  - [ ] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
-- [ ] YouTube Video
-  - [ ] Fix transcripts for grammar and other errors in DB
-  - [ ] Job only to fix transcript or do it while getting videos
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Pointer for video to create
