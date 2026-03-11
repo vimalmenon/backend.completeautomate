@@ -6,6 +6,7 @@ from backend.data import (
     TaskData,
     YouTubeJobData,
     YouTubeVideoMetadataJobData,
+    YouTubeVideoReviewerJobData,
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
@@ -165,17 +166,21 @@ class TaskManager:
             trail=self.task.trail + [self.task.id],
         )
 
-    def create_youtube_video_reviewer_task(self, ref_id: str) -> TaskData:
+    def create_youtube_video_reviewer_task(
+        self, ref_id: str, transcript: str
+    ) -> TaskData:
         if not self.task:
             logger.warning(
                 "Cannot create YouTube thumbnail prompt suggester task: source task missing"
             )
             raise AppException(self.TASK_NOT_FOUND)
         task_id = uuid4()
+        job_data = YouTubeVideoReviewerJobData(ref_id=ref_id, transcript=transcript)
+
         return TaskData(
             id=task_id,
             job_type=JobEnum.YouTubeVideoReviewer,
-            payload={},
+            payload=job_data.to_json(),
             created_at=datetime.now(),
             status=TaskStatusEnum.IN_PROGRESS,
             trail=self.task.trail + [self.task.id],
