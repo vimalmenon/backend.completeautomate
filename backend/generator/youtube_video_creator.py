@@ -49,8 +49,8 @@ class YouTubeVideoCreator(BaseGenerator):
             transcript = self.youtube_api.get_transcript(video_id)
             if transcript:
                 youtube_data.transcript = self.__convert_transcript_to_text(transcript)
+                self.__create_task_for_summarize(video_id, ref_id)
             YouTubeVideoManager(ref_id=ref_id).save_data(youtube_data)
-            self.__create_task_for_transcript(video_id, ref_id)
 
         if video_from_db and video_from_db.past_update_time(
             int(self.job_data.poll_frequency_in_days)
@@ -94,7 +94,7 @@ class YouTubeVideoCreator(BaseGenerator):
         logger.debug("Processing transcript snippet from %.3f to %.3f", start, end)
         return f"[{start:.3f} {end:.3f}] {text}"
 
-    def __create_task_for_transcript(self, video_id: str, ref_id: str) -> None:
+    def __create_task_for_summarize(self, video_id: str, ref_id: str) -> None:
         manager = TaskManager(self.task)
         task = manager.create_youtube_summarize_task_video_creator(ref_id=ref_id)
         manager.add_task(task)
