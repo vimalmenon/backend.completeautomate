@@ -166,6 +166,11 @@ class TaskManager:
         )
 
     def create_youtube_video_reviewer_task(self, ref_id: str) -> TaskData:
+        if not self.task:
+            logger.warning(
+                "Cannot create YouTube thumbnail prompt suggester task: source task missing"
+            )
+            raise AppException(self.TASK_NOT_FOUND)
         task_id = uuid4()
         return TaskData(
             id=task_id,
