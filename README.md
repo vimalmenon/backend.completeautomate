@@ -80,17 +80,17 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] `Created By` seems redundant as there is already trails
   - [x] Metadata updated will update the DB
   - [x] Update the title, description in DB after Metadata suggestion updated
+  - [x] Simplified update data in DB
+  - [ ] Can we use ref_id for all the secondary key in `Database`
   - [ ] Review the raw Transcript and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] Good points
-  - [ ] Can we use ref_id for all the secondary key in `Database`
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
-  - [ ] Standardize update data in DB
   - [ ] Should be able to get `Scheduled` videos
   - [ ] Update metadata before it's scheduled for release
   - [ ] Test all the prompts once done
