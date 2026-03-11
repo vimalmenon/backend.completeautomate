@@ -45,8 +45,6 @@ class YouTubeVideoDB:
 
     def add_video(self, video: YouTubeVideoDBData) -> None:
         video_data = video.platform.data
-        if not isinstance(video_data, PlatformYouTubeVideoDBData):
-            raise ValueError("Expected PlatformYouTubeVideoDBData")
         self.db_manager.add_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
