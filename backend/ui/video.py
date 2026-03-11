@@ -462,12 +462,12 @@ def save_video_details(ref_id: str, title: str, description: str) -> None:
 #         ui.notify("Failed to update summary", type="negative")
 
 
-def create_thumbnail_suggestion_task(video_id: str) -> None:
+def create_thumbnail_suggestion_task(ref_id: str) -> None:
     try:
         task_id = uuid4()
         payload = YouTubeVideoThumbnailPromptSuggesterJobData(
             task_id=task_id,
-            ref_id=video_id,
+            ref_id=ref_id,
         ).to_json()
         task = TaskData(
             id=task_id,
@@ -584,15 +584,17 @@ def _get_video_db_id(video_json: dict) -> str:
 
 
 def _render_video_action_buttons(video_json: dict, video_id: str = "") -> None:
+    ref_id = str(video_json.get("ref_id", "")).strip()
     with ui.row().classes("w-full justify-end gap-2"):
-        if video_id:
+        if ref_id:
             ui.button(
                 "Suggest Thumbnail",
                 icon="image_search",
-                on_click=lambda current_video_id=video_id: create_thumbnail_suggestion_task(
-                    current_video_id
+                on_click=lambda current_ref_id=ref_id: create_thumbnail_suggestion_task(
+                    current_ref_id
                 ),
             ).props("flat")
+        if video_id:
             ui.button(
                 "Metadata Suggestions",
                 icon="tips_and_updates",
@@ -715,13 +717,14 @@ def _render_video_row(video) -> None:
             ui.label(short_description).classes("w-1/4 text-sm")
             ui.label(published).classes("w-1/6 text-sm")
             with ui.row().classes("w-1/6 justify-center items-center gap-1 shrink-0"):
-                if video_id_full:
+                if ref_id:
                     ui.button(
                         icon="image_search",
-                        on_click=lambda current_video_id=video_id_full: create_thumbnail_suggestion_task(
-                            current_video_id
+                        on_click=lambda current_ref_id=ref_id: create_thumbnail_suggestion_task(
+                            current_ref_id
                         ),
                     ).props("flat dense")
+                if video_id_full:
                     ui.button(
                         icon="tips_and_updates",
                         on_click=lambda current_video_id=video_id_full: open_metadata_suggestions_dialog(

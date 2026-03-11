@@ -199,7 +199,7 @@ def render_add_task_form() -> None:
             job_type_input = (
                 ui.select(
                     options=job_options,
-                    value="OWNER",
+                    value=job_options[0] if job_options else None,
                     label="Job Type",
                 )
                 .props("outlined dense")
