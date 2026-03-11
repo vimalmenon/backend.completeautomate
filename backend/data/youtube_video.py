@@ -27,12 +27,14 @@ class YouTubeVideoReviewerJobData:
 @dataclass
 class YouTubeVideoReviewerDBData:
     ref_id: str
+    task_id: str
     downsides: list[str]
     upsides: list[str]
 
     def to_json(self) -> dict:
         return {
             "ref_id": self.ref_id,
+            "task_id": self.task_id,
             "downsides": self.downsides,
             "upsides": self.upsides,
         }
@@ -40,7 +42,10 @@ class YouTubeVideoReviewerDBData:
     @classmethod
     def to_cls(cls, data) -> Self:
         return cls(
-            ref_id=data["ref_id"], downsides=data["downsides"], upsides=data["upsides"]
+            ref_id=data["ref_id"],
+            task_id=data["task_id"],
+            downsides=data["downsides"],
+            upsides=data["upsides"],
         )
 
     @cached_property

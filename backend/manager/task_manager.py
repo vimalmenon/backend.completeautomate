@@ -165,6 +165,17 @@ class TaskManager:
             trail=self.task.trail + [self.task.id],
         )
 
+    def create_youtube_video_reviewer_task(self, ref_id: str) -> TaskData:
+        task_id = uuid4()
+        return TaskData(
+            id=task_id,
+            job_type=JobEnum.YouTubeVideoReviewer,
+            payload={},
+            created_at=datetime.now(),
+            status=TaskStatusEnum.IN_PROGRESS,
+            trail=self.task.trail + [self.task.id],
+        )
+
     def promote_new_task(self):
         logger.info("Promoting NEW tasks to IN_PROGRESS status")
         tasks = self.db.query_items(TaskStatusEnum.NEW)

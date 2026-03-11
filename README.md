@@ -81,8 +81,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Metadata updated will update the DB
   - [x] Update the title, description in DB after Metadata suggestion updated
   - [ ] Review the raw Transcript and rate the video based on it 
-      - [ ] Check for grammar, 
-      - [ ] Points to improve, 
+      - [ ] Check for grammar
+      - [ ] Points to improve 
       - [ ] Good points
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
