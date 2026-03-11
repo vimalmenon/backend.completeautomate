@@ -63,3 +63,30 @@ class DbManager:
             )
         except ClientError:
             return None
+
+    def get_update_values(self, data: dict) -> tuple[str, dict, dict]:
+        update_expression: list[str] = []
+        expression_attribute_names = {}
+        expression_attribute_values = {}
+
+        for key, value in data.items():
+            update_expression.append(f"#{key} = :{key}")
+            expression_attribute_names[f"#{key}"] = key
+            expression_attribute_values[f":{key}"] = value
+
+        return (
+            f"SET {', '.join(update_expression)}",
+            expression_attribute_names,
+            expression_attribute_values,
+        )
+
+    def update_data(self, key: dict, values: dict) -> None:
+        update_expression, expression_attribute_names, expression_attribute_values = (
+            self.get_update_values(values)
+        )
+        self.update_item(
+            Key=key,
+            UpdateExpression=update_expression,
+            ExpressionAttributeNames=expression_attribute_names,
+            ExpressionAttributeValues=expression_attribute_values,
+        )

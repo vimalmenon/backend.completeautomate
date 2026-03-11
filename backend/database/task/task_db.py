@@ -80,6 +80,21 @@ class TaskDB:
         logger.info(
             f"Updating task status to {task.status.value} for task id: {task.id}"
         )
+        # key = {
+        #     DbKeysEnum.Primary.value: self.TABLE,
+        #     DbKeysEnum.Secondary.value: str(task.id),
+        # }
+        # self.db_manager.update_data(
+        #     key=key,
+        #     data={
+        #         "status": task.status.value,
+        #         "completed_at": (
+        #             task.completed_at.isoformat() if task.completed_at else None
+        #         ),
+        #         "failed_count": task.failed_count,
+        #     },
+        # )
+
         update_expression = [
             "#status = :status",
             "failed_count = :failed_count",
@@ -99,5 +114,16 @@ class TaskDB:
             },
             UpdateExpression=f"SET {', '.join(update_expression)}",
             ExpressionAttributeNames={"#status": "status"},
+            ExpressionAttributeValues=expression_attribute_values,
+        )
+
+    def update_data(self, key: dict, values: dict) -> None:
+        update_expression, expression_attribute_names, expression_attribute_values = (
+            self.db_manager.get_update_values(values)
+        )
+        self.db_manager.update_item(
+            Key=key,
+            UpdateExpression=update_expression,
+            ExpressionAttributeNames=expression_attribute_names,
             ExpressionAttributeValues=expression_attribute_values,
         )
