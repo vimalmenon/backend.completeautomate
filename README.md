@@ -87,9 +87,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Standardize update data in DB
   - [ ] Should be able to get `Scheduled` videos
   - [ ] Update metadata before it's scheduled for release
-  - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Improve on prompt suggester
   - [ ] Test all the prompts once done
+  - [ ] Improve on prompt suggester
+  - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] GUI Enhancements (Top priority)
   - [ ] Update the title, description in DB after Metadata suggestion updated
   - [ ] Move to new routes
