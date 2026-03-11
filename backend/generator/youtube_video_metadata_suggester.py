@@ -106,7 +106,6 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
                 title=promoted_videos[0].title,
                 description=promoted_videos[0].description,
                 tags=promoted_videos[0].tags,
-                created_by="YouTubeVideoMetadataSuggester",
             )
             task_manager.add_task(task)
             return TaskStatusEnum.COMPLETED

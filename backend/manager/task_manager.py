@@ -118,7 +118,6 @@ class TaskManager:
         title: str,
         description: str,
         tags: list[str],
-        created_by: str,
     ) -> TaskData:
         if not self.task:
             logger.warning(
@@ -143,9 +142,7 @@ class TaskManager:
             trail=self.task.trail + [self.task.id],
         )
 
-    def create_youtube_thumbnail_prompt_suggester_task(
-        self, ref_id: str, created_by: str
-    ) -> TaskData:
+    def create_youtube_thumbnail_prompt_suggester_task(self, ref_id: str) -> TaskData:
         if not self.task:
             logger.warning(
                 "Cannot create YouTube thumbnail prompt suggester task: source task missing"
