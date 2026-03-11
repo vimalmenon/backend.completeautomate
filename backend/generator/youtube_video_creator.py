@@ -43,14 +43,12 @@ class YouTubeVideoCreator(BaseGenerator):
             logger.info("Video not found in DB. Fetching details from API.")
             youtube_response = self.youtube_api.fetch_video_details(video_id)
             ref_id = self.__create_platform_data(video_id)
-
             youtube_data = YouTubeVideoDBData.to_cls_from_response(
                 {**youtube_response, "task_id": str(self.task.id), "ref_id": ref_id}
             )
-            transcript = self.youtube_api.get_transcript(
-                self.job_data.platform.video_id
-            )
-            youtube_data.transcript = self.__convert_transcript_to_text(transcript)
+            transcript = self.youtube_api.get_transcript(video_id)
+            if transcript:
+                youtube_data.transcript = self.__convert_transcript_to_text(transcript)
             YouTubeVideoManager(ref_id=ref_id).save_data(youtube_data)
             self.__create_task_for_transcript(video_id, ref_id)
 
@@ -60,7 +58,11 @@ class YouTubeVideoCreator(BaseGenerator):
             logger.info("Video data stale. Refreshing from API.")
             youtube_response = self.youtube_api.fetch_video_details(video_id)
             latest_youtube_data = YouTubeVideoDBData.to_cls_from_response(
-                {**youtube_response, "task_id": str(self.task.id)}
+                {
+                    **youtube_response,
+                    "task_id": str(self.task.id),
+                    "ref_id": platform_data.ref_id,
+                }
             )
             YouTubeVideoManager(platform_data.ref_id).update_video(
                 latest_youtube_data.values_to_update(video_from_db)
