@@ -86,6 +86,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Should be able to get `Scheduled` videos
   - [ ] Update metadata before it's scheduled for release
+  - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Set up image generation
   - [ ] Standardize the image generation
   - [ ] Make the image generation more generic to be used
@@ -109,14 +110,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
   - [ ] Basic Pages
-  - [ ] Update Workflow 
+  - [ ] Update Workflow
 - [ ] Agent to analyze result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
-- [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] Ability to run the agent tasks in parallel
 - [ ] Complete TODOs
 - [ ] Remove Deadcode
