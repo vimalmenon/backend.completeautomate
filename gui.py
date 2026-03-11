@@ -12,6 +12,7 @@ from backend.ui import (  # tasks_page,
     s3_bucket_page,
     task_detail_page,
     video_detail_page,
+    youtube_channel_page,
     youtube_page,
 )
 from backend.ui.service.work_offline import toggle_offline_mode
@@ -81,6 +82,7 @@ def root():
                 "/task/{task_id}": task_detail_page,
                 "/youtube": youtube_page,
                 "/youtube/{channel_id}/{video_id}": youtube_video_page,
+                "/youtube/{channel_id}": youtube_channel_page,
                 "/video/{ref_id}": video_detail_page,
                 "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,
