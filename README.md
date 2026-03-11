@@ -78,6 +78,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [x] `Created By` seems redundant as there is already trails
+  - [x] Metadata updated will update the DB
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
