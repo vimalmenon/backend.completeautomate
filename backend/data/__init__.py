@@ -30,6 +30,7 @@ from backend.data.youtube import (
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
+from backend.data.youtube_video import YouTubeVideoReviewerJobData
 
 __all__ = [
     "ImagePromptDBData",
@@ -57,4 +58,5 @@ __all__ = [
     "PromptSuggesterDBData",
     "YouTubeVideoThumbnailPromptSuggesterJobData",
     "YouTubeThumbnailImageGenerationPromptData",
+    "YouTubeVideoReviewerJobData",
 ]

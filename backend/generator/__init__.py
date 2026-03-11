@@ -10,6 +10,7 @@ from backend.generator.youtube_video_metadata_suggester import (
     YouTubeVideoMetadataSuggester,
 )
 from backend.generator.youtube_video_metadata_updater import YouTubeVideoMetadataUpdater
+from backend.generator.youtube_video_reviewer import YouTubeVideoReviewer
 from backend.generator.youtube_video_summarizer import (
     YouTubeVideoSummarizer,
 )
@@ -28,4 +29,5 @@ __all__ = [
     "PromptSuggester",
     "YoutubeVideoThumbnailImagePromptSuggester",
     "YouTubeTopicSuggester",
+    "YouTubeVideoReviewer",
 ]

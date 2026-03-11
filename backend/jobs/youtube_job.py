@@ -10,6 +10,7 @@ from backend.generator import (
     YouTubeVideoCreator,
     YouTubeVideoMetadataSuggester,
     YouTubeVideoMetadataUpdater,
+    YouTubeVideoReviewer,
     YouTubeVideoSummarizer,
     YoutubeVideoThumbnailImagePromptSuggester,
 )
@@ -36,6 +37,8 @@ class YouTubeJob(BaseJob):
                 return (YouTubeVideoMetadataUpdater(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeTopicSuggester:
                 return (YouTubeTopicSuggester(self.task).generate(), 0)
+            if self.task.job_type == JobEnum.YouTubeVideoReviewer:
+                return (YouTubeVideoReviewer(self.task).generate(), 0)
             if self.task.job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
                 return (
                     YoutubeVideoThumbnailImagePromptSuggester(self.task).generate(),
