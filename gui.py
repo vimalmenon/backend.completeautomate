@@ -4,7 +4,7 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
-from backend.ui import (  # tasks_page,
+from backend.ui import (
     channel_detail_page,
     main_page,
     prompt_detail_page,
@@ -12,11 +12,10 @@ from backend.ui import (  # tasks_page,
     s3_bucket_page,
     task_detail_page,
     video_detail_page,
-    youtube_channel_page,
     youtube_page,
 )
 from backend.ui.service.work_offline import toggle_offline_mode
-from backend.ui.view import tasks_page, youtube_video_page
+from backend.ui.view import tasks_page, youtube_channel_page, youtube_video_page
 
 logger = logging.getLogger(__name__)
 

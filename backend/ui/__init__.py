@@ -5,7 +5,6 @@ from backend.ui.tasks import task_detail_page, tasks_page
 from backend.ui.video import (
     channel_detail_page,
     video_detail_page,
-    youtube_channel_page,
     youtube_page,
 )
 
@@ -19,5 +18,4 @@ __all__ = [
     "prompt_page",
     "prompt_detail_page",
     "s3_bucket_page",
-    "youtube_channel_page",
 ]
