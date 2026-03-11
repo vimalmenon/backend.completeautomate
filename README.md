@@ -84,6 +84,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] Good points
+  - [ ] Can we use ref_id for all the secondary key in `Database`
   - [ ] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
