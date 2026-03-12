@@ -382,7 +382,6 @@ async def youtube_video_page(
                         icon="arrow_back",
                         on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
                     ).props("flat dense")
-                    ui.label(video_id).classes("text-sm text-gray-500")
                     ui.label(
                         f"Published {video.published_at.strftime('%Y-%m-%d')}"
                     ).classes("text-sm text-gray-500")
