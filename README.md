@@ -83,8 +83,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
-    - [x] Make the Workflow as complete if the transcript is not available
     - [x] Fix the failing test
+    - [ ] Make the Workflow as complete if the transcript is not available
     - [ ] Test remaining workflow
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
@@ -97,7 +97,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the prompts once done
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Remove Completed tasks after 1 week
+  - [ ] Remove `Completed` tasks after 1 week
 - [ ] Send Notification
   - [ ] Send Email
   - [ ] Send Signal
