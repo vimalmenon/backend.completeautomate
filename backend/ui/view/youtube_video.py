@@ -128,7 +128,9 @@ async def youtube_video_page(
                     ui.icon("subtitles").style("font-size:1.5rem;")
                     with ui.column().style("gap:2px;"):
                         ui.label("Edit Transcript").style("font-size:1.1rem; font-weight:700;")
-                        ui.label(video.title).style("font-size:0.8rem; opacity:0.75; max-width:60vw;")
+                        ui.label(
+                            f"{video.title} • Published {video.published_at.strftime('%Y-%m-%d')}"
+                        ).style("font-size:0.8rem; opacity:0.75; max-width:60vw;")
                 ui.button(icon="close", on_click=transcript_dialog.close).props(
                     "flat round dense color=white"
                 )
@@ -205,6 +207,9 @@ async def youtube_video_page(
                 on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
             ).props("flat dense")
             ui.label(video_id).classes("text-sm text-gray-500")
+            ui.label(f"Published {video.published_at.strftime('%Y-%m-%d')}").classes(
+                "text-sm text-gray-500"
+            )
         ui.button(
             "Edit Transcript", icon="edit", on_click=transcript_dialog.open
         ).props("color=primary outline")
