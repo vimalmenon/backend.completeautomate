@@ -449,7 +449,7 @@ def _get_video_route_id(video: Any) -> str:
     return ref_id
 
 
-def _render_channel_videos(videos: list[Any]) -> None:
+def _render_channel_videos(videos: list[Any], channel_id: str) -> None:
     ui.label(f"Channel Videos ({len(videos)})").classes("text-h6 mb-3 font-bold")
     with ui.column().classes(
         "w-full gap-0 border border-gray-300 dark:border-slate-600 rounded"
@@ -477,8 +477,8 @@ def _render_channel_videos(videos: list[Any]) -> None:
                 with ui.row().classes("w-1/12 justify-center"):
                     ui.button(
                         icon="open_in_new",
-                        on_click=lambda current_route_id=route_id: ui.run_javascript(
-                            f'window.location.href = "/video/{current_route_id}"'
+                        on_click=lambda c=channel_id, v=route_id: ui.navigate.to(
+                            f"/youtube/{c}/{v}"
                         ),
                     ).props("flat dense")
 
@@ -561,7 +561,7 @@ async def youtube_channel_page(channel_id: str, tab: str | None = None) -> None:
         _render_channel_description(channel_json)
         ui.separator().classes("my-4")
         if channel_videos:
-            _render_channel_videos(channel_videos)
+            _render_channel_videos(channel_videos, channel_id)
         else:
             with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
                 ui.icon("video_library", size="xl").classes("text-gray-400")
