@@ -231,6 +231,23 @@ S3 Storage                      /storage
 Prompt                          /prompts
 Prompt Detail                   /prompts/{prompt_id}
 
+## YouTube Video Page (Current UI)
+
+The `/youtube/{channel_id}/{video_id}` page currently includes:
+
+- Header actions: **Show Graph** (opens Plotly stats dialog) and **Edit Transcript** (opens transcript editor dialog)
+- Video summary card with thumbnail, title, published/language badges, and tag badges
+- Inline latest video stats (views, likes, comments, stats updated)
+- Task Flow card showing pipeline stages and current status per stage
+- Transcript card with fixed-height scroll area
+- Summarized Transcript card (shown when available) with fixed-height scroll area
+
+Transcript editor dialog supports:
+
+- In-place editing and save to DB
+- Live character count
+- Persistent modal behavior (prevents accidental close by outside click)
+
 
 ## Requirements
 
