@@ -10,9 +10,11 @@ from backend.ui import (
     prompt_page,
     s3_bucket_page,
     task_detail_page,
+    youtube_channel_page,
+    youtube_video_page,
 )
 from backend.ui.service.work_offline import toggle_offline_mode
-from backend.ui.view import tasks_page, youtube_channel_page, youtube_video_page
+from backend.ui.view import tasks_page
 
 logger = logging.getLogger(__name__)
 

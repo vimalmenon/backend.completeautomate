@@ -82,6 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Keep metadata in in video data itself
   - [ ] Keep the image prompt in the video data itself
   - [ ] Upload and download prompts during startup if there is any change
+  - [ ] Move from View to UI root folder
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [x] Fix the failing test
