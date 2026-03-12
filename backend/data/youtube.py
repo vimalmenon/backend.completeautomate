@@ -200,6 +200,7 @@ class YouTubeVideoDBData:
     transcript: str | None = None
     summarized_transcript: str | None = None
     metadata_suggestions: list[dict] = field(default_factory=list)
+    thumbnail_prompt_suggestions: list[dict] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
