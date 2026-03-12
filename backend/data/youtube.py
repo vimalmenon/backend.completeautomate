@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import cached_property
 from typing import Any, Self
@@ -199,6 +199,7 @@ class YouTubeVideoDBData:
     stats: list[YouTubeVideoDBStats]
     transcript: str | None = None
     summarized_transcript: str | None = None
+    metadata_suggestions: list[dict] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
