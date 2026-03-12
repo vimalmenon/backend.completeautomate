@@ -4,7 +4,7 @@ from typing import Any
 from nicegui import run, ui
 
 from backend.data import PlatformDBData, PlatformYouTubeVideoDBData, TaskData
-from backend.enum import JobEnum, JobStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
 from backend.manager import TaskManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
@@ -173,43 +173,43 @@ def _render_metadata_suggestions(ref_id: str) -> None:
         "bg-amber-50 dark:bg-amber-900/20"
     ):
         ui.label("Metadata Suggestions").classes("text-h6 font-bold mb-2")
-        if suggestion.comment:
-            with ui.row().classes("w-full gap-4 items-start mb-2"):
-                ui.label("Comment:").classes("font-bold text-amber-700 text-sm")
-                ui.label(str(suggestion.comment)).classes("text-wrap text-sm")
+        # if suggestion.comment:
+        #     with ui.row().classes("w-full gap-4 items-start mb-2"):
+        #         ui.label("Comment:").classes("font-bold text-amber-700 text-sm")
+        #         ui.label(str(suggestion.comment)).classes("text-wrap text-sm")
 
-        for index, detail in enumerate(suggestion.video_details, start=1):
-            with ui.card().classes("w-full bg-white dark:bg-slate-800 mt-2"):
-                ui.label(f"Option {index} ({detail.status.value})").classes(
-                    "text-sm font-semibold text-amber-700 mb-1"
-                )
-                with ui.row().classes("w-full justify-end items-center gap-2 mb-2"):
-                    status_input = (
-                        ui.select(
-                            label="Status",
-                            options=[s.value for s in JobStatusEnum],
-                            value=detail.status.value,
-                        )
-                        .props("outlined dense")
-                        .classes("w-48")
-                    )
-                    ui.button(
-                        "Update Status",
-                        icon="save",
-                        on_click=lambda current_ref=ref_id, current_index=index - 1, current_status=status_input: _update_metadata_option_status(
-                            ref_id=current_ref,
-                            option_index=current_index,
-                            status_value=str(current_status.value),
-                        ),
-                    ).props("color=primary")
-                with ui.row().classes("w-full gap-4 items-start"):
-                    ui.label("Title:").classes("w-1/5 font-bold text-sm")
-                    ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
-                with ui.row().classes("w-full gap-4 items-start"):
-                    ui.label("Tags:").classes("w-1/5 font-bold text-sm")
-                    ui.label(", ".join(detail.tags) if detail.tags else "-").classes(
-                        "w-4/5 text-wrap text-sm"
-                    )
+        # for index, detail in enumerate(suggestion.video_details, start=1):
+        #     with ui.card().classes("w-full bg-white dark:bg-slate-800 mt-2"):
+        #         ui.label(f"Option {index} ({detail.status.value})").classes(
+        #             "text-sm font-semibold text-amber-700 mb-1"
+        #         )
+        #         with ui.row().classes("w-full justify-end items-center gap-2 mb-2"):
+        #             status_input = (
+        #                 ui.select(
+        #                     label="Status",
+        #                     options=[s.value for s in JobStatusEnum],
+        #                     value=detail.status.value,
+        #                 )
+        #                 .props("outlined dense")
+        #                 .classes("w-48")
+        #             )
+        #             ui.button(
+        #                 "Update Status",
+        #                 icon="save",
+        #                 on_click=lambda current_ref=ref_id, current_index=index - 1, current_status=status_input: _update_metadata_option_status(
+        #                     ref_id=current_ref,
+        #                     option_index=current_index,
+        #                     status_value=str(current_status.value),
+        #                 ),
+        #             ).props("color=primary")
+        #         with ui.row().classes("w-full gap-4 items-start"):
+        #             ui.label("Title:").classes("w-1/5 font-bold text-sm")
+        #             ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
+        #         with ui.row().classes("w-full gap-4 items-start"):
+        #             ui.label("Tags:").classes("w-1/5 font-bold text-sm")
+        #             ui.label(", ".join(detail.tags) if detail.tags else "-").classes(
+        #                 "w-4/5 text-wrap text-sm"
+        #             )
 
 
 def _render_stat_card(icon: str, label: str, value: str) -> None:

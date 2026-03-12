@@ -7,7 +7,7 @@ import pytest
 from backend.data.image import ImagePromptJobData
 from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
-from backend.data.youtube import (
+from backend.data.youtube_channel import (
     YouTubeJobData,
     YouTubeThumbnailJobData,
     YouTubeVideoMetadataJobData,
