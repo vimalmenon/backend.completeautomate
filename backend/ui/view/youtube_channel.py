@@ -1,9 +1,10 @@
 from datetime import datetime
+from typing import Any
 
 from nicegui import run, ui
 
 from backend.data import PlatformDBData, PlatformYouTubeChannelDBData
-from backend.database.youtube import YouTubeChannelDB
+from backend.database.youtube import YouTubeChannelDB, YouTubeVideoDB
 from backend.enum import PlatformEnum
 
 
@@ -156,11 +157,6 @@ def _render_channel_page_header(channel_json: dict | None = None) -> None:
                     icon="bar_chart",
                     on_click=lambda: open_channel_stats_chart_dialog(channel_json),
                 ).props("color=primary")
-            ui.button(
-                "Back to Videos",
-                icon="arrow_back",
-                on_click=lambda: ui.run_javascript('window.location.href = "/youtube"'),
-            ).props("flat")
             ui.button(
                 icon="home",
                 on_click=lambda: ui.run_javascript('window.location.href = "/"'),
@@ -333,11 +329,6 @@ def _render_channel_detail_header() -> None:
         ui.label("Channel Details").classes("text-h4")
         with ui.row().classes("gap-2"):
             ui.button(
-                "Back to Videos",
-                icon="arrow_back",
-                on_click=lambda: ui.run_javascript('window.location.href = "/youtube"'),
-            ).props("flat")
-            ui.button(
                 icon="home",
                 on_click=lambda: ui.run_javascript('window.location.href = "/"'),
             ).props("flat")
@@ -447,6 +438,51 @@ def _render_channel_info_card(channel_json: dict) -> None:
                     )
 
 
+def _get_video_route_id(video: Any) -> str:
+    ref_id = str(getattr(video, "ref_id", ""))
+    try:
+        video_id = str(video.platform.video_id)
+        if video_id:
+            return video_id
+    except Exception:
+        pass
+    return ref_id
+
+
+def _render_channel_videos(videos: list[Any]) -> None:
+    ui.label(f"Channel Videos ({len(videos)})").classes("text-h6 mb-3 font-bold")
+    with ui.column().classes(
+        "w-full gap-0 border border-gray-300 dark:border-slate-600 rounded"
+    ):
+        with ui.row().classes(
+            "w-full bg-gray-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-600 p-3 font-bold flex-nowrap items-center"
+        ):
+            ui.label("Video ID").classes("w-1/6")
+            ui.label("Title").classes("w-1/2")
+            ui.label("Published").classes("w-1/4")
+            ui.label("Action").classes("w-1/12 text-center")
+
+        for video in videos:
+            route_id = _get_video_route_id(video)
+            title = str(getattr(video, "title", "Untitled"))
+            published_at = str(getattr(video, "published_at", ""))
+            short_id = route_id[:16]
+
+            with ui.row().classes(
+                "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700"
+            ):
+                ui.label(short_id).classes("w-1/6 text-sm")
+                ui.label(title).classes("w-1/2 text-sm")
+                ui.label(published_at).classes("w-1/4 text-sm")
+                with ui.row().classes("w-1/12 justify-center"):
+                    ui.button(
+                        icon="open_in_new",
+                        on_click=lambda current_route_id=route_id: ui.run_javascript(
+                            f'window.location.href = "/video/{current_route_id}"'
+                        ),
+                    ).props("flat dense")
+
+
 async def youtube_channel_page(channel_id: str, tab: str | None = None) -> None:
     """Render the detailed channel page."""
     platform = PlatformDBData(
@@ -459,6 +495,28 @@ async def youtube_channel_page(channel_id: str, tab: str | None = None) -> None:
         )
     except Exception:
         channel = None
+
+    with ui.row().classes("w-full items-center my-2") as loading_row:
+        ui.spinner(size="sm", color="primary")
+        ui.label("Loading channel videos...")
+        all_videos = await run.io_bound(
+            YouTubeVideoDB(ref_id=channel_id).get_all_videos_from_db
+        )
+    loading_row.delete()
+
+    channel_videos: list[Any] = []
+    for video in all_videos:
+        try:
+            if video.platform.channel_id == channel_id:
+                channel_videos.append(video)
+        except Exception:
+            continue
+
+    channel_videos = sorted(
+        channel_videos,
+        key=lambda video: getattr(video, "published_at", ""),
+        reverse=True,
+    )
 
     if not channel:
         with ui.card().classes("w-full page-transition"):
@@ -501,3 +559,12 @@ async def youtube_channel_page(channel_id: str, tab: str | None = None) -> None:
         ui.separator()
         _render_channel_statistics(channel_json)
         _render_channel_description(channel_json)
+        ui.separator().classes("my-4")
+        if channel_videos:
+            _render_channel_videos(channel_videos)
+        else:
+            with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
+                ui.icon("video_library", size="xl").classes("text-gray-400")
+                ui.label("No videos found for this channel").classes(
+                    "text-h6 text-gray-500"
+                )
