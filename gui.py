@@ -82,6 +82,7 @@ def root():
                 "/youtube": youtube_page,
                 "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/youtube/{channel_id}": youtube_channel_page,
+                
                 "/video/{ref_id}": video_detail_page,
                 "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,
