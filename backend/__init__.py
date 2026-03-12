@@ -1,5 +1,3 @@
-"""Backend package initialization"""
-
-from . import generator, jobs
+"""Backend package initialization."""
 
 __all__ = ["generator", "jobs"]
