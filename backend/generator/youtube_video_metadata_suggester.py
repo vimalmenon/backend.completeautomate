@@ -25,7 +25,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.channel_id = self.job_data.platform.channel_id
         self.video_db = YouTubeVideoDB(ref_id=self.job_data.ref_id)
-        self.analysis_db = YouTubeVideoMetadataSuggesterDB()
+        self.analysis_db = YouTubeVideoMetadataSuggesterDB(ref_id=self.job_data.ref_id)
         logger.info("Initializing YouTubeVideoAnalyzerGenerator")
 
     def generate(self) -> TaskStatusEnum:
@@ -42,9 +42,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
                 "Transcript not found for video_id: %s", self.job_data.platform.video_id
             )
             return TaskStatusEnum.COMPLETED
-        suggested_video = self.analysis_db.fetch_suggestion(
-            self.job_data.platform.channel_id, self.job_data.platform.video_id
-        )
+        suggested_video = self.analysis_db.fetch_suggestion()
         if not suggested_video:
             return self.__create_metadata_suggestion(video_db)
         return self.__check_suggested_video(suggested_video)

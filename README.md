@@ -80,13 +80,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Can we use ref_id for all the secondary key in `Database`
   - [x] Put all the TASK in NEW to begin
   - [x] Job only to fix transcript or do it while getting videos
-  - [ ] Fix transcripts for grammar and other errors in DB (This to be done manually)
+  - [x] Fix transcripts for grammar and other errors in DB (This to be done manually)
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [x] Make the Workflow as complete if the transcript is not available
+    - [x] Fix the failing test
     - [ ] Test remaining workflow
-    - [ ] Fix the failing test
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 

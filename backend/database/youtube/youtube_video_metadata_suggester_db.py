@@ -8,8 +8,9 @@ from backend.enum import DbKeysEnum, JobStatusEnum
 class YouTubeVideoMetadataSuggesterDB:
     TABLE = "CA#YOUTUBE_VIDEO_METADATA_SUGGESTER"
 
-    def __init__(self):
+    def __init__(self, ref_id: str):
         self.db_manager = DbManager()
+        self.ref_id = ref_id
 
     def add_data(self, data: YouTubeVideoMetadataDBData) -> None:
         self.db_manager.add_item(
@@ -20,13 +21,11 @@ class YouTubeVideoMetadataSuggesterDB:
             }
         )
 
-    def fetch_suggestion(
-        self, channel_id: str, video_id: str
-    ) -> YouTubeVideoMetadataDBData | None:
+    def fetch_suggestion(self) -> YouTubeVideoMetadataDBData | None:
         item = self.db_manager.get_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             }
         )
         if item:
@@ -41,12 +40,10 @@ class YouTubeVideoMetadataSuggesterDB:
 
     def update_option_status(
         self,
-        channel_id: str,
-        video_id: str,
         option_index: int,
         status: JobStatusEnum,
     ) -> bool:
-        suggestion = self.fetch_suggestion(channel_id=channel_id, video_id=video_id)
+        suggestion = self.fetch_suggestion()
         if not suggestion:
             return False
 
@@ -54,14 +51,13 @@ class YouTubeVideoMetadataSuggesterDB:
             return False
 
         suggestion.video_details[option_index].status = status
-        self.db_manager.update_item(
-            Key={
+        self.db_manager.update_data(
+            key={
                 DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: f"{channel_id}#{video_id}",
+                DbKeysEnum.Secondary.value: self.ref_id,
             },
-            UpdateExpression="SET video_details = :video_details",
-            ExpressionAttributeValues={
-                ":video_details": [
+            values={
+                "video_details": [
                     detail.to_json() for detail in suggestion.video_details
                 ]
             },

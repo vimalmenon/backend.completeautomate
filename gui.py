@@ -10,8 +10,6 @@ from backend.ui import (
     prompt_page,
     s3_bucket_page,
     task_detail_page,
-    video_detail_page,
-    youtube_page,
 )
 from backend.ui.service.work_offline import toggle_offline_mode
 from backend.ui.view import tasks_page, youtube_channel_page, youtube_video_page
@@ -78,10 +76,8 @@ def root():
                 "/": main_page,
                 "/tasks": tasks_page,
                 "/task/{task_id}": task_detail_page,
-                "/youtube": youtube_page,
-                "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/youtube/{channel_id}": youtube_channel_page,
-                "/video/{ref_id}": video_detail_page,
+                "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/prompt": prompt_page,
                 "/prompt/{task_id}": prompt_detail_page,
                 "/s3": s3_bucket_page,
