@@ -72,6 +72,17 @@ def _render_video_details(video) -> None:
             ui.label(video.description).classes("text-sm whitespace-pre-wrap")
 
 
+def _render_transcript_section(
+    video, ref_id: str, video_id: str, transcript_dialog: ui.dialog
+) -> None:
+    ui.separator().classes("my-4")
+    ui.label("Transcript").classes("text-h6 font-bold mb-2")
+    with ui.card().classes("w-full bg-gray-50 dark:bg-slate-800"):
+        ui.label(
+            video.transcript or "(No transcript available)"
+        ).classes("text-sm whitespace-pre-wrap font-mono leading-relaxed p-4")
+
+
 async def youtube_video_page(
     channel_id: str, video_id: str, section: str | None = None
 ):
@@ -81,15 +92,6 @@ async def youtube_video_page(
     )
     render_common_header(page_title=f"YouTube Video: {video_id}")
     render_separator()
-
-    # Navigation breadcrumb
-    with ui.row().classes("w-full items-center gap-2 mb-2"):
-        ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props("flat dense")
-        ui.button(
-            icon="arrow_back",
-            on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
-        ).props("flat dense")
-        ui.label(video_id).classes("text-sm text-gray-500")
 
     # Show loading spinner while fetching
     with ui.row().classes("w-full items-center my-4") as loading_row:
@@ -103,7 +105,6 @@ async def youtube_video_page(
             )
         )
 
-    # Remove loading indicator
     loading_row.delete()
 
     if not video:
@@ -111,5 +112,94 @@ async def youtube_video_page(
             ui.label(f"No video found with {video_id}")
         return
 
+    # Build transcript dialog before the top bar so the button can open it
+    with ui.dialog().props("maximized persistent") as transcript_dialog:
+        with ui.card().style(
+            "width:100%; height:100%; border-radius:0; display:flex; flex-direction:column; "
+            "padding:0; gap:0; overflow:hidden;"
+        ):
+            # ── Header ────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; background:var(--q-primary); color:white; "
+                "padding:12px 24px; align-items:center; justify-content:space-between; width:100%;"
+            ):
+                with ui.row().style("align-items:center; gap:12px;"):
+                    ui.icon("subtitles").style("font-size:1.5rem;")
+                    with ui.column().style("gap:2px;"):
+                        ui.label("Edit Transcript").style("font-size:1.1rem; font-weight:700;")
+                        ui.label(video.title).style("font-size:0.8rem; opacity:0.75; max-width:60vw;")
+                ui.button(icon="close", on_click=transcript_dialog.close).props(
+                    "flat round dense color=white"
+                )
+
+            # ── Hint ──────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; padding:8px 24px 0; align-items:center; gap:8px;"
+            ):
+                ui.icon("info").style("font-size:1rem; color:#6b7280;")
+                ui.label("Edit the transcript below. Click Save Changes when done.").style(
+                    "font-size:0.85rem; color:#6b7280;"
+                )
+
+            # ── Textarea ──────────────────────────────────────────────────
+            with ui.element("div").style(
+                "flex:1; min-height:0; padding:12px 24px; overflow:hidden; display:flex; flex-direction:column;"
+            ):
+                transcript_area = (
+                    ui.textarea(value=video.transcript or "")
+                    .classes("w-full")
+                    .props("input-style=height:100%; min-height:100%;")
+                    .style(
+                        "flex:1 1 auto; min-height:0; "
+                        "font-family:ui-monospace,SFMono-Regular,Menlo,monospace; "
+                        "font-size:0.85rem; line-height:1.7; resize:none;"
+                    )
+                )
+
+            # ── Footer ────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; padding:12px 24px; border-top:1px solid #e2e8f0; "
+                "align-items:center; justify-content:space-between; width:100%;"
+            ):
+                char_hint = ui.label("").style("font-size:0.8rem; color:#9ca3af;")
+                transcript_area.on(
+                    "input",
+                    lambda e, lbl=char_hint: lbl.set_text(
+                        f"{len(e.args.get('value', '') if isinstance(e.args, dict) else '')} characters"
+                    ),
+                )
+                with ui.row().style("gap:12px; align-items:center;"):
+                    ui.button("Cancel", on_click=transcript_dialog.close).props("flat")
+
+                    async def save_transcript() -> None:
+                        new_text = transcript_area.value
+                        save_btn.props("loading=true disabled=true")
+                        await run.io_bound(
+                            lambda: YouTubeVideoManager(ref_id=platform.ref_id).update_transcript(
+                                video_id, new_text
+                            )
+                        )
+                        save_btn.props("loading=false disabled=false")
+                        transcript_dialog.close()
+                        ui.notify("Transcript saved", type="positive", position="top")
+
+                    save_btn = ui.button(
+                        "Save Changes", icon="save", on_click=save_transcript
+                    ).props("color=primary")
+
+    # Top navigation bar (rendered after load so dialog reference is available)
+    with ui.row().classes("w-full items-center justify-between mb-4"):
+        with ui.row().classes("items-center gap-2"):
+            ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props("flat dense")
+            ui.button(
+                icon="arrow_back",
+                on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
+            ).props("flat dense")
+            ui.label(video_id).classes("text-sm text-gray-500")
+        ui.button(
+            "Edit Transcript", icon="edit", on_click=transcript_dialog.open
+        ).props("color=primary outline")
+
     render_task_progress(tasks)
     _render_video_details(video)
+    _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
