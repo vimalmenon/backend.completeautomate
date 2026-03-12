@@ -238,6 +238,10 @@ def render_add_task_form() -> None:
     ).classes("my-3")
 
 
+def navigate_to_correct_task(current_task_id):
+    ui.run_javascript(f'window.location.href = "/task/{current_task_id}"'),
+
+
 async def tasks_page(status: str = ""):
     with ui.card().classes("w-full gap-0 page-transition"):
         render_common_header(page_title="Task Management")
@@ -347,9 +351,9 @@ async def tasks_page(status: str = ""):
                                 )
                             ui.button(
                                 icon="open_in_new",
-                                # on_click=lambda current_task_id=task_id: ui.run_javascript(
-                                #     f'window.location.href = "/task/{current_task_id}"'
-                                # ),
+                                on_click=lambda current_task_id=task_id: navigate_to_correct_task(
+                                    current_task_id
+                                ),
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
