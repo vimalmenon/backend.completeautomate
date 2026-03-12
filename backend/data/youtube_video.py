@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import Any, Self
 from uuid import UUID
 
+from backend.data.image import PromptData
 from backend.data.platform import PlatformDBData
 from backend.enum import JobStatusEnum
 
@@ -133,7 +134,7 @@ class YouTubeVideoDBData:
     summarized_transcript: str | None = None
     comment: str | None = None
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
-    thumbnail_prompt_suggestions: list[dict] = field(default_factory=list)
+    thumbnail_prompt_suggestions: list[PromptData] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -161,6 +162,10 @@ class YouTubeVideoDBData:
             metadata_suggestions=[
                 YouTubeVideoMetadataData.to_cls(suggestion)
                 for suggestion in data.get("metadata_suggestions", [])
+            ],
+            thumbnail_prompt_suggestions=[
+                PromptData.to_cls(prompt)
+                for prompt in data.get("thumbnail_prompt_suggestions", [])
             ],
         )
 
@@ -198,6 +203,9 @@ class YouTubeVideoDBData:
             "comment": self.comment,
             "metadata_suggestions": [
                 suggestion.to_json() for suggestion in self.metadata_suggestions
+            ],
+            "thumbnail_prompt_suggestions": [
+                prompt.to_json() for prompt in self.thumbnail_prompt_suggestions
             ],
         }
 

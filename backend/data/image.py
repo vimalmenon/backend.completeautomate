@@ -50,13 +50,14 @@ class ImageGeneratorJobData:
         )
 
 
+# TODO Rename to ImagePromptData
 @dataclass
 class PromptData:
     name: str
-    prompt: str
     description: str
-    status: JobStatusEnum = JobStatusEnum.NEW
+    prompt: str
     negative_prompt: str | None = None
+    status: JobStatusEnum = JobStatusEnum.NEW
 
     def to_json(self) -> dict:
         return {

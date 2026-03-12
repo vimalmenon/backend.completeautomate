@@ -243,6 +243,7 @@ class YouTubeVideoSummarizeJobData:
         return PlatformDB().get_data(self.ref_id)
 
 
+# TODO Move to video metadata data class
 @dataclass
 class YouTubeVideoDetailDBData:
     title: str
@@ -268,6 +269,7 @@ class YouTubeVideoDetailDBData:
         )
 
 
+# TODO Move to video metadata data class
 @dataclass
 class YouTubeVideoMetadataDBData:
     ref_id: str
