@@ -30,6 +30,86 @@ def _render_stat_card(icon: str, label: str, value: str) -> None:
         ui.label(label).classes("text-sm text-gray-500")
 
 
+def open_video_stats_chart_dialog(video) -> None:
+    stats = getattr(video, "stats", [])
+
+    if not stats:
+        ui.notify("No stats data available", type="warning")
+        return
+
+    time_labels = []
+    views = []
+    likes = []
+    comments = []
+
+    for stat in stats:
+        try:
+            time_labels.append(stat.timestamp.strftime("%Y-%m-%d %H:%M"))
+            views.append(int(stat.views))
+            likes.append(int(stat.likes))
+            comments.append(int(stat.comments))
+        except (AttributeError, TypeError, ValueError):
+            continue
+
+    if not time_labels:
+        ui.notify("No valid stats data to display", type="warning")
+        return
+
+    with ui.dialog() as dialog, ui.card().classes("w-[1100px] max-w-full"):
+        ui.label(f"Stats for: {video.title}").classes("text-h6 mb-4")
+
+        import plotly.graph_objects as go
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=views,
+                mode="lines+markers",
+                name="Views",
+                line=dict(color="#2563EB", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=likes,
+                mode="lines+markers",
+                name="Likes",
+                line=dict(color="#16A34A", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=time_labels,
+                y=comments,
+                mode="lines+markers",
+                name="Comments",
+                line=dict(color="#EA580C", width=2),
+                marker=dict(size=6),
+            )
+        )
+        fig.update_layout(
+            title="Video Statistics Over Time",
+            xaxis_title="Date/Time",
+            yaxis_title="Count",
+            hovermode="x unified",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+            height=500,
+        )
+
+        ui.plotly(fig).classes("w-full")
+
+        with ui.row().classes("w-full justify-end mt-4"):
+            ui.button("Close", on_click=dialog.close).props("flat color=primary")
+
+        dialog.open()
+
+
 def _render_video_details(video) -> None:
     # Latest stats (last entry has the most recent data)
     latest_stats = video.stats[-1] if video.stats else None
@@ -54,6 +134,14 @@ def _render_video_details(video) -> None:
 
     # Stats row
     if latest_stats:
+        with ui.row().classes("w-full items-center justify-between mb-3"):
+            ui.label("Video Statistics").classes("text-h6 font-bold")
+            ui.button(
+                "Show Graph",
+                icon="show_chart",
+                on_click=lambda: open_video_stats_chart_dialog(video),
+            ).props("outline color=primary")
+
         with ui.row().classes("w-full gap-4 flex-wrap"):
             _render_stat_card("visibility", "Views", f"{latest_stats.views:,}")
             _render_stat_card("thumb_up", "Likes", f"{latest_stats.likes:,}")
@@ -79,9 +167,9 @@ def _render_transcript_section(
     ui.label("Transcript").classes("text-h6 font-bold mb-2")
     with ui.card().classes("w-full bg-gray-50 dark:bg-slate-800"):
         with ui.scroll_area().classes("w-full").style("height: 200px;"):
-            ui.label(
-                video.transcript or "(No transcript available)"
-            ).classes("text-sm whitespace-pre-wrap font-mono leading-relaxed p-4")
+            ui.label(video.transcript or "(No transcript available)").classes(
+                "text-sm whitespace-pre-wrap font-mono leading-relaxed p-4"
+            )
 
 
 async def youtube_video_page(
@@ -127,7 +215,9 @@ async def youtube_video_page(
                 with ui.row().style("align-items:center; gap:12px;"):
                     ui.icon("subtitles").style("font-size:1.5rem;")
                     with ui.column().style("gap:2px;"):
-                        ui.label("Edit Transcript").style("font-size:1.1rem; font-weight:700;")
+                        ui.label("Edit Transcript").style(
+                            "font-size:1.1rem; font-weight:700;"
+                        )
                         ui.label(
                             f"{video.title} • Published {video.published_at.strftime('%Y-%m-%d')}"
                         ).style("font-size:0.8rem; opacity:0.75; max-width:60vw;")
@@ -140,9 +230,9 @@ async def youtube_video_page(
                 "flex-shrink:0; padding:8px 24px 0; align-items:center; gap:8px;"
             ):
                 ui.icon("info").style("font-size:1rem; color:#6b7280;")
-                ui.label("Edit the transcript below. Click Save Changes when done.").style(
-                    "font-size:0.85rem; color:#6b7280;"
-                )
+                ui.label(
+                    "Edit the transcript below. Click Save Changes when done."
+                ).style("font-size:0.85rem; color:#6b7280;")
 
             # ── Textarea ──────────────────────────────────────────────────
             with ui.element("div").style(
@@ -186,9 +276,9 @@ async def youtube_video_page(
                         new_text = transcript_area.value
                         save_btn.props("loading=true disabled=true")
                         await run.io_bound(
-                            lambda: YouTubeVideoManager(ref_id=platform.ref_id).update_transcript(
-                                video_id, new_text
-                            )
+                            lambda: YouTubeVideoManager(
+                                ref_id=platform.ref_id
+                            ).update_transcript(video_id, new_text)
                         )
                         save_btn.props("loading=false disabled=false")
                         transcript_dialog.close()
@@ -201,7 +291,9 @@ async def youtube_video_page(
     # Top navigation bar (rendered after load so dialog reference is available)
     with ui.row().classes("w-full items-center justify-between mb-4"):
         with ui.row().classes("items-center gap-2"):
-            ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props("flat dense")
+            ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props(
+                "flat dense"
+            )
             ui.button(
                 icon="arrow_back",
                 on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
