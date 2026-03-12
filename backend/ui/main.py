@@ -305,7 +305,7 @@ def main_page():
                 {
                     "name": "List Channel",
                     "icon": "live_tv",
-                    "links_to": f"/channel/{env.YOUTUBE_CHANNEL_ID}",
+                    "links_to": f"/youtube/{env.YOUTUBE_CHANNEL_ID}",
                     "description": "View channel details and statistics",
                 },
             ],

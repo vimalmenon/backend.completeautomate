@@ -6,15 +6,16 @@ from backend.ui.video import (
     video_detail_page,
     youtube_page,
 )
+from backend.ui.view.youtube_channel import youtube_channel_page
 
 __all__ = [
     "main_page",
     "youtube_page",
     "video_detail_page",
-    "channel_detail_page",
     "tasks_page",
     "task_detail_page",
     "prompt_page",
     "prompt_detail_page",
     "s3_bucket_page",
+    "youtube_channel_page",
 ]
