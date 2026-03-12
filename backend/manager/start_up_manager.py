@@ -5,7 +5,9 @@ from backend.data import S3Data
 from backend.enum import JobEnum, PlatformEnum
 from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
-from backend.manager import PlatformManager, PromptManager, TaskManager
+from backend.manager.platform_manager import PlatformManager
+from backend.manager.prompt_manager import PromptManager
+from backend.manager.task_manager import TaskManager
 
 logger = getLogger(__name__)
 

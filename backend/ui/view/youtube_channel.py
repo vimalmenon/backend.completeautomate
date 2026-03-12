@@ -33,19 +33,20 @@ async def youtube_channel_page(channel_id: str, tab: str | None = None):
     if not videos:
         render_not_found_message(message=f"No Videos found in the channel {channel_id}")
         return
-    
-    # TODO Show Channel detail
-        # - Views
-        # - Like
-        # - Hours Watched
-    # TODO Show Video list
-        # - title
-        # - Description
-        # - Views
-        # - Likes
-        # - Comments
-        # - Image
-        # - Navigate
+
+    # TODO Show channel detail
+    # - Views
+    # - Like
+    # - Hours Watched
+    # - Subscribers
+    # TODO Show videos list
+    # - title
+    # - Description
+    # - Views
+    # - Likes
+    # - Comments
+    # - Image
+    # - Navigate
 
     for video in videos:
         with ui.row().classes("w-100"):
