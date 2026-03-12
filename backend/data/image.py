@@ -50,7 +50,6 @@ class ImageGeneratorJobData:
         )
 
 
-# TODO Rename to ImagePromptData
 @dataclass
 class ImagePromptData:
     name: str
