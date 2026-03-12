@@ -1,8 +1,8 @@
 from backend.data.image import (
     ImageGeneratorJobData,
+    ImagePromptData,
     ImagePromptDBData,
     ImagePromptJobData,
-    PromptData,
 )
 from backend.data.message import MessageDBData
 from backend.data.platform import (
@@ -41,7 +41,7 @@ __all__ = [
     "ImagePromptJobData",
     "ImageGeneratorJobData",
     "S3Data",
-    "PromptData",
+    "ImagePromptData",
     "TaskData",
     "YouTubeChannelDBData",
     "YouTubeJobData",

@@ -2,8 +2,8 @@ import logging
 from uuid import uuid4
 
 from backend.data import (
+    ImagePromptData,
     ImagePromptDBData,
-    PromptData,
     YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
@@ -86,10 +86,10 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         )
         logger.debug("Agent response received for task_id=%s", self.task.id)
         prompt_response = [
-            PromptData(
+            ImagePromptData(
                 name=data.name,
-                prompt=data.prompt,
                 description=data.description,
+                prompt=data.prompt,
                 negative_prompt=data.negative_prompt,
             )
             for data in structured_response.image_prompts

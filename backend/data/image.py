@@ -52,7 +52,7 @@ class ImageGeneratorJobData:
 
 # TODO Rename to ImagePromptData
 @dataclass
-class PromptData:
+class ImagePromptData:
     name: str
     description: str
     prompt: str
@@ -122,7 +122,7 @@ class ImagePromptDBData:
     ref_id: str
     comment: str | None = None
     status: JobStatusEnum = JobStatusEnum.NEW
-    prompts: list[PromptData] = field(default_factory=list)
+    prompts: list[ImagePromptData] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -140,7 +140,7 @@ class ImagePromptDBData:
             id=UUID(data["id"]),
             task_id=UUID(data["task_id"]),
             comment=data.get("comment"),
-            prompts=[PromptData.to_cls(pr) for pr in data.get("prompts", [])],
+            prompts=[ImagePromptData.to_cls(pr) for pr in data.get("prompts", [])],
             ref_id=data["ref_id"],
         )
 
