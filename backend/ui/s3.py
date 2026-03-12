@@ -148,5 +148,8 @@ async def s3_bucket_page() -> None:
             ui.button("Load Items", icon="search", on_click=load_items).props(
                 "color=primary"
             )
+            ui.button("Download", icon="download", on_click=load_items).props(
+                "color=primary"
+            )
 
             await load_items()

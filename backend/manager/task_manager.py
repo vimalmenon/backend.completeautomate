@@ -51,6 +51,10 @@ class TaskManager:
             raise AppException(self.TASK_NOT_FOUND)
         return task
 
+    def get_task_by_ref_id(self, ref_id: str) -> list[TaskData]:
+        tasks = TaskDB().get_tasks()
+        return [task for task in tasks if task.payload.get("ref_id") == ref_id]
+
     def transform_tasks(self) -> None:
         return None
 

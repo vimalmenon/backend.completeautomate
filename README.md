@@ -92,7 +92,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Points to improve 
       - [ ] What went well
   - [ ] Send notification via email or signal
-  - [ ] Send the logs to some Common place (AWS Logger)
+  - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB

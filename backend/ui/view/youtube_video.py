@@ -2,11 +2,25 @@ from nicegui import run, ui
 
 from backend.data import PlatformDBData, PlatformYouTubeVideoDBData
 from backend.enum import PlatformEnum
-from backend.manager import YouTubeVideoManager
+from backend.manager import TaskManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
     render_separator,
 )
+
+steps = [
+    "YouTubeVideoCreate",
+    "YouTubeSummarize",
+    "YoutubeMetadataGenerator",
+    "YouTubeMetadataUpdater",
+    "YouTubeThumbnailGenerator",
+    "YouTubeThumbnailUpdater",
+]
+
+
+def render_task_progress(tasks):
+    # TODO Show video status Progress
+    pass
 
 
 async def youtube_video_page(
@@ -24,8 +38,11 @@ async def youtube_video_page(
         ui.spinner(size="lg", color="primary")
         ui.label("Loading video...")
 
-        video = await run.io_bound(
-            lambda: YouTubeVideoManager(ref_id=platform.ref_id).get_video()
+        video, tasks = await run.io_bound(
+            lambda: (
+                YouTubeVideoManager(ref_id=platform.ref_id).get_video(),
+                TaskManager().get_task_by_ref_id(ref_id=platform.ref_id),
+            )
         )
 
     # Remove loading indicator
@@ -36,9 +53,10 @@ async def youtube_video_page(
             ui.label(f"No video found with {video_id}")
         return
 
-    # TODO Show Video Status Progress
-    # TODO Show VIDEO Details
-    # TODO Edit transcript
-    # TODO Show Options to select Title Options and Thumbnail Options
     if video:
+        render_task_progress(tasks)
+
+        # TODO Show VIDEO Details
+        # TODO Edit transcript
+        # TODO Show Options to select Title Options and Thumbnail Options
         pass
