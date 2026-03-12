@@ -78,9 +78,10 @@ def _render_transcript_section(
     ui.separator().classes("my-4")
     ui.label("Transcript").classes("text-h6 font-bold mb-2")
     with ui.card().classes("w-full bg-gray-50 dark:bg-slate-800"):
-        ui.label(
-            video.transcript or "(No transcript available)"
-        ).classes("text-sm whitespace-pre-wrap font-mono leading-relaxed p-4")
+        with ui.scroll_area().classes("w-full").style("height: 200px;"):
+            ui.label(
+                video.transcript or "(No transcript available)"
+            ).classes("text-sm whitespace-pre-wrap font-mono leading-relaxed p-4")
 
 
 async def youtube_video_page(
@@ -143,14 +144,22 @@ async def youtube_video_page(
 
             # ── Textarea ──────────────────────────────────────────────────
             with ui.element("div").style(
-                "flex:1; min-height:0; padding:12px 24px; overflow:hidden; display:flex; flex-direction:column;"
+                "flex:1; min-height:0; width:100%; height:100%; padding:12px 24px; overflow:hidden; display:flex; flex-direction:column;"
             ):
                 transcript_area = (
                     ui.textarea(value=video.transcript or "")
-                    .classes("w-full")
-                    .props("input-style=height:100%; min-height:100%;")
+                    .classes(
+                        "w-full h-full "
+                        "[&_.q-field__inner]:h-full "
+                        "[&_.q-field__control]:h-full "
+                        "[&_.q-field__native]:h-full"
+                    )
+                    .props(
+                        "input-class=h-full "
+                        "input-style=width:100%; height:100%; min-height:100%;"
+                    )
                     .style(
-                        "flex:1 1 auto; min-height:0; "
+                        "flex:1 1 auto; width:100%; height:100%; min-height:100%; "
                         "font-family:ui-monospace,SFMono-Regular,Menlo,monospace; "
                         "font-size:0.85rem; line-height:1.7; resize:none;"
                     )
