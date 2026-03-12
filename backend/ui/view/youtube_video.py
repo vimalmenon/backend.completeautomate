@@ -51,7 +51,6 @@ async def youtube_video_page(
     if not video:
         with ui.row().classes("w-full"):
             ui.label(f"No video found with {video_id}")
-        return
 
     if video:
         render_task_progress(tasks)

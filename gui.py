@@ -5,7 +5,6 @@ from nicegui import ui
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
 from backend.ui import (
-    channel_detail_page,
     main_page,
     prompt_detail_page,
     prompt_page,
@@ -83,7 +82,6 @@ def root():
                 "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/youtube/{channel_id}": youtube_channel_page,
                 "/video/{ref_id}": video_detail_page,
-                "/channel/{channel_id}": channel_detail_page,
                 "/prompt": prompt_page,
                 "/prompt/{task_id}": prompt_detail_page,
                 "/s3": s3_bucket_page,

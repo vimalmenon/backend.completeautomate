@@ -3,7 +3,6 @@ from backend.ui.prompt import prompt_detail_page, prompt_page
 from backend.ui.s3 import s3_bucket_page
 from backend.ui.tasks import task_detail_page, tasks_page
 from backend.ui.video import (
-    channel_detail_page,
     video_detail_page,
     youtube_page,
 )

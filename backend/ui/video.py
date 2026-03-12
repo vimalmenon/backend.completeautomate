@@ -11,7 +11,6 @@ from backend.data import (
 from backend.database import TaskDB
 from backend.database.image.image_prompt_db import ImagePromptDB
 from backend.database.youtube import (
-    YouTubeChannelDB,
     YouTubeVideoDB,
     YouTubeVideoMetadataSuggesterDB,
 )
@@ -896,24 +895,55 @@ def _render_channel_identity(channel_json: dict) -> None:
     # Channel banner if available.
     if channel_json.get("banner_image_url"):
         with ui.image(channel_json["banner_image_url"]).classes(
-            "w-full h-48 object-cover mb-4"
+            "w-full h-48 object-cover mb-4 rounded"
         ):
             pass
 
-    with ui.row().classes("w-full gap-4 items-start"):
+    with ui.row().classes("w-full gap-6 items-start"):
+        # Thumbnail on the left
         if channel_json.get("thumbnail_url"):
-            ui.image(channel_json["thumbnail_url"]).classes("w-24 h-24 rounded-full")
+            ui.image(channel_json["thumbnail_url"]).classes(
+                "w-32 h-32 rounded-full flex-shrink-0"
+            )
 
-        with ui.column().classes("flex-1"):
-            ui.label(channel_json.get("title", "")).classes("text-h5 font-bold")
+        # Channel info in the middle
+        with ui.column().classes("flex-1 gap-3"):
+            # Channel name
+            ui.label(channel_json.get("title", "")).classes(
+                "text-h5 font-bold text-gray-900 dark:text-white"
+            )
+
+            # URL
             if channel_json.get("custom_url"):
-                ui.label(f"Custom URL: {channel_json['custom_url']}").classes(
-                    "text-sm text-gray-600"
-                )
+                url_text = channel_json["custom_url"]
+                with ui.row().classes("w-full items-center gap-2"):
+                    ui.label("URL:").classes(
+                        "font-semibold text-sm text-gray-700 dark:text-gray-300"
+                    )
+                    ui.label(url_text).classes(
+                        "text-sm text-blue-600 dark:text-blue-400"
+                    )
+
+            # Country
             if channel_json.get("country"):
-                ui.label(f"Country: {channel_json['country']}").classes(
-                    "text-sm text-gray-600"
-                )
+                with ui.row().classes("w-full items-center gap-2"):
+                    ui.label("Country:").classes(
+                        "font-semibold text-sm text-gray-700 dark:text-gray-300"
+                    )
+                    ui.label(channel_json["country"]).classes(
+                        "text-sm text-gray-600 dark:text-gray-400"
+                    )
+
+            # Description
+            description = channel_json.get("description", "").strip()
+            if description:
+                with ui.column().classes("w-full mt-2"):
+                    ui.label("About").classes(
+                        "text-sm font-semibold text-gray-700 dark:text-gray-300"
+                    )
+                    ui.label(description).classes(
+                        "text-sm text-gray-600 dark:text-gray-400 text-wrap"
+                    )
 
 
 def _render_channel_metadata(channel_json: dict) -> None:
@@ -947,75 +977,75 @@ def _render_channel_description(channel_json: dict) -> None:
 
 def _render_channel_statistics(channel_json: dict) -> None:
     stats = channel_json.get("stats")
-    if not stats:
+    latest_stats = None
+
+    # Get latest stats from the stats array, or use channel-level stats
+    if stats and len(stats) > 0:
+        latest_stats = stats[-1]
+
+    # If no stats array, try to get stats from channel_json directly
+    if not latest_stats:
+        latest_stats = {
+            "subscriber_count": channel_json.get("subscriber_count", 0),
+            "view_count": channel_json.get("view_count", 0),
+            "video_count": channel_json.get("video_count", 0),
+        }
+
+    # Only render if we have at least some stats
+    if not latest_stats or all(v in (None, 0, "0") for v in latest_stats.values()):
         return
 
-    latest_stats = stats[-1]
     with ui.card().classes("w-full dark:bg-slate-800"):
-        ui.label("Statistics").classes("text-h6 mb-3")
-        with ui.row().classes("w-full gap-4"):
-            with ui.card().classes("w-1/3 bg-blue-50 dark:bg-blue-900/20"):
-                ui.label("Subscribers").classes("text-sm text-gray-600")
-                ui.label(f"{latest_stats.get('subscriber_count', 0):,}").classes(
-                    "text-h6 font-bold"
+        ui.label("Channel Statistics").classes("text-h6 mb-4 font-bold")
+
+        with ui.row().classes("w-full gap-4 justify-between"):
+            # Subscribers card
+            subscriber_count = latest_stats.get("subscriber_count", 0)
+            if isinstance(subscriber_count, str):
+                sub_display = subscriber_count
+            else:
+                sub_display = f"{int(subscriber_count):,}" if subscriber_count else "0"
+
+            with ui.column().classes(
+                "flex-1 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 rounded"
+            ):
+                ui.label("Subscribers").classes(
+                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
+                )
+                ui.label(sub_display).classes(
+                    "text-h5 font-bold text-blue-600 dark:text-blue-400 mt-2"
                 )
 
-            with ui.card().classes("w-1/3 bg-green-50 dark:bg-green-900/20"):
-                ui.label("Views").classes("text-sm text-gray-600")
-                ui.label(f"{latest_stats.get('view_count', 0):,}").classes(
-                    "text-h6 font-bold"
+            # Views card
+            view_count = latest_stats.get("view_count", 0)
+            if isinstance(view_count, str):
+                view_display = view_count
+            else:
+                view_display = f"{int(view_count):,}" if view_count else "0"
+
+            with ui.column().classes(
+                "flex-1 px-4 py-3 bg-green-50 dark:bg-green-900/20 rounded"
+            ):
+                ui.label("Total Views").classes(
+                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
+                )
+                ui.label(view_display).classes(
+                    "text-h5 font-bold text-green-600 dark:text-green-400 mt-2"
                 )
 
-            with ui.card().classes("w-1/3 bg-purple-50 dark:bg-purple-900/20"):
-                ui.label("Videos").classes("text-sm text-gray-600")
-                ui.label(f"{latest_stats.get('video_count', 0):,}").classes(
-                    "text-h6 font-bold"
+            # Videos card
+            video_count = latest_stats.get("video_count", 0)
+            if isinstance(video_count, str):
+                video_display = video_count
+            else:
+                video_display = f"{int(video_count):,}" if video_count else "0"
+
+            with ui.column().classes(
+                "flex-1 px-4 py-3 bg-purple-50 dark:bg-purple-900/20 rounded"
+            ):
+                ui.label("Videos").classes(
+                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
                 )
-
-
-async def channel_detail_page(channel_id: str) -> None:
-    try:
-        channel = await run.io_bound(YouTubeChannelDB(ref_id=channel_id).query_channel)
-    except Exception:
-        channel = None
-
-    if not channel:
-        with ui.card().classes("w-full page-transition"):
-            _render_channel_page_header()
-            render_breadcrumbs(
-                [
-                    ("Home", "/"),
-                    ("YouTube Videos", "/youtube"),
-                    ("Channel", f"/channel/{channel_id}"),
-                ],
-                right_text="Channel not found",
-            )
-            ui.separator()
-            with ui.card().classes("w-full bg-red-50 dark:bg-red-900/20"):
-                ui.label(f"Channel not found for id: {channel_id}").classes(
-                    "text-negative text-subtitle1"
+                ui.label(video_display).classes(
+                    "text-h5 font-bold text-purple-600 dark:text-purple-400 mt-2"
                 )
-        return
-
-    channel_json = channel.to_json()
-    channel_title = channel_json.get("title", "Channel")
-    breadcrumb_title = (
-        channel_title[:30] + "..." if len(channel_title) > 30 else channel_title
-    )
-    with ui.card().classes("w-full page-transition"):
-        _render_channel_page_header(channel_json)
-        subscriber_count = channel_json.get("subscriber_count", "N/A")
-        render_breadcrumbs(
-            [
-                ("Home", "/"),
-                ("YouTube Videos", "/youtube"),
-                (breadcrumb_title, f"/channel/{channel_id}"),
-            ],
-            right_text=f"Subscribers: {subscriber_count}",
-        )
-        ui.separator()
-        _render_channel_identity(channel_json)
-        ui.separator()
-        _render_channel_metadata(channel_json)
-        _render_channel_description(channel_json)
-        _render_channel_statistics(channel_json)
