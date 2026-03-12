@@ -12,6 +12,7 @@ from backend.task_scheduler_services import TaskSchedulerServices
 from backend.ui.common.component_common import (
     render_breadcrumbs,
     render_common_header,
+    render_not_found_message,
 )
 
 TASK_STATUS_PRIORITY = {
@@ -283,9 +284,8 @@ async def tasks_page(status: str = ""):
         loading_row.delete()
 
         if not tasks:
-            with ui.card().classes("w-full bg-gray-100 dark:bg-slate-800"):
-                ui.icon("inbox", size="xl").classes("text-gray-400")
-                ui.label("No tasks found").classes("text-h6 text-gray-500")
+            render_not_found_message(message="No tasks found", icon="inbox")
+
         else:
             ui.label(f"Found {len(tasks)} task(s)").classes("text-subtitle1 mb-4")
 

@@ -82,7 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Job only to fix transcript or do it while getting videos
   - [ ] Fix transcripts for grammar and other errors in DB (This to be done manually)
   - [ ] Upload and download prompts during startup if there is any change
-  - [ ] Test the complete flow (Video Generation to Upload Thumbnail)
+  - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [x] Make the Workflow as complete if the transcript is not available
     - [ ] Test remaining workflow
@@ -91,6 +91,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] What went well
+  - [ ] Send notification via email or signal
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
