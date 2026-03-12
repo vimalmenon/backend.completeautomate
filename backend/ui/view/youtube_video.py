@@ -19,14 +19,30 @@ FLOW_STEPS: list[tuple[JobEnum, str]] = [
 ]
 
 STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
-    TaskStatusEnum.COMPLETED: {"icon": "check_circle", "color": "green", "label": "Completed"},
-    TaskStatusEnum.IN_PROGRESS: {"icon": "schedule", "color": "blue", "label": "In Progress"},
-    TaskStatusEnum.REVIEW: {"icon": "rate_review", "color": "orange", "label": "Review"},
+    TaskStatusEnum.COMPLETED: {
+        "icon": "check_circle",
+        "color": "green",
+        "label": "Completed",
+    },
+    TaskStatusEnum.IN_PROGRESS: {
+        "icon": "schedule",
+        "color": "blue",
+        "label": "In Progress",
+    },
+    TaskStatusEnum.REVIEW: {
+        "icon": "rate_review",
+        "color": "orange",
+        "label": "Review",
+    },
     TaskStatusEnum.FAILED: {"icon": "error", "color": "red", "label": "Failed"},
     TaskStatusEnum.NEW: {"icon": "fiber_new", "color": "grey", "label": "New"},
     TaskStatusEnum.PENDING: {"icon": "pending", "color": "grey", "label": "Pending"},
     TaskStatusEnum.APPROVED: {"icon": "verified", "color": "teal", "label": "Approved"},
-    TaskStatusEnum.CLEAN_UP: {"icon": "cleaning_services", "color": "brown", "label": "Clean Up"},
+    TaskStatusEnum.CLEAN_UP: {
+        "icon": "cleaning_services",
+        "color": "brown",
+        "label": "Clean Up",
+    },
 }
 
 
@@ -35,7 +51,9 @@ def render_task_progress(tasks: list[TaskData]) -> None:
     for task in sorted(tasks, key=lambda t: t.created_at):
         task_by_job[task.job_type] = task
 
-    with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+    with ui.card().classes(
+        "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
+    ):
         ui.label("Task Flow").classes("text-sm font-bold mb-2")
         with ui.row().classes("w-full items-stretch gap-1 flex-wrap"):
             for index, (job_type, step_label) in enumerate(FLOW_STEPS):
@@ -156,9 +174,11 @@ def _render_video_details(video) -> None:
     # Latest stats (last entry has the most recent data)
     latest_stats = video.stats[-1] if video.stats else None
 
-    with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
-        with ui.row().classes("w-full gap-4 flex-wrap items-start"):
-            with ui.column().classes("shrink-0"):
+    with ui.card().classes(
+        "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
+    ):
+        with ui.row().classes("w-full gap-4 flex-wrap items-center"):
+            with ui.column().classes("shrink-0 justify-center"):
                 if video.thumbnail:
                     ui.image(video.thumbnail).classes("w-64 rounded-lg shadow-sm")
 
@@ -179,24 +199,28 @@ def _render_video_details(video) -> None:
                         for tag in video.tags[:6]:
                             ui.badge(tag, color="grey-6").props("outline")
 
-    # Stats row
-    if latest_stats:
-        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
-            ui.label("Video Statistics").classes("text-h6 font-bold mb-3")
-
-            with ui.row().classes("w-full gap-4 flex-wrap"):
-                _render_stat_card("visibility", "Views", f"{latest_stats.views:,}")
-                _render_stat_card("thumb_up", "Likes", f"{latest_stats.likes:,}")
-                _render_stat_card("comment", "Comments", f"{latest_stats.comments:,}")
-                _render_stat_card(
-                    "update",
-                    "Stats Updated",
-                    latest_stats.timestamp.strftime("%Y-%m-%d"),
-                )
+                if latest_stats:
+                    with ui.row().classes("w-full gap-3 flex-wrap"):
+                        _render_stat_card(
+                            "visibility", "Views", f"{latest_stats.views:,}"
+                        )
+                        _render_stat_card(
+                            "thumb_up", "Likes", f"{latest_stats.likes:,}"
+                        )
+                        _render_stat_card(
+                            "comment", "Comments", f"{latest_stats.comments:,}"
+                        )
+                        _render_stat_card(
+                            "update",
+                            "Stats Updated",
+                            latest_stats.timestamp.strftime("%Y-%m-%d"),
+                        )
 
     # Description
     if video.description:
-        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+        with ui.card().classes(
+            "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
+        ):
             ui.label("Description").classes("text-h6 font-bold mb-2")
             ui.label(video.description).classes("text-sm whitespace-pre-wrap")
 
@@ -204,14 +228,25 @@ def _render_video_details(video) -> None:
 def _render_transcript_section(
     video, ref_id: str, video_id: str, transcript_dialog: ui.dialog
 ) -> None:
-    with ui.card().classes(
-        "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
-    ):
-        ui.label("Transcript").classes("text-h6 font-bold mb-2")
-        with ui.scroll_area().classes("w-full").style("height: 200px;"):
-            ui.label(video.transcript or "(No transcript available)").classes(
-                "text-sm whitespace-pre-wrap font-mono leading-relaxed p-4"
-            )
+    with ui.column().classes("w-full gap-4"):
+        with ui.card().classes(
+            "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+        ):
+            ui.label("Transcript").classes("text-h6 font-bold mb-2")
+            with ui.scroll_area().classes("w-full").style("height: 200px;"):
+                ui.label(video.transcript or "(No transcript available)").classes(
+                    "text-sm whitespace-pre-wrap font-mono leading-relaxed p-4"
+                )
+        if video.summarized_transcript:
+            with ui.card().classes(
+                "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+            ):
+                ui.label("Summarized Transcript").classes("text-h6 font-bold mb-2")
+                with ui.scroll_area().classes("w-full").style("height: 200px;"):
+                    ui.label(
+                        video.summarized_transcript
+                        or "(No summarized transcript available)"
+                    ).classes("text-sm whitespace-pre-wrap leading-relaxed p-4")
 
 
 async def youtube_video_page(
@@ -331,8 +366,12 @@ async def youtube_video_page(
                     ).props("color=primary")
 
     with ui.column().classes("w-full max-w-7xl mx-auto gap-4"):
-        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
-            with ui.row().classes("w-full items-center justify-between gap-3 flex-wrap"):
+        with ui.card().classes(
+            "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
+        ):
+            with ui.row().classes(
+                "w-full items-center justify-between gap-3 flex-wrap"
+            ):
                 with ui.row().classes("items-center gap-2 flex-wrap"):
                     ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props(
                         "flat dense"
