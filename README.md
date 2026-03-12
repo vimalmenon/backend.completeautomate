@@ -83,7 +83,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
-    - [x] Fix the failing test
     - [ ] Make the Workflow as complete if the transcript is not available
     - [ ] Test remaining workflow
   - [ ] Review the raw `Transcript` and rate the video based on it 
@@ -102,11 +101,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Email
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
-  - [x] Show channel detail and videos in tabs
+  - [x] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
   - [ ] Clicking on `Task` navigate button should route to correct page
-  - [ ] Channel to show both channel details and videos
   - [ ] Ability to perform all actions from GUI
-  - [ ] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
+  - [ ] Change the status of tasks from the Video Page
+  - [ ] Improve the status of Video Page
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
 - [ ] Set up image generation
