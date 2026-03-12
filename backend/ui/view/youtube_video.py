@@ -183,16 +183,18 @@ def _render_video_details(video) -> None:
                     ui.image(video.thumbnail).classes("w-64 rounded-lg shadow-sm")
 
             with ui.column().classes("flex-1 gap-3 min-w-[280px]"):
-                ui.label(video.title).classes("text-h5 font-bold leading-tight")
-
-                with ui.row().classes("gap-2 flex-wrap"):
-                    ui.badge(
-                        f"Published {video.published_at.strftime('%Y-%m-%d')}",
-                        color="primary",
-                    ).props("outline")
-                    ui.badge(f"Language {video.language}", color="grey-7").props(
-                        "outline"
-                    )
+                with ui.row().classes(
+                    "w-full items-center justify-between gap-2 flex-wrap"
+                ):
+                    ui.label(video.title).classes("text-h5 font-bold leading-tight")
+                    with ui.row().classes("gap-2 flex-wrap"):
+                        ui.badge(
+                            f"Published {video.published_at.strftime('%Y-%m-%d')}",
+                            color="primary",
+                        ).props("outline")
+                        ui.badge(f"Language {video.language}", color="grey-7").props(
+                            "outline"
+                        )
 
                 if video.tags:
                     with ui.row().classes("gap-2 flex-wrap"):
@@ -279,9 +281,9 @@ async def youtube_video_page(
         return
 
     # Build transcript dialog before the top bar so the button can open it
-    with ui.dialog().props("maximized persistent") as transcript_dialog:
+    with ui.dialog().props("persistent") as transcript_dialog:
         with ui.card().style(
-            "width:100%; height:100%; border-radius:0; display:flex; flex-direction:column; "
+            "width:min(960px, 92vw); height:min(760px, 88vh); border-radius:16px; display:flex; flex-direction:column; "
             "padding:0; gap:0; overflow:hidden;"
         ):
             # ── Header ────────────────────────────────────────────────────
@@ -297,7 +299,7 @@ async def youtube_video_page(
                         )
                         ui.label(
                             f"{video.title} • Published {video.published_at.strftime('%Y-%m-%d')}"
-                        ).style("font-size:0.8rem; opacity:0.75; max-width:60vw;")
+                        ).style("font-size:0.8rem; opacity:0.75; max-width:680px;")
                 ui.button(icon="close", on_click=transcript_dialog.close).props(
                     "flat round dense color=white"
                 )
