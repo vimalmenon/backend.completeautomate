@@ -102,9 +102,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Email
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
+  - [x] Show channel detail and videos in tabs
   - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Channel to show both channel details and videos
-  - [ ] Show channel detail and videos in tabs
   - [ ] Ability to perform all actions from GUI
   - [ ] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
   - [ ] View images from S3 and Local
