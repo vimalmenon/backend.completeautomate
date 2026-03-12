@@ -14,7 +14,6 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
         self.task_manager = TaskManager(self.task)
 
     def generate(self) -> TaskStatusEnum:
-        video_id = self.job_data.platform.video_id
         title = self.job_data.title
         description = self.job_data.description
         tags = self.job_data.tags
@@ -24,7 +23,7 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
             description=self.job_data.description,
             tags=self.job_data.tags,
         )
-        self.youtube_db.update_metadata(video_id, title, description, tags)
+        self.youtube_db.update_metadata(title, description, tags)
         next_task = self.task_manager.create_youtube_thumbnail_prompt_suggester_task(
             ref_id=self.job_data.ref_id,
         )

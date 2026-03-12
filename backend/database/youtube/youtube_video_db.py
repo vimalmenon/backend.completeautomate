@@ -61,7 +61,17 @@ class YouTubeVideoDB:
             values=values,
         )
 
-    def update_transcript(self, video_id: str, summarized_transcript: str) -> None:
+    def update_transcript(self, transcript: str) -> None:
+        self.db_manager.update_data(
+            key={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: self.ref_id,
+            },
+            values={"transcript": transcript},
+        )
+        logger.info(f"Updated transcript for video id: {self.ref_id}")
+
+    def update_summarized_transcript(self, summarized_transcript: str) -> None:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
@@ -69,10 +79,10 @@ class YouTubeVideoDB:
             },
             values={"summarized_transcript": summarized_transcript},
         )
-        logger.info(f"Updated transcript for video id: {video_id}")
+        logger.info(f"Updated summarized transcript for video id: {self.ref_id}")
 
     def update_video_details(
-        self, video_id: str, title: str, description: str, tags: list[str]
+        self, title: str, description: str, tags: list[str]
     ) -> None:
         self.db_manager.update_data(
             key={
@@ -85,4 +95,4 @@ class YouTubeVideoDB:
                 "tags": tags,
             },
         )
-        logger.info(f"Updated video details for video id: {video_id}")
+        logger.info(f"Updated video details for video id: {self.ref_id}")

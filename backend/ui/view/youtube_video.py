@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from nicegui import run, ui
 
 from backend.data import PlatformDBData, PlatformYouTubeVideoDBData
@@ -10,7 +12,6 @@ from backend.ui.common.component_common import (
 )
 
 FLOW_STEPS: list[tuple[JobEnum, str]] = [
-    (JobEnum.YouTubeVideo, "Video"),
     (JobEnum.YouTubeVideoSummarizer, "Summarize"),
     (JobEnum.YouTubeVideoMetadataSuggester, "Metadata Suggest"),
     (JobEnum.YouTubeVideoMetadataUpdater, "Metadata Update"),
@@ -46,6 +47,48 @@ STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
 }
 
 
+def _show_task_status_dialog(task: TaskData) -> None:
+    with ui.dialog() as dialog, ui.card().classes("w-96"):
+        ui.label("Edit Task Status").classes("text-h6 mb-2")
+        ui.label(f"Task ID: {task.id}").classes("text-caption text-gray-600 mb-2")
+
+        status_options = [status.value for status in TaskStatusEnum]
+        status_input = (
+            ui.select(
+                options=status_options,
+                value=task.status.value,
+                label="Status",
+            )
+            .props("outlined dense")
+            .classes("w-full")
+        )
+
+        def on_save() -> None:
+            old_status = task.status
+            old_completed_at = task.completed_at
+            try:
+                task.status = TaskStatusEnum(str(status_input.value))
+                task.completed_at = (
+                    datetime.now() if task.status == TaskStatusEnum.COMPLETED else None
+                )
+                TaskManager().update_task(task)
+                ui.notify("Task status updated", type="positive")
+                dialog.close()
+                ui.run_javascript(
+                    "window.location.href = window.location.pathname + window.location.search"
+                )
+            except Exception:
+                task.status = old_status
+                task.completed_at = old_completed_at
+                ui.notify("Failed to update task status", type="negative")
+
+        with ui.row().classes("w-full justify-end gap-2 mt-4"):
+            ui.button("Cancel", on_click=dialog.close).props("flat")
+            ui.button("Save", icon="save", on_click=on_save).props("color=primary")
+
+    dialog.open()
+
+
 def render_task_progress(tasks: list[TaskData]) -> None:
     task_by_job: dict[JobEnum, TaskData] = {}
     for task in sorted(tasks, key=lambda t: t.created_at):
@@ -67,7 +110,7 @@ def render_task_progress(tasks: list[TaskData]) -> None:
 
                 with ui.card().classes(
                     "min-w-[110px] flex-1 shadow-none border border-gray-200 dark:border-slate-700"
-                ):
+                ) as task_card:
                     with ui.column().classes("px-2 py-1 gap-0"):
                         ui.label(step_label).classes("text-xs font-semibold")
                         with ui.row().classes("items-center gap-1"):
@@ -77,6 +120,20 @@ def render_task_progress(tasks: list[TaskData]) -> None:
                             ui.badge(style["label"], color=style["color"]).classes(
                                 "text-[10px] px-1 py-0"
                             ).props("outline")
+
+                if job_type == JobEnum.YouTubeVideoSummarizer:
+                    if current_task:
+                        task_card.on(
+                            "dblclick",
+                            lambda _, task=current_task: _show_task_status_dialog(task),
+                        )
+                    else:
+                        task_card.on(
+                            "dblclick",
+                            lambda _: ui.notify(
+                                "Summarize task is not available yet", type="warning"
+                            ),
+                        )
 
                 if index < len(FLOW_STEPS) - 1:
                     with ui.column().classes("justify-center hidden lg:flex"):
@@ -357,7 +414,7 @@ async def youtube_video_page(
                         await run.io_bound(
                             lambda: YouTubeVideoManager(
                                 ref_id=platform.ref_id
-                            ).update_transcript(video_id, new_text)
+                            ).update_transcript(new_text)
                         )
                         save_btn.props("loading=false disabled=false")
                         transcript_dialog.close()

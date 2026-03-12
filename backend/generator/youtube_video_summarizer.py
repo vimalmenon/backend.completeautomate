@@ -42,7 +42,6 @@ class YouTubeVideoSummarizer(BaseGenerator):
             )
             summarize = self.__summarize_transcript(video.transcript)
             self.db_manager.update_summarized_transcript(
-                video_id=self.job_data.platform.video_id,
                 summarized_transcript=summarize,
             )
             self.__create_analysis_task()

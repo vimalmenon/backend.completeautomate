@@ -16,29 +16,18 @@ class YouTubeVideoManager:
     def save_data(self, data: YouTubeVideoDBData) -> None:
         return YouTubeVideoDB(ref_id=self.ref_id).add_video(data)
 
-    def update_summarized_transcript(
-        self, video_id: str, summarized_transcript: str
-    ) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_transcript(
-            video_id, summarized_transcript
-        )
-
-    def update_metadata(
-        self, video_id: str, title: str, description: str, tags: list[str]
-    ) -> None:
+    def update_metadata(self, title: str, description: str, tags: list[str]) -> None:
         YouTubeVideoDB(ref_id=self.ref_id).update_video_details(
-            video_id=video_id, title=title, description=description, tags=tags
+            title=title, description=description, tags=tags
         )
 
-    def update_transcript(self, video_id: str, transcript: str) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_transcript(video_id, transcript)
+    def update_transcript(self, transcript: str) -> None:
+        YouTubeVideoDB(ref_id=self.ref_id).update_transcript(transcript)
 
-    # def update_summarized_transcript(
-    #     self, video_id: str, summarized_transcript: str
-    # ) -> None:
-    #     YouTubeVideoDB(ref_id=self.ref_id).update_summarized_transcript(
-    #         video_id, summarized_transcript
-    #     )
+    def update_summarized_transcript(self, summarized_transcript: str) -> None:
+        YouTubeVideoDB(ref_id=self.ref_id).update_summarized_transcript(
+            summarized_transcript
+        )
 
     def update_video(self, values: dict) -> None:
         YouTubeVideoDB(ref_id=self.ref_id).update_video(values=values)
