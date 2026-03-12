@@ -92,7 +92,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] What went well
-  - [ ] Send notification via email or signal
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
@@ -101,8 +100,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
   - [ ] Delete the `Completed` Tasks and send email
-  - [ ] Send email or Signal Notification
   - [ ] Remove Completed tasks after 1 week
+- [ ] Send Notification
+  - [ ] Send Email
+  - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
   - [ ] Button to edit transcript and move to next stage
   - [ ] Move to new routes
