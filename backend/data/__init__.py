@@ -23,7 +23,6 @@ from backend.data.youtube import (
     YouTubeChannelDBData,
     YouTubeJobData,
     YouTubeThumbnailJobData,
-    YouTubeVideoDBData,
     YouTubeVideoDetailDBData,
     YouTubeVideoMetadataDBData,
     YouTubeVideoMetadataJobData,
@@ -31,6 +30,7 @@ from backend.data.youtube import (
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 from backend.data.youtube_video import (
+    YouTubeVideoDBData,
     YouTubeVideoReviewerDBData,
     YouTubeVideoReviewerJobData,
 )
