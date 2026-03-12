@@ -79,7 +79,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [x] Put all the TASK in NEW to begin
   - [x] Fix transcripts for grammar and other errors in DB (This to be done manually)
-  - [ ] Keep metadata in in video data itself
+  - [x] Keep metadata in in video data itself
+  - [ ] Keep the image prompt in the video data itself
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
