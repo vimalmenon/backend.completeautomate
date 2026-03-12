@@ -1,26 +1,68 @@
 from nicegui import run, ui
 
 from backend.data import PlatformDBData, PlatformYouTubeVideoDBData
-from backend.enum import PlatformEnum
+from backend.data.task import TaskData
+from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
 from backend.manager import TaskManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
     render_separator,
 )
 
-steps = [
-    "YouTubeVideoCreate",
-    "YouTubeSummarize",
-    "YoutubeMetadataGenerator",
-    "YouTubeMetadataUpdater",
-    "YouTubeThumbnailGenerator",
-    "YouTubeThumbnailUpdater",
+FLOW_STEPS: list[tuple[JobEnum, str]] = [
+    (JobEnum.YouTubeVideo, "Video"),
+    (JobEnum.YouTubeVideoSummarizer, "Summarize"),
+    (JobEnum.YouTubeVideoMetadataSuggester, "Metadata Suggest"),
+    (JobEnum.YouTubeVideoMetadataUpdater, "Metadata Update"),
+    (JobEnum.YouTubeVideoThumbnailPromptSuggester, "Thumbnail Prompt"),
+    (JobEnum.YouTubeThumbnailUpdater, "Thumbnail Update"),
 ]
 
+STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
+    TaskStatusEnum.COMPLETED: {"icon": "check_circle", "color": "green", "label": "Completed"},
+    TaskStatusEnum.IN_PROGRESS: {"icon": "schedule", "color": "blue", "label": "In Progress"},
+    TaskStatusEnum.REVIEW: {"icon": "rate_review", "color": "orange", "label": "Review"},
+    TaskStatusEnum.FAILED: {"icon": "error", "color": "red", "label": "Failed"},
+    TaskStatusEnum.NEW: {"icon": "fiber_new", "color": "grey", "label": "New"},
+    TaskStatusEnum.PENDING: {"icon": "pending", "color": "grey", "label": "Pending"},
+    TaskStatusEnum.APPROVED: {"icon": "verified", "color": "teal", "label": "Approved"},
+    TaskStatusEnum.CLEAN_UP: {"icon": "cleaning_services", "color": "brown", "label": "Clean Up"},
+}
 
-def render_task_progress(tasks):
-    # TODO Show video status Progress
-    pass
+
+def render_task_progress(tasks: list[TaskData]) -> None:
+    task_by_job: dict[JobEnum, TaskData] = {}
+    for task in sorted(tasks, key=lambda t: t.created_at):
+        task_by_job[task.job_type] = task
+
+    with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+        ui.label("Task Flow").classes("text-sm font-bold mb-2")
+        with ui.row().classes("w-full items-stretch gap-1 flex-wrap"):
+            for index, (job_type, step_label) in enumerate(FLOW_STEPS):
+                current_task = task_by_job.get(job_type)
+                status = current_task.status if current_task else None
+                style = (
+                    STATUS_STYLE[status]
+                    if status and status in STATUS_STYLE
+                    else STATUS_STYLE[TaskStatusEnum.PENDING]
+                )
+
+                with ui.card().classes(
+                    "min-w-[110px] flex-1 shadow-none border border-gray-200 dark:border-slate-700"
+                ):
+                    with ui.column().classes("px-2 py-1 gap-0"):
+                        ui.label(step_label).classes("text-xs font-semibold")
+                        with ui.row().classes("items-center gap-1"):
+                            ui.icon(style["icon"]).classes(
+                                f"text-{style['color']}-600 text-sm"
+                            )
+                            ui.badge(style["label"], color=style["color"]).classes(
+                                "text-[10px] px-1 py-0"
+                            ).props("outline")
+
+                if index < len(FLOW_STEPS) - 1:
+                    with ui.column().classes("justify-center hidden lg:flex"):
+                        ui.icon("chevron_right").classes("text-gray-400 text-xs")
 
 
 def _render_stat_card(icon: str, label: str, value: str) -> None:
@@ -114,58 +156,58 @@ def _render_video_details(video) -> None:
     # Latest stats (last entry has the most recent data)
     latest_stats = video.stats[-1] if video.stats else None
 
-    with ui.row().classes("w-full gap-4 flex-wrap"):
-        # Left column: thumbnail
-        with ui.column().classes("shrink-0"):
-            if video.thumbnail:
-                ui.image(video.thumbnail).classes("w-64 rounded shadow")
+    with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+        with ui.row().classes("w-full gap-4 flex-wrap items-start"):
+            with ui.column().classes("shrink-0"):
+                if video.thumbnail:
+                    ui.image(video.thumbnail).classes("w-64 rounded-lg shadow-sm")
 
-        # Right column: title + metadata
-        with ui.column().classes("flex-1 gap-2"):
-            ui.label(video.title).classes("text-h5 font-bold")
+            with ui.column().classes("flex-1 gap-3 min-w-[280px]"):
+                ui.label(video.title).classes("text-h5 font-bold leading-tight")
 
-            with ui.row().classes("gap-4 flex-wrap text-sm text-gray-500"):
-                ui.label(f"Published: {video.published_at.strftime('%Y-%m-%d')}")
-                ui.label(f"Language: {video.language}")
+                with ui.row().classes("gap-2 flex-wrap"):
+                    ui.badge(
+                        f"Published {video.published_at.strftime('%Y-%m-%d')}",
+                        color="primary",
+                    ).props("outline")
+                    ui.badge(f"Language {video.language}", color="grey-7").props(
+                        "outline"
+                    )
+
                 if video.tags:
-                    ui.label(f"Tags: {', '.join(video.tags[:6])}")
-
-    ui.separator().classes("my-4")
+                    with ui.row().classes("gap-2 flex-wrap"):
+                        for tag in video.tags[:6]:
+                            ui.badge(tag, color="grey-6").props("outline")
 
     # Stats row
     if latest_stats:
-        with ui.row().classes("w-full items-center justify-between mb-3"):
-            ui.label("Video Statistics").classes("text-h6 font-bold")
-            ui.button(
-                "Show Graph",
-                icon="show_chart",
-                on_click=lambda: open_video_stats_chart_dialog(video),
-            ).props("outline color=primary")
+        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+            ui.label("Video Statistics").classes("text-h6 font-bold mb-3")
 
-        with ui.row().classes("w-full gap-4 flex-wrap"):
-            _render_stat_card("visibility", "Views", f"{latest_stats.views:,}")
-            _render_stat_card("thumb_up", "Likes", f"{latest_stats.likes:,}")
-            _render_stat_card("comment", "Comments", f"{latest_stats.comments:,}")
-            _render_stat_card(
-                "update",
-                "Stats Updated",
-                latest_stats.timestamp.strftime("%Y-%m-%d"),
-            )
+            with ui.row().classes("w-full gap-4 flex-wrap"):
+                _render_stat_card("visibility", "Views", f"{latest_stats.views:,}")
+                _render_stat_card("thumb_up", "Likes", f"{latest_stats.likes:,}")
+                _render_stat_card("comment", "Comments", f"{latest_stats.comments:,}")
+                _render_stat_card(
+                    "update",
+                    "Stats Updated",
+                    latest_stats.timestamp.strftime("%Y-%m-%d"),
+                )
 
     # Description
     if video.description:
-        ui.separator().classes("my-4")
-        ui.label("Description").classes("text-h6 font-bold")
-        with ui.card().classes("w-full"):
+        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+            ui.label("Description").classes("text-h6 font-bold mb-2")
             ui.label(video.description).classes("text-sm whitespace-pre-wrap")
 
 
 def _render_transcript_section(
     video, ref_id: str, video_id: str, transcript_dialog: ui.dialog
 ) -> None:
-    ui.separator().classes("my-4")
-    ui.label("Transcript").classes("text-h6 font-bold mb-2")
-    with ui.card().classes("w-full bg-gray-50 dark:bg-slate-800"):
+    with ui.card().classes(
+        "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+    ):
+        ui.label("Transcript").classes("text-h6 font-bold mb-2")
         with ui.scroll_area().classes("w-full").style("height: 200px;"):
             ui.label(video.transcript or "(No transcript available)").classes(
                 "text-sm whitespace-pre-wrap font-mono leading-relaxed p-4"
@@ -288,24 +330,34 @@ async def youtube_video_page(
                         "Save Changes", icon="save", on_click=save_transcript
                     ).props("color=primary")
 
-    # Top navigation bar (rendered after load so dialog reference is available)
-    with ui.row().classes("w-full items-center justify-between mb-4"):
-        with ui.row().classes("items-center gap-2"):
-            ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props(
-                "flat dense"
-            )
-            ui.button(
-                icon="arrow_back",
-                on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
-            ).props("flat dense")
-            ui.label(video_id).classes("text-sm text-gray-500")
-            ui.label(f"Published {video.published_at.strftime('%Y-%m-%d')}").classes(
-                "text-sm text-gray-500"
-            )
-        ui.button(
-            "Edit Transcript", icon="edit", on_click=transcript_dialog.open
-        ).props("color=primary outline")
+    with ui.column().classes("w-full max-w-7xl mx-auto gap-4"):
+        with ui.card().classes("w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"):
+            with ui.row().classes("w-full items-center justify-between gap-3 flex-wrap"):
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.button(icon="home", on_click=lambda: ui.navigate.to("/")).props(
+                        "flat dense"
+                    )
+                    ui.button(
+                        icon="arrow_back",
+                        on_click=lambda: ui.navigate.to(f"/youtube/{channel_id}"),
+                    ).props("flat dense")
+                    ui.label(video_id).classes("text-sm text-gray-500")
+                    ui.label(
+                        f"Published {video.published_at.strftime('%Y-%m-%d')}"
+                    ).classes("text-sm text-gray-500")
 
-    render_task_progress(tasks)
-    _render_video_details(video)
-    _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.button(
+                        "Show Graph",
+                        icon="show_chart",
+                        on_click=lambda: open_video_stats_chart_dialog(video),
+                    ).props("outline color=primary")
+                    ui.button(
+                        "Edit Transcript",
+                        icon="edit",
+                        on_click=transcript_dialog.open,
+                    ).props("color=primary outline")
+
+        render_task_progress(tasks)
+        _render_video_details(video)
+        _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
