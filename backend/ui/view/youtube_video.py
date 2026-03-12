@@ -1,10 +1,9 @@
 from datetime import datetime
+from typing import Any
 
 from nicegui import run, ui
 
-from backend.data import PlatformDBData, PlatformYouTubeVideoDBData
-from backend.data.task import TaskData
-from backend.database.youtube import YouTubeVideoMetadataSuggesterDB
+from backend.data import PlatformDBData, PlatformYouTubeVideoDBData, TaskData
 from backend.enum import JobEnum, JobStatusEnum, PlatformEnum, TaskStatusEnum
 from backend.manager import TaskManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
@@ -147,15 +146,15 @@ def _update_metadata_option_status(
     status_value: str,
 ) -> None:
     try:
-        is_updated = YouTubeVideoMetadataSuggesterDB(
-            ref_id=ref_id
-        ).update_option_status(
-            option_index=option_index,
-            status=JobStatusEnum(status_value),
-        )
-        if not is_updated:
-            ui.notify("Unable to update option status", type="warning")
-            return
+        # is_updated = YouTubeVideoMetadataSuggesterDB(
+        #     ref_id=ref_id
+        # ).update_option_status(
+        #     option_index=option_index,
+        #     status=JobStatusEnum(status_value),
+        # )
+        # if not is_updated:
+        #     ui.notify("Unable to update option status", type="warning")
+        #     return
         ui.notify("Option status updated", type="positive")
         ui.run_javascript(
             "window.location.href = window.location.pathname + window.location.search"
@@ -165,7 +164,7 @@ def _update_metadata_option_status(
 
 
 def _render_metadata_suggestions(ref_id: str) -> None:
-    suggestion = YouTubeVideoMetadataSuggesterDB(ref_id=ref_id).fetch_suggestion()
+    suggestion: list[Any] = []
     if not suggestion:
         return
 

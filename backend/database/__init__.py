@@ -6,7 +6,6 @@ from backend.database.task.task_db import TaskDB
 from backend.database.youtube import (
     YouTubeChannelDB,
     YouTubeVideoDB,
-    YouTubeVideoMetadataSuggesterDB,
 )
 
 __all__ = [
@@ -14,7 +13,6 @@ __all__ = [
     "TaskDB",
     "YouTubeChannelDB",
     "YouTubeVideoDB",
-    "YouTubeVideoMetadataSuggesterDB",
     "PromptDB",
     "AgentMessageDB",
     "PlatformDB",

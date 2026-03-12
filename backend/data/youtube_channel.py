@@ -6,7 +6,7 @@ from uuid import UUID
 
 from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
-from backend.enum.status import JobStatusEnum, TaskStatusEnum
+from backend.enum.status import TaskStatusEnum
 
 NO_ITEMS_FOUND_ERROR = "No items found with in response"
 
@@ -233,67 +233,6 @@ class YouTubeVideoSummarizeJobData:
     @classmethod
     def to_cls(cls, data) -> Self:
         return cls(
-            ref_id=data["ref_id"],
-        )
-
-    @cached_property
-    def platform(self) -> PlatformDBData:
-        from backend.database.platform.platform_database import PlatformDB
-
-        return PlatformDB().get_data(self.ref_id)
-
-
-# TODO Move to video metadata data class
-@dataclass
-class YouTubeVideoDetailDBData:
-    title: str
-    description: str
-    tags: list[str]
-    status: JobStatusEnum = JobStatusEnum.NEW
-
-    def to_json(self) -> dict:
-        return {
-            "title": self.title,
-            "description": self.description,
-            "status": self.status.value,
-            "tags": self.tags,
-        }
-
-    @classmethod
-    def to_cls(cls, data) -> Self:
-        return cls(
-            title=data["title"],
-            description=data["description"],
-            status=JobStatusEnum(data["status"]),
-            tags=data["tags"],
-        )
-
-
-# TODO Move to video metadata data class
-@dataclass
-class YouTubeVideoMetadataDBData:
-    ref_id: str
-    task_id: UUID
-    video_details: list[YouTubeVideoDetailDBData]
-    comment: str | None = None
-
-    def to_json(self) -> dict:
-        return {
-            "task_id": str(self.task_id),
-            "video_details": [detail.to_json() for detail in self.video_details],
-            "comment": self.comment,
-            "ref_id": self.ref_id,
-        }
-
-    @classmethod
-    def to_cls(cls, data) -> Self:
-        return cls(
-            video_details=[
-                YouTubeVideoDetailDBData.to_cls(detail)
-                for detail in data["video_details"]
-            ],
-            comment=data.get("comment"),
-            task_id=UUID(data["task_id"]),
             ref_id=data["ref_id"],
         )
 
