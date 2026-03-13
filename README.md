@@ -81,6 +81,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [ ] Make the Workflow as complete if the transcript is not available
+    - [ ] Move to New Flow
+    - [ ] Need to work on `Image Generation Flow`
     - [ ] Test remaining workflow
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Update JobData for videos rather than creating New Tasks
