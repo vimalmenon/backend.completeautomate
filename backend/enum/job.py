@@ -20,9 +20,10 @@ class JobEnum(str, Enum):
 
 class JobsEnum(str, Enum):
     YouTubeChannel = "YouTubeChannel"
-    YouTubeVideo = "YouTubeVideo"
+    YouTubeVideoUpload = "YouTubeVideoUpload"
     YouTubeChannelStats = "YouTubeChannelStats"
     YouTubeVideoStats = "YouTubeVideoStats"
+    PROMPT_REVIEW = "PROMPT_REVIEW"
 
 
 class TasksEnum(str, Enum):
