@@ -34,6 +34,8 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
     def generate(self) -> TaskStatusEnum:
         logger.info("Generating thumbnail image prompts for task_id=%s", self.task.id)
         video_db = self.video_manager.get_video()
+        if not video_db:
+            raise AppException("Not video found with the ref_id : {self.task.id}")
         if len(video_db.thumbnail_prompt_suggestions) == 0:
             return self.__create_image_prompt_suggestion()
         return self.__update_image_prompt_suggestion(
