@@ -120,7 +120,10 @@ class YouTubeVideoMetadataData:
 
 @dataclass
 class YouTubeVideoReviewData:
-    pass
+    upsides: list[str]
+    downsides: list[str]
+    overall: str
+    rating: int
 
 
 @dataclass
