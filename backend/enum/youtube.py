@@ -6,3 +6,4 @@ class YouTubeJobEnum(str, Enum):
     YouTubeVideoSummarize = "YouTubeVideoSummarize"
     YouTubeVideoMetadata = "YouTubeVideoMetadata"
     YouTubeVideoThumbnailPrompts = "YouTubeVideoThumbnailPrompts"
+    Complete = "Complete"
