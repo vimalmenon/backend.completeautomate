@@ -78,14 +78,15 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [x] Put all the TASK in NEW to begin
-  - [x] Move from View to UI root folder
   - [x] Keep the image prompt in the video data itself
-  - [ ] Upload and download prompts during startup if there is any change
-  - [ ] Update JobData rather than creating New Tasks
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [ ] Make the Workflow as complete if the transcript is not available
     - [ ] Test remaining workflow
+  - [ ] Upload and download prompts during startup if there is any change
+  - [ ] Update JobData for videos rather than creating New Tasks
+  - [ ] Remove task_id from video db
+  - [ ] Remove task_id from channel db
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 

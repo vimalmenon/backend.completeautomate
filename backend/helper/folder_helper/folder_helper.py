@@ -34,3 +34,7 @@ class FolderHelper:
             )
 
         shutil.rmtree(normalized_path)
+
+    def create_pickle_file(self, path: str, data) -> None:
+        # TODO Need to implement
+        pass
