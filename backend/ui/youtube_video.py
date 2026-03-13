@@ -1,10 +1,14 @@
 from datetime import datetime
-from typing import Any
 
 from nicegui import run, ui
 
-from backend.data import PlatformDBData, PlatformYouTubeVideoDBData, TaskData
-from backend.enum import JobEnum, PlatformEnum, TaskStatusEnum
+from backend.data import (
+    PlatformDBData,
+    PlatformYouTubeVideoDBData,
+    TaskData,
+    YouTubeVideoDBData,
+)
+from backend.enum import JobEnum, JobStatusEnum, PlatformEnum, TaskStatusEnum
 from backend.manager import TaskManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
@@ -146,15 +150,18 @@ def _update_metadata_option_status(
     status_value: str,
 ) -> None:
     try:
-        # is_updated = YouTubeVideoMetadataSuggesterDB(
-        #     ref_id=ref_id
-        # ).update_option_status(
-        #     option_index=option_index,
-        #     status=JobStatusEnum(status_value),
-        # )
-        # if not is_updated:
-        #     ui.notify("Unable to update option status", type="warning")
-        #     return
+        video_manager = YouTubeVideoManager(ref_id=ref_id)
+        video = video_manager.get_video()
+        if not video:
+            ui.notify("Video not found", type="negative")
+            return
+
+        if option_index < 0 or option_index >= len(video.metadata_suggestions):
+            ui.notify("Metadata option not found", type="warning")
+            return
+
+        video.metadata_suggestions[option_index].status = JobStatusEnum(status_value)
+        video_manager.update_metadata_suggestions(video.metadata_suggestions)
         ui.notify("Option status updated", type="positive")
         ui.run_javascript(
             "window.location.href = window.location.pathname + window.location.search"
@@ -163,53 +170,78 @@ def _update_metadata_option_status(
         ui.notify("Failed to update option status", type="negative")
 
 
-def _render_metadata_suggestions(ref_id: str) -> None:
-    suggestion: list[Any] = []
-    if not suggestion:
+def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
+    suggestions = video.metadata_suggestions
+    if not suggestions:
         return
+
+    status_styles: dict[JobStatusEnum, tuple[str, str]] = {
+        JobStatusEnum.NEW: ("fiber_new", "grey"),
+        JobStatusEnum.IN_PROGRESS: ("schedule", "blue"),
+        JobStatusEnum.REVIEW: ("rate_review", "orange"),
+        JobStatusEnum.APPROVED: ("verified", "teal"),
+        JobStatusEnum.PROMOTE: ("north_east", "green"),
+        JobStatusEnum.FAILED: ("error", "red"),
+        JobStatusEnum.CLEAN_UP: ("cleaning_services", "brown"),
+    }
 
     with ui.card().classes(
         "w-full p-4 shadow-sm border border-amber-200 dark:border-amber-700 "
         "bg-amber-50 dark:bg-amber-900/20"
     ):
         ui.label("Metadata Suggestions").classes("text-h6 font-bold mb-2")
-        # if suggestion.comment:
-        #     with ui.row().classes("w-full gap-4 items-start mb-2"):
-        #         ui.label("Comment:").classes("font-bold text-amber-700 text-sm")
-        #         ui.label(str(suggestion.comment)).classes("text-wrap text-sm")
+        if video.comment:
+            with ui.row().classes("w-full gap-4 items-start mb-3"):
+                ui.label("Comment:").classes("font-bold text-amber-700 text-sm")
+                ui.label(video.comment).classes("text-wrap text-sm")
 
-        # for index, detail in enumerate(suggestion.video_details, start=1):
-        #     with ui.card().classes("w-full bg-white dark:bg-slate-800 mt-2"):
-        #         ui.label(f"Option {index} ({detail.status.value})").classes(
-        #             "text-sm font-semibold text-amber-700 mb-1"
-        #         )
-        #         with ui.row().classes("w-full justify-end items-center gap-2 mb-2"):
-        #             status_input = (
-        #                 ui.select(
-        #                     label="Status",
-        #                     options=[s.value for s in JobStatusEnum],
-        #                     value=detail.status.value,
-        #                 )
-        #                 .props("outlined dense")
-        #                 .classes("w-48")
-        #             )
-        #             ui.button(
-        #                 "Update Status",
-        #                 icon="save",
-        #                 on_click=lambda current_ref=ref_id, current_index=index - 1, current_status=status_input: _update_metadata_option_status(
-        #                     ref_id=current_ref,
-        #                     option_index=current_index,
-        #                     status_value=str(current_status.value),
-        #                 ),
-        #             ).props("color=primary")
-        #         with ui.row().classes("w-full gap-4 items-start"):
-        #             ui.label("Title:").classes("w-1/5 font-bold text-sm")
-        #             ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
-        #         with ui.row().classes("w-full gap-4 items-start"):
-        #             ui.label("Tags:").classes("w-1/5 font-bold text-sm")
-        #             ui.label(", ".join(detail.tags) if detail.tags else "-").classes(
-        #                 "w-4/5 text-wrap text-sm"
-        #             )
+        for index, detail in enumerate(suggestions, start=1):
+            icon_name, color = status_styles.get(detail.status, ("info", "grey"))
+            with ui.card().classes(
+                "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-amber-100 dark:border-amber-800"
+            ):
+                with ui.row().classes("w-full justify-between items-center gap-2 mb-2"):
+                    ui.label(f"Option {index}").classes(
+                        "text-sm font-semibold text-amber-700"
+                    )
+                    with ui.row().classes("items-center gap-2 flex-wrap justify-end"):
+                        status_input = (
+                            ui.select(
+                                options=[status.value for status in JobStatusEnum],
+                                value=detail.status.value,
+                                label="Status",
+                            )
+                            .props("outlined dense")
+                            .classes("min-w-40")
+                        )
+                        ui.button(
+                            "Update Status",
+                            icon="save",
+                            on_click=lambda current_ref=video.ref_id, current_index=index - 1, current_status=status_input: _update_metadata_option_status(
+                                ref_id=current_ref,
+                                option_index=current_index,
+                                status_value=str(current_status.value),
+                            ),
+                        ).props("color=primary")
+                        ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
+                        ui.badge(detail.status.value, color=color).props("outline")
+
+                with ui.column().classes("w-full gap-2"):
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Title:").classes("w-1/5 font-bold text-sm")
+                        ui.label(detail.title).classes("w-4/5 text-wrap text-sm")
+
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Description:").classes("w-1/5 font-bold text-sm")
+                        ui.label(detail.description or "-").classes(
+                            "w-4/5 text-wrap text-sm whitespace-pre-wrap"
+                        )
+
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Tags:").classes("w-1/5 font-bold text-sm")
+                        ui.label(
+                            ", ".join(detail.tags) if detail.tags else "-"
+                        ).classes("w-4/5 text-wrap text-sm")
 
 
 def _render_stat_card(icon: str, label: str, value: str) -> None:
@@ -530,4 +562,4 @@ async def youtube_video_page(
         render_task_progress(tasks)
         _render_video_details(video)
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
-        _render_metadata_suggestions(platform.ref_id)
+        _render_metadata_suggestions(video)
