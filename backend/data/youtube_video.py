@@ -246,14 +246,12 @@ class YouTubeVideoJobData:
     job_type: YouTubeVideoJobEnum
     ref_id: str
     status: YouTubeVideoJobStatusEnum
-    comment: str | None = None
 
     def to_json(self) -> dict:
         return {
             "job_type": self.job_type.value,
             "ref_id": self.ref_id,
             "status": self.status.value,
-            "comment": self.comment,
         }
 
     @classmethod
@@ -262,5 +260,4 @@ class YouTubeVideoJobData:
             job_type=YouTubeVideoJobEnum(data["job_type"]),
             ref_id=data["ref_id"],
             status=YouTubeVideoJobStatusEnum(data["status"]),
-            comment=data.get("comment"),
         )

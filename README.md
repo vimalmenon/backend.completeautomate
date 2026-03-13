@@ -1,7 +1,7 @@
 # Complete Automate Backend
 
 ![CI](https://github.com/vimalmenon/backend.completeautomate/workflows/CI/badge.svg)
-![Project Rating](https://img.shields.io/badge/Project%20Rating-7.5%2F10-yellow)
+![Project Rating](https://img.shields.io/badge/Project%20Rating-8.0%2F10-yellow)
 
 Python backend for multi-agent automation workflows, with task scheduling, YouTube automation, image generation, and a NiceGUI dashboard.
 
@@ -37,7 +37,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 
 ## Project Health
 
-Current internal score: **7.5/10**
+Current internal score: **8.0/10**
 
 ### What is working well
 
@@ -237,6 +237,8 @@ The `/youtube/{channel_id}/{video_id}` page currently includes:
 - Video summary card with thumbnail, title, published/language badges, and tag badges
 - Inline latest video stats (views, likes, comments, stats updated)
 - Task Flow card showing pipeline stages and current status per stage
+- Double-click on **Summarize** task in Task Flow to update task status
+- Metadata Suggestions section with per-option status update controls
 - Transcript card with fixed-height scroll area
 - Summarized Transcript card (shown when available) with fixed-height scroll area
 
