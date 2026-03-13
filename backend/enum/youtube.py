@@ -5,8 +5,7 @@ class YouTubeVideoJobEnum(str, Enum):
     YouTubeVideoStart = "YouTubeVideoStart"
     YouTubeVideoFixTranscript = "YouTubeVideoFixTranscript"
     YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"
-    YouTubeVideoThumbnailPromptSelection = "YouTubeVideoThumbnailPromptSelection"
-    YouTubeVideoReview = "YouTubeVideoReview"
+    YouTubeVideoThumbnailSelection = "YouTubeVideoThumbnailSelection"
     YouTubeVideoComplete = "YouTubeVideoComplete"
 
 

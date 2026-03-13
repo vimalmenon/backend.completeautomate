@@ -6,7 +6,7 @@ from uuid import UUID
 
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
-from backend.enum import JobStatusEnum, YouTubeVideoJobEnum, YouTubeVideoJobStatusEnum
+from backend.enum import JobStatusEnum, YouTubeVideoJobEnum
 
 
 @dataclass
@@ -142,6 +142,7 @@ class YouTubeVideoDBData:
     transcript: str | None = None
     summarized_transcript: str | None = None
     comment: str | None = None
+    image_paths: list[str] = field(default_factory=list)
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
 
@@ -176,6 +177,7 @@ class YouTubeVideoDBData:
                 ImagePromptData.to_cls(prompt)
                 for prompt in data.get("thumbnail_prompt_suggestions", [])
             ],
+            image_paths=data.get("image_paths", []),
         )
 
     @classmethod
@@ -216,6 +218,7 @@ class YouTubeVideoDBData:
             "thumbnail_prompt_suggestions": [
                 prompt.to_json() for prompt in self.thumbnail_prompt_suggestions
             ],
+            "image_paths": self.image_paths,
         }
 
     def past_update_time(self, days: int = 7) -> bool:
@@ -245,13 +248,11 @@ class YouTubeVideoDBData:
 class YouTubeVideoJobData:
     job_type: YouTubeVideoJobEnum
     ref_id: str
-    status: YouTubeVideoJobStatusEnum
 
     def to_json(self) -> dict:
         return {
             "job_type": self.job_type.value,
             "ref_id": self.ref_id,
-            "status": self.status.value,
         }
 
     @classmethod
@@ -259,5 +260,4 @@ class YouTubeVideoJobData:
         return cls(
             job_type=YouTubeVideoJobEnum(data["job_type"]),
             ref_id=data["ref_id"],
-            status=YouTubeVideoJobStatusEnum(data["status"]),
         )

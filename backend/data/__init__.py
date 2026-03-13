@@ -28,6 +28,7 @@ from backend.data.youtube_channel import (
 )
 from backend.data.youtube_video import (
     YouTubeVideoDBData,
+    YouTubeVideoJobData,
     YouTubeVideoMetadataData,
     YouTubeVideoReviewerDBData,
     YouTubeVideoReviewerJobData,
@@ -59,4 +60,5 @@ __all__ = [
     "YouTubeVideoReviewerJobData",
     "YouTubeVideoReviewerDBData",
     "YouTubeVideoMetadataData",
+    "YouTubeVideoJobData",
 ]
