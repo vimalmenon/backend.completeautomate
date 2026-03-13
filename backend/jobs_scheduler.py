@@ -10,10 +10,20 @@ class JobScheduler:
         job_id: str | None = None,
         transform: bool | None = False,
         test: bool | None = False,
-    ):
+    ) -> None:
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
 
             logger.info("Completed one-time job execution for job_id=%s", job_id)
             return
-        pass
+        if transform:
+            logger.info("Starting job transformation process")
+
+            logger.info("Completed job transformation process")
+            return
+        if test:
+            logger.info("Starting test script execution")
+
+            logger.info("Completed test script execution")
+            return
+        logger.info("Starting scheduled job execution")

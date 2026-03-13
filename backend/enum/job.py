@@ -18,13 +18,18 @@ class JobEnum(str, Enum):
     TwitterPost = "TwitterPost"
 
 
-class JobsEnum(str, Enum):
-    YouTubeChannel = "YouTubeChannel"
-    YouTubeVideoUpload = "YouTubeVideoUpload"
-    YouTubeChannelStats = "YouTubeChannelStats"
-    YouTubeVideoStats = "YouTubeVideoStats"
-    PROMPT_REVIEW = "PROMPT_REVIEW"
+class JobTypeEnum(str, Enum):
+    AddYouTubeChannel = "AddYouTubeChannel"
+    AddYouTubeVideo = "AddYouTubeVideo"
+    YouTubeVideoChecker = "YouTubeVideoChecker"
+    YouTubeChannelStatsUpdater = "YouTubeChannelStatsUpdater"
+    YouTubeVideoStatsUpdater = "YouTubeVideoStatsUpdater"
 
 
-class TasksEnum(str, Enum):
-    pass
+class JobsStatusEnum(str, Enum):
+    NEW = "NEW"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETE = "COMPLETE"
+    PENDING = "PENDING"
+    REVIEW = "REVIEW"
+    FAILED = "FAILED"
