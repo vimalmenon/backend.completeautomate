@@ -6,7 +6,7 @@ from uuid import UUID
 
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
-from backend.enum import JobStatusEnum
+from backend.enum import JobStatusEnum, YouTubeJobEnum
 
 
 @dataclass
@@ -230,3 +230,28 @@ class YouTubeVideoDBData:
         if self.comment != result.comment:
             updated_values["comment"] = self.comment
         return updated_values
+
+
+@dataclass
+class YouTubeVideoJobData:
+    job_type: YouTubeJobEnum
+    ref_id: str
+    status: JobStatusEnum
+    comment: str | None = None
+
+    def to_json(self) -> dict:
+        return {
+            "job_type": self.job_type.value,
+            "ref_id": self.ref_id,
+            "status": self.status.value,
+            "comment": self.comment,
+        }
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(
+            job_type=data["job_type"],
+            ref_id=data["ref_id"],
+            status=data["status"],
+            comment=data.get("comment"),
+        )

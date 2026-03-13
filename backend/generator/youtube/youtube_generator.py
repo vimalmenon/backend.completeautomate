@@ -1,0 +1,2 @@
+class YouTubeVideoGenerator:
+    pass
