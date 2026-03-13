@@ -1,4 +1,3 @@
-from backend.data import YouTubeVideoJobData
 from backend.enum.status import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
 
@@ -13,7 +12,6 @@ class YouTubeVideoGenerator(BaseGenerator):
 
     def __init__(self, task):
         super().__init__(task)
-        self.job_data = YouTubeVideoJobData.to_cls(self.task.payload)
 
     def generate(self) -> TaskStatusEnum:
         self.__create_video_db()

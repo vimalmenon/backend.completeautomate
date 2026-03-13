@@ -7,30 +7,18 @@ from openai import OpenAI
 
 from backend.config.env import env
 from backend.exception.app_exception import AppException
-from backend.integration.image_generation.qwen_image_generation import (
-    QwenImageGeneration,
-)
 
 
 class ImageModelList(Enum):
     GEMINI_THREE_PRO_IMAGE = "google/gemini-3-pro-image-preview"
     FLUX = "black-forest-labs/flux.2-flex"
-    GROK = "grok-imagine-image"  # xAI Grok image generation
-    QWEN = "qwen-image-max"  # Alibaba Cloud Qwen image generation
 
 
-class ImageModel:
+class OpenRouterImageGeneration:
     def __init__(self, model: ImageModelList = ImageModelList.FLUX):
         self.model = model
 
     def __initialize_model(self):
-        # Use xAI endpoint for Grok models
-        if self.model == ImageModelList.GROK:
-            return OpenAI(
-                base_url="https://api.x.ai/v1",
-                api_key=env.GROK_API_KEY.get_secret_value(),
-            )
-        # Use OpenRouter for other models
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=env.OPEN_ROUTE_API_KEY.get_secret_value(),
@@ -38,8 +26,6 @@ class ImageModel:
 
     def generate(self, prompt: str) -> bytes:
         try:
-            if self.model == ImageModelList.QWEN:
-                return QwenImageGeneration(model=self.model.value).generate(prompt)
             response = self.__generate_image(prompt)
             return self.__parse_response(response)
         except Exception as e:
@@ -48,15 +34,6 @@ class ImageModel:
     # Private method
     def __generate_image(self, prompt: str) -> Any:
         client = self.__initialize_model()
-
-        # Grok uses native image generation API
-        if self.model == ImageModelList.GROK:
-            return client.images.generate(
-                prompt=prompt,
-                model=self.model.value,
-                n=1,
-                response_format="b64_json",
-            )
 
         # Other models use chat completion with image modality
         return client.chat.completions.create(
@@ -71,19 +48,6 @@ class ImageModel:
         )
 
     def __parse_response(self, response) -> bytes:
-        # Handle Grok image generation response
-        if self.model == ImageModelList.GROK:
-            if not response.data:
-                raise AppException(
-                    f"No image data found in {self.model.name.title()} response."
-                )
-            image_data = response.data[0]
-            if hasattr(image_data, "b64_json") and image_data.b64_json:
-                return self.__convert_base64_to_bytes(image_data.b64_json)
-            raise AppException(
-                f"No valid image data found in {self.model.name.title()} response."
-            )
-
         # Handle OpenRouter chat completion response
         response = response.choices[0].message
         if response.images:
