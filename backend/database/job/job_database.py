@@ -1,0 +1,2 @@
+class JobDatabase:
+    pass
