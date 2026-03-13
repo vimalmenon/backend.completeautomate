@@ -76,10 +76,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve features
-  - [x] Put all the TASK in NEW to begin
-  - [x] Keep the image prompt in the video data itself
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
-    - [x] Tested till summarization
     - [ ] Make the Workflow as complete if the transcript is not available
     - [ ] Move to New Flow
     - [ ] Need to work on `Image Generation Flow`
@@ -104,7 +101,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Email
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
-  - [x] Show the current status of video Tasks (Metadata Suggester, Thumbnail Suggester)
   - [ ] Clicking on `Task` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
   - [ ] Change the status of tasks from the Video Page
