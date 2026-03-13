@@ -16,6 +16,16 @@ class YouTubeVideoGenerator(BaseGenerator):
         self.job_data = YouTubeVideoJobData.to_cls(self.task.payload)
 
     def generate(self) -> TaskStatusEnum:
+        self.__create_video_db()
+        self.__fix_transcript()
+        self.__create_transcript_summary()
+        self.__create_metadata_suggestions()
+        self.__select_metadata_suggestion()
+        self.__create_thumbnail_prompt_suggestions()
+        self.__generate_thumbnails()
+        self.__select_thumbnail()
+        self.__review_video()
+        self.__job_complete()
         return TaskStatusEnum.IN_PROGRESS
 
     def __create_video_db(self):
@@ -43,4 +53,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         pass
 
     def __review_video(self):
+        pass
+
+    def __job_complete(self):
         pass
