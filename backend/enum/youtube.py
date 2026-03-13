@@ -2,8 +2,9 @@ from enum import Enum
 
 
 class YouTubeJobEnum(str, Enum):
-    YouTubeVideoCreate = "YouTubeVideoCreate"
-    YouTubeVideoSummarize = "YouTubeVideoSummarize"
-    YouTubeVideoMetadata = "YouTubeVideoMetadata"
-    YouTubeVideoThumbnailPrompts = "YouTubeVideoThumbnailPrompts"
+    YouTubeVideoStart = "YouTubeVideoStart"
+    YouTubeFixTranscript = "\YouTubeFixTranscript"
+    YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"
+    YouTubeVideoThumbnailPromptSelection = "YouTubeVideoThumbnailPromptSelection"
+    YouTubeVideoReview = "YouTubeVideoReview"
     YouTubeVideoJobComplete = "YouTubeVideoJobComplete"

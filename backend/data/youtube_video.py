@@ -119,6 +119,11 @@ class YouTubeVideoMetadataData:
 
 
 @dataclass
+class YouTubeVideoReviewData:
+    pass
+
+
+@dataclass
 class YouTubeVideoDBData:
     ref_id: str
     published_at: datetime
@@ -130,6 +135,7 @@ class YouTubeVideoDBData:
     language: str
     task_id: UUID
     stats: list[YouTubeVideoDBStats]
+    review: YouTubeVideoReviewData | None = None
     transcript: str | None = None
     summarized_transcript: str | None = None
     comment: str | None = None
