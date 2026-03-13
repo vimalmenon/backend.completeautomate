@@ -6,7 +6,7 @@ from uuid import UUID
 
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
-from backend.enum import JobStatusEnum, YouTubeJobEnum
+from backend.enum import JobStatusEnum, YouTubeVideoJobEnum, YouTubeVideoJobStatusEnum
 
 
 @dataclass
@@ -243,9 +243,9 @@ class YouTubeVideoDBData:
 
 @dataclass
 class YouTubeVideoJobData:
-    job_type: YouTubeJobEnum
+    job_type: YouTubeVideoJobEnum
     ref_id: str
-    status: JobStatusEnum
+    status: YouTubeVideoJobStatusEnum
     comment: str | None = None
 
     def to_json(self) -> dict:
@@ -259,8 +259,8 @@ class YouTubeVideoJobData:
     @classmethod
     def to_cls(cls, data) -> Self:
         return cls(
-            job_type=data["job_type"],
+            job_type=YouTubeVideoJobEnum(data["job_type"]),
             ref_id=data["ref_id"],
-            status=data["status"],
+            status=YouTubeVideoJobStatusEnum(data["status"]),
             comment=data.get("comment"),
         )
