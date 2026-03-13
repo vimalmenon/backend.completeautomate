@@ -13,9 +13,8 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
 	- [1) Install dependencies](#1-install-dependencies)
-	- [2) Configure environment](#2-configure-environment)
-	- [3) Run the app](#3-run-the-app)
-	- [4) Run the dashboard](#4-run-the-dashboard)
+  - [2) Run the app](#2-run-the-app)
+  - [3) Run the dashboard](#3-run-the-dashboard)
 - [YouTube OAuth Notes](#youtube-oauth-notes)
 - [Development Commands](#development-commands)
 - [Testing](#testing)
@@ -269,38 +268,7 @@ poetry install
 
 `poetry-plugin-dotenv` lets Poetry commands automatically read values from your `.env` file.
 
-### 2) Configure environment
-
-The app reads required variables from `backend/config/env.py`. Add them to a local `.env` (or export in your shell):
-
-```env
-VERSION=local
-COMPANY_NAME=Your Company
-
-AWS_CLIENT_ID=...
-AWS_SECRET=...
-AWS_REGION=us-east-1
-AWS_SECRET_MANAGER=...
-AWS_TABLE=...
-AWS_S3_BUCKET=...
-OFFLINE=false
-
-QWEN_API_KEY=...
-PPLX_API_KEY=...
-OPEN_ROUTE_API_KEY=...
-OPENAI_API_KEY=...
-DEEPSEEK_API_KEY=...
-
-YOUTUBE_API_KEY=...
-YOUTUBE_CHANNEL_ID=...
-```
-
-Set `OFFLINE=true` to run AWS integrations against local Moto mocks (S3 + DynamoDB)
-without requiring internet or real AWS credentials.
-
-If `OFFLINE` is not set, the app defaults to `false`.
-
-### 3) Run the app
+### 2) Run the app
 
 ```sh
 poetry run app
@@ -343,7 +311,7 @@ Qwen image generation uses DashScope `MultiModalConversation` with:
 
 
 
-### 4) Run the dashboard
+### 3) Run the dashboard
 
 ```sh
 poetry run python -m gui
