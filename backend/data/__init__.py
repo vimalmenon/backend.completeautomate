@@ -17,7 +17,7 @@ from backend.data.prompt import (
     YouTubeThumbnailImageGenerationPromptData,
 )
 from backend.data.s3 import S3Data
-from backend.data.task import TaskData, YouTubeChannelTaskData
+from backend.data.task import TaskData, YouTubeChannelTaskData, YouTubeVideoTaskData
 from backend.data.team import GraphicDesignerClsData, SocialMediaManagerData
 from backend.data.youtube_channel import (
     YouTubeChannelDBData,
@@ -62,4 +62,5 @@ __all__ = [
     "YouTubeVideoMetadataData",
     "JobData",
     "YouTubeChannelTaskData",
+    "YouTubeVideoTaskData",
 ]
