@@ -7,7 +7,7 @@ from backend.enum.prompt import PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.enum.status import JobStatusEnum, TaskStatusEnum
 from backend.enum.team import TeamEnum
-from backend.enum.youtube import YouTubeVideoJobEnum, YouTubeVideoJobStatusEnum
+from backend.enum.youtube import YouTubeVideoJobStatusEnum, YouTubeVideoTaskEnum
 
 __all__ = [
     "AICreativityLevelEnum",
@@ -21,6 +21,6 @@ __all__ = [
     "ImageTypeEnum",
     "PromptTaskEnum",
     "PlatformEnum",
-    "YouTubeVideoJobEnum",
+    "YouTubeVideoTaskEnum",
     "YouTubeVideoJobStatusEnum",
 ]

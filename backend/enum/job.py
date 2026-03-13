@@ -16,3 +16,14 @@ class JobEnum(str, Enum):
     PromptSuggester = "PromptSuggester"
     # TODO Need to implement
     TwitterPost = "TwitterPost"
+
+
+class JobsEnum(str, Enum):
+    YouTubeChannel = "YouTubeChannel"
+    YouTubeVideo = "YouTubeVideo"
+    YouTubeChannelStats = "YouTubeChannelStats"
+    YouTubeVideoStats = "YouTubeVideoStats"
+
+
+class TasksEnum(str, Enum):
+    pass

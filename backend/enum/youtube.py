@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class YouTubeVideoJobEnum(str, Enum):
+class YouTubeVideoTaskEnum(str, Enum):
     YouTubeVideoStart = "YouTubeVideoStart"
     YouTubeVideoFixTranscript = "YouTubeVideoFixTranscript"
     YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"

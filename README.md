@@ -81,6 +81,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Move to New Flow
     - [ ] Need to work on `Image Generation Flow`
     - [ ] Test remaining workflow
+  - [ ] App revamp
+      - [ ] Job  ->  Tasks  ->   Generator  -> Manager  -> DB Manager
   - [ ] Upload and download prompts during startup if there is any change
   - [ ] Update JobData for videos rather than creating New Tasks
   - [ ] Remove task_id from video db
