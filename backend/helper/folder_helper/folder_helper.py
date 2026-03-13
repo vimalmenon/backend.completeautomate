@@ -1,5 +1,7 @@
+import pickle
 import shutil
 from pathlib import Path
+from typing import Any
 
 
 class FolderHelper:
@@ -35,6 +37,14 @@ class FolderHelper:
 
         shutil.rmtree(normalized_path)
 
-    def create_pickle_file(self, path: str, data) -> None:
-        # TODO Need to implement
-        pass
+    def create_pickle_file(self, path: str, data: Any) -> None:
+        normalized_path = Path(path)
+
+        if normalized_path.exists() and normalized_path.is_dir():
+            raise IsADirectoryError(
+                f"Expected a file path but found an existing directory: {normalized_path}"
+            )
+
+        self.create_missing_folders(path)
+        with normalized_path.open("wb") as pickle_file:
+            pickle.dump(data, pickle_file)
