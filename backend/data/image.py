@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import cached_property
 from typing import Optional, Self
 from uuid import UUID
@@ -104,42 +104,6 @@ class ImagePromptJobData:
             task_id=UUID(data["task_id"]),
             description=data["description"],
             image_type=ImageTypeEnum(data["image_type"]),
-            ref_id=data["ref_id"],
-        )
-
-    @cached_property
-    def platform(self) -> PlatformDBData:
-        from backend.database.platform.platform_database import PlatformDB
-
-        return PlatformDB().get_data(self.ref_id)
-
-
-@dataclass
-class ImagePromptDBData:
-    id: UUID
-    task_id: UUID
-    ref_id: str
-    comment: str | None = None
-    status: JobStatusEnum = JobStatusEnum.NEW
-    prompts: list[ImagePromptData] = field(default_factory=list)
-
-    def to_json(self) -> dict:
-        return {
-            "id": str(self.id),
-            "task_id": str(self.task_id),
-            "comment": self.comment,
-            "status": self.status.value,
-            "prompts": [pr.to_json() for pr in self.prompts],
-            "ref_id": self.ref_id,
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            id=UUID(data["id"]),
-            task_id=UUID(data["task_id"]),
-            comment=data.get("comment"),
-            prompts=[ImagePromptData.to_cls(pr) for pr in data.get("prompts", [])],
             ref_id=data["ref_id"],
         )
 

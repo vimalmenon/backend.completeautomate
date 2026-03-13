@@ -1,4 +1,4 @@
-from backend.data import YouTubeVideoDBData
+from backend.data import ImagePromptData, YouTubeVideoDBData, YouTubeVideoMetadataData
 from backend.database import YouTubeVideoDB
 
 
@@ -27,6 +27,22 @@ class YouTubeVideoManager:
     def update_summarized_transcript(self, summarized_transcript: str) -> None:
         YouTubeVideoDB(ref_id=self.ref_id).update_summarized_transcript(
             summarized_transcript
+        )
+
+    def update_metadata_suggestions(
+        self, metadata_suggestions: list[YouTubeVideoMetadataData]
+    ):
+        data = [suggestion.to_json() for suggestion in metadata_suggestions]
+        YouTubeVideoDB(ref_id=self.ref_id).update_metadata_suggestions(
+            metadata_suggestions=data
+        )
+
+    def update_thumbnail_prompt_suggestions(
+        self, thumbnail_prompt_suggestions: list[ImagePromptData]
+    ):
+        data = [suggestion.to_json() for suggestion in thumbnail_prompt_suggestions]
+        YouTubeVideoDB(ref_id=self.ref_id).update_thumbnail_prompt_suggestions(
+            thumbnail_prompt_suggestions=data
         )
 
     def update_video(self, values: dict) -> None:

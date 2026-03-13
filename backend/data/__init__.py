@@ -1,7 +1,6 @@
 from backend.data.image import (
     ImageGeneratorJobData,
     ImagePromptData,
-    ImagePromptDBData,
     ImagePromptJobData,
 )
 from backend.data.message import MessageDBData
@@ -35,7 +34,6 @@ from backend.data.youtube_video import (
 )
 
 __all__ = [
-    "ImagePromptDBData",
     "ImagePromptJobData",
     "ImageGeneratorJobData",
     "S3Data",

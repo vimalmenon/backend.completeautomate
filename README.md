@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Move from View to UI root folder
   - [ ] Keep the image prompt in the video data itself
   - [ ] Upload and download prompts during startup if there is any change
+  - [ ] Update JobData rather than creating New Tasks
   - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
     - [x] Tested till summarization
     - [ ] Make the Workflow as complete if the transcript is not available

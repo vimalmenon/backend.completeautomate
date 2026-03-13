@@ -1,15 +1,11 @@
 import logging
-from uuid import uuid4
 
 from backend.data import (
     ImagePromptData,
-    ImagePromptDBData,
     YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
-from backend.database.image.image_prompt_db import ImagePromptDB
 from backend.enum import (
-    JobStatusEnum,
     PromptTaskEnum,
     TaskStatusEnum,
 )
@@ -28,7 +24,6 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
     def __init__(self, task):
         super().__init__(task)
         self.job_data = YouTubeVideoThumbnailPromptSuggesterJobData.to_cls(task.payload)
-        self.db_manager = ImagePromptDB()
         self.video_manager = YouTubeVideoManager(ref_id=self.job_data.ref_id)
         logger.info(
             "Initialized thumbnail image prompt suggester for task_id=%s ref_id=%s",
@@ -38,15 +33,12 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
 
     def generate(self) -> TaskStatusEnum:
         logger.info("Generating thumbnail image prompts for task_id=%s", self.task.id)
-        prompts = self.db_manager.get_by_task_id(str(self.job_data.task_id))
-        logger.debug(
-            "Fetched %d existing prompt record(s) for task_id=%s",
-            len(prompts),
-            self.job_data.task_id,
-        )
-        if len(prompts) == 0:
+        video_db = self.video_manager.get_video()
+        if len(video_db.thumbnail_prompt_suggestions) == 0:
             return self.__create_image_prompt_suggestion()
-        return self.__update_image_prompt_suggestion(prompts)
+        return self.__update_image_prompt_suggestion(
+            video_db.thumbnail_prompt_suggestions
+        )
 
     def __create_image_prompt_suggestion(self) -> TaskStatusEnum:
         logger.info(
@@ -99,19 +91,23 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             len(prompt_response),
             self.task.id,
         )
-        data = ImagePromptDBData(
-            id=uuid4(),
-            ref_id=self.job_data.ref_id,
-            task_id=self.job_data.task_id,
-            status=JobStatusEnum.REVIEW,
-            prompts=prompt_response,
+        self.video_manager.update_thumbnail_prompt_suggestions(
+            thumbnail_prompt_suggestions=prompt_response
         )
-        self.db_manager.save_to_db(data)
+        # TODO REmove this
+        # data = ImagePromptDBData(
+        #     id=uuid4(),
+        #     ref_id=self.job_data.ref_id,
+        #     task_id=self.job_data.task_id,
+        #     status=JobStatusEnum.REVIEW,
+        #     prompts=prompt_response,
+        # )
+        # self.db_manager.save_to_db(data)
         logger.info("Saved thumbnail prompt suggestions for task_id=%s", self.task.id)
         return TaskStatusEnum.REVIEW
 
     def __update_image_prompt_suggestion(
-        self, prompts: list[ImagePromptDBData]
+        self, prompts: list[ImagePromptData]
     ) -> TaskStatusEnum:
         logger.info(
             "Updating thumbnail prompt suggestions for task_id=%s with %d record(s)",

@@ -12,7 +12,7 @@ from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
 from backend.integration.agent.general_agent import GeneralAgent
-from backend.manager import TaskManager
+from backend.manager import TaskManager, YouTubeVideoManager
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
         self.job_data = YouTubeVideoSummarizeJobData.to_cls(task.payload)
         self.channel_id = self.job_data.platform.channel_id
         self.video_db = YouTubeVideoDB(ref_id=self.job_data.ref_id)
+        self.video_manager = YouTubeVideoManager(ref_id=self.job_data.ref_id)
         logger.info("Initializing YouTubeVideoAnalyzerGenerator")
 
     def generate(self) -> TaskStatusEnum:
@@ -73,7 +74,7 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             )
             for data in structured_response.details
         ]
-        self.video_db.update_metadata_suggestions(video_metadata_suggestions)
+        self.video_manager.update_metadata_suggestions(video_metadata_suggestions)
         logger.info("Successfully analyzed video data for task id: %s", self.task.id)
         return TaskStatusEnum.REVIEW
 
