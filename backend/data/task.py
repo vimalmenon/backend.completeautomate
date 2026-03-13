@@ -47,3 +47,20 @@ class TaskData:
                 else None
             ),
         )
+
+
+@dataclass
+class YouTubeChannelTaskData:
+    channel_id: str
+
+    def to_dict(self) -> dict:
+        return {"channel_id": self.channel_id}
+
+    @classmethod
+    def to_cls(cls, data: dict) -> Self:
+        return cls(channel_id=data["channel_id"])
+
+
+@dataclass
+class YouTubeVideoTaskData:
+    pass
