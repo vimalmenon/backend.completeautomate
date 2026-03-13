@@ -304,7 +304,6 @@ async def tasks_page(status: str = ""):
                     ui.label("Task ID").classes("w-1/5")
                     ui.label("Job Type").classes("w-1/5")
                     ui.label("Status").classes("w-1/8")
-                    ui.label("Created By").classes("w-1/8")
                     ui.label("Created At").classes("w-1/8")
                     ui.label("Actions").classes("w-1/6 text-right shrink-0")
 

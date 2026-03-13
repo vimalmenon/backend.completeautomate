@@ -5,10 +5,7 @@ from backend.data import (
     YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
-from backend.enum import (
-    PromptTaskEnum,
-    TaskStatusEnum,
-)
+from backend.enum import JobStatusEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import ImagePromptsListRequest
@@ -96,27 +93,24 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
         self.video_manager.update_thumbnail_prompt_suggestions(
             thumbnail_prompt_suggestions=prompt_response
         )
-        # TODO REmove this
-        # data = ImagePromptDBData(
-        #     id=uuid4(),
-        #     ref_id=self.job_data.ref_id,
-        #     task_id=self.job_data.task_id,
-        #     status=JobStatusEnum.REVIEW,
-        #     prompts=prompt_response,
-        # )
-        # self.db_manager.save_to_db(data)
         logger.info("Saved thumbnail prompt suggestions for task_id=%s", self.task.id)
         return TaskStatusEnum.REVIEW
 
     def __update_image_prompt_suggestion(
         self, prompts: list[ImagePromptData]
     ) -> TaskStatusEnum:
-        logger.info(
-            "Updating thumbnail prompt suggestions for task_id=%s with %d record(s)",
-            self.task.id,
-            len(prompts),
-        )
-        if len(prompts) == 1:
+        suggested_thumbnails = [
+            detail for detail in prompts if detail.status == JobStatusEnum.PROMOTE
+        ]
+        if len(suggested_thumbnails) == 1:
+            # selected_thumbnail = suggested_thumbnails[0]
+            # task_manager = TaskManager(self.task)
+            # task = task_manager.create_youtube_metadata_updater_task(
+            #     ref_id=self.job_data.ref_id,
+            #     title=promoted_video.title,
+            #     description=promoted_video.description,
+            #     tags=promoted_video.tags,
+            # )
             # prompt = prompts[0]
             # prompt.prompts = self.__filter_prompt_responses(prompt.prompts)
             # self.db_manager.update_data(prompt)
@@ -131,7 +125,9 @@ class YoutubeVideoThumbnailImagePromptSuggester(BaseGenerator):
             len(prompts),
             self.task.id,
         )
-        raise AppException("There is app exception")
+        raise AppException(
+            f"Invalid prompt record count={len(prompts)} for task_id={self.task.id}"
+        )
 
     # def __fetch_video_details(self):
     #     video_db = YouTubeVideoDB()

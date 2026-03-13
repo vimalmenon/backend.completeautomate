@@ -98,12 +98,22 @@ def render_task_progress(tasks: list[TaskData]) -> None:
     for task in sorted(tasks, key=lambda t: t.created_at):
         task_by_job[task.job_type] = task
 
+    visible_flow_steps: list[tuple[JobEnum, str]] = []
+    for job_type, step_label in FLOW_STEPS:
+        if job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
+            thumbnail_prompt_task = task_by_job.get(job_type)
+            if not thumbnail_prompt_task:
+                continue
+            if thumbnail_prompt_task.status != TaskStatusEnum.REVIEW:
+                continue
+        visible_flow_steps.append((job_type, step_label))
+
     with ui.card().classes(
         "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
     ):
         ui.label("Task Flow").classes("text-sm font-bold mb-2")
         with ui.row().classes("w-full items-stretch gap-1 flex-wrap"):
-            for index, (job_type, step_label) in enumerate(FLOW_STEPS):
+            for index, (job_type, step_label) in enumerate(visible_flow_steps):
                 current_task = task_by_job.get(job_type)
                 status = current_task.status if current_task else None
                 style = (
@@ -125,7 +135,11 @@ def render_task_progress(tasks: list[TaskData]) -> None:
                                 "text-[10px] px-1 py-0"
                             ).props("outline")
 
-                if job_type == JobEnum.YouTubeVideoSummarizer:
+                if job_type in {
+                    JobEnum.YouTubeVideoSummarizer,
+                    JobEnum.YouTubeVideoMetadataSuggester,
+                    JobEnum.YouTubeVideoThumbnailPromptSuggester,
+                }:
                     if current_task:
                         task_card.on(
                             "dblclick",
@@ -134,14 +148,141 @@ def render_task_progress(tasks: list[TaskData]) -> None:
                     else:
                         task_card.on(
                             "dblclick",
-                            lambda _: ui.notify(
-                                "Summarize task is not available yet", type="warning"
+                            lambda _, current_step=step_label: ui.notify(
+                                f"{current_step} task is not available yet",
+                                type="warning",
                             ),
                         )
 
-                if index < len(FLOW_STEPS) - 1:
+                if index < len(visible_flow_steps) - 1:
                     with ui.column().classes("justify-center hidden lg:flex"):
                         ui.icon("chevron_right").classes("text-gray-400 text-xs")
+
+
+def _should_show_metadata_suggestions(tasks: list[TaskData]) -> bool:
+    latest_metadata_suggest_task: TaskData | None = None
+    for task in sorted(tasks, key=lambda t: t.created_at):
+        if task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
+            latest_metadata_suggest_task = task
+
+    return bool(
+        latest_metadata_suggest_task
+        and latest_metadata_suggest_task.status == TaskStatusEnum.REVIEW
+    )
+
+
+def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
+    latest_thumbnail_prompt_task: TaskData | None = None
+    for task in sorted(tasks, key=lambda t: t.created_at):
+        if task.job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
+            latest_thumbnail_prompt_task = task
+
+    return bool(
+        latest_thumbnail_prompt_task
+        and latest_thumbnail_prompt_task.status == TaskStatusEnum.REVIEW
+    )
+
+
+def _update_thumbnail_prompt_option_status(
+    ref_id: str,
+    option_index: int,
+    status_value: str,
+) -> None:
+    try:
+        video_manager = YouTubeVideoManager(ref_id=ref_id)
+        video = video_manager.get_video()
+        if not video:
+            ui.notify("Video not found", type="negative")
+            return
+
+        if option_index < 0 or option_index >= len(video.thumbnail_prompt_suggestions):
+            ui.notify("Thumbnail prompt option not found", type="warning")
+            return
+
+        video.thumbnail_prompt_suggestions[option_index].status = JobStatusEnum(
+            status_value
+        )
+        video_manager.update_thumbnail_prompt_suggestions(
+            video.thumbnail_prompt_suggestions
+        )
+        ui.notify("Option status updated", type="positive")
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
+    except Exception:
+        ui.notify("Failed to update option status", type="negative")
+
+
+def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
+    suggestions = video.thumbnail_prompt_suggestions
+    if not suggestions:
+        return
+
+    status_styles: dict[JobStatusEnum, tuple[str, str]] = {
+        JobStatusEnum.NEW: ("fiber_new", "grey"),
+        JobStatusEnum.IN_PROGRESS: ("schedule", "blue"),
+        JobStatusEnum.REVIEW: ("rate_review", "orange"),
+        JobStatusEnum.APPROVED: ("verified", "teal"),
+        JobStatusEnum.PROMOTE: ("north_east", "green"),
+        JobStatusEnum.FAILED: ("error", "red"),
+        JobStatusEnum.CLEAN_UP: ("cleaning_services", "brown"),
+    }
+
+    with ui.card().classes(
+        "w-full p-4 shadow-sm border border-indigo-200 dark:border-indigo-700 "
+        "bg-indigo-50 dark:bg-indigo-900/20"
+    ):
+        ui.label("Thumbnail Prompt Suggestions").classes("text-h6 font-bold mb-2")
+
+        for index, detail in enumerate(suggestions, start=1):
+            icon_name, color = status_styles.get(detail.status, ("info", "grey"))
+            with ui.card().classes(
+                "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-indigo-100 dark:border-indigo-800"
+            ):
+                with ui.row().classes("w-full justify-between items-center gap-2 mb-2"):
+                    ui.label(f"Option {index}: {detail.name}").classes(
+                        "text-sm font-semibold text-indigo-700"
+                    )
+                    with ui.row().classes("items-center gap-2 flex-wrap justify-end"):
+                        status_input = (
+                            ui.select(
+                                options=[status.value for status in JobStatusEnum],
+                                value=detail.status.value,
+                                label="Status",
+                            )
+                            .props("outlined dense")
+                            .classes("min-w-40")
+                        )
+                        ui.button(
+                            "Update Status",
+                            icon="save",
+                            on_click=lambda current_ref=video.ref_id, current_index=index - 1, current_status=status_input: _update_thumbnail_prompt_option_status(
+                                ref_id=current_ref,
+                                option_index=current_index,
+                                status_value=str(current_status.value),
+                            ),
+                        ).props("color=primary")
+                        ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
+                        ui.badge(detail.status.value, color=color).props("outline")
+
+                with ui.column().classes("w-full gap-2"):
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Description:").classes("w-1/5 font-bold text-sm")
+                        ui.label(detail.description or "-").classes(
+                            "w-4/5 text-wrap text-sm whitespace-pre-wrap"
+                        )
+
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Prompt:").classes("w-1/5 font-bold text-sm")
+                        ui.label(detail.prompt or "-").classes(
+                            "w-4/5 text-wrap text-sm whitespace-pre-wrap font-mono"
+                        )
+
+                    with ui.row().classes("w-full gap-4 items-start"):
+                        ui.label("Negative Prompt:").classes("w-1/5 font-bold text-sm")
+                        ui.label(detail.negative_prompt or "-").classes(
+                            "w-4/5 text-wrap text-sm whitespace-pre-wrap font-mono"
+                        )
 
 
 def _update_metadata_option_status(
@@ -528,6 +669,9 @@ async def youtube_video_page(
                         "Save Changes", icon="save", on_click=save_transcript
                     ).props("color=primary")
 
+    show_metadata_suggestions = _should_show_metadata_suggestions(tasks)
+    show_thumbnail_prompt_suggestions = _should_show_thumbnail_prompt_suggestions(tasks)
+
     with ui.column().classes("w-full max-w-7xl mx-auto gap-4"):
         with ui.card().classes(
             "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
@@ -562,4 +706,7 @@ async def youtube_video_page(
         render_task_progress(tasks)
         _render_video_details(video)
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
-        _render_metadata_suggestions(video)
+        if show_metadata_suggestions:
+            _render_metadata_suggestions(video)
+        if show_thumbnail_prompt_suggestions:
+            _render_thumbnail_prompt_suggestions(video)

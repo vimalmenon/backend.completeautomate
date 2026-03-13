@@ -98,4 +98,6 @@ class YouTubeVideoMetadataSuggester(BaseGenerator):
             )
             task_manager.add_task(task)
             return TaskStatusEnum.COMPLETED
-        raise AppException("There is app exception")
+        raise AppException(
+            f"Multiple promoted videos found for video_id {self.job_data.platform.video_id}"
+        )

@@ -3,6 +3,7 @@ from logging import getLogger
 from uuid import uuid4
 
 from backend.data import (
+    ImagePromptData,
     TaskData,
     YouTubeJobData,
     YouTubeVideoMetadataJobData,
@@ -72,6 +73,23 @@ class TaskManager:
             status=TaskStatusEnum.IN_PROGRESS,
             trail=self.task.trail + [self.task.id],
         )
+
+    def create_youtube_thumbnail_task(
+        self, ref_id: str, data: ImagePromptData
+    ) -> TaskData:
+        if not self.task:
+            logger.warning("Cannot create YouTube thumbnail task: source task missing")
+            raise AppException(self.TASK_NOT_FOUND)
+        # logger.debug(f"Creating YouTube thumbnail task for ref_id={ref_id}")
+        # payload_cls = YouTubeVideoThumbnailPromptSuggesterJobData(ref_id=ref_id)
+        # return TaskData(
+        #     id=uuid4(),
+        #     job_type=JobEnum.YouTubeThumbnailUpdater,
+        #     payload=payload_cls.to_json(),
+        #     created_at=datetime.now(),
+        #     status=TaskStatusEnum.IN_PROGRESS,
+        #     trail=self.task.trail + [self.task.id],
+        # )
 
     def create_youtube_video_task(self, ref_id: str) -> TaskData:
         if not self.task:

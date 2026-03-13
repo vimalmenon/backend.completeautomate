@@ -23,7 +23,8 @@ class YouTubeVideoMetadataUpdater(BaseGenerator):
             description=self.job_data.description,
             tags=self.job_data.tags,
         )
-        self.youtube_db.update_metadata(title, description, tags)
+        self.youtube_db.update_metadata(title=title, description=description, tags=tags)
+        self.youtube_db.update_metadata_suggestions(metadata_suggestions=[])
         next_task = self.task_manager.create_youtube_thumbnail_prompt_suggester_task(
             ref_id=self.job_data.ref_id,
         )
