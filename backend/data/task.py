@@ -145,6 +145,22 @@ class YouTubeChannelStatsUpdaterTaskData:
 
 
 @dataclass
+class YouTubeVideoTaskData:
+    ref_id: str
+    comment: str | None = None
+
+    def to_dict(self) -> dict:
+        return {"ref_id": self.ref_id, "comment": self.comment}
+
+    @classmethod
+    def to_cls(cls, data):
+        return cls(
+            ref_id=data["ref_id"],
+            comment=data.get("comment"),
+        )
+
+
+@dataclass
 class YouTubeVideoStatsUpdaterTaskData:
     ref_id: str
     poll_frequency_in_days: int = 3

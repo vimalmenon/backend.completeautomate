@@ -138,9 +138,9 @@ class YouTubeVideoDBData:
     language: str
     task_id: UUID
     stats: list[YouTubeVideoDBStats]
-    review: YouTubeVideoReviewData | None = None
     transcript: str | None = None
     summarized_transcript: str | None = None
+    review: YouTubeVideoReviewData | None = None
     comment: str | None = None
     image_paths: list[str] = field(default_factory=list)
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)

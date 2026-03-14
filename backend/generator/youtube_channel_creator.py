@@ -4,17 +4,25 @@ from backend.data import (
     JobData,
     PlatformDBData,
     PlatformYouTubeChannelDBData,
+    PlatformYouTubeVideoDBData,
     YouTubeChannelDBData,
     YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeChannelVideoCheckerTaskData,
     YouTubeJobData,
+    YouTubeVideoTaskData,
 )
-from backend.enum import JobsStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator, BaseGeneratorJob
 from backend.integration.youtube.youtube_api import YouTubeAPI
-from backend.manager import TaskManager, YouTubeChannelManager
+from backend.manager import (
+    JobManager,
+    PlatformManager,
+    TaskManager,
+    YouTubeChannelManager,
+    YouTubeVideoManager,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -75,8 +83,40 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
         self.manager = TaskManager()
 
     def generate(self) -> JobsStatusEnum:
+        videos = self.youtube_api.list_all_videos(self.task_data.platform.channel_id)
+        for video in videos:
+            platform_data = self.__get_platform_data(video["id"])
+            video_from_db = YouTubeVideoManager(platform_data.ref_id).get_video()
+            if not video_from_db:
+                platform_ref_id = self.__create_platform_data(video["id"])
+
+                cls_data = YouTubeVideoTaskData(ref_id=platform_ref_id)
+                job_manager = JobManager()
+                job_data = job_manager.create_job(
+                    type=JobTypeEnum.YouTubeVideo,
+                    task_data=cls_data.to_dict(),
+                    description="",
+                )
+                job_manager.save_data(job_data=job_data)
 
         return JobsStatusEnum.IN_PROGRESS
+
+    def __get_platform_data(self, video_id: str) -> PlatformDBData:
+        return PlatformDBData(
+            platform_type=PlatformEnum.YouTubeVideo,
+            data=PlatformYouTubeVideoDBData(
+                channel_id=self.task_data.platform.channel_id, video_id=video_id
+            ),
+        )
+
+    def __create_platform_data(self, video_id: str) -> str:
+        data = self.__get_platform_data(video_id)
+        logger.info(
+            "Saving platform data for video id: %s to database with ref_id: %s",
+            video_id,
+            self.task_data.ref_id,
+        )
+        return PlatformManager().save_data(data)
 
 
 class YouTubeChannelCreator(BaseGenerator):
