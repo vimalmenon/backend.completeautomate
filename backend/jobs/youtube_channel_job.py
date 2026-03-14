@@ -11,6 +11,12 @@ class YouTubeChannelJob:
 
     def execute(self) -> tuple[JobsStatusEnum, int]:
         if self.job.type == JobTypeEnum.YouTubeChannel:
-            status = YouTubeChannelCreatorJob(self.job).generate()
-            return (status, 0)
+            try:
+                status = YouTubeChannelCreatorJob(self.job).generate()
+                return (status, 0)
+            except Exception:
+                self.job.failed_count += 1
+                if self.job.failed_count >= 4:
+                    return (JobsStatusEnum.FAILED, 1)
+                return (JobsStatusEnum.IN_PROGRESS, self.job.failed_count)
         return (JobsStatusEnum.IN_PROGRESS, 0)
