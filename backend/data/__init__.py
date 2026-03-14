@@ -19,6 +19,7 @@ from backend.data.prompt import (
 from backend.data.s3 import S3Data
 from backend.data.task import (
     TaskData,
+    YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeVideoCheckerTaskData,
     YouTubeVideoTaskData,
@@ -69,4 +70,5 @@ __all__ = [
     "YouTubeChannelTaskData",
     "YouTubeVideoTaskData",
     "YouTubeVideoCheckerTaskData",
+    "YouTubeChannelStatsUpdaterTaskData",
 ]

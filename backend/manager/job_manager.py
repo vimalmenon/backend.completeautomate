@@ -2,6 +2,7 @@ from datetime import datetime
 
 from backend.data import (
     JobData,
+    YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeVideoCheckerTaskData,
     YouTubeVideoTaskData,
@@ -46,11 +47,12 @@ class JobManager:
         )
 
     def add_channel_stats_updater_job(self, ref_id: str) -> JobData:
+        task_cls = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
         return JobData(
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeChannelStatsUpdater,
             description=f"Updating stats for channel with ref ID: {ref_id}",
-            task_data={},
+            task_data=task_cls.to_dict(),
             created_at=datetime.now(),
         )
 
