@@ -1,18 +1,13 @@
-from backend.data import JobData
+from backend.data import JobData, YouTubeVideoTaskDataNew
 from backend.enum import JobsStatusEnum
 from backend.generator.base_generator import BaseGeneratorJob
-
-# YouTubeVideoStart = "YouTubeVideoStart"
-# YouTubeVideoFixTranscript = "YouTubeVideoFixTranscript"
-# YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"
-# YouTubeVideoThumbnailSelection = "YouTubeVideoThumbnailSelection"
-# YouTubeVideoComplete = "YouTubeVideoComplete"
 
 
 class YouTubeVideoGenerator(BaseGeneratorJob):
 
     def __init__(self, job: JobData):
         super().__init__(job=job)
+        self.task_data = YouTubeVideoTaskDataNew.to_cls(data=job.task_data)
 
     def generate(self) -> JobsStatusEnum:
         self.__create_video_db()
@@ -25,7 +20,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.__select_thumbnail()
         self.__review_video()
         self.__job_complete()
-        return JobsStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS, {}
 
     def __create_video_db(self):
         pass

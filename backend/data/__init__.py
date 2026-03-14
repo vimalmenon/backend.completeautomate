@@ -40,6 +40,7 @@ from backend.data.youtube_video import (
     YouTubeVideoReviewerDBData,
     YouTubeVideoReviewerJobData,
 )
+from backend.data.youtube_video import YouTubeVideoTaskData as YouTubeVideoTaskDataNew
 
 __all__ = [
     "ImagePromptJobData",
@@ -73,4 +74,5 @@ __all__ = [
     "YouTubeVideoStatsUpdaterTaskData",
     "YouTubeChannelVideoCheckerTaskData",
     "YouTubeVideoTaskData",
+    "YouTubeVideoTaskDataNew",
 ]
