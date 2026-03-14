@@ -9,8 +9,8 @@ class YouTubeVideoJob(BaseNewJob):
     def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
 
         if self.job.type == JobTypeEnum.YouTubeVideo:
-            task_data = YouTubeVideoGenerator().generate(self.job)
-            return (JobsStatusEnum.FAILED, 0, task_data)
+            YouTubeVideoGenerator(job=self.job).generate()
+            return (JobsStatusEnum.FAILED, 0, None)
         if self.job.type == JobTypeEnum.YouTubeVideoStatsUpdater:
-            pass
+            return (JobsStatusEnum.FAILED, 0, None)
         return (JobsStatusEnum.FAILED, 0, None)

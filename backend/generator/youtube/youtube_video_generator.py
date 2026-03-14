@@ -1,5 +1,6 @@
-from backend.enum.status import TaskStatusEnum
-from backend.generator.base_generator import BaseGenerator
+from backend.data import JobData
+from backend.enum import JobsStatusEnum
+from backend.generator.base_generator import BaseGeneratorJob
 
 # YouTubeVideoStart = "YouTubeVideoStart"
 # YouTubeVideoFixTranscript = "YouTubeVideoFixTranscript"
@@ -8,12 +9,12 @@ from backend.generator.base_generator import BaseGenerator
 # YouTubeVideoComplete = "YouTubeVideoComplete"
 
 
-class YouTubeVideoGenerator(BaseGenerator):
+class YouTubeVideoGenerator(BaseGeneratorJob):
 
-    def __init__(self, task):
-        super().__init__(task)
+    def __init__(self, job: JobData):
+        super().__init__(job=job)
 
-    def generate(self) -> TaskStatusEnum:
+    def generate(self) -> JobsStatusEnum:
         self.__create_video_db()
         self.__fix_transcript()
         self.__create_transcript_summary()
@@ -24,7 +25,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         self.__select_thumbnail()
         self.__review_video()
         self.__job_complete()
-        return TaskStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS
 
     def __create_video_db(self):
         pass
