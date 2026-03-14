@@ -17,7 +17,6 @@ def youtube_channel_factory(**kwargs) -> YouTubeChannelDBData:
         banner_image_url=faker.image_url(),
         privacy_status=faker.word(),
         made_for_kids=faker.boolean(),
-        task_id=kwargs.get("task_id") or UUID(faker.uuid4()),
         stats=[],
     )
 

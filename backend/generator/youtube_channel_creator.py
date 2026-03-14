@@ -8,7 +8,7 @@ from backend.data import (
     YouTubeChannelTaskData,
     YouTubeJobData,
 )
-from backend.enum import JobStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import JobsStatusEnum, PlatformEnum, TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator, BaseGeneratorJob
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager, YouTubeChannelManager
@@ -25,8 +25,15 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
         self.youtube_api = YouTubeAPI()
         self.channel_manager = YouTubeChannelManager(ref_id=self.task_data.ref_id)
 
-    def generate(self) -> JobStatusEnum:
-        JobStatusEnum.IN_PROGRESS
+    def generate(self) -> JobsStatusEnum:
+        channel_from_db = self.channel_manager.get_channel_details()
+        if not channel_from_db:
+            result = YouTubeAPI().get_channel_info(self.task_data.platform.channel_id)
+            channel_from_api = YouTubeChannelDBData.to_cls_from_response(
+                {**result, "ref_id": self.task_data.ref_id}
+            )
+            self.channel_manager.add_channel(channel_from_api)
+        return JobsStatusEnum.COMPLETE
 
 
 class YouTubeChannelCreator(BaseGenerator):

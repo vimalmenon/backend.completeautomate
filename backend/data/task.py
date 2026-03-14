@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from functools import cached_property
 from typing import Self
 from uuid import UUID
 
+from backend.data import PlatformDBData
 from backend.enum import JobEnum, TaskStatusEnum
 
 
@@ -60,6 +62,12 @@ class YouTubeChannelTaskData:
     def to_cls(cls, data: dict) -> Self:
         return cls(ref_id=data["ref_id"])
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeChannelVideoCheckerTaskData:
@@ -78,6 +86,12 @@ class YouTubeChannelVideoCheckerTaskData:
             ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
@@ -98,6 +112,12 @@ class YouTubeVideoCheckerTaskData:
             poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
         )
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeChannelStatsUpdaterTaskData:
@@ -117,6 +137,12 @@ class YouTubeChannelStatsUpdaterTaskData:
             poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
         )
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeVideoStatsUpdaterTaskData:
@@ -135,3 +161,9 @@ class YouTubeVideoStatsUpdaterTaskData:
             ref_id=data["ref_id"],
             poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
         )
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)

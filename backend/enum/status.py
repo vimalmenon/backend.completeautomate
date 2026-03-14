@@ -35,6 +35,7 @@ class JobStatusEnum(str, Enum):
     APPROVED = "APPROVED"
     PROMOTE = "PROMOTE"
     FAILED = "FAILED"
+
     CLEAN_UP = "CLEAN_UP"
 
 

@@ -1,6 +1,6 @@
 from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
-from backend.generator import YouTubeChannelCreator
+from backend.generator import YouTubeChannelCreatorJob
 
 
 class YouTubeChannelJob:
@@ -11,6 +11,6 @@ class YouTubeChannelJob:
 
     def execute(self) -> tuple[JobsStatusEnum, int]:
         if self.job.type == JobTypeEnum.YouTubeChannel:
-            status = YouTubeChannelCreator().generate()
+            status = YouTubeChannelCreatorJob(self.job).generate()
             return (status, 0)
         return (JobsStatusEnum.IN_PROGRESS, 0)

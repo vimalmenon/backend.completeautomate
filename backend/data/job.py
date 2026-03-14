@@ -34,7 +34,7 @@ class JobData:
         }
 
     @classmethod
-    def from_json(cls, data: dict) -> Self:
+    def to_cls(cls, data: dict) -> Self:
         return cls(
             id=UUID(data["id"]),
             status=JobsStatusEnum(data["status"]),
@@ -43,7 +43,7 @@ class JobData:
             description=data["description"],
             created_at=datetime.fromisoformat(data["created_at"]),
             failed_count=data.get("failed_count", 0),
-            pending_on=[cls.from_json(job) for job in data.get("pending_on", [])],
+            pending_on=[cls.to_cls(job) for job in data.get("pending_on", [])],
             completed_at=(
                 datetime.fromisoformat(data["completed_at"])
                 if data.get("completed_at")

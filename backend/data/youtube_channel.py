@@ -58,7 +58,6 @@ class YouTubeChannelDBData:
     banner_image_url: str
     privacy_status: str
     made_for_kids: bool
-    task_id: UUID
     stats: list[YouTubeChannelStatsDBData]
 
     @cached_property
@@ -80,7 +79,6 @@ class YouTubeChannelDBData:
             banner_image_url=data["banner_image_url"],
             privacy_status=data["privacy_status"],
             made_for_kids=data.get("made_for_kids", False),
-            task_id=UUID(data["task_id"]),
             stats=[YouTubeChannelStatsDBData.to_cls(stat) for stat in data["stats"]],
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
         )
@@ -102,7 +100,6 @@ class YouTubeChannelDBData:
             banner_image_url=branding["image"]["bannerExternalUrl"],
             privacy_status=status["privacyStatus"],
             made_for_kids=status.get("madeForKids", False),
-            task_id=UUID(channel["task_id"]),
             stats=[stat],
             last_updated_at=datetime.now(),
         )
@@ -119,7 +116,6 @@ class YouTubeChannelDBData:
             "banner_image_url": self.banner_image_url,
             "privacy_status": self.privacy_status,
             "made_for_kids": self.made_for_kids,
-            "task_id": str(self.task_id),
             "stats": [stat.to_json() for stat in self.stats],
             "last_updated_at": self.last_updated_at.isoformat(),
         }
