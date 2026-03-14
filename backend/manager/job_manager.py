@@ -15,6 +15,7 @@ class JobManager:
         return JobData(
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeChannel,
+            description=f"Processing YouTube channel with ID: {channel_id}",
             task_data=task_cls.to_dict(),
             created_at=datetime.now(),
         )
@@ -24,15 +25,34 @@ class JobManager:
         return JobData(
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeVideo,
+            description=f"Processing YouTube video with ID: {video_id} from channel ID: {channel_id}",
             task_data=task_cls.to_dict(),
             created_at=datetime.now(),
         )
 
-    def add_video_checker_job(self, ref_id: str):
-        pass
+    def add_video_checker_job(self, ref_id: str) -> JobData:
+        return JobData(
+            status=JobsStatusEnum.IN_PROGRESS,
+            type=JobTypeEnum.YouTubeVideoChecker,
+            description=f"Checking video with ref ID: {ref_id}",
+            task_data={},
+            created_at=datetime.now(),
+        )
 
-    def add_channel_stats_updater_job(self, ref_id: str):
-        pass
+    def add_channel_stats_updater_job(self, ref_id: str) -> JobData:
+        return JobData(
+            status=JobsStatusEnum.IN_PROGRESS,
+            type=JobTypeEnum.YouTubeChannelStatsUpdater,
+            description=f"Updating stats for channel with ref ID: {ref_id}",
+            task_data={},
+            created_at=datetime.now(),
+        )
 
-    def add_video_stats_updater_job(self, ref_id: str):
-        pass
+    def add_video_stats_updater_job(self, ref_id: str) -> JobData:
+        return JobData(
+            status=JobsStatusEnum.IN_PROGRESS,
+            type=JobTypeEnum.YouTubeVideoStatsUpdater,
+            description=f"Updating stats for video with ref ID: {ref_id}",
+            task_data={},
+            created_at=datetime.now(),
+        )

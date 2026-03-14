@@ -33,3 +33,4 @@ class JobsStatusEnum(str, Enum):
     PENDING = "PENDING"
     REVIEW = "REVIEW"
     FAILED = "FAILED"
+    ARCHIVED = "ARCHIVED"
