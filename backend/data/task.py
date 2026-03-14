@@ -5,7 +5,11 @@ from typing import Self
 from uuid import UUID
 
 from backend.data import PlatformDBData
-from backend.enum import JobEnum, TaskStatusEnum
+from backend.enum import (
+    JobEnum,
+    TaskStatusEnum,
+    YouTubeVideoTaskEnum,
+)
 
 
 @dataclass
@@ -129,17 +133,20 @@ class YouTubeVideoCheckerTaskData:
 @dataclass
 class YouTubeVideoTaskData:
     ref_id: str
-    comment: str | None = None
-
-    def to_dict(self) -> dict:
-        return {"ref_id": self.ref_id, "comment": self.comment}
+    task: YouTubeVideoTaskEnum = YouTubeVideoTaskEnum.YouTubeVideoStart
 
     @classmethod
-    def to_cls(cls, data):
+    def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            comment=data.get("comment"),
+            task=YouTubeVideoTaskEnum(data["task"]),
         )
+
+    def to_json(self) -> dict:
+        return {
+            "ref_id": self.ref_id,
+            "task": self.task.value,
+        }
 
 
 @dataclass

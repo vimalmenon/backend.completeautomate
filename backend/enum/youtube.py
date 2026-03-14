@@ -7,9 +7,3 @@ class YouTubeVideoTaskEnum(str, Enum):
     YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"
     YouTubeVideoThumbnailSelection = "YouTubeVideoThumbnailSelection"
     YouTubeVideoComplete = "YouTubeVideoComplete"
-
-
-class YouTubeVideoJobStatusEnum(str, Enum):
-    PENDING = "PENDING"
-    IN_PROGRESS = "IN_PROGRESS"
-    COMPLETE = "COMPLETE"

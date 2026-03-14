@@ -1,13 +1,17 @@
-from backend.data import JobData, YouTubeVideoTaskDataNew
+from backend.data import JobData, YouTubeVideoTaskData
 from backend.enum import JobsStatusEnum
 from backend.generator.base_generator import BaseGeneratorJob
+from backend.integration.youtube.youtube_api import YouTubeAPI
+from backend.manager import YouTubeVideoManager
 
 
 class YouTubeVideoGenerator(BaseGeneratorJob):
 
     def __init__(self, job: JobData):
         super().__init__(job=job)
-        self.task_data = YouTubeVideoTaskDataNew.to_cls(data=job.task_data)
+        self.task_data = YouTubeVideoTaskData.to_cls(data=job.task_data)
+        self.youtube_api = YouTubeAPI()
+        self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
 
     def generate(self) -> JobsStatusEnum:
         self.__create_video_db()
