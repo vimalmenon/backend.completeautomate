@@ -6,7 +6,7 @@ from backend.data import (
     YouTubeChannelTaskData,
     YouTubeChannelVideoCheckerTaskData,
 )
-from backend.enum import JobTypeEnum
+from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.manager import JobManager, PlatformManager
 
 logger = logging.getLogger(__name__)
@@ -56,6 +56,10 @@ class AddYouTubeChannelServices:
     def __create_channel_job(
         self, job_manager: JobManager, ref_id: str, description: str
     ) -> JobData:
+        if job_data := self.__check_if_job_exists(
+            job_manager=job_manager, type=JobTypeEnum.YouTubeChannel, ref_id=ref_id
+        ):
+            return job_data
         cls_data = YouTubeChannelTaskData(ref_id=ref_id)
         job_data = job_manager.create_job(
             type=JobTypeEnum.YouTubeChannel,
@@ -68,8 +72,13 @@ class AddYouTubeChannelServices:
     def __create_channel_video_checker_job(
         self, job_manager: JobManager, ref_id: str, description: str
     ) -> JobData:
+        if job_data := self.__check_if_job_exists(
+            job_manager=job_manager,
+            type=JobTypeEnum.YouTubeChannelVideoChecker,
+            ref_id=ref_id,
+        ):
+            return job_data
         cls_data = YouTubeChannelVideoCheckerTaskData(ref_id=ref_id)
-
         job_data = job_manager.create_job(
             type=JobTypeEnum.YouTubeChannelVideoChecker,
             task_data=cls_data.to_dict(),
@@ -81,11 +90,27 @@ class AddYouTubeChannelServices:
     def __create_channel_stats_updater_job(
         self, job_manager: JobManager, ref_id: str, description: str
     ) -> JobData:
+        if job_data := self.__check_if_job_exists(
+            job_manager=job_manager,
+            type=JobTypeEnum.YouTubeChannelStatsUpdater,
+            ref_id=ref_id,
+        ):
+            return job_data
         cls_data = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
         job_data = job_manager.create_job(
             type=JobTypeEnum.YouTubeChannelStatsUpdater,
             task_data=cls_data.to_dict(),
             description=description,
+            status=JobsStatusEnum.NEW,
         )
         job_manager.save_job(job_data=job_data)
         return job_data
+
+    def __check_if_job_exists(
+        self, job_manager: JobManager, type: JobTypeEnum, ref_id: str
+    ) -> JobData | None:
+        jobs = job_manager.get_job_by_type(type=type)
+        jobs_with_ref_id = [
+            job for job in jobs if job.task_data.get("ref_id") == ref_id
+        ]
+        return jobs_with_ref_id[0] if len(jobs_with_ref_id) > 0 else None
