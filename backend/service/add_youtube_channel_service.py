@@ -59,6 +59,10 @@ class AddYouTubeChannelServices:
         if job_data := self.__check_if_job_exists(
             job_manager=job_manager, type=JobTypeEnum.YouTubeChannel, ref_id=ref_id
         ):
+            logger.info(
+                f"Job already exists for YouTube channel with ref_id: {ref_id}, "
+                f"job: {job_data.to_json()}"
+            )
             return job_data
         cls_data = YouTubeChannelTaskData(ref_id=ref_id)
         job_data = job_manager.create_job(
@@ -77,6 +81,10 @@ class AddYouTubeChannelServices:
             type=JobTypeEnum.YouTubeChannelVideoChecker,
             ref_id=ref_id,
         ):
+            logger.info(
+                f"Job already exists for YouTube channel video checker with ref_id: {ref_id}, "
+                f"job: {job_data.to_json()}"
+            )
             return job_data
         cls_data = YouTubeChannelVideoCheckerTaskData(ref_id=ref_id)
         job_data = job_manager.create_job(
@@ -95,6 +103,10 @@ class AddYouTubeChannelServices:
             type=JobTypeEnum.YouTubeChannelStatsUpdater,
             ref_id=ref_id,
         ):
+            logger.info(
+                f"Job already exists for YouTube channel stats updater with ref_id: {ref_id}, "
+                f"job: {job_data.to_json()}"
+            )
             return job_data
         cls_data = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
         job_data = job_manager.create_job(

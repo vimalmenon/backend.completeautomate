@@ -1,8 +1,8 @@
 from boto3.dynamodb.conditions import Attr, Key
 
-from backend.data import JobData, JobTypeEnum
+from backend.data import JobData
 from backend.database import DbManager
-from backend.enum import DbKeysEnum
+from backend.enum import DbKeysEnum, JobsStatusEnum, JobTypeEnum
 
 
 class JobDB:
@@ -24,5 +24,20 @@ class JobDB:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
             filter_expression=Attr("type").eq(type.value),
+        )
+        return [JobData.to_cls(item) for item in items]
+
+    def get_all_jobs(self) -> list[JobData]:
+        items = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE),
+        )
+        return [JobData.to_cls(item) for item in items]
+
+    def get_all_active_jobs(self) -> list[JobData]:
+        items = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE),
+            filter_expression=Attr("status").is_in(
+                [JobsStatusEnum.IN_PROGRESS.value, JobsStatusEnum.FAILED.value]
+            ),
         )
         return [JobData.to_cls(item) for item in items]

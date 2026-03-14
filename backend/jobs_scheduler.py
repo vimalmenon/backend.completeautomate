@@ -1,9 +1,14 @@
 import logging
 
+from backend.jobs import YouTubeChannelJob
+from backend.manager import JobManager
+
 logger = logging.getLogger(__name__)
 
 
 class JobScheduler:
+    def __init__(self):
+        self.job_manager = JobManager()
 
     def start(
         self,
@@ -26,4 +31,16 @@ class JobScheduler:
 
             logger.info("Completed test script execution")
             return
-        logger.info("Starting scheduled job execution")
+        jobs = self.job_manager.get_all_active_jobs()
+        for job in jobs:
+            logger.info(
+                f"Starting scheduled job execution for job_id={job.id}, type={job.type}"
+            )
+            if job.type in YouTubeChannelJob.types:
+                YouTubeChannelJob(job=job).execute()
+                # Execute YouTubeChannelJob specific logic here
+                pass
+
+            logger.info(
+                f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
+            )
