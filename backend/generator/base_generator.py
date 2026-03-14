@@ -21,5 +21,5 @@ class BaseGeneratorJob(ABC):
         self.job = job
 
     @abstractmethod
-    def generate(self) -> JobsStatusEnum:
+    def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         raise AppException("Subclasses must implement the execute method")

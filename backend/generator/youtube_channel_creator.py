@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class YouTubeChannelOnboardingJob(BaseGeneratorJob):
-    def generate(self) -> JobsStatusEnum:
+    def generate(self) -> tuple[JobsStatusEnum:, dict | None]:
         channel_id = env.YOUTUBE_CHANNEL_ID
         ref_id = self.__create_channel_platform_if_not_exists(channel_id=channel_id)
         job_manager = JobManager()
@@ -121,7 +121,7 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
         self.youtube_api = YouTubeAPI()
         self.channel_manager = YouTubeChannelManager(ref_id=self.task_data.ref_id)
 
-    def generate(self) -> JobsStatusEnum:
+    def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         channel_from_db = self.channel_manager.get_channel_details()
         if not channel_from_db:
             result = YouTubeAPI().get_channel_info(self.task_data.platform.channel_id)
@@ -129,7 +129,7 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
                 {**result, "ref_id": self.task_data.ref_id}
             )
             self.channel_manager.add_channel(channel_from_api)
-            return JobsStatusEnum.IN_PROGRESS
+            return JobsStatusEnum.IN_PROGRESS, None
         if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
             result = YouTubeAPI().get_channel_info(self.task_data.platform.channel_id)
             latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
@@ -139,7 +139,7 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
                 latest_channel_from_api.values_to_update(channel_from_db)
             )
 
-        return JobsStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS, None
 
 
 class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
@@ -151,7 +151,7 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
         self.channel_manager = YouTubeChannelManager(ref_id=self.task_data.ref_id)
         self.manager = TaskManager()
 
-    def generate(self) -> JobsStatusEnum:
+    def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         videos = self.youtube_api.list_all_videos(self.task_data.platform.channel_id)
         for video in videos:
             platform_data = self.__get_platform_data(video["id"])

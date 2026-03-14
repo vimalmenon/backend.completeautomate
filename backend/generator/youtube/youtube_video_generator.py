@@ -13,7 +13,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.youtube_api = YouTubeAPI()
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
 
-    def generate(self) -> JobsStatusEnum:
+    def generate(self) -> tuple[JobsStatusEnum, dict]:
         self.__create_video_db()
         self.__fix_transcript()
         self.__create_transcript_summary()
@@ -24,7 +24,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.__select_thumbnail()
         self.__review_video()
         self.__job_complete()
-        return JobsStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS, self.task_data.to_json()
 
     def __create_video_db(self):
         pass
