@@ -1,3 +1,4 @@
+from backend.manager.job_manager import JobManager
 from backend.manager.platform_manager import PlatformManager
 from backend.manager.prompt_manager import PromptManager
 from backend.manager.start_up_manager import StartUpManager
@@ -12,4 +13,5 @@ __all__ = [
     "YouTubeChannelManager",
     "PlatformManager",
     "PromptManager",
+    "JobManager",
 ]

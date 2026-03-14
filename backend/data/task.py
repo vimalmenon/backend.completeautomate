@@ -51,14 +51,14 @@ class TaskData:
 
 @dataclass
 class YouTubeChannelTaskData:
-    channel_id: str
+    ref_id: str
 
     def to_dict(self) -> dict:
-        return {"channel_id": self.channel_id}
+        return {"ref_id": self.ref_id}
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        return cls(channel_id=data["channel_id"])
+        return cls(ref_id=data["ref_id"])
 
 
 @dataclass

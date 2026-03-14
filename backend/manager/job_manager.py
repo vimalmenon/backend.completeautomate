@@ -4,7 +4,6 @@ from uuid import uuid4
 from backend.data import (
     JobData,
     YouTubeChannelStatsUpdaterTaskData,
-    YouTubeChannelTaskData,
     YouTubeVideoCheckerTaskData,
     YouTubeVideoStatsUpdaterTaskData,
     YouTubeVideoTaskData,
@@ -18,14 +17,15 @@ class JobManager:
     def save_job(self, job_data: JobData):
         JobDB().save_data(job_data)
 
-    def add_channel_job(self, channel_id: str) -> JobData:
-        task_cls = YouTubeChannelTaskData(channel_id=channel_id)
+    def create_job(
+        self, type: JobTypeEnum, task_data: dict, description: str
+    ) -> JobData:
         return JobData(
             id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
-            type=JobTypeEnum.YouTubeChannel,
-            description=f"Processing YouTube channel with ID: {channel_id}",
-            task_data=task_cls.to_dict(),
+            type=type,
+            task_data=task_data,
+            description=description,
             created_at=datetime.now(),
         )
 
