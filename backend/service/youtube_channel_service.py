@@ -2,11 +2,10 @@ import logging
 
 from backend.data import (
     JobData,
-    YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeChannelVideoCheckerTaskData,
 )
-from backend.enum import JobsStatusEnum, JobTypeEnum
+from backend.enum import JobTypeEnum
 from backend.manager import JobManager, PlatformManager
 
 logger = logging.getLogger(__name__)
@@ -32,14 +31,6 @@ class YouTubeChannelServices:
         )
         logger.info(
             f"Created video checker job for YouTube channel with ID: {channel_id}, job: {video_checker_job_data.to_json()}"
-        )
-        stats_updater_job_data = self.__create_channel_stats_updater_job(
-            job_manager=job_manager,
-            ref_id=ref_id,
-            description=f"Updating stats for YouTube channel with ID: {channel_id}",
-        )
-        logger.info(
-            f"Created stats updater job for YouTube channel with ID: {channel_id}, job: {stats_updater_job_data.to_json()}"
         )
 
     def __create_channel_platform_if_not_exists(self, channel_id: str) -> str:
@@ -91,29 +82,6 @@ class YouTubeChannelServices:
             type=JobTypeEnum.YouTubeChannelVideoChecker,
             task_data=cls_data.to_dict(),
             description=description,
-        )
-        job_manager.save_job(job_data=job_data)
-        return job_data
-
-    def __create_channel_stats_updater_job(
-        self, job_manager: JobManager, ref_id: str, description: str
-    ) -> JobData:
-        if job_data := self.__check_if_job_exists(
-            job_manager=job_manager,
-            type=JobTypeEnum.YouTubeChannelStatsUpdater,
-            ref_id=ref_id,
-        ):
-            logger.info(
-                f"Job already exists for YouTube channel stats updater with ref_id: {ref_id}, "
-                f"job: {job_data.to_json()}"
-            )
-            return job_data
-        cls_data = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
-        job_data = job_manager.create_job(
-            type=JobTypeEnum.YouTubeChannelStatsUpdater,
-            task_data=cls_data.to_dict(),
-            description=description,
-            status=JobsStatusEnum.NEW,
         )
         job_manager.save_job(job_data=job_data)
         return job_data

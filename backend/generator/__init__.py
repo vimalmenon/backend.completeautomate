@@ -3,7 +3,6 @@ from backend.generator.prompt_suggester import PromptSuggester
 from backend.generator.youtube_channel_creator import (
     YouTubeChannelCreator,
     YouTubeChannelCreatorJob,
-    YouTubeChannelStatsUpdaterJob,
     YouTubeChannelVideoCheckerJob,
 )
 from backend.generator.youtube_thumbnail_updater import (
@@ -36,6 +35,5 @@ __all__ = [
     "YouTubeTopicSuggester",
     "YouTubeVideoReviewer",
     "YouTubeChannelCreatorJob",
-    "YouTubeChannelStatsUpdaterJob",
     "YouTubeChannelVideoCheckerJob",
 ]

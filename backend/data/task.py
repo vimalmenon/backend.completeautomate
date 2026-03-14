@@ -54,13 +54,20 @@ class TaskData:
 @dataclass
 class YouTubeChannelTaskData:
     ref_id: str
+    poll_frequency_in_days: int = 3
 
     def to_dict(self) -> dict:
-        return {"ref_id": self.ref_id}
+        return {
+            "ref_id": self.ref_id,
+            "poll_frequency_in_days": int(self.poll_frequency_in_days),
+        }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        return cls(ref_id=data["ref_id"])
+        return cls(
+            ref_id=data["ref_id"],
+            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
+        )
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -84,7 +91,7 @@ class YouTubeChannelVideoCheckerTaskData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
+            poll_frequency_in_days=int(data.get("poll_frequency_in_days", 3)),
         )
 
     @cached_property
@@ -109,32 +116,7 @@ class YouTubeVideoCheckerTaskData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
-        )
-
-    @cached_property
-    def platform(self) -> PlatformDBData:
-        from backend.database.platform.platform_database import PlatformDB
-
-        return PlatformDB().get_data(self.ref_id)
-
-
-@dataclass
-class YouTubeChannelStatsUpdaterTaskData:
-    ref_id: str
-    poll_frequency_in_days: int = 3
-
-    def to_dict(self) -> dict:
-        return {
-            "ref_id": self.ref_id,
-            "poll_frequency_in_days": int(self.poll_frequency_in_days),
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            ref_id=data["ref_id"],
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
+            poll_frequency_in_days=int(data.get("poll_frequency_in_days", 3)),
         )
 
     @cached_property
@@ -168,14 +150,14 @@ class YouTubeVideoStatsUpdaterTaskData:
     def to_dict(self) -> dict:
         return {
             "ref_id": self.ref_id,
-            "poll_frequency_in_days": self.poll_frequency_in_days,
+            "poll_frequency_in_days": int(self.poll_frequency_in_days),
         }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
+            poll_frequency_in_days=int(data.get("poll_frequency_in_days", 3)),
         )
 
     @cached_property
