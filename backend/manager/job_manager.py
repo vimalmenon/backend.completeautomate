@@ -1,5 +1,5 @@
 from datetime import datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from backend.data import (
     JobData,
@@ -36,4 +36,15 @@ class JobManager:
             task_data=task_data,
             description=description,
             created_at=datetime.now(),
+        )
+
+    def update_job_data(
+        self, job_id: UUID, status: JobsStatusEnum, failed_count: int
+    ) -> None:
+        JobDB().update_data(
+            job_id=job_id,
+            values={
+                "status": status.value,
+                "failed_count": failed_count,
+            },
         )

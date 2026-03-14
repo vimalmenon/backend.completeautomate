@@ -37,9 +37,10 @@ class JobScheduler:
                 f"Starting scheduled job execution for job_id={job.id}, type={job.type}"
             )
             if job.type in YouTubeChannelJob.types:
-                YouTubeChannelJob(job=job).execute()
-                # Execute YouTubeChannelJob specific logic here
-                pass
+                status, failed_count = YouTubeChannelJob(job=job).execute()
+                self.job_manager.update_job_data(
+                    job_id=job.id, status=status, failed_count=failed_count
+                )
 
             logger.info(
                 f"Completed scheduled job execution for job_id={job.id}, type={job.type}"

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from boto3.dynamodb.conditions import Attr, Key
 
 from backend.data import JobData
@@ -41,3 +43,13 @@ class JobDB:
             ),
         )
         return [JobData.to_cls(item) for item in items]
+
+    def update_data(self, job_id: UUID, values: dict) -> None:
+        key = {
+            DbKeysEnum.Primary.value: self.TABLE,
+            DbKeysEnum.Secondary.value: str(job_id),
+        }
+        self.db_manager.update_data(
+            key=key,
+            values=values,
+        )

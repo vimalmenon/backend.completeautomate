@@ -30,8 +30,12 @@ class JobTypeEnum(str, Enum):
 # YouTubeChannel = Check for channel and create in Database
 # YouTubeChannelVideoChecker = Check for new videos in the channel and create a Job for each new video
 # YouTubeChannelStatsUpdater = Check the stats for the channel and update in Database
+
 # YouTubeVideo = Check for video and update in Database
 # YouTubeVideoStatsUpdater = Check the stats for the video and update in Database
+
+
+# YouTubeChannelVideoChecker will create YouTubeVideo & YouTubeVideoStatsUpdater
 
 
 class JobsStatusEnum(str, Enum):

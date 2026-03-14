@@ -62,19 +62,6 @@ class YouTubeChannelTaskData:
 
 
 @dataclass
-class YouTubeVideoTaskData:
-    channel_id: str
-    video_id: str
-
-    def to_dict(self) -> dict:
-        return {"channel_id": self.channel_id, "video_id": self.video_id}
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(channel_id=data["channel_id"], video_id=data["video_id"])
-
-
-@dataclass
 class YouTubeChannelVideoCheckerTaskData:
     ref_id: str
     poll_frequency_in_days: int = 3
