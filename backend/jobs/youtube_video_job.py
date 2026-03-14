@@ -6,4 +6,9 @@ class YouTubeVideoJob(BaseNewJob):
     types = [JobTypeEnum.YouTubeVideo, JobTypeEnum.YouTubeVideoStatsUpdater]
 
     def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
-        return (JobsStatusEnum.IN_PROGRESS, 0, None)
+
+        if self.job.type == JobTypeEnum.YouTubeVideo:
+            pass
+        if self.job.type == JobTypeEnum.YouTubeVideoStatsUpdater:
+            pass
+        return (JobsStatusEnum.FAILED, 0, None)
