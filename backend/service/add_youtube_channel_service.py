@@ -2,6 +2,7 @@ import logging
 
 from backend.data import (
     JobData,
+    YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeChannelVideoCheckerTaskData,
 )
@@ -14,19 +15,31 @@ logger = logging.getLogger(__name__)
 class AddYouTubeChannelServices:
 
     def add_channel(self, channel_id: str) -> None:
-        ref_id = self.__create_channel_platform_if_not_exists(channel_id)
+        ref_id = self.__create_channel_platform_if_not_exists(channel_id=channel_id)
+        job_manager = JobManager()
         job_data = self.__create_channel_job(
-            ref_id, description=f"Processing YouTube channel with ID: {channel_id}"
+            job_manager=job_manager,
+            ref_id=ref_id,
+            description=f"Processing YouTube channel with ID: {channel_id}",
         )
         logger.info(
             f"Created job for YouTube channel with ID: {channel_id}, job: {job_data.to_json()}"
         )
         video_checker_job_data = self.__create_channel_video_checker_job(
-            ref_id,
+            job_manager=job_manager,
+            ref_id=ref_id,
             description=f"Checking videos for YouTube channel with ID: {channel_id}",
         )
         logger.info(
             f"Created video checker job for YouTube channel with ID: {channel_id}, job: {video_checker_job_data.to_json()}"
+        )
+        stats_updater_job_data = self.__create_channel_stats_updater_job(
+            job_manager=job_manager,
+            ref_id=ref_id,
+            description=f"Updating stats for YouTube channel with ID: {channel_id}",
+        )
+        logger.info(
+            f"Created stats updater job for YouTube channel with ID: {channel_id}, job: {stats_updater_job_data.to_json()}"
         )
 
     def __create_channel_platform_if_not_exists(self, channel_id: str) -> str:
@@ -40,9 +53,10 @@ class AddYouTubeChannelServices:
             logger.info(f"Creating new platform for channel_id: {channel_id}")
             return PlatformManager().save_data(channel_data)
 
-    def __create_channel_job(self, ref_id: str, description: str) -> JobData:
+    def __create_channel_job(
+        self, job_manager: JobManager, ref_id: str, description: str
+    ) -> JobData:
         cls_data = YouTubeChannelTaskData(ref_id=ref_id)
-        job_manager = JobManager()
         job_data = job_manager.create_job(
             type=JobTypeEnum.YouTubeChannel,
             task_data=cls_data.to_dict(),
@@ -52,12 +66,24 @@ class AddYouTubeChannelServices:
         return job_data
 
     def __create_channel_video_checker_job(
-        self, ref_id: str, description: str
+        self, job_manager: JobManager, ref_id: str, description: str
     ) -> JobData:
         cls_data = YouTubeChannelVideoCheckerTaskData(ref_id=ref_id)
-        job_manager = JobManager()
+
         job_data = job_manager.create_job(
             type=JobTypeEnum.YouTubeChannelVideoChecker,
+            task_data=cls_data.to_dict(),
+            description=description,
+        )
+        job_manager.save_job(job_data=job_data)
+        return job_data
+
+    def __create_channel_stats_updater_job(
+        self, job_manager: JobManager, ref_id: str, description: str
+    ) -> JobData:
+        cls_data = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
+        job_data = job_manager.create_job(
+            type=JobTypeEnum.YouTubeChannelStatsUpdater,
             task_data=cls_data.to_dict(),
             description=description,
         )
