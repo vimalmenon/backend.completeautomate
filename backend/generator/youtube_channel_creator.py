@@ -1,17 +1,32 @@
 import logging
 
 from backend.data import (
+    JobData,
     PlatformDBData,
     PlatformYouTubeChannelDBData,
     YouTubeChannelDBData,
+    YouTubeChannelTaskData,
     YouTubeJobData,
 )
-from backend.enum import PlatformEnum, TaskStatusEnum
-from backend.generator.base_generator import BaseGenerator
+from backend.enum import JobStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.generator.base_generator import BaseGenerator, BaseGeneratorJob
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager, YouTubeChannelManager
 
 logger = logging.getLogger(__name__)
+
+
+class YouTubeChannelCreatorJob(BaseGeneratorJob):
+
+    def __init__(self, job: JobData):
+        super().__init__(job)
+        self.task_data = YouTubeChannelTaskData.to_cls(job.task_data)
+
+        self.youtube_api = YouTubeAPI()
+        self.channel_manager = YouTubeChannelManager(ref_id=self.task_data.ref_id)
+
+    def generate(self) -> JobStatusEnum:
+        JobStatusEnum.IN_PROGRESS
 
 
 class YouTubeChannelCreator(BaseGenerator):

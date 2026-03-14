@@ -12,7 +12,7 @@ from backend.manager import JobManager, PlatformManager
 logger = logging.getLogger(__name__)
 
 
-class AddYouTubeChannelServices:
+class YouTubeChannelServices:
 
     def add_channel(self, channel_id: str) -> None:
         ref_id = self.__create_channel_platform_if_not_exists(channel_id=channel_id)

@@ -1,5 +1,5 @@
-from backend.service.add_youtube_channel_service import AddYouTubeChannelServices
+from backend.service.youtube_channel_service import YouTubeChannelServices
 
 __all__ = [
-    "AddYouTubeChannelServices",
+    "YouTubeChannelServices",
 ]
