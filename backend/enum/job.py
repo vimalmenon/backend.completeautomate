@@ -26,8 +26,7 @@ class JobTypeEnum(str, Enum):
 
 
 # JOB DESCRIPTIONS :
-# YouTubeChannel = Check for channel and create in Database
-# YouTubeChannelStatsUpdater = Check the stats for the channel and update in Database and also check other values
+# YouTubeChannel = Check for channel and create in Database and also updated the stats for the channel
 
 # YouTubeChannelVideoChecker = Check for new videos in the channel and create a Job for each new video
 
