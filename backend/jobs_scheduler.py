@@ -1,6 +1,6 @@
 import logging
 
-from backend.jobs import YouTubeChannelJob
+from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
 from backend.manager import JobManager
 
 logger = logging.getLogger(__name__)
@@ -38,6 +38,11 @@ class JobScheduler:
             )
             if job.type in YouTubeChannelJob.types:
                 status, failed_count = YouTubeChannelJob(job=job).execute()
+                self.job_manager.update_job_data(
+                    job_id=job.id, status=status, failed_count=failed_count
+                )
+            elif job.type in YouTubeVideoJob.types:
+                status, failed_count = YouTubeVideoJob(job=job).execute()
                 self.job_manager.update_job_data(
                     job_id=job.id, status=status, failed_count=failed_count
                 )

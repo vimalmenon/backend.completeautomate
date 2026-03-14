@@ -9,9 +9,9 @@ from backend.generator import (
 
 class YouTubeChannelJob:
     types = [
+        JobTypeEnum.YouTubeChannelOnboarding,
         JobTypeEnum.YouTubeChannel,
         JobTypeEnum.YouTubeChannelVideoChecker,
-        JobTypeEnum.YouTubeChannelOnboarding,
     ]
 
     def __init__(self, job: JobData):
