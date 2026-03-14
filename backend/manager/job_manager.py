@@ -1,10 +1,12 @@
 from datetime import datetime
+from uuid import uuid4
 
 from backend.data import (
     JobData,
     YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
     YouTubeVideoCheckerTaskData,
+    YouTubeVideoStatsUpdaterTaskData,
     YouTubeVideoTaskData,
 )
 from backend.database import JobDB
@@ -19,6 +21,7 @@ class JobManager:
     def add_channel_job(self, channel_id: str) -> JobData:
         task_cls = YouTubeChannelTaskData(channel_id=channel_id)
         return JobData(
+            id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeChannel,
             description=f"Processing YouTube channel with ID: {channel_id}",
@@ -29,6 +32,7 @@ class JobManager:
     def add_video_job(self, channel_id: str, video_id: str) -> JobData:
         task_cls = YouTubeVideoTaskData(channel_id=channel_id, video_id=video_id)
         return JobData(
+            id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeVideo,
             description=f"Processing YouTube video with ID: {video_id} from channel ID: {channel_id}",
@@ -39,6 +43,7 @@ class JobManager:
     def add_video_checker_job(self, ref_id: str) -> JobData:
         task_cls = YouTubeVideoCheckerTaskData(ref_id=ref_id)
         return JobData(
+            id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeVideoChecker,
             description=f"Checking video with ref ID: {ref_id}",
@@ -49,6 +54,7 @@ class JobManager:
     def add_channel_stats_updater_job(self, ref_id: str) -> JobData:
         task_cls = YouTubeChannelStatsUpdaterTaskData(ref_id=ref_id)
         return JobData(
+            id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeChannelStatsUpdater,
             description=f"Updating stats for channel with ref ID: {ref_id}",
@@ -57,10 +63,12 @@ class JobManager:
         )
 
     def add_video_stats_updater_job(self, ref_id: str) -> JobData:
+        task_cls = YouTubeVideoStatsUpdaterTaskData(ref_id=ref_id)
         return JobData(
+            id=uuid4(),
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeVideoStatsUpdater,
             description=f"Updating stats for video with ref ID: {ref_id}",
-            task_data={},
+            task_data=task_cls.to_dict(),
             created_at=datetime.now(),
         )
