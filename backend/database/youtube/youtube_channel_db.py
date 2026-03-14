@@ -43,11 +43,20 @@ class YouTubeChannelDB:
         )
         logger.info(f"Deleted channel with id: {self.ref_id}")
 
-    def update_channel(self, channel: dict):
+    def update_channel(self, channel: dict) -> None:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: self.ref_id,
             },
             values=channel,
+        )
+
+    def update_values(self, values: dict) -> None:
+        self.db_manager.update_data(
+            key={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: self.ref_id,
+            },
+            values=values,
         )

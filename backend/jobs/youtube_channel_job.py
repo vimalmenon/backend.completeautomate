@@ -1,10 +1,10 @@
 from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
-from backend.generator import YouTubeChannelCreatorJob
+from backend.generator import YouTubeChannelCreatorJob, YouTubeChannelStatsUpdaterJob
 
 
 class YouTubeChannelJob:
-    types = [JobTypeEnum.YouTubeChannel]
+    types = [JobTypeEnum.YouTubeChannel, JobTypeEnum.YouTubeChannelStatsUpdater]
 
     def __init__(self, job: JobData):
         self.job = job
@@ -19,4 +19,11 @@ class YouTubeChannelJob:
                 if self.job.failed_count >= 4:
                     return (JobsStatusEnum.FAILED, 1)
                 return (JobsStatusEnum.IN_PROGRESS, self.job.failed_count)
-        return (JobsStatusEnum.IN_PROGRESS, 0)
+        if self.job.type == JobTypeEnum.YouTubeChannelStatsUpdater:
+            try:
+                status = YouTubeChannelStatsUpdaterJob(self.job).generate()
+                return (status, 0)
+            except Exception:
+                self.job.failed_count += 1
+                return (JobsStatusEnum.IN_PROGRESS, self.job.failed_count)
+        return (JobsStatusEnum.FAILED, 0)
