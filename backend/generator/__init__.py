@@ -4,6 +4,7 @@ from backend.generator.youtube_channel_creator import (
     YouTubeChannelCreator,
     YouTubeChannelCreatorJob,
     YouTubeChannelStatsUpdaterJob,
+    YouTubeChannelVideoCheckerJob,
 )
 from backend.generator.youtube_thumbnail_updater import (
     YouTubeThumbnailUpdater,
@@ -36,4 +37,5 @@ __all__ = [
     "YouTubeVideoReviewer",
     "YouTubeChannelCreatorJob",
     "YouTubeChannelStatsUpdaterJob",
+    "YouTubeChannelVideoCheckerJob",
 ]

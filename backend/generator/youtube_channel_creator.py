@@ -7,9 +7,11 @@ from backend.data import (
     YouTubeChannelDBData,
     YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
+    YouTubeChannelVideoCheckerTaskData,
     YouTubeJobData,
 )
 from backend.enum import JobsStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator, BaseGeneratorJob
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import TaskManager, YouTubeChannelManager
@@ -48,14 +50,32 @@ class YouTubeChannelStatsUpdaterJob(BaseGeneratorJob):
 
     def generate(self) -> JobsStatusEnum:
         channel_from_db = self.channel_manager.get_channel_details()
-        if channel_from_db:
-            result = YouTubeAPI().get_channel_info(self.task_data.platform.channel_id)
-            latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
-                {**result, "ref_id": self.task_data.ref_id}
+        if not channel_from_db:
+            raise AppException(
+                f"Channel with ID {self.task_data.platform.channel_id} not found in database for stats update."
             )
+        result = YouTubeAPI().get_channel_info(self.task_data.platform.channel_id)
+        latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
+            {**result, "ref_id": self.task_data.ref_id}
+        )
+        if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
             self.channel_manager.update_channel(
-                {"stats": [stats.to_json() for stats in latest_channel_from_api.stats]}
+                latest_channel_from_api.values_to_update(channel_from_db)
             )
+        return JobsStatusEnum.IN_PROGRESS
+
+
+class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
+
+    def __init__(self, job: JobData):
+        super().__init__(job)
+        self.task_data = YouTubeChannelVideoCheckerTaskData.to_cls(job.task_data)
+        self.youtube_api = YouTubeAPI()
+        self.channel_manager = YouTubeChannelManager(ref_id=self.task_data.ref_id)
+        self.manager = TaskManager()
+
+    def generate(self) -> JobsStatusEnum:
+
         return JobsStatusEnum.IN_PROGRESS
 
 

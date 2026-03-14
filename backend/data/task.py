@@ -77,7 +77,7 @@ class YouTubeChannelVideoCheckerTaskData:
     def to_dict(self) -> dict:
         return {
             "ref_id": self.ref_id,
-            "poll_frequency_in_days": self.poll_frequency_in_days,
+            "poll_frequency_in_days": int(self.poll_frequency_in_days),
         }
 
     @classmethod
@@ -102,7 +102,7 @@ class YouTubeVideoCheckerTaskData:
     def to_dict(self) -> dict:
         return {
             "ref_id": self.ref_id,
-            "poll_frequency_in_days": self.poll_frequency_in_days,
+            "poll_frequency_in_days": int(self.poll_frequency_in_days),
         }
 
     @classmethod
@@ -127,7 +127,7 @@ class YouTubeChannelStatsUpdaterTaskData:
     def to_dict(self) -> dict:
         return {
             "ref_id": self.ref_id,
-            "poll_frequency_in_days": self.poll_frequency_in_days,
+            "poll_frequency_in_days": int(self.poll_frequency_in_days),
         }
 
     @classmethod
