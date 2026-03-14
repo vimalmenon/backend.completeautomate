@@ -21,6 +21,7 @@ from backend.data.task import (
     TaskData,
     YouTubeChannelStatsUpdaterTaskData,
     YouTubeChannelTaskData,
+    YouTubeChannelVideoCheckerTaskData,
     YouTubeVideoCheckerTaskData,
     YouTubeVideoStatsUpdaterTaskData,
     YouTubeVideoTaskData,
@@ -73,4 +74,5 @@ __all__ = [
     "YouTubeVideoCheckerTaskData",
     "YouTubeChannelStatsUpdaterTaskData",
     "YouTubeVideoStatsUpdaterTaskData",
+    "YouTubeChannelVideoCheckerTaskData",
 ]
