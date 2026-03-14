@@ -24,7 +24,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.__select_thumbnail()
         self.__review_video()
         self.__job_complete()
-        return JobsStatusEnum.IN_PROGRESS, {}
+        return JobsStatusEnum.IN_PROGRESS
 
     def __create_video_db(self):
         pass

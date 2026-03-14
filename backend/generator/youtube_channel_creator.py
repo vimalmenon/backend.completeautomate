@@ -163,7 +163,7 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
                 job_manager = JobManager()
                 job_data = job_manager.create_job(
                     type=JobTypeEnum.YouTubeVideo,
-                    task_data=cls_data.to_dict(),
+                    task_data=cls_data.to_json(),
                     description=f"Checking video with ID: {video['id']} for YouTube channel with ID: {platform_data.data.channel_id}",
                 )
                 job_manager.save_job(job_data=job_data)
