@@ -18,11 +18,15 @@ class JobManager:
         JobDB().save_data(job_data)
 
     def create_job(
-        self, type: JobTypeEnum, task_data: dict, description: str
+        self,
+        type: JobTypeEnum,
+        task_data: dict,
+        description: str,
+        status: JobsStatusEnum = JobsStatusEnum.IN_PROGRESS,
     ) -> JobData:
         return JobData(
             id=uuid4(),
-            status=JobsStatusEnum.IN_PROGRESS,
+            status=status,
             type=type,
             task_data=task_data,
             description=description,

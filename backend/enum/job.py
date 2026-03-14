@@ -20,6 +20,7 @@ class JobEnum(str, Enum):
 
 class JobTypeEnum(str, Enum):
     YouTubeChannel = "YouTubeChannel"
+    YouTubeChannelVideoChecker = "YouTubeChannelVideoChecker"
     YouTubeVideo = "YouTubeVideo"
     YouTubeVideoChecker = "YouTubeVideoChecker"
     YouTubeChannelStatsUpdater = "YouTubeChannelStatsUpdater"
