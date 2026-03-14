@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from backend.data import TaskData
-from backend.enum.status import TaskStatusEnum
+from backend.data import JobData, TaskData
+from backend.enum import JobsStatusEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 
 
@@ -12,4 +12,14 @@ class BaseJob(ABC):
 
     @abstractmethod
     def execute(self) -> tuple[TaskStatusEnum, int]:
+        raise AppException("Subclasses must implement the execute method")
+
+
+class BaseNewJob(ABC):
+
+    def __init__(self, job: JobData):
+        self.job = job
+
+    @abstractmethod
+    def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
         raise AppException("Subclasses must implement the execute method")

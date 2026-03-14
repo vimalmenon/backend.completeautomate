@@ -5,9 +5,10 @@ from backend.generator import (
     YouTubeChannelOnboardingJob,
     YouTubeChannelVideoCheckerJob,
 )
+from backend.jobs.base_job import BaseNewJob
 
 
-class YouTubeChannelJob:
+class YouTubeChannelJob(BaseNewJob):
     types = [
         JobTypeEnum.YouTubeChannelOnboarding,
         JobTypeEnum.YouTubeChannel,
@@ -17,11 +18,11 @@ class YouTubeChannelJob:
     def __init__(self, job: JobData):
         self.job = job
 
-    def execute(self) -> tuple[JobsStatusEnum, int]:
+    def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
         if self.job.type == JobTypeEnum.YouTubeChannel:
             try:
                 status = YouTubeChannelCreatorJob(self.job).generate()
-                return (status, 0)
+                return (status, 0, None)
             except Exception:
                 self.job.failed_count += 1
                 status = (
@@ -29,11 +30,11 @@ class YouTubeChannelJob:
                     if self.job.failed_count >= 4
                     else JobsStatusEnum.IN_PROGRESS
                 )
-                return (status, 1)
+                return (status, 1, None)
         if self.job.type == JobTypeEnum.YouTubeChannelVideoChecker:
             try:
                 status = YouTubeChannelVideoCheckerJob(self.job).generate()
-                return (status, 0)
+                return (status, 0, None)
             except Exception:
                 self.job.failed_count += 1
                 status = (
@@ -41,11 +42,11 @@ class YouTubeChannelJob:
                     if self.job.failed_count >= 4
                     else JobsStatusEnum.IN_PROGRESS
                 )
-                return (status, 1)
+                return (status, 1, None)
         if self.job.type == JobTypeEnum.YouTubeChannelOnboarding:
             try:
                 status = YouTubeChannelOnboardingJob(self.job).generate()
-                return (status, 0)
+                return (status, 0, None)
             except Exception:
                 self.job.failed_count += 1
                 status = (
@@ -53,5 +54,5 @@ class YouTubeChannelJob:
                     if self.job.failed_count >= 4
                     else JobsStatusEnum.IN_PROGRESS
                 )
-                return (status, 1)
-        return (JobsStatusEnum.FAILED, 0)
+                return (status, 1, None)
+        return (JobsStatusEnum.FAILED, 0, None)
