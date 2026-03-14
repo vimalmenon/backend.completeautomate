@@ -1,6 +1,11 @@
 from datetime import datetime
 
-from backend.data import JobData, YouTubeChannelTaskData, YouTubeVideoTaskData
+from backend.data import (
+    JobData,
+    YouTubeChannelTaskData,
+    YouTubeVideoCheckerTaskData,
+    YouTubeVideoTaskData,
+)
 from backend.database import JobDB
 from backend.enum import JobsStatusEnum, JobTypeEnum
 
@@ -31,11 +36,12 @@ class JobManager:
         )
 
     def add_video_checker_job(self, ref_id: str) -> JobData:
+        task_cls = YouTubeVideoCheckerTaskData(ref_id=ref_id)
         return JobData(
             status=JobsStatusEnum.IN_PROGRESS,
             type=JobTypeEnum.YouTubeVideoChecker,
             description=f"Checking video with ref ID: {ref_id}",
-            task_data={},
+            task_data=task_cls.to_dict(),
             created_at=datetime.now(),
         )
 
