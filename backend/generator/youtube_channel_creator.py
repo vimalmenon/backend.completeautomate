@@ -107,10 +107,7 @@ class YouTubeChannelOnboardingJob(BaseGeneratorJob):
     ) -> JobData | None:
         jobs = job_manager.get_job_by_type(type=type)
         jobs_with_ref_id = [
-            job
-            for job in jobs
-            if job.task_data.get("ref_id") == ref_id
-            and job.type == JobTypeEnum.YouTubeChannelVideoChecker
+            job for job in jobs if job.task_data.get("ref_id") == ref_id
         ]
         return jobs_with_ref_id[0] if len(jobs_with_ref_id) > 0 else None
 
