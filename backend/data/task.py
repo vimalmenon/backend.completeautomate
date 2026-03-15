@@ -148,6 +148,12 @@ class YouTubeVideoTaskData:
             "task": self.task.value,
         }
 
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
 
 @dataclass
 class YouTubeVideoStatsUpdaterTaskData:

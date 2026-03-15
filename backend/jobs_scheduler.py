@@ -24,7 +24,7 @@ class JobScheduler:
             return
         if transform:
             logger.info("Starting job transformation process")
-
+            self.__transform_data()
             logger.info("Completed job transformation process")
             return
         if test:
@@ -60,3 +60,7 @@ class JobScheduler:
             logger.info(
                 f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
             )
+
+    def __transform_data(self) -> bool:
+        # Need to add when there is some transfrom data
+        return False

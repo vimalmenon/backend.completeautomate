@@ -1,5 +1,7 @@
+from typing import Any
+
 from backend.config.env import env
-from backend.data import JobData, YouTubeVideoTaskData
+from backend.data import JobData, YouTubeVideoDBData, YouTubeVideoTaskData
 from backend.enum import JobsStatusEnum, YouTubeVideoTaskEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGeneratorJob
@@ -16,6 +18,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.youtube_api: YouTubeAPI | MockYouTubeAPI = (
             MockYouTubeAPI() if env.OFFLINE else YouTubeAPI()
         )
+        self.video_id = self.task_data.platform.video_id
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
         self.video_from_db = self.youtube_manager.get_video()
 
@@ -44,6 +47,17 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if self.video_from_db:
             raise AppException("Video already exists in DB")
 
+        youtube_response = self.youtube_api.fetch_video_details(video_id=self.video_id)
+        youtube_data = YouTubeVideoDBData.to_cls_from_response(
+            {**youtube_response, "ref_id": self.task_data.ref_id}
+        )
+        transcript = self.youtube_api.get_transcript(video_id=self.video_id)
+        if transcript:
+            youtube_data.transcript = self.__convert_transcript_to_text(
+                result=transcript
+            )
+        self.youtube_manager.save_data(data=youtube_data)
+
     def __create_transcript_summary(self):
         pass
 
@@ -64,3 +78,26 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
 
     def __job_complete(self):
         pass
+
+    def __convert_transcript_to_text(self, result) -> str:
+        text = [self.__process_transcript(snippet) for snippet in result.snippets]
+        return "\n".join(text)
+
+    def __process_transcript(self, snippet: Any) -> str:
+        text = (
+            snippet.get("text", "")
+            if isinstance(snippet, dict)
+            else getattr(snippet, "text", "")
+        )
+        start = float(
+            snippet.get("start", 0.0)
+            if isinstance(snippet, dict)
+            else getattr(snippet, "start", 0.0)
+        )
+        duration = float(
+            snippet.get("duration", 0.0)
+            if isinstance(snippet, dict)
+            else getattr(snippet, "duration", 0.0)
+        )
+        end = start + duration
+        return f"[{start:.3f} {end:.3f}] {text}"
