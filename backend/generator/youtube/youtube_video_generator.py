@@ -1,7 +1,9 @@
+from backend.config.env import env
 from backend.data import JobData, YouTubeVideoTaskData
 from backend.enum import JobsStatusEnum, YouTubeVideoTaskEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGeneratorJob
+from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import YouTubeVideoManager
 
@@ -11,7 +13,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     def __init__(self, job: JobData):
         super().__init__(job=job)
         self.task_data = YouTubeVideoTaskData.to_cls(data=job.task_data)
-        self.youtube_api = YouTubeAPI()
+        self.youtube_api: YouTubeAPI | MockYouTubeAPI = (
+            MockYouTubeAPI() if env.OFFLINE else YouTubeAPI()
+        )
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
         self.video_from_db = self.youtube_manager.get_video()
 
