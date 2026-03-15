@@ -42,19 +42,19 @@ class JobScheduler:
                 (
                     status,
                     failed_count,
-                    job_data,
+                    task_data,
                 ) = YouTubeChannelJob(job=job).execute()
             elif job.type in YouTubeVideoJob.types:
                 (
                     status,
                     failed_count,
-                    job_data,
+                    task_data,
                 ) = YouTubeVideoJob(job=job).execute()
             self.job_manager.update_job_data(
                 job_id=job.id,
                 status=status,
                 failed_count=failed_count,
-                job_data=job_data,
+                task_data=task_data,
             )
 
             logger.info(

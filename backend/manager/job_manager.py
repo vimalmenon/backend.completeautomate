@@ -44,14 +44,14 @@ class JobManager:
         job_id: UUID,
         status: JobsStatusEnum,
         failed_count: int,
-        job_data: dict | None = None,
+        task_data: dict | None = None,
     ) -> None:
         values: Any = {
             "status": status.value,
             "failed_count": failed_count,
         }
-        if job_data:
-            values["task_data"] = job_data
+        if task_data:
+            values["task_data"] = task_data
 
         JobDB().update_data(
             job_id=job_id,
