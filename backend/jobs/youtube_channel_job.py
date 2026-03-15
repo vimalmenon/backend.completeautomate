@@ -21,8 +21,8 @@ class YouTubeChannelJob(BaseNewJob):
     def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
         if self.job.type == JobTypeEnum.YouTubeChannel:
             try:
-                status = YouTubeChannelCreatorJob(self.job).generate()
-                return (status, 0, None)
+                status, data = YouTubeChannelCreatorJob(self.job).generate()
+                return (status, 0, data)
             except Exception:
                 self.job.failed_count += 1
                 status = (
@@ -33,8 +33,8 @@ class YouTubeChannelJob(BaseNewJob):
                 return (status, 1, None)
         if self.job.type == JobTypeEnum.YouTubeChannelVideoChecker:
             try:
-                status = YouTubeChannelVideoCheckerJob(self.job).generate()
-                return (status, 0, None)
+                status, data = YouTubeChannelVideoCheckerJob(self.job).generate()
+                return (status, 0, data)
             except Exception:
                 self.job.failed_count += 1
                 status = (
@@ -45,8 +45,8 @@ class YouTubeChannelJob(BaseNewJob):
                 return (status, 1, None)
         if self.job.type == JobTypeEnum.YouTubeChannelOnboarding:
             try:
-                status = YouTubeChannelOnboardingJob(self.job).generate()
-                return (status, 0, None)
+                status, data = YouTubeChannelOnboardingJob(self.job).generate()
+                return (status, 0, data)
             except Exception:
                 self.job.failed_count += 1
                 status = (

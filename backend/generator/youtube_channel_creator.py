@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class YouTubeChannelOnboardingJob(BaseGeneratorJob):
-    def generate(self) -> tuple[JobsStatusEnum:, dict | None]:
+    def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         channel_id = env.YOUTUBE_CHANNEL_ID
         ref_id = self.__create_channel_platform_if_not_exists(channel_id=channel_id)
         job_manager = JobManager()
@@ -47,7 +47,7 @@ class YouTubeChannelOnboardingJob(BaseGeneratorJob):
         logger.info(
             f"Created video checker job for YouTube channel with ID: {channel_id}, job: {video_checker_job_data.to_json()}"
         )
-        return JobsStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS, None
 
     def __create_channel_platform_if_not_exists(self, channel_id: str) -> str:
         if ref_id := PlatformManager().get_platform_by_channel_id(channel_id):
@@ -168,7 +168,7 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
                 )
                 job_manager.save_job(job_data=job_data)
 
-        return JobsStatusEnum.IN_PROGRESS
+        return JobsStatusEnum.IN_PROGRESS, None
 
     def __get_platform_data(self, video_id: str) -> PlatformDBData:
         return PlatformDBData(
