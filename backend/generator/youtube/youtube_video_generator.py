@@ -1,5 +1,6 @@
 from backend.data import JobData, YouTubeVideoTaskData
-from backend.enum import JobsStatusEnum
+from backend.enum import JobsStatusEnum, YouTubeVideoTaskEnum
+from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGeneratorJob
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import YouTubeVideoManager
@@ -12,10 +13,12 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.task_data = YouTubeVideoTaskData.to_cls(data=job.task_data)
         self.youtube_api = YouTubeAPI()
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
+        self.video_from_db = self.youtube_manager.get_video()
 
     def generate(self) -> tuple[JobsStatusEnum, dict]:
-        self.__create_video_db()
-        self.__fix_transcript()
+        if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoStart:
+            self.__create_video_db()
+            self.__fix_transcript()
         self.__create_transcript_summary()
         self.__create_metadata_suggestions()
         self.__select_metadata_suggestion()
@@ -27,7 +30,8 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         return JobsStatusEnum.IN_PROGRESS, self.task_data.to_json()
 
     def __create_video_db(self):
-        pass
+        if self.video_from_db:
+            raise AppException("Video already exists in DB")
 
     def __fix_transcript(self):
         pass
