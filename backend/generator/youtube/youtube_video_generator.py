@@ -50,7 +50,6 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     def __create_metadata_suggestions(self):
         pass
 
-
     def __create_thumbnail_prompt_suggestions(self):
         pass
 
