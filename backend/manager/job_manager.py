@@ -39,12 +39,20 @@ class JobManager:
         )
 
     def update_job_data(
-        self, job_id: UUID, status: JobsStatusEnum, failed_count: int
+        self,
+        job_id: UUID,
+        status: JobsStatusEnum,
+        failed_count: int,
+        job_data: dict | None = None,
     ) -> None:
+        values = {
+            "status": status.value,
+            "failed_count": failed_count,
+        }
+        if job_data:
+            values["task_data"] = job_data
+
         JobDB().update_data(
             job_id=job_id,
-            values={
-                "status": status.value,
-                "failed_count": failed_count,
-            },
+            values=values,
         )

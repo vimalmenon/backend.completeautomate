@@ -1,7 +1,7 @@
 import logging
 
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
-from backend.manager import JobManager
+from backend.manager import JobManager, StartUpManager
 
 logger = logging.getLogger(__name__)
 
@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 class JobScheduler:
     def __init__(self):
         self.job_manager = JobManager()
+        self.startup_manager = StartUpManager()
 
     def start(
         self,
@@ -31,6 +32,7 @@ class JobScheduler:
 
             logger.info("Completed test script execution")
             return
+        self.startup_manager.start()
         jobs = self.job_manager.get_all_active_jobs()
         for job in jobs:
             logger.info(
@@ -42,18 +44,18 @@ class JobScheduler:
                     failed_count,
                     job_data,
                 ) = YouTubeChannelJob(job=job).execute()
-                self.job_manager.update_job_data(
-                    job_id=job.id, status=status, failed_count=failed_count
-                )
             elif job.type in YouTubeVideoJob.types:
                 (
                     status,
                     failed_count,
                     job_data,
                 ) = YouTubeVideoJob(job=job).execute()
-                self.job_manager.update_job_data(
-                    job_id=job.id, status=status, failed_count=failed_count
-                )
+            self.job_manager.update_job_data(
+                job_id=job.id,
+                status=status,
+                failed_count=failed_count,
+                job_data=job_data,
+            )
 
             logger.info(
                 f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
