@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 from uuid import UUID, uuid4
 
 from backend.data import (
@@ -45,7 +46,7 @@ class JobManager:
         failed_count: int,
         job_data: dict | None = None,
     ) -> None:
-        values = {
+        values: Any = {
             "status": status.value,
             "failed_count": failed_count,
         }
