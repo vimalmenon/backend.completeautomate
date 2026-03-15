@@ -2,7 +2,9 @@ import logging
 
 from langchain.agents import create_agent
 from langchain.messages import AIMessage, HumanMessage, SystemMessage
+from pydantic import BaseModel
 
+from backend.config.env import env
 from backend.data import MessageDBData
 from backend.database import AgentMessageDB
 from backend.exception.app_exception import AppException
@@ -27,17 +29,23 @@ class GeneralAgent:
 
     def invoke(self):
         logger.info("Invoking general agent for team=%s", self.team.name)
-        agent = self.__create_agent()
         messages = [
             SystemMessage(content=self.agent.get_system_message()),
             HumanMessage(content=self.agent.get_prompt()),
         ]
-        result = agent.invoke(
-            {
-                "messages": messages,
-                "user_preferences": {"style": "technical", "verbosity": "detailed"},
-            }
-        )
+        if env.OFFLINE:
+            result = self.__mock_offline_result(messages)
+        else:
+            agent = self.__create_agent()
+            result = agent.invoke(
+                {
+                    "messages": messages,
+                    "user_preferences": {
+                        "style": "technical",
+                        "verbosity": "detailed",
+                    },
+                }
+            )
         data = MessageDBData(
             task_id=self.task_id,
             messages=self.parse_messages_to_dict(result["messages"]),
@@ -52,13 +60,19 @@ class GeneralAgent:
             raise AppException("data not found")
         messages = self.__convert_msg_dict_for_reinvoke(db_data.messages)
         messages.append(HumanMessage(content=message))
-        agent = self.__create_agent()
-        result = agent.invoke(
-            {
-                "messages": messages,
-                "user_preferences": {"style": "technical", "verbosity": "detailed"},
-            }
-        )
+        if env.OFFLINE:
+            result = self.__mock_offline_result(messages)
+        else:
+            agent = self.__create_agent()
+            result = agent.invoke(
+                {
+                    "messages": messages,
+                    "user_preferences": {
+                        "style": "technical",
+                        "verbosity": "detailed",
+                    },
+                }
+            )
         data = MessageDBData(
             task_id=self.task_id,
             messages=self.parse_messages_to_dict(result["messages"]),
@@ -106,3 +120,55 @@ class GeneralAgent:
         if message["role"] == "human":
             return HumanMessage(content=message["content"])
         raise AppException("No Compatible role type")
+
+    def __mock_offline_result(self, messages: list) -> dict:
+        logger.info("OFFLINE mode enabled: returning mock AI response")
+        ai_message = AIMessage(
+            content=(
+                "[OFFLINE MOCK RESPONSE] This is a simulated AI response generated "
+                "because OFFLINE mode is enabled."
+            )
+        )
+        result = {
+            "messages": [*messages, ai_message],
+        }
+        structured_response = self.__build_mock_structured_response()
+        if structured_response is not None:
+            result["structured_response"] = structured_response
+        return result
+
+    def __build_mock_structured_response(self):
+        if not self.response_format:
+            return None
+
+        try:
+            if self.response_format.__name__ == "YouTubeVideoAnalyzerListResponse":
+                return self.response_format(
+                    details=[
+                        {
+                            "title": "[OFFLINE] Mock Video Title",
+                            "description": "[OFFLINE] Mock description generated for testing.",
+                            "tags": ["offline", "mock", "youtube"],
+                        }
+                    ]
+                )
+
+            if self.response_format.__name__ == "ImagePromptsListRequest":
+                return self.response_format(
+                    image_prompts=[
+                        {
+                            "name": "offline_mock_thumbnail.png",
+                            "prompt": "A clean YouTube thumbnail with bold headline typography and high contrast subject.",
+                            "description": "[OFFLINE] Mock thumbnail prompt for local testing.",
+                            "negative_prompt": "blurry, low resolution, watermark, distorted face",
+                        }
+                    ]
+                )
+
+            if issubclass(self.response_format, BaseModel):
+                return self.response_format.model_construct()
+
+        except Exception as exc:
+            logger.warning("Failed to build mock structured response: %s", exc)
+
+        return None
