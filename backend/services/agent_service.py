@@ -47,6 +47,8 @@ class AgentService:
             raise AppException("Unsupported AI model")
 
     def get_image_model(self):
+        if not self.prompt_data:
+            raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
         if self.prompt_data.ai == AIImageModelEnum.Grok:
             return GrokImageGeneration()
         if self.prompt_data.ai == AIImageModelEnum.Qwen:

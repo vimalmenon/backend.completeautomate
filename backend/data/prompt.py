@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Any, Self
 
-from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum
+from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum, AIImageModelEnum
 
 
 @dataclass
@@ -11,7 +11,7 @@ class PromptDBData:
     system_message: str
     task: PromptTaskEnum
     role: TeamEnum
-    ai: AIModelEnum
+    ai: AIModelEnum | AIImageModelEnum
     version: str = "LATEST"
     last_updated: datetime = datetime.now()
 
