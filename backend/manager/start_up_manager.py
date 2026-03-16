@@ -1,5 +1,7 @@
 from logging import getLogger
 
+from tabulate import tabulate
+
 from backend.data import S3Data
 from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
@@ -19,6 +21,7 @@ class StartUpManager:
 
     def end(self) -> None:
         self.__sync_prompts()
+        self.__show_jobs()
 
     def __add_start_up_file(self) -> None:
         for path in ["pickle/token.pickle", "json/client_secret.json"]:
@@ -49,3 +52,9 @@ class StartUpManager:
         data = FolderHelper().create_pickle_data(data=prompts_data)
         S3Storage().upload_data(s3_data=s3_data, data=data)
         return True
+
+    def __show_jobs(self):
+        jobs = JobManager().get_all_active_jobs()
+        data = [[job.id, job.type, job.status] for job in jobs]
+        headers = ["ID", "Type", "Status"]
+        print(tabulate(data, headers=headers, tablefmt="grid"))

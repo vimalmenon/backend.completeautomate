@@ -31,6 +31,7 @@ langsmith = "^0.7.17"
 langgraph = "^1.1.2"
 langchain = "^1.2.12"
 boto3 = "^1.42.67"
+tabulate = "^0.10.0"
 
 [tool.poetry.scripts]
 app = "main:main"
@@ -53,6 +54,7 @@ pyfaker = "^0.1"
 tox = "^4.49.0"
 faker = "^40.8.0"
 ruff = "^0.15.6"
+types-tabulate = "^0.10.0.20260308"
 
 [tool.black]
 line-length = 88
