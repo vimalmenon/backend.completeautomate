@@ -2,7 +2,9 @@ from typing import Any
 
 from backend.config.env import env
 from backend.data import (
+    ImagePromptData,
     JobData,
+    YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoDBData,
     YouTubeVideoMetadataData,
     YouTubeVideoTaskData,
@@ -15,7 +17,10 @@ from backend.enum import (
 )
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGeneratorJob
-from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
+from backend.generator.response_format import (
+    ImagePromptsListRequest,
+    YouTubeVideoAnalyzerListResponse,
+)
 from backend.integration.agent.general_agent import GeneralAgent
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI
@@ -41,10 +46,10 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if not self.video_from_db:
             raise AppException("There is no video available")
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoFixTranscript:
-            self.__create_transcript_summary(self.video_from_db)
-            return self.__create_metadata_suggestions(self.video_from_db)
+            self.__create_transcript_summary(video_from_db=self.video_from_db)
+            return self.__create_metadata_suggestions(video_from_db=self.video_from_db)
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
-            self.__create_thumbnail_prompt_suggestions()
+            self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             self.__generate_thumbnails()
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
             return JobsStatusEnum.REVIEW, self.task_data.to_json()
@@ -125,8 +130,36 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
-    def __create_thumbnail_prompt_suggestions(self):
-        pass
+    def __create_thumbnail_prompt_suggestions(self, video_from_db: YouTubeVideoDBData):
+        service = AgentService(
+            prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
+            task_id=str(self.task.id),
+            data=YouTubeThumbnailImageGenerationPromptData(
+                title=video_from_db.title,
+                description=video_from_db.description,
+                video_summary=video_from_db.summarized_transcript or "",
+            ).to_json(),
+        )
+        agent = GeneralAgent(
+            service,
+            response_format=ImagePromptsListRequest,
+        )
+        result = agent.invoke()
+        structured_response: ImagePromptsListRequest = result.get(
+            "structured_response", []
+        )
+        prompt_response = [
+            ImagePromptData(
+                name=data.name,
+                description=data.description,
+                prompt=data.prompt,
+                negative_prompt=data.negative_prompt,
+            )
+            for data in structured_response.image_prompts
+        ]
+        self.youtube_manager.update_thumbnail_prompt_suggestions(
+            thumbnail_prompt_suggestions=prompt_response
+        )
 
     def __generate_thumbnails(self):
         pass
