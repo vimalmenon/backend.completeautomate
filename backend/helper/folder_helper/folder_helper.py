@@ -51,5 +51,5 @@ class FolderHelper:
             pickle_file.write(serialized_data)
         return serialized_data
 
-    def create_pickle_data(self, data: any) -> bytes:
+    def create_pickle_data(self, data: Any) -> bytes:
         return pickle.dumps(data)
