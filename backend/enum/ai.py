@@ -12,3 +12,9 @@ class AIModelEnum(str, Enum):
     Perplexity = "Perplexity"
     Qwen = "Qwen"
     Grok = "Grok"
+
+
+class AIImageModelEnum(str, Enum):
+    Qwen = "Qwen"
+    Grok = "Grok"
+    OpenRouter = "OpenRouter"

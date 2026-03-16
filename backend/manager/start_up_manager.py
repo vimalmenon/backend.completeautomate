@@ -39,5 +39,4 @@ class StartUpManager:
         FolderHelper().create_pickle_file(
             path="backend/output/pickle/prompt_data.pickle", data=prompts_data
         )
-        # Placeholder for syncing prompt templates or other necessary data during startup
         return False

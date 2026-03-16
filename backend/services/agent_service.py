@@ -4,6 +4,9 @@ from backend.ai import DeepseekAI, GrokAI, PerplexityAI, QwenAI
 from backend.database import PromptDB
 from backend.enum import AIModelEnum, PromptTaskEnum
 from backend.exception.app_exception import AppException
+from backend.integration.image_generation import (
+    GrokImageGeneration,
+)
 
 
 class AgentService:
@@ -35,6 +38,12 @@ class AgentService:
             return PerplexityAI().get_model()
         elif self.prompt_data.ai == AIModelEnum.Qwen:
             return QwenAI().get_model()
+        else:
+            raise AppException("Unsupported AI model")
+
+    def get_image_model(self):
+        if self.prompt_data.ai == AIModelEnum.Grok:
+            return GrokImageGeneration()
         else:
             raise AppException("Unsupported AI model")
 
