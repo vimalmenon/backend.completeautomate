@@ -17,6 +17,9 @@ class JobManager:
     def get_job_by_type(self, type: JobTypeEnum) -> list[JobData]:
         return JobDB().query_data_by_type(type)
 
+    def get_job_by_id(self, job_id: str) -> JobData | None:
+        return JobDB().get_job_by_id(job_id)
+
     def get_all_jobs(self) -> list[JobData]:
         return JobDB().get_all_jobs()
 

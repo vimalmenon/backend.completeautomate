@@ -22,6 +22,17 @@ class JobDB:
             }
         )
 
+    def get_job_by_id(self, job_id: str) -> JobData | None:
+        item = self.db_manager.get_item(
+            key={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: job_id,
+            }
+        )
+        if item:
+            return JobData.to_cls(item)
+        return None
+
     def query_data_by_type(self, type: JobTypeEnum) -> list[JobData]:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
