@@ -19,9 +19,7 @@ class AgentImageService:
         self.prompt = prompt
         self.image_ai = image_ai
 
-    def get_image_model(self):
-        if not self.prompt_data:
-            raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
+    def get_model(self):
         if self.image_ai == AIImageModelEnum.Grok:
             return GrokImageGeneration()
         if self.image_ai == AIImageModelEnum.Qwen:
