@@ -3,6 +3,7 @@ from logging import getLogger
 from backend.data import S3Data
 from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
+from backend.manager.job_manager import JobManager
 from backend.manager.prompt_manager import PromptManager
 
 logger = getLogger(__name__)
@@ -29,7 +30,8 @@ class StartUpManager:
                 logger.debug(f"Startup file already present: {path}")
 
     def __add_start_up_jobs(self) -> bool:
-        return False
+        JobManager().create_youtube_channel_onboarding_job()
+        return True
 
     def __transform_data(self) -> bool:
         # Placeholder for any future data transformation logic needed during startup
