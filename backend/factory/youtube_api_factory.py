@@ -85,3 +85,47 @@ class MockYouTubeAPI:
             },
             "status": {"privacyStatus": "public"},
         }
+
+
+def youtube_channel_api_factory(**kwargs) -> dict:
+    return {
+        "id": kwargs.get("channel_id"),
+        "snippet": {
+            "title": "Mock Channel",
+            "description": "Mock channel description for offline mode.",
+            "customUrl": "@mockchannel",
+            "publishedAt": "2020-01-01T00:00:00Z",
+            "thumbnails": {
+                "high": {"url": "https://example.com/mock_channel_thumb.jpg"}
+            },
+        },
+        "statistics": {
+            "viewCount": "100",
+            "subscriberCount": "5",
+            "videoCount": "3",
+        },
+        "status": {"privacyStatus": "public"},
+        "brandingSettings": {},
+    }
+
+
+def youtube_video_api_factory(**kwargs) -> dict:
+    video_id = kwargs.get("video_id")
+    return {
+        "id": video_id,
+        "snippet": {
+            "title": f"Mock Video Title [{video_id}]",
+            "description": "Mock video description for offline mode.",
+            "publishedAt": "2024-03-01T12:00:00Z",
+            "thumbnails": {"high": {"url": "https://example.com/mock_thumbnail.jpg"}},
+            "tags": ["mock", "offline", "test"],
+            "defaultLanguage": "en",
+            "defaultAudioLanguage": "en",
+        },
+        "statistics": {
+            "viewCount": "1000",
+            "likeCount": "50",
+            "commentCount": "10",
+        },
+        "status": {"privacyStatus": "public"},
+    }
