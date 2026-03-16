@@ -1,11 +1,11 @@
+from backend.ai.image_generation.open_router_image_generation import (
+    ImageModelList,
+    OpenRouterImageGeneration,
+)
 from backend.data import ImageGeneratorJobData, S3Data, TaskData
 from backend.database.image.image_generator_db import ImageGeneratorDB
 from backend.enum import TaskStatusEnum
 from backend.generator.base_generator import BaseGenerator
-from backend.integration.image_generation.open_router_image_generation import (
-    ImageModelList,
-    OpenRouterImageGeneration,
-)
 from backend.integration.storage.s3_storage import S3Storage
 
 

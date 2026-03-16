@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Any, Self
 
-from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum, AIImageModelEnum
+from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum, TeamEnum
 
 
 @dataclass
