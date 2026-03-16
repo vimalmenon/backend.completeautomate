@@ -1,6 +1,16 @@
-from backend.ai.deepseek_ai import DeepseekAI
-from backend.ai.grok_ai import GrokAI
-from backend.ai.perplexity_ai import PerplexityAI
-from backend.ai.qwen_ai import QwenAI
+from backend.ai.general import DeepseekAI, GrokAI, PerplexityAI, QwenAI
+from backend.ai.image_generation import (
+    GrokImageGeneration,
+    OpenRouterImageGeneration,
+    QwenImageGeneration,
+)
 
-__all__ = ["DeepseekAI", "GrokAI", "PerplexityAI", "QwenAI"]
+__all__ = [
+    "DeepseekAI",
+    "GrokAI",
+    "PerplexityAI",
+    "QwenAI",
+    "GrokImageGeneration",
+    "QwenImageGeneration",
+    "OpenRouterImageGeneration",
+]

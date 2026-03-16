@@ -1,12 +1,17 @@
 from jinja2 import StrictUndefined, Template, TemplateError
 
-from backend.ai import DeepseekAI, GrokAI, PerplexityAI, QwenAI
-from backend.database import PromptDB
-from backend.enum import AIModelEnum, PromptTaskEnum
-from backend.exception.app_exception import AppException
-from backend.integration.image_generation import (
+from backend.ai import (
+    DeepseekAI,
+    GrokAI,
     GrokImageGeneration,
+    OpenRouterImageGeneration,
+    PerplexityAI,
+    QwenAI,
+    QwenImageGeneration,
 )
+from backend.database import PromptDB
+from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum
+from backend.exception.app_exception import AppException
 
 
 class AgentService:
@@ -42,8 +47,12 @@ class AgentService:
             raise AppException("Unsupported AI model")
 
     def get_image_model(self):
-        if self.prompt_data.ai == AIModelEnum.Grok:
+        if self.prompt_data.ai == AIImageModelEnum.Grok:
             return GrokImageGeneration()
+        if self.prompt_data.ai == AIImageModelEnum.Qwen:
+            return QwenImageGeneration()
+        if self.prompt_data.ai == AIImageModelEnum.OpenRouter:
+            return OpenRouterImageGeneration()
         else:
             raise AppException("Unsupported AI model")
 
