@@ -76,17 +76,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve features
-  - [ ] Test the complete flow (Video DB Generation to Upload Thumbnail)
-    - [ ] Make the Workflow as complete if the transcript is not available
-    - [ ] Move to New Flow
-    - [ ] Need to work on `Image Generation Flow`
-    - [ ] Test remaining workflow
   - [ ] App revamp
       - [ ] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
-  - [ ] Upload and download prompts during startup if there is any change
-  - [ ] Update JobData for videos rather than creating New Tasks
-  - [ ] Remove task_id from video db
-  - [ ] Remove task_id from channel db
+      - [ ] Remove all the old reference
+      - [ ] Upload and download prompts during startup if there is any change
+      - [ ] Update JobData for videos rather than creating New Tasks
+      - [ ] Remove task_id from video db
+      - [ ] Remove task_id from channel db
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
@@ -98,7 +94,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Test all the prompts once done
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Remove `Completed` tasks after 1 week
+  - [ ] Make Workflow as `Archive` tasks after 1 week
 - [ ] Send Notification
   - [ ] Send Email
   - [ ] Send Signal
