@@ -14,6 +14,27 @@ from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum
 from backend.exception.app_exception import AppException
 
 
+class AgentImageService:
+    def __init__(self, prompt: str, image_ai: AIImageModelEnum = AIImageModelEnum.Qwen):
+        self.prompt = prompt
+        self.image_ai = image_ai
+
+    def get_image_model(self):
+        if not self.prompt_data:
+            raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
+        if self.image_ai == AIImageModelEnum.Grok:
+            return GrokImageGeneration()
+        if self.image_ai == AIImageModelEnum.Qwen:
+            return QwenImageGeneration()
+        if self.image_ai == AIImageModelEnum.OpenRouter:
+            return OpenRouterImageGeneration()
+        else:
+            raise AppException("Unsupported AI model")
+
+    def get_prompt(self) -> str:
+        return self.prompt
+
+
 class AgentService:
     PROMPT_DATA_NOT_FOUND_ERROR = "Prompt data not found for the given task"
 
@@ -43,18 +64,6 @@ class AgentService:
             return PerplexityAI().get_model()
         elif self.prompt_data.ai == AIModelEnum.Qwen:
             return QwenAI().get_model()
-        else:
-            raise AppException("Unsupported AI model")
-
-    def get_image_model(self):
-        if not self.prompt_data:
-            raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
-        if self.prompt_data.ai == AIImageModelEnum.Grok:
-            return GrokImageGeneration()
-        if self.prompt_data.ai == AIImageModelEnum.Qwen:
-            return QwenImageGeneration()
-        if self.prompt_data.ai == AIImageModelEnum.OpenRouter:
-            return OpenRouterImageGeneration()
         else:
             raise AppException("Unsupported AI model")
 
