@@ -17,10 +17,12 @@ class TestFolderHelper:
         output_path = tmp_path / "nested" / "token.pickle"
         payload = {"token": "abc123", "expires": 3600}
 
-        helper.create_pickle_file(str(output_path), payload)
+        raw_bytes = helper.create_pickle_file(str(output_path), payload)
 
         assert output_path.exists()
         assert output_path.is_file()
+        assert isinstance(raw_bytes, bytes)
+        assert pickle.loads(raw_bytes) == payload
         with output_path.open("rb") as pickle_file:
             loaded = pickle.load(pickle_file)
         assert loaded == payload

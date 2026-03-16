@@ -46,6 +46,10 @@ class FolderHelper:
             )
 
         self.create_missing_folders(path)
+        serialized_data = pickle.dumps(data)
         with normalized_path.open("wb") as pickle_file:
-            pickle.dump(data, pickle_file)
-            return pickle_file
+            pickle_file.write(serialized_data)
+        return serialized_data
+
+    def create_pickle_data(self, data: any) -> bytes:
+        return pickle.dumps(data)

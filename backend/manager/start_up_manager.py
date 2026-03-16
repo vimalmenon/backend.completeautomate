@@ -45,8 +45,6 @@ class StartUpManager:
             ),
         )
 
-        data = FolderHelper().create_pickle_file(
-            path=s3_data.downloaded_path, data=prompts_data
-        )
+        data = FolderHelper().create_pickle_data(data=prompts_data)
         S3Storage().upload_data(s3_data=s3_data, data=data)
         return True
