@@ -6,6 +6,7 @@ from uuid import UUID
 
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
+from backend.data.s3 import S3Data
 from backend.enum import JobStatusEnum
 
 
@@ -125,6 +126,42 @@ class YouTubeVideoReviewData:
     overall: str
     rating: int
 
+    def to_json(self) -> dict:
+        return {
+            "upsides": self.upsides,
+            "downsides": self.downsides,
+            "overall": self.overall,
+            "rating": self.rating,
+        }
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(
+            upsides=data["upsides"],
+            downsides=data["downsides"],
+            overall=data["overall"],
+            rating=data["rating"],
+        )
+
+
+@dataclass
+class YouTubeVideoThumbnailData:
+    s3_data: S3Data
+    status: JobStatusEnum = JobStatusEnum.NEW
+
+    def to_json(self) -> dict:
+        return {
+            "s3_data": self.s3_data.to_json(),
+            "status": self.status.value,
+        }
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(
+            s3_data=S3Data.to_cls(data["s3_data"]),
+            status=JobStatusEnum(data["status"]),
+        )
+
 
 @dataclass
 class YouTubeVideoDBData:
@@ -142,7 +179,9 @@ class YouTubeVideoDBData:
     summarized_transcript: str | None = None
     review: YouTubeVideoReviewData | None = None
     comment: str | None = None
-    image_paths: list[str] = field(default_factory=list)
+    thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
+        default_factory=list
+    )
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
 
@@ -177,7 +216,10 @@ class YouTubeVideoDBData:
                 ImagePromptData.to_cls(prompt)
                 for prompt in data.get("thumbnail_prompt_suggestions", [])
             ],
-            image_paths=data.get("image_paths", []),
+            thumbnails_suggestions=[
+                YouTubeVideoThumbnailData.to_cls(suggestion)
+                for suggestion in data.get("thumbnails_suggestions", [])
+            ],
         )
 
     @classmethod
@@ -218,7 +260,9 @@ class YouTubeVideoDBData:
             "thumbnail_prompt_suggestions": [
                 prompt.to_json() for prompt in self.thumbnail_prompt_suggestions
             ],
-            "image_paths": self.image_paths,
+            "thumbnails_suggestions": [
+                suggestion.to_json() for suggestion in self.thumbnails_suggestions
+            ],
         }
 
     def past_update_time(self, days: int = 7) -> bool:

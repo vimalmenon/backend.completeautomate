@@ -4,10 +4,12 @@ from backend.config.env import env
 from backend.data import (
     ImagePromptData,
     JobData,
+    S3Data,
     YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoDBData,
     YouTubeVideoMetadataData,
     YouTubeVideoTaskData,
+    YouTubeVideoThumbnailData,
 )
 from backend.enum import (
     JobsStatusEnum,
@@ -50,9 +52,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             return self.__create_metadata_suggestions(video_from_db=self.video_from_db)
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
-            self.__generate_thumbnails()
-            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
-            return JobsStatusEnum.REVIEW, self.task_data.to_json()
+            return self.__generate_thumbnails(video_from_db=self.video_from_db)
         self.__upload_thumbnail()
         self.__review_video()
         return self.__job_complete()
@@ -161,8 +161,21 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             thumbnail_prompt_suggestions=prompt_response
         )
 
-    def __generate_thumbnails(self):
-        pass
+    def __generate_thumbnails(
+        self, video_from_db: YouTubeVideoDBData
+    ) -> tuple[JobsStatusEnum, dict]:
+        for prompt in video_from_db.thumbnail_prompt_suggestions:
+            s3_data = S3Data(
+                name=prompt.name,
+                content_type=S3Data.detect_content_type_from_name(prompt.name),
+                key=self.task_data.ref_id,
+            )
+            YouTubeVideoThumbnailData(
+                s3_data=s3_data,
+                status=JobStatusEnum.REVIEW,
+            )
+        self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
+        return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
     def __upload_thumbnail(self):
         pass
