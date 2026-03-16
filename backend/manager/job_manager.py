@@ -49,7 +49,7 @@ class JobManager:
         failed_count: int,
         task_data: dict | None = None,
     ) -> None:
-        values: Any = {
+        values: dict[str, Any] = {
             "status": status.value,
             "failed_count": failed_count,
         }

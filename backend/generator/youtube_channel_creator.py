@@ -126,14 +126,18 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
     def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         channel_from_db = self.channel_manager.get_channel_details()
         if not channel_from_db:
-            result = self.youtube_api.get_channel_info(self.task_data.platform.channel_id)
+            result = self.youtube_api.get_channel_info(
+                self.task_data.platform.channel_id
+            )
             channel_from_api = YouTubeChannelDBData.to_cls_from_response(
                 {**result, "ref_id": self.task_data.ref_id}
             )
             self.channel_manager.add_channel(channel_from_api)
             return JobsStatusEnum.IN_PROGRESS, None
         if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
-            result = self.youtube_api.get_channel_info(self.task_data.platform.channel_id)
+            result = self.youtube_api.get_channel_info(
+                self.task_data.platform.channel_id
+            )
             latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
                 {**result, "ref_id": self.task_data.ref_id}
             )
@@ -168,7 +172,7 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
                 job_data = job_manager.create_job(
                     type=JobTypeEnum.YouTubeVideo,
                     task_data=cls_data.to_json(),
-                    description=f"Checking video with ID: {video['id']} for YouTube channel with ID: {platform_data.data.channel_id}",
+                    description=f"Checking video with ID: {video['id']} for YouTube channel with ID: {platform_data.channel_id}",
                 )
                 job_manager.save_job(job_data=job_data)
 
@@ -206,7 +210,9 @@ class YouTubeChannelCreator(BaseGenerator):
     def generate(self) -> TaskStatusEnum:
         channel_from_db = self.channel_manager.get_channel_details()
         if not channel_from_db:
-            result = self.youtube_api.get_channel_info(self.job_data.platform.channel_id)
+            result = self.youtube_api.get_channel_info(
+                self.job_data.platform.channel_id
+            )
             channel_from_api = YouTubeChannelDBData.to_cls_from_response(
                 {**result, "task_id": str(self.task.id), "ref_id": self.job_data.ref_id}
             )
@@ -222,7 +228,9 @@ class YouTubeChannelCreator(BaseGenerator):
         if channel_from_db and channel_from_db.past_update_time(
             int(self.job_data.poll_frequency_in_days)
         ):
-            result = self.youtube_api.get_channel_info(self.job_data.platform.channel_id)
+            result = self.youtube_api.get_channel_info(
+                self.job_data.platform.channel_id
+            )
             latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
                 {**result, "task_id": str(self.task.id), "ref_id": self.job_data.ref_id}
             )
