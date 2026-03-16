@@ -30,7 +30,7 @@ class JobScheduler:
             return
         if test:
             logger.info("Starting test script execution")
-
+            self.__run_test_script()
             logger.info("Completed test script execution")
             return
         self.startup_manager.start()
@@ -69,6 +69,9 @@ class JobScheduler:
 
     def __transform_data(self) -> bool:
         # Need to add when there is some transfrom data
+        return False
+
+    def __run_test_script(self) -> bool:
         return False
 
     def __run_job_by_id(self, job_id: str) -> None:
