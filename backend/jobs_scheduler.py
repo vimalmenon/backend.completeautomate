@@ -19,7 +19,7 @@ class JobScheduler:
     ) -> None:
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
-
+            self.__run_job_by_id(job_id)
             logger.info("Completed one-time job execution for job_id=%s", job_id)
             return
         if transform:
@@ -61,6 +61,11 @@ class JobScheduler:
                 f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
             )
 
+        self.startup_manager.end()
+
     def __transform_data(self) -> bool:
         # Need to add when there is some transfrom data
         return False
+
+    def __run_job_by_id(self, job_id: str) -> None:
+        pass

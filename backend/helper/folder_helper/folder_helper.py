@@ -37,7 +37,7 @@ class FolderHelper:
 
         shutil.rmtree(normalized_path)
 
-    def create_pickle_file(self, path: str, data: Any) -> None:
+    def create_pickle_file(self, path: str, data: Any) -> bytes:
         normalized_path = Path(path)
 
         if normalized_path.exists() and normalized_path.is_dir():
@@ -48,3 +48,4 @@ class FolderHelper:
         self.create_missing_folders(path)
         with normalized_path.open("wb") as pickle_file:
             pickle.dump(data, pickle_file)
+            return pickle_file

@@ -9,13 +9,15 @@ logger = getLogger(__name__)
 
 
 class StartUpManager:
-    def start(self):
+    def start(self) -> None:
         logger.info("Starting startup manager flow")
         self.__add_start_up_file()
         self.__add_start_up_jobs()
         self.__transform_data()
-        self.__sync_prompts()
         logger.info("Startup manager flow completed")
+
+    def end(self) -> None:
+        self.__sync_prompts()
 
     def __add_start_up_file(self) -> None:
         for path in ["pickle/token.pickle", "json/client_secret.json"]:
@@ -36,7 +38,15 @@ class StartUpManager:
     def __sync_prompts(self) -> bool:
         prompts = PromptManager().get_prompts()
         prompts_data = [prompt.to_json() for prompt in prompts]
-        FolderHelper().create_pickle_file(
-            path="backend/output/pickle/prompt_data.pickle", data=prompts_data
+        s3_data = S3Data(
+            name="prompt_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="prompt_data.pickle"
+            ),
         )
-        return False
+
+        data = FolderHelper().create_pickle_file(
+            path=s3_data.downloaded_path, data=prompts_data
+        )
+        S3Storage().upload_data(s3_data=s3_data, data=data)
+        return True

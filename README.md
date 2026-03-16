@@ -77,7 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [ ] App revamp
-      - [ ] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
+      - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [ ] Remove all the old reference
       - [ ] Upload and download prompts during startup if there is any change
       - [ ] Update JobData for videos rather than creating New Tasks
