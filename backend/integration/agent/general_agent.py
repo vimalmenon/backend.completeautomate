@@ -8,51 +8,64 @@ from backend.config.env import env
 from backend.data import MessageDBData
 from backend.database import AgentMessageDB
 from backend.exception.app_exception import AppException
-from backend.services.agent_service import AgentService
+from backend.services.agent_service import AgentImageService, AgentService
 
 logger = logging.getLogger(__name__)
 
 
 class GeneralAgent:
 
-    def __init__(self, agent: AgentService, response_format=None):
-        self.agent = agent
-        prompt_data = self.agent.prompt_data
-        self.task_id = self.agent.task_id
-        if not prompt_data:
-            raise AppException("Prompt data is required for GeneralAgent")
-        self.agent_db = AgentMessageDB()
-        self.team = prompt_data.role
-        self.prompt = agent.get_prompt()
-        self.response_format = response_format
-        logger.debug("GeneralAgent initialized for team=%s", self.team.name)
+    def __init__(self, agent: AgentService | AgentImageService, response_format=None):
+        if isinstance(agent, AgentService):
+            self.agent = agent
+            prompt_data = self.agent.prompt_data
+            self.task_id = self.agent.task_id
+            if not prompt_data:
+                raise AppException("Prompt data is required for GeneralAgent")
+            self.agent_db = AgentMessageDB()
+            self.team = prompt_data.role
+            self.prompt = agent.get_prompt()
+            self.response_format = response_format
+            logger.debug("GeneralAgent initialized for team=%s", self.team.name)
+        if isinstance(agent, AgentImageService):
+            self.agent = agent
 
     def invoke(self):
-        logger.info("Invoking general agent for team=%s", self.team.name)
-        messages = [
-            SystemMessage(content=self.agent.get_system_message()),
-            HumanMessage(content=self.agent.get_prompt()),
-        ]
-        if env.OFFLINE:
-            result = self.__mock_offline_result(messages)
-        else:
-            agent = self.__create_agent()
-            result = agent.invoke(
-                {
-                    "messages": messages,
-                    "user_preferences": {
-                        "style": "technical",
-                        "verbosity": "detailed",
-                    },
-                }
+        if isinstance(self.agent, AgentService):
+            logger.info("Invoking general agent for team=%s", self.team.name)
+            messages = [
+                SystemMessage(content=self.agent.get_system_message()),
+                HumanMessage(content=self.agent.get_prompt()),
+            ]
+            if env.OFFLINE:
+                result = self.__mock_offline_result(messages)
+            else:
+                agent = self.__create_agent()
+                result = agent.invoke(
+                    {
+                        "messages": messages,
+                        "user_preferences": {
+                            "style": "technical",
+                            "verbosity": "detailed",
+                        },
+                    }
+                )
+            data = MessageDBData(
+                task_id=self.task_id,
+                messages=self.parse_messages_to_dict(result["messages"]),
             )
-        data = MessageDBData(
-            task_id=self.task_id,
-            messages=self.parse_messages_to_dict(result["messages"]),
-        )
-        self.agent_db.save_message(data)
-        logger.info("General agent invocation completed for team=%s", self.team.name)
-        return result
+            self.agent_db.save_message(data)
+            logger.info(
+                "General agent invocation completed for team=%s", self.team.name
+            )
+            return result
+        raise AppException("Not a valid instance")
+
+    def generate(self) -> bytes:
+        if isinstance(self.agent, AgentImageService):
+            image_model = self.agent.get_model()
+            return image_model.generate(self.agent.prompt)
+        raise AppException("Not a valid instance")
 
     def reinvoke(self, message: str):
         db_data = self.agent_db.get_messages_by_task_id(self.task_id)
