@@ -133,7 +133,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     def __create_thumbnail_prompt_suggestions(self, video_from_db: YouTubeVideoDBData):
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
-            task_id=str(self.task.id),
+            task_id=str(self.job.id),
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_from_db.title,
                 description=video_from_db.description,
