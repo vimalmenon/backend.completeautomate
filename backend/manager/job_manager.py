@@ -57,3 +57,14 @@ class JobManager:
             job_id=job_id,
             values=values,
         )
+
+    def create_youtube_channel_onboarding_job(self) -> JobData:
+        if jobs := self.get_job_by_type(type=JobTypeEnum.YouTubeChannelOnboarding):
+            return jobs[0]
+        job_data = self.create_job(
+            type=JobTypeEnum.YouTubeChannelOnboarding,
+            task_data={},
+            description="Onboard YouTube Channels",
+        )
+        self.save_job(job_data=job_data)
+        return job_data
