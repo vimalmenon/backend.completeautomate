@@ -11,7 +11,7 @@ from backend.enum import JobStatusEnum, PromptTaskEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
-from backend.integration.agent.general_agent import GeneralAgent
+from backend.integration import GeneralAgent
 from backend.manager import TaskManager, YouTubeVideoManager
 from backend.services.agent_service import AgentService
 

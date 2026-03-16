@@ -23,9 +23,8 @@ from backend.generator.response_format import (
     ImagePromptsListRequest,
     YouTubeVideoAnalyzerListResponse,
 )
-from backend.integration.agent.general_agent import GeneralAgent
+from backend.integration import GeneralAgent, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
-from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import YouTubeVideoManager
 from backend.services.agent_service import AgentService
 

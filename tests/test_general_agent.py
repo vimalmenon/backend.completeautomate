@@ -9,7 +9,7 @@ from langchain.messages import AIMessage, HumanMessage, SystemMessage
 from backend.data import MessageDBData
 from backend.enum import TeamEnum
 from backend.exception.app_exception import AppException
-from backend.integration.agent.general_agent import GeneralAgent
+from backend.integration import GeneralAgent
 
 
 def _build_agent_service_mock() -> MagicMock:
