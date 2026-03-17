@@ -79,15 +79,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [x] Update JobData for videos rather than creating New Tasks
-      - [x] Remove all the old reference
-      - [x] Remove task_id from video db
-      - [x] Remove task_id from channel db
+      - [x] Print Jobs at the end of the run
       - [ ] Download prompts during startup if there is any change
       - [ ] Upload prompts to S3 Bucket
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
-      - [ ] Print Jobs at the end of the run
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
         - [ ] Standardize the image generation
