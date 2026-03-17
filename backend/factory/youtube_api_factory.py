@@ -1,5 +1,7 @@
 from typing import Any
 
+from backend.factory.common import fake_date, fake_url
+
 
 class MockYouTubeAPI:
     """Drop-in mock for YouTubeAPI, returned when OFFLINE mode is enabled.
@@ -71,9 +73,7 @@ class MockYouTubeAPI:
                 "title": f"Mock Video Title [{video_id}]",
                 "description": "Mock video description for offline mode.",
                 "publishedAt": "2024-03-01T12:00:00Z",
-                "thumbnails": {
-                    "high": {"url": "https://example.com/mock_thumbnail.jpg"}
-                },
+                "thumbnails": {"high": {"url": fake_url}},
                 "tags": ["mock", "offline", "test"],
                 "defaultLanguage": "en",
                 "defaultAudioLanguage": "en",
@@ -94,10 +94,8 @@ def youtube_channel_api_factory(**kwargs) -> dict:
             "title": "Mock Channel",
             "description": "Mock channel description for offline mode.",
             "customUrl": "@mockchannel",
-            "publishedAt": "2020-01-01T00:00:00Z",
-            "thumbnails": {
-                "high": {"url": "https://example.com/mock_channel_thumb.jpg"}
-            },
+            "publishedAt": fake_date,
+            "thumbnails": {"high": {"url": fake_url}},
         },
         "statistics": {
             "viewCount": "100",
@@ -116,7 +114,7 @@ def youtube_video_api_factory(**kwargs) -> dict:
         "snippet": {
             "title": f"Mock Video Title [{video_id}]",
             "description": "Mock video description for offline mode.",
-            "publishedAt": "2024-03-01T12:00:00Z",
+            "publishedAt": fake_date,
             "thumbnails": {"high": {"url": "https://example.com/mock_thumbnail.jpg"}},
             "tags": ["mock", "offline", "test"],
             "defaultLanguage": "en",
@@ -129,3 +127,11 @@ def youtube_video_api_factory(**kwargs) -> dict:
         },
         "status": {"privacyStatus": "public"},
     }
+
+
+def youtube_video_transcript():
+    return (
+        "This is a mock transcript generated for offline mode. "
+        "It provides sample content so the full generator pipeline "
+        "can be exercised without a live YouTube connection."
+    )
