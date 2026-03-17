@@ -52,9 +52,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             return self.__generate_thumbnails(video_from_db=self.video_from_db)
-        self.__upload_thumbnail(video_from_db=self.video_from_db)
-        self.__review_video()
-        return self.__job_complete()
+        return self.__upload_thumbnail(video_from_db=self.video_from_db)
+        # self.__review_video()
+        # return self.__job_complete()
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:
@@ -186,7 +186,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
-    def __upload_thumbnail(self, video_from_db: YouTubeVideoDBData):
+    def __upload_thumbnail(
+        self, video_from_db: YouTubeVideoDBData
+    ) -> tuple[JobsStatusEnum, dict]:
         suggested_thumbnails = [
             suggestion
             for suggestion in video_from_db.thumbnails_suggestions
@@ -198,14 +200,16 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
                 video_id=self.video_id,
                 thumbnail_path=thumbnail.s3_data.downloaded_path,
             )
+            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+            return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
 
-    def __review_video(self):
-        pass
+    # def __review_video(self):
+    #     pass
 
-    def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
-        self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
-        return JobsStatusEnum.COMPLETE, self.task_data.to_json()
+    # def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
+    #     self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+    #     return JobsStatusEnum.COMPLETE, self.task_data.to_json()
 
     def __convert_transcript_to_text(self, result) -> str:
         text = [self.__process_transcript(snippet) for snippet in result.snippets]
