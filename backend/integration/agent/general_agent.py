@@ -65,7 +65,7 @@ class GeneralAgent:
         if isinstance(self.agent, AgentImageService):
             image_model = self.agent.get_model()
             return image_model.generate(prompt=self.agent.prompt)
-        raise AppException("Not a valid instance")
+        raise AppException("Not a image valid instance")
 
     def reinvoke(self, message: str):
         db_data = self.agent_db.get_messages_by_task_id(self.task_id)

@@ -85,6 +85,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove task_id from channel db
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
+      - [ ] Remove YouTube Tasks reference
       - [ ] Print Jobs at the end of the run
       - [ ] Set up image generation
         - [ ] Standardize the image generation
