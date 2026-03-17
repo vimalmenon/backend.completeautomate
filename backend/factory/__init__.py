@@ -9,8 +9,8 @@ from backend.factory.task_factory import (
 )
 from backend.factory.youtube_channel_factory import (
     youtube_channel_factory,
-    youtube_video_factory,
 )
+from backend.factory.youtube_video_factory import youtube_video_factory
 
 __all__ = [
     "create_task_factory",

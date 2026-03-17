@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import cached_property
 from typing import Any, Self
-from uuid import UUID
 
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
@@ -142,7 +141,6 @@ class YouTubeVideoDBData:
     thumbnail: str
     tags: list[str]
     language: str
-    task_id: UUID
     stats: list[YouTubeVideoDBStats]
     transcript: str | None = None
     summarized_transcript: str | None = None
@@ -175,7 +173,6 @@ class YouTubeVideoDBData:
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
             stats=stats,
-            task_id=UUID(data["task_id"]),
             comment=data.get("comment"),
             metadata_suggestions=[
                 YouTubeVideoMetadataData.to_cls(suggestion)
@@ -205,7 +202,6 @@ class YouTubeVideoDBData:
             language=snippet["defaultLanguage"],
             last_updated_at=datetime.now(),
             stats=[stat],
-            task_id=UUID(item["task_id"]),
         )
 
     def to_json(self) -> dict:
@@ -217,7 +213,6 @@ class YouTubeVideoDBData:
             "thumbnail": self.thumbnail,
             "tags": self.tags,
             "language": self.language,
-            "task_id": str(self.task_id),
             "last_updated_at": self.last_updated_at.isoformat(),
             "stats": [stat.to_json() for stat in self.stats],
             "transcript": self.transcript,
