@@ -100,7 +100,7 @@ class YouTubeVideoReviewData:
             "upsides": self.upsides,
             "downsides": self.downsides,
             "overall": self.overall,
-            "rating": self.rating,
+            "rating": int(self.rating),
         }
 
     @classmethod
@@ -109,7 +109,7 @@ class YouTubeVideoReviewData:
             upsides=data["upsides"],
             downsides=data["downsides"],
             overall=data["overall"],
-            rating=data["rating"],
+            rating=int(data["rating"]),
         )
 
 
