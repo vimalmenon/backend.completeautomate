@@ -1,4 +1,9 @@
-from backend.data import ImagePromptData, YouTubeVideoDBData, YouTubeVideoMetadataData
+from backend.data import (
+    ImagePromptData,
+    YouTubeVideoDBData,
+    YouTubeVideoMetadataData,
+    YouTubeVideoThumbnailData,
+)
 from backend.database import YouTubeVideoDB
 
 
@@ -47,3 +52,11 @@ class YouTubeVideoManager:
 
     def update_video(self, values: dict) -> None:
         YouTubeVideoDB(ref_id=self.ref_id).update_video(values=values)
+
+    def update_thumbnails_suggestions(
+        self, thumbnails_suggestions: list[YouTubeVideoThumbnailData]
+    ) -> None:
+        data = [suggestion.to_json() for suggestion in thumbnails_suggestions]
+        YouTubeVideoDB(ref_id=self.ref_id).update_video(
+            {"thumbnails_suggestions": data}
+        )

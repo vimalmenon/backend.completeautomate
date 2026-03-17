@@ -23,10 +23,10 @@ from backend.generator.response_format import (
     ImagePromptsListRequest,
     YouTubeVideoAnalyzerListResponse,
 )
-from backend.integration import GeneralAgent, YouTubeAPI
+from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.manager import YouTubeVideoManager
-from backend.services.agent_service import AgentService
+from backend.services.agent_service import AgentImageService, AgentService
 
 
 class YouTubeVideoGenerator(BaseGeneratorJob):
@@ -163,16 +163,26 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     def __generate_thumbnails(
         self, video_from_db: YouTubeVideoDBData
     ) -> tuple[JobsStatusEnum, dict]:
-        for prompt in video_from_db.thumbnail_prompt_suggestions:
+        thumbnails_suggestions: list[YouTubeVideoThumbnailData] = []
+        for suggestion in video_from_db.thumbnail_prompt_suggestions:
             s3_data = S3Data(
-                name=prompt.name,
-                content_type=S3Data.detect_content_type_from_name(prompt.name),
+                name=suggestion.name,
+                content_type=S3Data.detect_content_type_from_name(suggestion.name),
                 key=self.task_data.ref_id,
             )
-            YouTubeVideoThumbnailData(
+            video_thumbnail_data = YouTubeVideoThumbnailData(
                 s3_data=s3_data,
                 status=JobStatusEnum.REVIEW,
             )
+            service = AgentImageService(prompt=suggestion.prompt)
+            agent = GeneralAgent(
+                service,
+                response_format=YouTubeVideoAnalyzerListResponse,
+            )
+            image_data = agent.generate()
+            S3Storage().upload_data(s3_data=s3_data, data=image_data)
+            thumbnails_suggestions.append(video_thumbnail_data)
+        self.youtube_manager.update_thumbnails_suggestions(thumbnails_suggestions)
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
