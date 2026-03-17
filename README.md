@@ -79,7 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [x] Update JobData for videos rather than creating New Tasks
-      - [ ] Remove all the old reference
+      - [x] Remove all the old reference
       - [ ] Upload and download prompts during startup if there is any change
       - [ ] Remove task_id from video db
       - [ ] Remove task_id from channel db
