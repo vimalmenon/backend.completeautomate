@@ -389,13 +389,20 @@ Available markers:
 
 ## Mock Data Factories
 
-The project uses `faker` for synthetic data generation in shared test/factory helpers.
+The project uses `faker` for synthetic data generation in shared test/factory helpers and domain-specific factory functions.
 
-Current helpers live in `backend/factory/common.py`:
+**Common helpers** in `backend/factory/common.py`:
 
-- `fake_date()`
-- `fake_uuid()`
-- `fake_url()`
+- `fake_date()` — generate fake datetime
+- `fake_uuid()` — generate fake UUID
+- `fake_url()` — generate fake URL
+
+**Domain factories** in `backend/factory/`:
+
+- `create_youtube_channel_job_factory(**kwargs)` — creates `YouTubeJobData`
+- `platform_channel_factory(**kwargs)` — creates `PlatformDBData` for YouTube channels
+- `platform_video_factory(**kwargs)` — creates `PlatformDBData` for YouTube videos
+- `image_generator_factory(**kwargs)` — creates image generation mock data
 
 Example usage:
 
@@ -536,6 +543,10 @@ Key modules:
 - `no_job.py`: fallback for unmapped job types
 
 **Factories** (`backend/factory/`):
+- `common.py`: shared Faker-backed helpers (`fake_date()`, `fake_uuid()`, `fake_url()`)
+- `job_factory.py`: creates `YouTubeJobData` instances
+- `platform_factory.py`: creates `PlatformDBData` instances (channels and videos)
+- `image_generator_factory.py`: creates image generation mock data
 - `agent_factory.py`: creates AI agent instances
 - `task_factory.py`: creates task objects
 
