@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 class GeneralAgent:
 
     def __init__(self, agent: AgentService | AgentImageService, response_format=None):
+        self.agent: AgentService | AgentImageService = agent
         if isinstance(agent, AgentService):
             self.agent = agent
             prompt_data = self.agent.prompt_data
@@ -95,6 +96,7 @@ class GeneralAgent:
         return result
 
     def __create_agent(self):
+        assert isinstance(self.agent, AgentService)
         logger.debug("Creating LangChain agent for team=%s", self.team.name)
         return create_agent(
             name=self.team.name,

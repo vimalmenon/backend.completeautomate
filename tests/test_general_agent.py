@@ -10,10 +10,11 @@ from backend.data import MessageDBData
 from backend.enum import TeamEnum
 from backend.exception.app_exception import AppException
 from backend.integration import GeneralAgent
+from backend.services.agent_service import AgentService
 
 
 def _build_agent_service_mock() -> MagicMock:
-    service = MagicMock()
+    service = MagicMock(spec=AgentService)
     service.task_id = "task-1"
     service.prompt_data = SimpleNamespace(role=TeamEnum.MANAGER)
     service.get_prompt.return_value = "Write test cases"
@@ -98,7 +99,7 @@ class TestGeneralAgent:
             general_agent.reinvoke("Refine the answer")
 
     def test_init_raises_when_prompt_data_missing(self) -> None:
-        service = MagicMock()
+        service = MagicMock(spec=AgentService)
         service.task_id = "task-1"
         service.prompt_data = None
 

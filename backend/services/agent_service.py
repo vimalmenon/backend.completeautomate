@@ -19,7 +19,9 @@ class AgentImageService:
         self.prompt = prompt
         self.image_ai = image_ai
 
-    def get_model(self):
+    def get_model(
+        self,
+    ) -> GrokImageGeneration | QwenImageGeneration | OpenRouterImageGeneration:
         if self.image_ai == AIImageModelEnum.Grok:
             return GrokImageGeneration()
         if self.image_ai == AIImageModelEnum.Qwen:
