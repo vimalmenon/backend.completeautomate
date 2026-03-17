@@ -80,10 +80,10 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [x] Update JobData for videos rather than creating New Tasks
       - [x] Remove all the old reference
+      - [x] Remove task_id from video db
+      - [x] Remove task_id from channel db
       - [ ] Download prompts during startup if there is any change
       - [ ] Upload prompts to S3 Bucket
-      - [ ] Remove task_id from video db
-      - [ ] Remove task_id from channel db
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
