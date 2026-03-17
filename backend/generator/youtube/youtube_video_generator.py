@@ -95,7 +95,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             service,
         )
         result = agent.invoke()
-        # TODO Need to get it reviewed by AI again
+        # TODO Need to get it reviewed by AI 2 times
         return result["messages"][-1].content
 
     def __create_metadata_suggestions(
@@ -103,7 +103,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     ) -> tuple[JobsStatusEnum, dict]:
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoAnalysis,
-            task_id=f"{str(self.job.id)}_analysis",
+            task_id=f"{str(self.job.id)}_metadata",
             data={
                 "transcript": video_from_db.summarized_transcript,
             },
@@ -132,7 +132,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
     def __create_thumbnail_prompt_suggestions(self, video_from_db: YouTubeVideoDBData):
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
-            task_id=str(self.job.id),
+            task_id=f"{str(self.job.id)}_thumbnail",
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_from_db.title,
                 description=video_from_db.description,

@@ -51,8 +51,7 @@ class YouTubeVideoDB:
             }
         )
 
-    def update_video(self, values: dict) -> None:
-
+    def update_values(self, values: dict) -> None:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
@@ -60,59 +59,3 @@ class YouTubeVideoDB:
             },
             values=values,
         )
-
-    def update_transcript(self, transcript: str) -> None:
-        self.db_manager.update_data(
-            key={
-                DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: self.ref_id,
-            },
-            values={"transcript": transcript},
-        )
-        logger.info(f"Updated transcript for video id: {self.ref_id}")
-
-    def update_metadata_suggestions(self, metadata_suggestions: list[dict]):
-        self.db_manager.update_data(
-            key={
-                DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: self.ref_id,
-            },
-            values={"metadata_suggestions": metadata_suggestions},
-        )
-
-    def update_thumbnail_prompt_suggestions(
-        self, thumbnail_prompt_suggestions: list[dict]
-    ):
-        self.db_manager.update_data(
-            key={
-                DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: self.ref_id,
-            },
-            values={"thumbnail_prompt_suggestions": thumbnail_prompt_suggestions},
-        )
-
-    def update_summarized_transcript(self, summarized_transcript: str) -> None:
-        self.db_manager.update_data(
-            key={
-                DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: self.ref_id,
-            },
-            values={"summarized_transcript": summarized_transcript},
-        )
-        logger.info(f"Updated summarized transcript for video id: {self.ref_id}")
-
-    def update_video_details(
-        self, title: str, description: str, tags: list[str]
-    ) -> None:
-        self.db_manager.update_data(
-            key={
-                DbKeysEnum.Primary.value: self.TABLE,
-                DbKeysEnum.Secondary.value: self.ref_id,
-            },
-            values={
-                "title": title,
-                "description": description,
-                "tags": tags,
-            },
-        )
-        logger.info(f"Updated video details for video id: {self.ref_id}")

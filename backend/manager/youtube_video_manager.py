@@ -22,41 +22,39 @@ class YouTubeVideoManager:
         return YouTubeVideoDB(ref_id=self.ref_id).add_video(data)
 
     def update_metadata(self, title: str, description: str, tags: list[str]) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_video_details(
-            title=title, description=description, tags=tags
+        YouTubeVideoDB(ref_id=self.ref_id).update_values(
+            {"title": title, "description": description, "tags": tags}
         )
 
     def update_transcript(self, transcript: str) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_transcript(transcript)
+        YouTubeVideoDB(ref_id=self.ref_id).update_values({"transcript": transcript})
 
     def update_summarized_transcript(self, summarized_transcript: str) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_summarized_transcript(
-            summarized_transcript
+        YouTubeVideoDB(ref_id=self.ref_id).update_values(
+            {"summarized_transcript": summarized_transcript}
         )
 
     def update_metadata_suggestions(
         self, metadata_suggestions: list[YouTubeVideoMetadataData]
     ):
         data = [suggestion.to_json() for suggestion in metadata_suggestions]
-        YouTubeVideoDB(ref_id=self.ref_id).update_metadata_suggestions(
-            metadata_suggestions=data
-        )
+        YouTubeVideoDB(ref_id=self.ref_id).update_values({"metadata_suggestions": data})
 
     def update_thumbnail_prompt_suggestions(
         self, thumbnail_prompt_suggestions: list[ImagePromptData]
     ):
         data = [suggestion.to_json() for suggestion in thumbnail_prompt_suggestions]
-        YouTubeVideoDB(ref_id=self.ref_id).update_thumbnail_prompt_suggestions(
-            thumbnail_prompt_suggestions=data
+        YouTubeVideoDB(ref_id=self.ref_id).update_values(
+            {"thumbnail_prompt_suggestions": data}
         )
 
     def update_video(self, values: dict) -> None:
-        YouTubeVideoDB(ref_id=self.ref_id).update_video(values=values)
+        YouTubeVideoDB(ref_id=self.ref_id).update_values(values=values)
 
     def update_thumbnails_suggestions(
         self, thumbnails_suggestions: list[YouTubeVideoThumbnailData]
     ) -> None:
         data = [suggestion.to_json() for suggestion in thumbnails_suggestions]
-        YouTubeVideoDB(ref_id=self.ref_id).update_video(
+        YouTubeVideoDB(ref_id=self.ref_id).update_values(
             {"thumbnails_suggestions": data}
         )
