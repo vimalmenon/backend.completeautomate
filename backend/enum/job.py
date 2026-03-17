@@ -24,6 +24,7 @@ class JobTypeEnum(str, Enum):
     YouTubeChannelVideoChecker = "YouTubeChannelVideoChecker"
     YouTubeVideo = "YouTubeVideo"
     YouTubeVideoStatsUpdater = "YouTubeVideoStatsUpdater"
+    PromptImprover = "PromptImprover"
 
 
 # JOB DESCRIPTIONS :
