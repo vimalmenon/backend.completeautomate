@@ -88,6 +88,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
       - [ ] Print Jobs at the end of the run
+      - [ ] Test all the prompts once done
       - [ ] Set up image generation
         - [ ] Standardize the image generation
         - [ ] Make the image generation more generic to be used
@@ -99,7 +100,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
-  - [ ] Test all the prompts once done
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
   - [ ] Make Workflow as `Archive` tasks after 1 week
