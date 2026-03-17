@@ -52,7 +52,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             return self.__generate_thumbnails(video_from_db=self.video_from_db)
-        self.__upload_thumbnail()
+        self.__upload_thumbnail(video_from_db=self.video_from_db)
         self.__review_video()
         return self.__job_complete()
 
@@ -186,8 +186,19 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
-    def __upload_thumbnail(self):
-        pass
+    def __upload_thumbnail(self, video_from_db: YouTubeVideoDBData):
+        suggested_thumbnails = [
+            suggestion
+            for suggestion in video_from_db.thumbnails_suggestions
+            if suggestion.status == JobStatusEnum.PROMOTE
+        ]
+        if len(suggested_thumbnails) == 1:
+            thumbnail = suggested_thumbnails[0]
+            YouTubeAPI().update_thumbnail(
+                video_id=self.video_id,
+                thumbnail_path=thumbnail.s3_data.downloaded_path,
+            )
+        raise AppException("More than one thumbnail was selected")
 
     def __review_video(self):
         pass
