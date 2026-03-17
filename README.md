@@ -83,12 +83,17 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Update JobData for videos rather than creating New Tasks
       - [ ] Remove task_id from video db
       - [ ] Remove task_id from channel db
+      - [ ] Higher lvl component (UI and Generator) should never access DB directly
+      - [ ] Remove task manager and other references
+      - [ ] Set up image generation
+        - [ ] Standardize the image generation
+        - [ ] Make the image generation more generic to be used
+        - [ ] Put all the generated image prompt to review
   - [ ] Review the raw `Transcript` and rate the video based on it 
       - [ ] Check for grammar
       - [ ] Points to improve 
       - [ ] What went well
   - [ ] Send the logs to some common place (AWS Logger)
-  - [ ] Higher lvl component (UI and Generator) should never access DB directly
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Test all the prompts once done
@@ -99,16 +104,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Email
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Clicking on `Task` navigate button should route to correct page
+  - [ ] Use `Job` instead of `Task`
+  - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
   - [ ] Change the status of tasks from the Video Page
   - [ ] Improve the status of Video Page
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
-- [ ] Set up image generation
-  - [ ] Standardize the image generation
-  - [ ] Make the image generation more generic to be used
-  - [ ] Put all the generated image prompt to review
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
