@@ -10,6 +10,10 @@ faker = Faker()
 T = TypeVar("T", bound=Enum)
 
 
+def seed_faker(seed: int = 42) -> None:
+    faker.seed_instance(seed)
+
+
 def fake_date():
     return faker.date_time()
 
@@ -54,7 +58,7 @@ def fake_boolean() -> bool:
 
 def fake_str() -> str:
     """Generate a fake string."""
-    return faker.str()
+    return str(faker.pystr())
 
 
 def pick_random_enum(enum_class: Type[T]) -> T:
