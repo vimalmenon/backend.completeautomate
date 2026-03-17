@@ -52,9 +52,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             return self.__generate_thumbnails(video_from_db=self.video_from_db)
-        return self.__upload_thumbnail(video_from_db=self.video_from_db)
-        # self.__review_video()
-        # return self.__job_complete()
+        self.__upload_thumbnail(video_from_db=self.video_from_db)
+        self.__review_video(video_from_db=self.video_from_db)
+        return self.__job_complete()
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:
@@ -219,9 +219,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         # TODO Need to get it reviewed by AI 2 times
         return result["messages"][-1].content
 
-    # def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
-    #     self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
-    #     return JobsStatusEnum.COMPLETE, self.task_data.to_json()
+    def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
+        self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+        return JobsStatusEnum.COMPLETE, self.task_data.to_json()
 
     def __convert_transcript_to_text(self, result) -> str:
         text = [self.__process_transcript(snippet) for snippet in result.snippets]
