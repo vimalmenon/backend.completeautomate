@@ -78,21 +78,22 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [ ] App revamp
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
+      - [x] Update JobData for videos rather than creating New Tasks
       - [ ] Remove all the old reference
       - [ ] Upload and download prompts during startup if there is any change
-      - [ ] Update JobData for videos rather than creating New Tasks
       - [ ] Remove task_id from video db
       - [ ] Remove task_id from channel db
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
+      - [ ] Print Jobs at the end of the run
       - [ ] Set up image generation
         - [ ] Standardize the image generation
         - [ ] Make the image generation more generic to be used
         - [ ] Put all the generated image prompt to review
-  - [ ] Review the raw `Transcript` and rate the video based on it 
-      - [ ] Check for grammar
-      - [ ] Points to improve 
-      - [ ] What went well
+      - [ ] Review the raw `Transcript` and rate the video based on it 
+          - [ ] Check for grammar
+          - [ ] Points to improve 
+          - [ ] What went well
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
