@@ -1,4 +1,3 @@
-from backend.generator.image_generator import ImageGenerator
 from backend.generator.prompt_suggester import PromptSuggester
 from backend.generator.youtube_channel_creator import (
     YouTubeChannelCreator,
@@ -25,7 +24,6 @@ from backend.generator.youtube_video_thumbnail_image_prompt_suggester import (
 
 __all__ = [
     "YouTubeThumbnailUpdater",
-    "ImageGenerator",
     "YouTubeChannelCreator",
     "YouTubeVideoCreator",
     "YouTubeVideoSummarizer",
