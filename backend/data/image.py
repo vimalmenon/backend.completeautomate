@@ -18,7 +18,6 @@ class ImageGeneratorJobData:
     prompt: str
     image_type: ImageTypeEnum
     ref_id: str
-    task_id: UUID
     data: S3Data
     model: Optional[str] = None  # Optional model selection (e.g., "GROK", "FLUX")
 
@@ -27,7 +26,6 @@ class ImageGeneratorJobData:
             "id": str(self.id),
             "prompt": self.prompt,
             "name": self.name,
-            "task_id": str(self.task_id),
             "image_type": self.image_type.value,
             "data": self.data.to_json(),
             "ref_id": self.ref_id,
@@ -42,7 +40,6 @@ class ImageGeneratorJobData:
             id=UUID(data["id"]),
             name=data["name"],
             prompt=data["prompt"],
-            task_id=UUID(data["task_id"]),
             image_type=ImageTypeEnum(data["image_type"]),
             data=S3Data.to_cls(data["data"]),
             ref_id=data["ref_id"],
