@@ -93,9 +93,12 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Make the image generation more generic to be used
       - [ ] Put all the generated image prompt to review
       - [ ] Review the raw `Transcript` and rate the video based on it 
-          - [ ] Check for grammar
-          - [ ] Points to improve 
-          - [ ] What went well
+        - [ ] Check for grammar
+        - [ ] Points to improve 
+        - [ ] What went well
+      - [ ] Agent to analyze result
+        - [ ] Add AI review step for generated answers
+        - [ ] Agent to review tasks (only once)
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
@@ -119,9 +122,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] API to search the `Trends`
   - [ ] Pointer for video to create
   - [ ] Find next week topic
-- [ ] Agent to analyze result
-  - [ ] Add AI review step for generated answers
-  - [ ] Agent to review tasks (only once)
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
   - [ ] Basic pages

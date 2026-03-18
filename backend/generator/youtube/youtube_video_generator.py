@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from backend.config.env import env
@@ -46,6 +47,10 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             return self.__create_video_db()
         if not self.video_from_db:
             raise AppException("There is no video available")
+        if self.__check_if_video_is_older_than_two_weeks(
+            self.video_from_db.published_at
+        ):
+            return self.__job_complete()
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoFixTranscript:
             self.__create_transcript_summary(video_from_db=self.video_from_db)
             return self.__create_metadata_suggestions(video_from_db=self.video_from_db)
@@ -55,6 +60,10 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.__upload_thumbnail(video_from_db=self.video_from_db)
         self.__review_video(video_from_db=self.video_from_db)
         return self.__job_complete()
+
+    def __check_if_video_is_older_than_two_weeks(self, published_at: datetime) -> bool:
+        # TODO need to implement
+        return False
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:
