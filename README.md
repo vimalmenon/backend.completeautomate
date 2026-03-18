@@ -87,6 +87,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove YouTube Tasks reference
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
+      - [ ] Only update the metadata for last 3 videos
         - [ ] Standardize the image generation
         - [ ] Make the image generation more generic to be used
         - [ ] Put all the generated image prompt to review
