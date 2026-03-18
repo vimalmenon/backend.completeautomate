@@ -86,6 +86,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
       - [ ] Only update the metadata for last 2 weeks old videos
+      - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
       - [ ] Standardize the image generation
