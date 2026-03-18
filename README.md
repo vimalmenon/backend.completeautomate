@@ -85,12 +85,12 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
+      - [ ] Only update the metadata for last 2 weeks old videos
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
-      - [ ] Only update the metadata for last 3 videos
-        - [ ] Standardize the image generation
-        - [ ] Make the image generation more generic to be used
-        - [ ] Put all the generated image prompt to review
+      - [ ] Standardize the image generation
+      - [ ] Make the image generation more generic to be used
+      - [ ] Put all the generated image prompt to review
       - [ ] Review the raw `Transcript` and rate the video based on it 
           - [ ] Check for grammar
           - [ ] Points to improve 
