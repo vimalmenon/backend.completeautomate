@@ -1,6 +1,9 @@
 from backend.factory.common import fake_date, fake_uuid
 from backend.factory.job_factory import create_youtube_channel_job_factory
-from backend.factory.platform import platform_channel_factory, platform_video_factory
+from backend.factory.platform_factory import (
+    platform_channel_factory,
+    platform_video_factory,
+)
 from backend.factory.task_factory import (
     create_channel_task_factory,
     create_task_factory,
