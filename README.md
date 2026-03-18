@@ -80,9 +80,10 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [x] Update JobData for videos rather than creating New Tasks
       - [x] Upload prompts to S3 Bucket
-      - [ ] Only update the metadata for last 2 weeks old videos
+      - [x] Download prompts during startup if there is any change
+      - [x] Make Workflow as `Archive` tasks after 1 week
+      - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [ ] Upload Video Stats to S3
-      - [ ] Download prompts during startup if there is any change
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
@@ -104,7 +105,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Make Workflow as `Archive` tasks after 1 week
+
 - [ ] Send Notification
   - [ ] Send Email
   - [ ] Send Signal
