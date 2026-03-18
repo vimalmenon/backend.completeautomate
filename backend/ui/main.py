@@ -28,7 +28,7 @@ class MenuSection(TypedDict):
 
 
 tasks_cards = [
-    {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
+    {"label": "All Jobs", "value": "", "icon": "hourglass_empty", "color": "violet"},
     {
         "label": "IN PROGRESS",
         "value": TaskStatusEnum.IN_PROGRESS.value,
@@ -96,8 +96,8 @@ def _render_tasks_header() -> None:
         with ui.avatar(color="blue", text_color="white", size="lg"):
             ui.icon("task", size="md")
         with ui.column().classes("gap-0"):
-            ui.label("Tasks").classes("text-h6 font-bold")
-            ui.label("Manage and schedule automated content creation tasks").classes(
+            ui.label("Jobs").classes("text-h6 font-bold")
+            ui.label("Manage and schedule automated content creation jobs").classes(
                 "text-caption text-gray-600"
             )
 
