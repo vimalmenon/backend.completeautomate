@@ -53,6 +53,13 @@ class JobDB:
         )
         return [JobData.to_cls(item) for item in items]
 
+    def get_jobs_by_status(self, status: JobsStatusEnum) -> list[JobData]:
+        items = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE),
+            filter_expression=Attr("status").eq(status),
+        )
+        return [JobData.to_cls(item) for item in items]
+
     def update_data(self, job_id: UUID, values: dict) -> None:
         key = {
             DbKeysEnum.Primary.value: self.TABLE,

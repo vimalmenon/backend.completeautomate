@@ -26,6 +26,9 @@ class JobManager:
     def get_all_active_jobs(self) -> list[JobData]:
         return JobDB().get_all_active_jobs()
 
+    def get_all_completed_job(self) -> list[JobData]:
+        return JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE)
+
     def create_job(
         self,
         type: JobTypeEnum,
@@ -56,6 +59,19 @@ class JobManager:
         if task_data:
             values["task_data"] = task_data
 
+        JobDB().update_data(
+            job_id=job_id,
+            values=values,
+        )
+
+    def update_job_status(
+        self,
+        job_id: UUID,
+        status: JobsStatusEnum,
+    ):
+        values: dict[str, Any] = {
+            "status": status.value,
+        }
         JobDB().update_data(
             job_id=job_id,
             values=values,

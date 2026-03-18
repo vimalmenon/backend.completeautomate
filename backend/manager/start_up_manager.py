@@ -1,8 +1,10 @@
+from datetime import datetime, timedelta
 from logging import getLogger
 
 from tabulate import tabulate
 
 from backend.data import S3Data
+from backend.enum import JobsStatusEnum
 from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
 from backend.manager.job_manager import JobManager
@@ -16,11 +18,11 @@ class StartUpManager:
         logger.info("Starting startup manager flow")
         self.__add_start_up_file()
         self.__add_start_up_jobs()
-        self.__transform_data()
         logger.info("Startup manager flow completed")
 
     def end(self) -> None:
         self.__sync_prompts()
+        self.__archive_old_jobs()
         self.__show_jobs()
 
     def __add_start_up_file(self) -> None:
@@ -36,8 +38,19 @@ class StartUpManager:
         JobManager().create_youtube_channel_onboarding_job()
         return True
 
-    def __transform_data(self) -> bool:
-        # Placeholder for any future data transformation logic needed during startup
+    def __archive_old_jobs(self):
+        job_manager = JobManager()
+        jobs = job_manager.get_all_completed_job()
+        [
+            job_manager.update_job_status(job_id=job.id, status=JobsStatusEnum.ARCHIVED)
+            for job in jobs
+            if self.__check_if_past_due_date(job.completed_at)
+        ]
+
+    def __check_if_past_due_date(self, completed_at: datetime | None) -> bool:
+        if completed_at:
+            delta = datetime.now() - completed_at
+            return delta >= timedelta(weeks=2)
         return False
 
     def __sync_prompts(self) -> bool:

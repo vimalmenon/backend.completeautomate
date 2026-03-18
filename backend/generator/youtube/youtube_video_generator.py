@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from backend.config.env import env
@@ -62,8 +62,8 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         return self.__job_complete()
 
     def __check_if_video_is_older_than_two_weeks(self, published_at: datetime) -> bool:
-        # TODO need to implement
-        return False
+        delta = datetime.now() - published_at
+        return delta >= timedelta(weeks=2)
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:

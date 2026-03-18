@@ -79,13 +79,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
       - [x] Update JobData for videos rather than creating New Tasks
-      - [x] Print Jobs at the end of the run
+      - [x] Upload prompts to S3 Bucket
+      - [ ] Only update the metadata for last 2 weeks old videos
+      - [ ] Upload Video Stats to S3
       - [ ] Download prompts during startup if there is any change
-      - [ ] Upload prompts to S3 Bucket
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
-      - [ ] Only update the metadata for last 2 weeks old videos
       - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
@@ -116,6 +116,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve the status of Video Page
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
+  - [ ] Option to upload image
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
@@ -190,7 +191,6 @@ YouTubeChannelCreator (Initial Task)
 - Start with `YouTubeChannelCreator` task via task dashboard
 - Each job runs independently at scheduled intervals
 - Each job can be retried or repositioned in the queue via dashboard
-- Conditional task creation: some stages only create next task if specific conditions are met
 
 **Ideas / Low Priority:**
 
@@ -209,7 +209,7 @@ YouTubeChannelCreator (Initial Task)
 - Remove teams as it looks of no use
 - Create Videos
 - Notify user on `REVIEW` via email, Telegram or WhatsApp
-- Scrape websites for contact and potential client
+- Scrape websites for contacts and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
 - Backup DB data to S3
