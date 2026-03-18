@@ -5,11 +5,11 @@ from nicegui import ui
 from backend.config.env import env
 from backend.config.logging_config import setup_logging
 from backend.ui import (
+    jobs_page,
     main_page,
     prompt_detail_page,
     prompt_page,
     s3_bucket_page,
-    tasks_page,
     youtube_channel_page,
     youtube_video_page,
 )
@@ -39,9 +39,9 @@ def root():
                 ui.tooltip("Home")
             with ui.button(
                 icon="task",
-                on_click=lambda: ui.run_javascript('window.location.href = "/tasks"'),
+                on_click=lambda: ui.run_javascript('window.location.href = "/jobs"'),
             ).props("flat"):
-                ui.tooltip("Tasks")
+                ui.tooltip("Jobs")
             with ui.button(
                 icon="video_library",
                 on_click=lambda: ui.run_javascript('window.location.href = "/youtube"'),
@@ -75,7 +75,8 @@ def root():
         ui.sub_pages(
             {
                 "/": main_page,
-                "/tasks": tasks_page,
+                "/jobs": jobs_page,
+                "/tasks": jobs_page,
                 "/youtube/{channel_id}": youtube_channel_page,
                 "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/prompt": prompt_page,

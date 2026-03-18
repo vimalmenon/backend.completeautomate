@@ -7,8 +7,8 @@ from nicegui import run, ui
 from backend.data import TaskData
 from backend.enum import JobEnum, TaskStatusEnum
 from backend.exception.app_exception import AppException
+from backend.jobs_scheduler import JobScheduler
 from backend.manager import TaskManager
-from backend.task_scheduler_services import TaskSchedulerServices
 from backend.ui.common.component_common import (
     render_breadcrumbs,
     render_common_header,
@@ -24,7 +24,7 @@ TASK_STATUS_PRIORITY = {
 }
 
 tasks_cards = [
-    {"label": "All Tasks", "value": "", "icon": "hourglass_empty", "color": "violet"},
+    {"label": "All Jobs", "value": "", "icon": "hourglass_empty", "color": "violet"},
     {
         "label": "IN PROGRESS",
         "value": TaskStatusEnum.IN_PROGRESS.value,
@@ -77,33 +77,33 @@ def get_status_row_class(status_value: str) -> str:
 
 def make_tasks_navigation_handler(status: str):
     def _handler() -> None:
-        target = f"/tasks?status={status}" if status else "/tasks"
+        target = f"/jobs?status={status}" if status else "/jobs"
         ui.run_javascript(f'window.location.href = "{target}"')
 
     return _handler
 
 
-def run_task_now(task_id: str) -> None:
+def run_task_now(job_id: str) -> None:
     try:
-        ui.notify(f"Running task: {task_id}", type="info")
-        TaskSchedulerServices().start(task_id=task_id)
-        ui.notify("Task run completed", type="positive")
+        ui.notify(f"Running job: {job_id}", type="info")
+        JobScheduler().start(job_id=job_id)
+        ui.notify("Job run completed", type="positive")
         ui.run_javascript(
             "window.location.href = window.location.pathname + window.location.search"
         )
     except Exception:
-        ui.notify("Failed to run task", type="negative")
+        ui.notify("Failed to run job", type="negative")
 
 
-def show_run_task_confirmation(task_id: str) -> None:
+def show_run_task_confirmation(job_id: str) -> None:
     """Show confirmation dialog before running a task."""
     with ui.dialog() as dialog, ui.card().classes("w-96"):
-        ui.label("Confirm Task Execution").classes("text-h6 mb-4")
-        ui.label("Are you sure you want to run this task?").classes("mb-4")
+        ui.label("Confirm Job Execution").classes("text-h6 mb-4")
+        ui.label("Are you sure you want to run this job?").classes("mb-4")
 
         def on_confirm() -> None:
             dialog.close()
-            run_task_now(task_id)
+            run_task_now(job_id)
 
         with ui.row().classes("w-full justify-end gap-2"):
             ui.button(
@@ -121,8 +121,8 @@ def show_run_task_confirmation(task_id: str) -> None:
 
 def show_edit_status_dialog(task: TaskData) -> None:
     with ui.dialog() as dialog, ui.card().classes("w-96"):
-        ui.label("Edit Task Status").classes("text-h6 mb-2")
-        ui.label(f"Task ID: {task.id}").classes("text-caption text-gray-600 mb-2")
+        ui.label("Edit Job Status").classes("text-h6 mb-2")
+        ui.label(f"Job ID: {task.id}").classes("text-caption text-gray-600 mb-2")
 
         status_options = [status.value for status in TaskStatusEnum]
         status_input = (
@@ -140,14 +140,14 @@ def show_edit_status_dialog(task: TaskData) -> None:
             try:
                 task.status = TaskStatusEnum(str(status_input.value))
                 TaskManager().update_task(task)
-                ui.notify("Task status updated", type="positive")
+                ui.notify("Job status updated", type="positive")
                 dialog.close()
                 ui.run_javascript(
                     "window.location.href = window.location.pathname + window.location.search"
                 )
             except (ValueError, AppException):
                 task.status = old_status
-                ui.notify("Failed to update task status", type="negative")
+                ui.notify("Failed to update job status", type="negative")
 
         with ui.row().classes("w-full justify-end gap-2 mt-4"):
             ui.button("Cancel", on_click=dialog.close).props("flat")
@@ -178,14 +178,14 @@ def add_task(
             trail=[],
         )
         TaskManager().add_task(task)
-        ui.notify("Task created", type="positive")
+        ui.notify("Job created", type="positive")
         ui.run_javascript(
             "window.location.href = window.location.pathname + window.location.search"
         )
     except json.JSONDecodeError:
         ui.notify("Invalid payload JSON", type="negative")
     except Exception as ex:
-        ui.notify(f"Failed to create task: {ex}", type="negative")
+        ui.notify(f"Failed to create job: {ex}", type="negative")
 
 
 def render_add_task_form() -> None:
@@ -193,7 +193,7 @@ def render_add_task_form() -> None:
     status_options = [status.value for status in TaskStatusEnum]
 
     with ui.dialog() as add_task_dialog, ui.card().classes("w-[720px] max-w-full"):
-        ui.label("Add New Task").classes("text-h6 mb-2")
+        ui.label("Add New Job").classes("text-h6 mb-2")
 
         with ui.row().classes("w-full gap-3 items-end flex-wrap"):
             job_type_input = (
@@ -224,7 +224,7 @@ def render_add_task_form() -> None:
         with ui.row().classes("w-full justify-end mt-3 gap-2"):
             ui.button("Cancel", on_click=add_task_dialog.close).props("flat")
             ui.button(
-                "Create Task",
+                "Create Job",
                 icon="add",
                 on_click=lambda: add_task(
                     str(job_type_input.value),
@@ -233,7 +233,7 @@ def render_add_task_form() -> None:
                 ),
             ).props("color=primary")
 
-    ui.button("Add Task", icon="add", on_click=add_task_dialog.open).props(
+    ui.button("Add Job", icon="add", on_click=add_task_dialog.open).props(
         "color=primary"
     ).classes("my-3")
 
@@ -242,11 +242,11 @@ def navigate_to_correct_task(current_task_id):
     ui.run_javascript(f'window.location.href = "/task/{current_task_id}"'),
 
 
-async def tasks_page(status: str = ""):
+async def jobs_page(status: str = ""):
     with ui.card().classes("w-full gap-0 page-transition"):
-        render_common_header(page_title="Task Management")
+        render_common_header(page_title="Job Management")
         render_breadcrumbs(
-            [("Home", "/"), ("Tasks", "/tasks")], "Manage scheduled tasks"
+            [("Home", "/"), ("Jobs", "/jobs")], "Manage scheduled jobs"
         )
 
         with ui.row().classes("w-full gap-4 mb-4 flex-wrap"):
@@ -268,12 +268,12 @@ async def tasks_page(status: str = ""):
 
         render_add_task_form()
 
-        # Show loading spinner while fetching tasks
+        # Show loading spinner while fetching jobs
         with ui.row().classes("w-full items-center my-4") as loading_row:
             ui.spinner(size="lg", color="primary")
-            ui.label("Loading tasks...")
+            ui.label("Loading jobs...")
 
-            # Fetch tasks from database (non-blocking)
+            # Fetch jobs from database (non-blocking)
             tasks = await run.io_bound(TaskManager().get_tasks)
             tasks = sort_tasks_by_priority(
                 [
@@ -288,10 +288,10 @@ async def tasks_page(status: str = ""):
         loading_row.delete()
 
         if not tasks:
-            render_not_found_message(message="No tasks found", icon="inbox")
+            render_not_found_message(message="No jobs found", icon="inbox")
 
         else:
-            ui.label(f"Found {len(tasks)} task(s)").classes("text-subtitle1 mb-4")
+            ui.label(f"Found {len(tasks)} job(s)").classes("text-subtitle1 mb-4")
 
             # Create custom table
             with ui.column().classes(
@@ -356,3 +356,7 @@ async def tasks_page(status: str = ""):
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
+
+
+async def tasks_page(status: str = ""):
+    await jobs_page(status)

@@ -70,7 +70,7 @@ def get_cached_tasks():
 
 def make_tasks_navigation_handler(status: str):
     def _handler() -> None:
-        target = f"/tasks?status={status}" if status else "/tasks"
+        target = f"/jobs?status={status}" if status else "/jobs"
         ui.run_javascript(f'window.location.href = "{target}"')
 
     return _handler
