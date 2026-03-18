@@ -27,11 +27,11 @@ playwright = "^1.54.0"
 nicegui = "^3.8.0"
 plotly = "^6.6.0"
 dashscope = "^1.24.6"
-langsmith = "^0.7.17"
 langgraph = "^1.1.2"
 langchain = "^1.2.12"
 boto3 = "^1.42.67"
 tabulate = "^0.10.0"
+langsmith = "^0.7.20"
 
 [tool.poetry.scripts]
 app = "main:main"
@@ -51,10 +51,10 @@ deadcode = "^2.4.1"
 google-api-python-client-stubs = "^1.32.0"
 types-jinja2 = "^2.11.9"
 pyfaker = "^0.1"
-tox = "^4.49.0"
 faker = "^40.8.0"
 ruff = "^0.15.6"
 types-tabulate = "^0.10.0.20260308"
+tox = "^4.50.0"
 
 [tool.black]
 line-length = 88
