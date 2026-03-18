@@ -291,26 +291,6 @@ def main_page():
 
     menu_items: list[MenuSection] = [
         {
-            "category": "YouTube",
-            "icon": "video_library",
-            "description": "Manage YouTube videos, channels, and metadata",
-            "color": "red",
-            "items": [
-                {
-                    "name": "List Videos",
-                    "icon": "ondemand_video",
-                    "links_to": "/youtube",
-                    "description": "View and manage YouTube videos",
-                },
-                {
-                    "name": "List Channel",
-                    "icon": "live_tv",
-                    "links_to": f"/youtube/{env.YOUTUBE_CHANNEL_ID}",
-                    "description": "View channel details and statistics",
-                },
-            ],
-        },
-        {
             "category": "Prompt",
             "icon": "article",
             "description": "View and manage AI prompts for content generation",
