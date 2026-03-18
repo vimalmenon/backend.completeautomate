@@ -77,10 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [ ] App revamp
-      - [x] Job  ->  Tasks  ->  Generator  -> Manager  -> DB Manager
-      - [x] Update JobData for videos rather than creating New Tasks
       - [x] Upload prompts to S3 Bucket
-      - [x] Download prompts during startup if there is any change
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [ ] Upload Video Stats to S3
@@ -93,6 +90,8 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Standardize the image generation
       - [ ] Make the image generation more generic to be used
       - [ ] Put all the generated image prompt to review
+      - [ ] Workflow improvement
+        - [ ] Ability to run the agent tasks in parallel
       - [ ] Review the raw `Transcript` and rate the video based on it 
         - [ ] Check for grammar
         - [ ] Points to improve 
@@ -105,7 +104,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-
 - [ ] Send Notification
   - [ ] Send Email
   - [ ] Send Signal
@@ -132,8 +130,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
-- [ ] Workflow improvement
-  - [ ] Ability to run the agent tasks in parallel
 - [ ] Code improvement
   - [ ] Complete TODOs
   - [ ] Remove Deadcode
