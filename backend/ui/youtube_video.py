@@ -3,25 +3,61 @@ from datetime import datetime
 from nicegui import run, ui
 
 from backend.data import (
+    JobData,
     PlatformDBData,
     PlatformYouTubeVideoDBData,
     TaskData,
     YouTubeVideoDBData,
 )
-from backend.enum import JobEnum, JobStatusEnum, PlatformEnum, TaskStatusEnum
+from backend.enum import (
+    JobsStatusEnum,
+    JobStatusEnum,
+    JobTypeEnum,
+    PlatformEnum,
+    TaskStatusEnum,
+    YouTubeVideoTaskEnum,
+)
 from backend.manager import JobManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
     render_separator,
 )
 
-FLOW_STEPS: list[tuple[JobEnum, str]] = [
-    (JobEnum.YouTubeVideoSummarizer, "Summarize"),
-    (JobEnum.YouTubeVideoMetadataSuggester, "Metadata Suggest"),
-    (JobEnum.YouTubeVideoMetadataUpdater, "Metadata Update"),
-    (JobEnum.YouTubeVideoThumbnailPromptSuggester, "Thumbnail Prompt"),
-    (JobEnum.YouTubeThumbnailUpdater, "Thumbnail Update"),
+FLOW_STEPS: list[tuple[YouTubeVideoTaskEnum, str]] = [
+    (YouTubeVideoTaskEnum.YouTubeVideoStart, "Start"),
+    (YouTubeVideoTaskEnum.YouTubeVideoFixTranscript, "Summarize"),
+    (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Suggest"),
+    (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Update"),
+    (YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection, "Thumbnail Prompt"),
+    (YouTubeVideoTaskEnum.YouTubeVideoComplete, "Thumbnail Update"),
 ]
+
+FLOW_STEP_JOB_TYPES: dict[str, str] = {
+    "Start": "YouTubeVideo",
+    "Summarize": "YouTubeVideoSummarizer",
+    "Metadata Suggest": "YouTubeVideoMetadataSuggester",
+    "Metadata Update": "YouTubeVideoMetadataUpdater",
+    "Thumbnail Prompt": "YouTubeVideoThumbnailPromptSuggester",
+    "Thumbnail Update": "YouTubeThumbnailUpdater",
+}
+
+FLOW_CURRENT_STEP_LABEL: dict[YouTubeVideoTaskEnum, str] = {
+    YouTubeVideoTaskEnum.YouTubeVideoStart: "Start",
+    YouTubeVideoTaskEnum.YouTubeVideoFixTranscript: "Summarize",
+    YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection: "Metadata Suggest",
+    YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection: "Thumbnail Prompt",
+    YouTubeVideoTaskEnum.YouTubeVideoComplete: "Thumbnail Update",
+}
+
+JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, TaskStatusEnum] = {
+    JobsStatusEnum.NEW: TaskStatusEnum.NEW,
+    JobsStatusEnum.IN_PROGRESS: TaskStatusEnum.IN_PROGRESS,
+    JobsStatusEnum.COMPLETE: TaskStatusEnum.COMPLETED,
+    JobsStatusEnum.PENDING: TaskStatusEnum.PENDING,
+    JobsStatusEnum.REVIEW: TaskStatusEnum.REVIEW,
+    JobsStatusEnum.FAILED: TaskStatusEnum.FAILED,
+    JobsStatusEnum.ARCHIVED: TaskStatusEnum.CLEAN_UP,
+}
 
 STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
     TaskStatusEnum.COMPLETED: {
@@ -49,6 +85,185 @@ STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
         "label": "Clean Up",
     },
 }
+
+
+def _resolve_flow_root_job_id(task: TaskData) -> str:
+    if task.trail:
+        return str(task.trail[0])
+    return str(task.id)
+
+
+def _job_type_value(task: TaskData) -> str:
+    return task.job_type.value
+
+
+def _filter_tasks_by_flow_job_id(
+    tasks: list[TaskData], flow_job_id: str | None = None
+) -> list[TaskData]:
+    if not tasks:
+        return []
+
+    sorted_tasks = sorted(tasks, key=lambda task: task.created_at)
+    flow_job_types = set(FLOW_STEP_JOB_TYPES.values())
+    flow_candidates = [
+        task for task in sorted_tasks if _job_type_value(task) in flow_job_types
+    ]
+
+    if not flow_candidates:
+        return sorted_tasks
+
+    selected_root_job_id: str
+    if flow_job_id:
+        selected_root_job_id = flow_job_id
+        matched_task = next(
+            (task for task in reversed(sorted_tasks) if str(task.id) == flow_job_id),
+            None,
+        )
+        if matched_task:
+            selected_root_job_id = _resolve_flow_root_job_id(matched_task)
+    else:
+        selected_root_job_id = _resolve_flow_root_job_id(flow_candidates[-1])
+
+    filtered_tasks = [
+        task
+        for task in sorted_tasks
+        if _resolve_flow_root_job_id(task) == selected_root_job_id
+    ]
+
+    if flow_job_id and not filtered_tasks:
+        return _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=None)
+
+    return filtered_tasks
+
+
+def _get_video_job(ref_id: str, flow_job_id: str | None = None) -> JobData | None:
+    jobs = [
+        job
+        for job in JobManager().get_job_by_type(type=JobTypeEnum.YouTubeVideo)
+        if job.task_data.get("ref_id") == ref_id
+    ]
+    if not jobs:
+        return None
+
+    if flow_job_id:
+        matched_job = next((job for job in jobs if str(job.id) == flow_job_id), None)
+        if matched_job:
+            return matched_job
+
+    return sorted(jobs, key=lambda job: job.created_at)[-1]
+
+
+def _build_task_by_job(tasks: list[TaskData]) -> dict[str, TaskData]:
+    task_by_job: dict[str, TaskData] = {}
+    for task in tasks:
+        task_by_job[_job_type_value(task)] = task
+    return task_by_job
+
+
+def _get_flow_status_by_step_label(
+    video_job: JobData | None,
+) -> dict[str, TaskStatusEnum]:
+    if not video_job:
+        return {}
+
+    if video_job.status == JobsStatusEnum.COMPLETE:
+        return {step_label: TaskStatusEnum.COMPLETED for _, step_label in FLOW_STEPS}
+
+    current_task_value = video_job.task_data.get("task")
+    if not current_task_value:
+        return {}
+
+    current_flow_step = YouTubeVideoTaskEnum(current_task_value)
+    current_step_label = FLOW_CURRENT_STEP_LABEL[current_flow_step]
+    current_step_index = next(
+        index
+        for index, (_, step_label) in enumerate(FLOW_STEPS)
+        if step_label == current_step_label
+    )
+    current_status = JOB_STATUS_TO_TASK_STATUS.get(
+        video_job.status, TaskStatusEnum.PENDING
+    )
+
+    flow_statuses: dict[str, TaskStatusEnum] = {}
+    for index, (_, step_label) in enumerate(FLOW_STEPS):
+        if index < current_step_index:
+            flow_statuses[step_label] = TaskStatusEnum.COMPLETED
+            continue
+        if index > current_step_index:
+            flow_statuses[step_label] = TaskStatusEnum.PENDING
+            continue
+        flow_statuses[step_label] = current_status
+    return flow_statuses
+
+
+def _get_visible_flow_steps(
+    task_by_job: dict[str, TaskData],
+    flow_status_by_step_label: dict[str, TaskStatusEnum],
+) -> list[tuple[YouTubeVideoTaskEnum, str, str]]:
+    visible_flow_steps: list[tuple[YouTubeVideoTaskEnum, str, str]] = []
+    for flow_step, step_label in FLOW_STEPS:
+        job_type_key = FLOW_STEP_JOB_TYPES[step_label]
+        if job_type_key != "YouTubeVideoThumbnailPromptSuggester":
+            visible_flow_steps.append((flow_step, job_type_key, step_label))
+            continue
+
+        thumbnail_prompt_task = task_by_job.get(job_type_key)
+        thumbnail_prompt_status = (
+            thumbnail_prompt_task.status
+            if thumbnail_prompt_task
+            else flow_status_by_step_label.get(step_label)
+        )
+        if (
+            thumbnail_prompt_status
+            and thumbnail_prompt_status != TaskStatusEnum.PENDING
+        ):
+            visible_flow_steps.append((flow_step, job_type_key, step_label))
+    return visible_flow_steps
+
+
+def _attach_task_card_handlers(
+    *,
+    flow_step: YouTubeVideoTaskEnum,
+    job_type: str,
+    current_task: TaskData | None,
+    current_status: TaskStatusEnum | None,
+    step_label: str,
+    video_job: JobData | None,
+    task_card,
+) -> None:
+    editable_job_types = {
+        "YouTubeVideoSummarizer",
+        "YouTubeVideoMetadataSuggester",
+        "YouTubeVideoThumbnailPromptSuggester",
+    }
+    if job_type not in editable_job_types:
+        return
+
+    if current_task:
+        task_card.on(
+            "dblclick",
+            lambda _, task=current_task: _show_task_status_dialog(task),
+        )
+        return
+
+    if video_job and current_status is not None:
+        task_card.on(
+            "dblclick",
+            lambda _, job=video_job, step=flow_step, label=step_label: _show_flow_job_status_dialog(
+                video_job=job,
+                flow_step=step,
+                step_label=label,
+            ),
+        )
+        return
+
+    task_card.on(
+        "dblclick",
+        lambda _, current_step=step_label: ui.notify(
+            f"{current_step} task is not available yet",
+            type="warning",
+        ),
+    )
 
 
 def _show_task_status_dialog(task: TaskData) -> None:
@@ -93,29 +308,81 @@ def _show_task_status_dialog(task: TaskData) -> None:
     dialog.open()
 
 
-def render_task_progress(tasks: list[TaskData]) -> None:
-    task_by_job: dict[JobEnum, TaskData] = {}
-    for task in sorted(tasks, key=lambda t: t.created_at):
-        task_by_job[task.job_type] = task
+def _show_flow_job_status_dialog(
+    video_job: JobData,
+    flow_step: YouTubeVideoTaskEnum,
+    step_label: str,
+) -> None:
+    with ui.dialog() as dialog, ui.card().classes("w-96"):
+        ui.label(f"Edit {step_label} Status").classes("text-h6 mb-2")
+        ui.label(f"Job ID: {video_job.id}").classes("text-caption text-gray-600 mb-2")
 
-    visible_flow_steps: list[tuple[JobEnum, str]] = []
-    for job_type, step_label in FLOW_STEPS:
-        if job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
-            thumbnail_prompt_task = task_by_job.get(job_type)
-            if not thumbnail_prompt_task:
-                continue
-            if thumbnail_prompt_task.status != TaskStatusEnum.REVIEW:
-                continue
-        visible_flow_steps.append((job_type, step_label))
+        status_options = [status.value for status in JobsStatusEnum]
+        status_input = (
+            ui.select(
+                options=status_options,
+                value=video_job.status.value,
+                label="Job Status",
+            )
+            .props("outlined dense")
+            .classes("w-full")
+        )
+
+        def on_save() -> None:
+            old_status = video_job.status
+            old_task_data = dict(video_job.task_data)
+            try:
+                new_status = JobsStatusEnum(str(status_input.value))
+                updated_task_data = {**video_job.task_data, "task": flow_step.value}
+                JobManager().update_job_data(
+                    job_id=video_job.id,
+                    status=new_status,
+                    failed_count=video_job.failed_count,
+                    task_data=updated_task_data,
+                )
+                video_job.status = new_status
+                video_job.task_data = updated_task_data
+                ui.notify(f"{step_label} status updated", type="positive")
+                dialog.close()
+                ui.run_javascript(
+                    "window.location.href = window.location.pathname + window.location.search"
+                )
+            except Exception:
+                video_job.status = old_status
+                video_job.task_data = old_task_data
+                ui.notify(f"Failed to update {step_label} status", type="negative")
+
+        with ui.row().classes("w-full justify-end gap-2 mt-4"):
+            ui.button("Cancel", on_click=dialog.close).props("flat")
+            ui.button("Save", icon="save", on_click=on_save).props("color=primary")
+
+    dialog.open()
+
+
+def render_task_progress(
+    tasks: list[TaskData],
+    video_job: JobData | None,
+    flow_job_id: str | None = None,
+) -> None:
+    flow_tasks = _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=flow_job_id)
+    task_by_job = _build_task_by_job(flow_tasks)
+    flow_status_by_step_label = _get_flow_status_by_step_label(video_job)
+    visible_flow_steps = _get_visible_flow_steps(task_by_job, flow_status_by_step_label)
 
     with ui.card().classes(
         "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700"
     ):
         ui.label("Task Flow").classes("text-sm font-bold mb-2")
         with ui.row().classes("w-full items-stretch gap-1 flex-wrap"):
-            for index, (job_type, step_label) in enumerate(visible_flow_steps):
+            for index, (flow_step, job_type, step_label) in enumerate(
+                visible_flow_steps
+            ):
                 current_task = task_by_job.get(job_type)
-                status = current_task.status if current_task else None
+                status = (
+                    current_task.status
+                    if current_task
+                    else flow_status_by_step_label.get(step_label)
+                )
                 style = (
                     STATUS_STYLE[status]
                     if status and status in STATUS_STYLE
@@ -135,24 +402,15 @@ def render_task_progress(tasks: list[TaskData]) -> None:
                                 "text-[10px] px-1 py-0"
                             ).props("outline")
 
-                if job_type in {
-                    JobEnum.YouTubeVideoSummarizer,
-                    JobEnum.YouTubeVideoMetadataSuggester,
-                    JobEnum.YouTubeVideoThumbnailPromptSuggester,
-                }:
-                    if current_task:
-                        task_card.on(
-                            "dblclick",
-                            lambda _, task=current_task: _show_task_status_dialog(task),
-                        )
-                    else:
-                        task_card.on(
-                            "dblclick",
-                            lambda _, current_step=step_label: ui.notify(
-                                f"{current_step} task is not available yet",
-                                type="warning",
-                            ),
-                        )
+                _attach_task_card_handlers(
+                    flow_step=flow_step,
+                    job_type=job_type,
+                    current_task=current_task,
+                    current_status=status,
+                    step_label=step_label,
+                    video_job=video_job,
+                    task_card=task_card,
+                )
 
                 if index < len(visible_flow_steps) - 1:
                     with ui.column().classes("justify-center hidden lg:flex"):
@@ -162,7 +420,7 @@ def render_task_progress(tasks: list[TaskData]) -> None:
 def _should_show_metadata_suggestions(tasks: list[TaskData]) -> bool:
     latest_metadata_suggest_task: TaskData | None = None
     for task in sorted(tasks, key=lambda t: t.created_at):
-        if task.job_type == JobEnum.YouTubeVideoMetadataSuggester:
+        if _job_type_value(task) == "YouTubeVideoMetadataSuggester":
             latest_metadata_suggest_task = task
 
     return bool(
@@ -174,7 +432,7 @@ def _should_show_metadata_suggestions(tasks: list[TaskData]) -> bool:
 def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
     latest_thumbnail_prompt_task: TaskData | None = None
     for task in sorted(tasks, key=lambda t: t.created_at):
-        if task.job_type == JobEnum.YouTubeVideoThumbnailPromptSuggester:
+        if _job_type_value(task) == "YouTubeVideoThumbnailPromptSuggester":
             latest_thumbnail_prompt_task = task
 
     return bool(
@@ -568,10 +826,11 @@ async def youtube_video_page(
         ui.spinner(size="lg", color="primary")
         ui.label("Loading video...")
 
-        video, tasks = await run.io_bound(
+        video, tasks, video_job = await run.io_bound(
             lambda: (
                 YouTubeVideoManager(ref_id=platform.ref_id).get_video(),
                 JobManager().get_task_by_ref_id(ref_id=platform.ref_id),
+                _get_video_job(ref_id=platform.ref_id, flow_job_id=section),
             )
         )
 
@@ -669,8 +928,11 @@ async def youtube_video_page(
                         "Save Changes", icon="save", on_click=save_transcript
                     ).props("color=primary")
 
-    show_metadata_suggestions = _should_show_metadata_suggestions(tasks)
-    show_thumbnail_prompt_suggestions = _should_show_thumbnail_prompt_suggestions(tasks)
+    flow_tasks = _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=section)
+    show_metadata_suggestions = _should_show_metadata_suggestions(flow_tasks)
+    show_thumbnail_prompt_suggestions = _should_show_thumbnail_prompt_suggestions(
+        flow_tasks
+    )
 
     with ui.column().classes("w-full max-w-7xl mx-auto gap-4"):
         with ui.card().classes(
@@ -703,7 +965,7 @@ async def youtube_video_page(
                         on_click=transcript_dialog.open,
                     ).props("color=primary outline")
 
-        render_task_progress(tasks)
+        render_task_progress(tasks=tasks, video_job=video_job, flow_job_id=section)
         _render_video_details(video)
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
         if show_metadata_suggestions:
