@@ -66,6 +66,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             return self.__create_metadata_suggestions(video_from_db=self.video_from_db)
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection:
             logger.info("Creating thumbnails for job %s", self.job.id)
+            self.__update_metadata_selected(video_from_db=self.video_from_db)
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             return self.__generate_thumbnails(video_from_db=self.video_from_db)
         logger.info("Uploading thumbnail and reviewing video for job %s", self.job.id)
@@ -81,6 +82,32 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         )
         delta = current_time - published_at
         return delta >= timedelta(weeks=2)
+
+    def __update_metadata_selected(self, video_from_db: YouTubeVideoDBData) -> None:
+        metadata_suggestions = [
+            selection
+            for selection in video_from_db.metadata_suggestions
+            if selection.status == JobStatusEnum.PROMOTE
+        ]
+        if len(metadata_suggestions) == 1:
+            selected_metadata = metadata_suggestions[0]
+            self.youtube_api.update_video_metadata(
+                video_id=video_from_db.platform.video_id,
+                title=selected_metadata.title,
+                description=selected_metadata.description,
+                tags=selected_metadata.tags,
+            )
+            video_from_db.title = selected_metadata.title
+            video_from_db.description = selected_metadata.description
+            video_from_db.tags = selected_metadata.tags
+            self.youtube_manager.update_metadata(
+                title=selected_metadata.title,
+                description=selected_metadata.description,
+                tags=selected_metadata.tags,
+            )
+            self.youtube_manager.update_metadata_suggestions(metadata_suggestions=[])
+        else:
+            raise AppException("More than one metadata suggestion was selected")
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:

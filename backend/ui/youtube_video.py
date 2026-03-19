@@ -220,6 +220,7 @@ def _attach_task_card_handlers(
     editable_job_types = {
         "YouTubeVideoSummarizer",
         "YouTubeVideoMetadataSuggester",
+        "YouTubeVideoMetadataUpdater",
         "YouTubeVideoThumbnailPromptSuggester",
     }
     if job_type not in editable_job_types:
