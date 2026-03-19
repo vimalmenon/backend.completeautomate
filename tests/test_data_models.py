@@ -9,7 +9,6 @@ from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
 from backend.data.youtube_channel import (
     YouTubeJobData,
-    YouTubeThumbnailJobData,
     YouTubeVideoMetadataJobData,
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
@@ -150,66 +149,6 @@ class TestYouTubeVideoThumbnailPromptSuggesterJobData:
         )
         assert loaded.name == "YouTubeVideoThumbnailPromptSuggesterJobData"
 
-
-@pytest.mark.unit
-class TestYouTubeJobDataNames:
-    """Ensure all YouTube JobData classes reflect name in JSON and deserialization."""
-
-    def test_youtube_thumbnail_job_data_name_reflection(self) -> None:
-        data = YouTubeThumbnailJobData(
-            data=S3Data(name="test.png", content_type=S3ContentTypeEnum.PNG),
-            status=TaskStatusEnum.NEW,
-            ref_id="sample_ref",
-        )
-        assert data.to_json()["name"] == "YouTubeThumbnailJobData"
-
-        loaded = YouTubeThumbnailJobData.to_cls(
-            {
-                "data": data.data.to_json(),
-                "status": TaskStatusEnum.NEW.value,
-                "ref_id": "sample_ref",
-                "name": "CustomName",
-            }
-        )
-        assert loaded.name == "YouTubeThumbnailJobData"
-
-    def test_youtube_job_data_name_reflection(self) -> None:
-        data = YouTubeJobData(ref_id="sample_ref")
-        assert data.to_json()["name"] == "YouTubeJobData"
-
-        loaded = YouTubeJobData.to_cls({"ref_id": "sample_ref", "name": "CustomName"})
-        assert loaded.name == "YouTubeJobData"
-
-    def test_youtube_video_summarize_job_data_name_reflection(self) -> None:
-        data = YouTubeVideoSummarizeJobData(ref_id="sample_ref")
-        assert data.to_json()["name"] == "YouTubeVideoSummarizeJobData"
-
-        loaded = YouTubeVideoSummarizeJobData.to_cls(
-            {"ref_id": "sample_ref", "name": "CustomName"}
-        )
-        assert loaded.name == "YouTubeVideoSummarizeJobData"
-
-    def test_youtube_video_metadata_job_data_name_reflection(self) -> None:
-        data = YouTubeVideoMetadataJobData(
-            task_id=uuid4(),
-            ref_id="sample_ref",
-            title="Sample Title",
-            description="Sample Description",
-            tags=["tag1", "tag2"],
-        )
-        assert data.to_json()["name"] == "YouTubeVideoMetadataJobData"
-
-        loaded = YouTubeVideoMetadataJobData.to_cls(
-            {
-                "task_id": str(data.task_id),
-                "ref_id": "sample_ref",
-                "title": "Sample Title",
-                "description": "Sample Description",
-                "tags": ["tag1", "tag2"],
-                "name": "CustomName",
-            }
-        )
-        assert loaded.name == "YouTubeVideoMetadataJobData"
 
 
 @pytest.mark.unit

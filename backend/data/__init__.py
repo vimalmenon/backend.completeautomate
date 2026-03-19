@@ -28,7 +28,6 @@ from backend.data.team import GraphicDesignerClsData, SocialMediaManagerData
 from backend.data.youtube_channel import (
     YouTubeChannelDBData,
     YouTubeJobData,
-    YouTubeThumbnailJobData,
     YouTubeVideoMetadataJobData,
     YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
@@ -47,7 +46,6 @@ __all__ = [
     "ImagePromptData",
     "YouTubeChannelDBData",
     "YouTubeJobData",
-    "YouTubeThumbnailJobData",
     "YouTubeVideoDBData",
     "YouTubeVideoSummarizeJobData",
     "GraphicDesignerClsData",

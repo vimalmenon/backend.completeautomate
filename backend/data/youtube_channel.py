@@ -6,7 +6,7 @@ from uuid import UUID
 
 from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
-from backend.enum.status import TaskStatusEnum
+from backend.enum.status import JobStatusEnum
 
 NO_ITEMS_FOUND_ERROR = "No items found with in response"
 
@@ -146,38 +146,6 @@ class YouTubeChannelDBData:
         delta = datetime.now() - self.last_updated_at
         return delta >= timedelta(days=days)
 
-
-@dataclass
-class YouTubeThumbnailJobData:
-    data: S3Data
-    status: TaskStatusEnum
-    ref_id: str
-
-    @property
-    def name(self) -> str:
-        return self.__class__.__name__
-
-    def to_json(self) -> dict:
-        return {
-            "data": self.data.to_json(),
-            "status": self.status.value,
-            "ref_id": self.ref_id,
-            "name": self.name,
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            data=S3Data.to_cls(data["data"]),
-            status=TaskStatusEnum(data["status"]),
-            ref_id=data["ref_id"],
-        )
-
-    @cached_property
-    def platform(self) -> PlatformDBData:
-        from backend.database.platform.platform_database import PlatformDB
-
-        return PlatformDB().get_data(self.ref_id)
 
 
 @dataclass
