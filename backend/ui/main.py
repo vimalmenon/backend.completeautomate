@@ -61,9 +61,7 @@ def get_status_counts(status: str) -> int:
     if status == "":
         return len(jobs)
     return sum(
-        1
-        for job in jobs
-        if str(getattr(job.status, "value", job.status)) == status
+        1 for job in jobs if str(getattr(job.status, "value", job.status)) == status
     )
 
 

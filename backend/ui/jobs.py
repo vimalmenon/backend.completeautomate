@@ -82,6 +82,12 @@ def make_jobs_navigation_handler(status: str):
     return _handler
 
 
+def get_status_count(jobs: list[JobData], status: str) -> int:
+    if not status:
+        return len(jobs)
+    return sum(1 for job in jobs if job.status.value == status)
+
+
 def run_job_now(job_id: str) -> None:
     try:
         ui.notify(f"Running job: {job_id}", type="info")
@@ -168,12 +174,14 @@ def add_job(
 
         status = JobsStatusEnum(selected_status)
         job = JobData(
-            id=JobManager().create_job(
+            id=JobManager()
+            .create_job(
                 type=JobTypeEnum(selected_job_type),
                 task_data=payload,
                 description=selected_job_type,
                 status=status,
-            ).id,
+            )
+            .id,
             status=status,
             type=JobTypeEnum(selected_job_type),
             task_data=payload,
@@ -249,6 +257,25 @@ async def jobs_page(status: str = ""):
         render_common_header(page_title="Job Management")
         render_breadcrumbs([("Home", "/"), ("Jobs", "/jobs")], "Manage scheduled jobs")
 
+        # Show loading spinner while fetching jobs
+        with ui.row().classes("w-full items-center my-4") as loading_row:
+            ui.spinner(size="lg", color="primary")
+            ui.label("Loading jobs...")
+
+            # Fetch jobs from database (non-blocking)
+            all_jobs = await run.io_bound(JobManager().get_all_jobs)
+            jobs = sort_jobs_by_priority(
+                [
+                    job
+                    for job in all_jobs
+                    if not status
+                    or str(getattr(job.status, "value", job.status)) == status
+                ]
+            )
+
+        # Remove loading indicator
+        loading_row.delete()
+
         with ui.row().classes("w-full gap-4 mb-4 flex-wrap"):
             for stat in jobs_cards:
                 with (
@@ -262,30 +289,14 @@ async def jobs_page(status: str = ""):
                         ui.icon(stat["icon"], size="sm")
                     with ui.column().classes("gap-0"):
                         ui.label(stat["label"]).classes("text-subtitle2 text-gray-600")
+                        ui.label(
+                            str(get_status_count(all_jobs, stat["value"]))
+                        ).classes("text-h6 font-bold")
 
         if status:
             ui.label(f"Active filter: {status}").classes("text-caption text-gray-600")
 
         render_add_job_form()
-
-        # Show loading spinner while fetching jobs
-        with ui.row().classes("w-full items-center my-4") as loading_row:
-            ui.spinner(size="lg", color="primary")
-            ui.label("Loading jobs...")
-
-            # Fetch jobs from database (non-blocking)
-            jobs = await run.io_bound(JobManager().get_all_jobs)
-            jobs = sort_jobs_by_priority(
-                [
-                    job
-                    for job in jobs
-                    if not status
-                    or str(getattr(job.status, "value", job.status)) == status
-                ]
-            )
-
-        # Remove loading indicator
-        loading_row.delete()
 
         if not jobs:
             render_not_found_message(message="No jobs found", icon="inbox")

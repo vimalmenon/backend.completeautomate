@@ -49,7 +49,9 @@ class JobDB:
     def get_all_active_jobs(self) -> list[JobData]:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
-            filter_expression=Attr("status").is_in([JobsStatusEnum.IN_PROGRESS.value]),
+            filter_expression=Attr("status").is_in(
+                [JobsStatusEnum.IN_PROGRESS.value, JobsStatusEnum.FAILED.value]
+            ),
         )
         return [JobData.to_cls(item) for item in items]
 

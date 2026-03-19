@@ -92,11 +92,7 @@ class JobManager:
     # Backward-compatible helpers for UI code paths still reading CA#TASK records.
     def get_task_by_ref_id(self, ref_id: str) -> list[TaskData]:
         tasks = TaskDB().get_tasks()
-        return [
-            task
-            for task in tasks
-            if str(task.payload.get("ref_id", "")) == ref_id
-        ]
+        return [task for task in tasks if str(task.payload.get("ref_id", "")) == ref_id]
 
     def update_task(self, task: TaskData) -> None:
         TaskDB().update_task(task)
