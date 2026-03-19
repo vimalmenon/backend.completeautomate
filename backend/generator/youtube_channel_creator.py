@@ -27,7 +27,7 @@ from backend.manager import (
 logger = logging.getLogger(__name__)
 
 
-class YouTubeChannelOnboardingJob(BaseGeneratorJob):
+class YouTubeChannelOnboardingJob(BaseGenerator):
     def generate(self) -> tuple[JobsStatusEnum, dict | None]:
         channel_id = env.YOUTUBE_CHANNEL_ID
         ref_id = self.__create_channel_platform_if_not_exists(channel_id=channel_id)

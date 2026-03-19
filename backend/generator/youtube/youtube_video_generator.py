@@ -20,7 +20,7 @@ from backend.enum import (
     YouTubeVideoTaskEnum,
 )
 from backend.exception.app_exception import AppException
-from backend.generator.base_generator import BaseGeneratorJob
+from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import (
     ImagePromptsListRequest,
     YouTubeVideoAnalyzerListResponse,
@@ -33,7 +33,7 @@ from backend.services.agent_service import AgentImageService, AgentService
 logger = logging.getLogger(__name__)
 
 
-class YouTubeVideoGenerator(BaseGeneratorJob):
+class YouTubeVideoGenerator(BaseGenerator):
 
     def __init__(self, job: JobData):
         super().__init__(job=job)
