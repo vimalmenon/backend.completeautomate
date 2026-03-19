@@ -25,28 +25,18 @@ from backend.ui.common.component_common import (
 
 FLOW_STEPS: list[tuple[YouTubeVideoTaskEnum, str]] = [
     (YouTubeVideoTaskEnum.YouTubeVideoStart, "Start"),
-    (YouTubeVideoTaskEnum.YouTubeVideoFixTranscript, "Summarize"),
-    (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Suggest"),
+    (YouTubeVideoTaskEnum.YouTubeVideoFixTranscript, "Fix Transcript"),
     (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Update"),
-    (YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection, "Thumbnail Prompt"),
-    (YouTubeVideoTaskEnum.YouTubeVideoComplete, "Thumbnail Update"),
+    (YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection, "Thumbnail Selection"),
+    (YouTubeVideoTaskEnum.YouTubeVideoComplete, "Complete"),
 ]
 
 FLOW_STEP_JOB_TYPES: dict[str, str] = {
     "Start": "YouTubeVideo",
-    "Summarize": "YouTubeVideoSummarizer",
-    "Metadata Suggest": "YouTubeVideoMetadataSuggester",
+    "Fix Transcript": "YouTubeVideoSummarizer",
     "Metadata Update": "YouTubeVideoMetadataUpdater",
-    "Thumbnail Prompt": "YouTubeVideoThumbnailPromptSuggester",
-    "Thumbnail Update": "YouTubeThumbnailUpdater",
-}
-
-FLOW_CURRENT_STEP_LABEL: dict[YouTubeVideoTaskEnum, str] = {
-    YouTubeVideoTaskEnum.YouTubeVideoStart: "Start",
-    YouTubeVideoTaskEnum.YouTubeVideoFixTranscript: "Summarize",
-    YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection: "Metadata Suggest",
-    YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection: "Thumbnail Prompt",
-    YouTubeVideoTaskEnum.YouTubeVideoComplete: "Thumbnail Update",
+    "Thumbnail Selection": "YouTubeVideoThumbnailPromptSuggester",
+    "Complete": "YouTubeThumbnailUpdater",
 }
 
 JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, TaskStatusEnum] = {
@@ -174,7 +164,17 @@ def _get_flow_status_by_step_label(
         return {}
 
     current_flow_step = YouTubeVideoTaskEnum(current_task_value)
-    current_step_label = FLOW_CURRENT_STEP_LABEL[current_flow_step]
+    current_step_label = next(
+        (
+            step_label
+            for flow_step, step_label in FLOW_STEPS
+            if flow_step == current_flow_step
+        ),
+        None,
+    )
+    if not current_step_label:
+        return {}
+
     current_step_index = next(
         index
         for index, (_, step_label) in enumerate(FLOW_STEPS)
