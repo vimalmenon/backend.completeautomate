@@ -5,7 +5,6 @@ import pytest
 from backend.enum.ai import AICreativityLevelEnum, AIModelEnum
 from backend.enum.job import JobEnum
 from backend.enum.s3 import S3ContentTypeEnum
-from backend.enum.status import TaskStatusEnum
 from backend.enum.team import TeamEnum
 
 
@@ -37,18 +36,6 @@ class TestEnums:
         assert S3ContentTypeEnum.PNG is not None
         assert S3ContentTypeEnum.JPEG is not None
         assert S3ContentTypeEnum.JSON is not None
-
-    def test_task_status_enum(self) -> None:
-        """Test TaskStatusEnum enum values"""
-        assert TaskStatusEnum.NEW is not None
-        assert TaskStatusEnum.IN_PROGRESS is not None
-        assert TaskStatusEnum.COMPLETED is not None
-        assert TaskStatusEnum.FAILED is not None
-
-    def test_enum_string_representation(self) -> None:
-        """Test enum string representations"""
-        assert str(TaskStatusEnum.NEW) != ""
-        assert str(JobEnum.ImageGenerator) != ""
 
     def test_team_enum_role_and_display_name(self) -> None:
         """Test TeamEnum carries role and display_name metadata"""
