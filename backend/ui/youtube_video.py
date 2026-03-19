@@ -203,21 +203,7 @@ def _get_visible_flow_steps(
     visible_flow_steps: list[tuple[YouTubeVideoTaskEnum, str, str]] = []
     for flow_step, step_label in FLOW_STEPS:
         job_type_key = FLOW_STEP_JOB_TYPES[step_label]
-        if job_type_key != "YouTubeVideoThumbnailPromptSuggester":
-            visible_flow_steps.append((flow_step, job_type_key, step_label))
-            continue
-
-        thumbnail_prompt_task = task_by_job.get(job_type_key)
-        thumbnail_prompt_status = (
-            thumbnail_prompt_task.status
-            if thumbnail_prompt_task
-            else flow_status_by_step_label.get(step_label)
-        )
-        if (
-            thumbnail_prompt_status
-            and thumbnail_prompt_status != TaskStatusEnum.PENDING
-        ):
-            visible_flow_steps.append((flow_step, job_type_key, step_label))
+        visible_flow_steps.append((flow_step, job_type_key, step_label))
     return visible_flow_steps
 
 
