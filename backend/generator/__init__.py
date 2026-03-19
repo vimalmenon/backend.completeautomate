@@ -10,15 +10,11 @@ from backend.generator.youtube_video_reviewer import YouTubeVideoReviewer
 from backend.generator.youtube_video_summarizer import (
     YouTubeVideoSummarizer,
 )
-from backend.generator.youtube_video_thumbnail_image_prompt_suggester import (
-    YoutubeVideoThumbnailImagePromptSuggester,
-)
 
 __all__ = [
     "YouTubeChannelCreator",
     "YouTubeVideoSummarizer",
     "PromptSuggester",
-    "YoutubeVideoThumbnailImagePromptSuggester",
     "YouTubeTopicSuggester",
     "YouTubeVideoReviewer",
     "YouTubeChannelCreatorJob",

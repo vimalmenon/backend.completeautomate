@@ -1,6 +1,3 @@
-from backend.data import (
-    TaskData,
-)
 from backend.enum import JobsStatusEnum
 from backend.generator.base_generator import BaseGenerator
 
