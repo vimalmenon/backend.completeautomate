@@ -41,6 +41,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         self.youtube_api: YouTubeAPI | MockYouTubeAPI = (
             MockYouTubeAPI() if env.OFFLINE else YouTubeAPI()
         )
+        self.s3_storage = S3Storage()
         self.video_id = self.task_data.platform.video_id
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
         self.video_from_db = self.youtube_manager.get_video()
@@ -69,10 +70,14 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             self.__update_metadata_selected(video_from_db=self.video_from_db)
             self.__create_thumbnail_prompt_suggestions(video_from_db=self.video_from_db)
             return self.__generate_thumbnails(video_from_db=self.video_from_db)
-        logger.info("Uploading thumbnail and reviewing video for job %s", self.job.id)
-        self.__upload_thumbnail(video_from_db=self.video_from_db)
-        self.__review_video(video_from_db=self.video_from_db)
-        return self.__job_complete()
+        if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection:
+            logger.info(
+                "Uploading thumbnail and reviewing video for job %s", self.job.id
+            )
+            self.__upload_thumbnail(video_from_db=self.video_from_db)
+            self.__review_video(video_from_db=self.video_from_db)
+            return self.__job_complete()
+        raise AppException("Invalid task for YouTube video generator")
 
     def __check_if_video_is_older_than_two_weeks(self, published_at: datetime) -> bool:
         current_time = (
@@ -92,7 +97,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         if len(metadata_suggestions) == 1:
             selected_metadata = metadata_suggestions[0]
             self.youtube_api.update_video_metadata(
-                video_id=video_from_db.platform.video_id,
+                video_id=self.video_id,
                 title=selected_metadata.title,
                 description=selected_metadata.description,
                 tags=selected_metadata.tags,
@@ -273,13 +278,29 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             for suggestion in video_from_db.thumbnails_suggestions
             if suggestion.status == JobStatusEnum.PROMOTE
         ]
+        breakpoint()
         if len(suggested_thumbnails) == 1:
             thumbnail = suggested_thumbnails[0]
             logger.info("Uploading promoted thumbnail for job %s", self.job.id)
-            YouTubeAPI().update_thumbnail(
+            breakpoint()
+            S3Storage().download_data(s3_data=thumbnail.s3_data)
+            breakpoint()
+            self.youtube_api.update_thumbnail(
                 video_id=self.video_id,
                 thumbnail_path=thumbnail.s3_data.downloaded_path,
             )
+            breakpoint()
+            youtube_response = self.youtube_api.fetch_video_details(
+                video_id=self.video_id
+            )
+            updated_youtube_response = video_from_db.to_cls_from_response(
+                youtube_response
+            )
+            breakpoint()
+            self.youtube_manager.update_thumbnail(
+                thumbnail_url=updated_youtube_response.thumbnail
+            )
+            breakpoint()
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")

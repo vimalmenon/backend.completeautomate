@@ -58,3 +58,6 @@ class YouTubeVideoManager:
         YouTubeVideoDB(ref_id=self.ref_id).update_values(
             {"thumbnails_suggestions": data}
         )
+
+    def update_thumbnail(self, thumbnail_url: str) -> None:
+        YouTubeVideoDB(ref_id=self.ref_id).update_values({"thumbnail": thumbnail_url})

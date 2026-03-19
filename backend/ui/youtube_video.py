@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 
 from nicegui import run, ui
@@ -17,6 +18,7 @@ from backend.enum import (
     TaskStatusEnum,
     YouTubeVideoTaskEnum,
 )
+from backend.integration.storage.s3_storage import S3Storage
 from backend.manager import JobManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
@@ -417,7 +419,6 @@ def _should_show_metadata_suggestions(video_job: JobData | None) -> bool:
 def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
     latest_thumbnail_prompt_task: TaskData | None = None
     for task in sorted(tasks, key=lambda t: t.created_at):
-        breakpoint()
         if _job_type_value(task) == "YouTubeVideoThumbnailPromptSuggester":
             latest_thumbnail_prompt_task = task
 
@@ -425,6 +426,111 @@ def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
         latest_thumbnail_prompt_task
         and latest_thumbnail_prompt_task.status == TaskStatusEnum.REVIEW
     )
+
+
+def _should_show_thumbnail_suggestions(video_job: JobData | None) -> bool:
+    if not video_job:
+        return False
+    return (
+        video_job.status == JobsStatusEnum.REVIEW
+        and video_job.task_data.get("task")
+        == YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection.value
+    )
+
+
+def _build_thumbnail_image_source(s3_data) -> str | None:
+    try:
+        image_bytes = S3Storage().get_bytes(s3_data)
+        if not image_bytes:
+            return None
+        encoded_image = base64.b64encode(image_bytes).decode("utf-8")
+        return f"data:{s3_data.content_type.value};base64,{encoded_image}"
+    except Exception:
+        return None
+
+
+def _select_thumbnail_option(ref_id: str, option_index: int) -> None:
+    try:
+        video_manager = YouTubeVideoManager(ref_id=ref_id)
+        video = video_manager.get_video()
+        if not video:
+            ui.notify("Video not found", type="negative")
+            return
+
+        if option_index < 0 or option_index >= len(video.thumbnails_suggestions):
+            ui.notify("Thumbnail option not found", type="warning")
+            return
+
+        for index, suggestion in enumerate(video.thumbnails_suggestions):
+            suggestion.status = (
+                JobStatusEnum.PROMOTE if index == option_index else JobStatusEnum.REVIEW
+            )
+
+        video_manager.update_thumbnails_suggestions(video.thumbnails_suggestions)
+        ui.notify("Thumbnail selected", type="positive")
+        ui.run_javascript(
+            "window.location.href = window.location.pathname + window.location.search"
+        )
+    except Exception:
+        ui.notify("Failed to select thumbnail", type="negative")
+
+
+def _render_thumbnail_suggestions(video: YouTubeVideoDBData) -> None:
+    suggestions = video.thumbnails_suggestions
+    if not suggestions:
+        return
+
+    with ui.card().classes(
+        "w-full p-4 shadow-sm border border-emerald-200 dark:border-emerald-700 "
+        "bg-emerald-50 dark:bg-emerald-900/20"
+    ):
+        ui.label("Thumbnail Suggestions").classes("text-h6 font-bold mb-2")
+        ui.label("Select one thumbnail to promote").classes(
+            "text-sm text-emerald-700 mb-2"
+        )
+
+        with ui.row().classes("w-full gap-3 flex-wrap"):
+            for index, detail in enumerate(suggestions):
+                is_selected = detail.status == JobStatusEnum.PROMOTE
+                image_source = _build_thumbnail_image_source(detail.s3_data)
+
+                with ui.card().classes(
+                    "w-[260px] max-w-full p-3 bg-white dark:bg-slate-800 "
+                    "shadow-none border border-emerald-100 dark:border-emerald-800"
+                ):
+                    ui.label(f"Option {index + 1}").classes(
+                        "text-sm font-semibold text-emerald-700"
+                    )
+
+                    if image_source:
+                        ui.image(image_source).classes(
+                            "w-full h-[146px] object-cover rounded-md mt-2"
+                        )
+                    else:
+                        with ui.row().classes(
+                            "w-full h-[146px] mt-2 rounded-md border border-dashed border-gray-300 "
+                            "items-center justify-center"
+                        ):
+                            ui.label("Image preview unavailable").classes(
+                                "text-xs text-gray-500"
+                            )
+
+                    with ui.row().classes("w-full items-center justify-between mt-3"):
+                        badge_color = "green" if is_selected else "grey"
+                        badge_label = "Selected" if is_selected else detail.status.value
+                        ui.badge(badge_label, color=badge_color).props("outline")
+                        ui.button(
+                            "Select",
+                            icon="check",
+                            on_click=lambda current_ref=video.ref_id, current_index=index: _select_thumbnail_option(
+                                ref_id=current_ref,
+                                option_index=current_index,
+                            ),
+                        ).props(
+                            "color=primary"
+                            if not is_selected
+                            else "color=primary outline"
+                        )
 
 
 def _update_thumbnail_prompt_option_status(
@@ -916,6 +1022,7 @@ async def youtube_video_page(
 
     flow_tasks = _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=section)
     show_metadata_suggestions = _should_show_metadata_suggestions(video_job)
+    show_thumbnail_suggestions = _should_show_thumbnail_suggestions(video_job)
     show_thumbnail_prompt_suggestions = _should_show_thumbnail_prompt_suggestions(
         flow_tasks
     )
@@ -955,5 +1062,7 @@ async def youtube_video_page(
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
         if show_metadata_suggestions:
             _render_metadata_suggestions(video)
+        if show_thumbnail_suggestions:
+            _render_thumbnail_suggestions(video)
         if show_thumbnail_prompt_suggestions:
             _render_thumbnail_prompt_suggestions(video)
