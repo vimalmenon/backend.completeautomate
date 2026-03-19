@@ -26,7 +26,7 @@ from backend.ui.common.component_common import (
 FLOW_STEPS: list[tuple[YouTubeVideoTaskEnum, str]] = [
     (YouTubeVideoTaskEnum.YouTubeVideoStart, "Start"),
     (YouTubeVideoTaskEnum.YouTubeVideoFixTranscript, "Fix Transcript"),
-    (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Update"),
+    (YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection, "Metadata Selection"),
     (YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection, "Thumbnail Selection"),
     (YouTubeVideoTaskEnum.YouTubeVideoComplete, "Complete"),
 ]
@@ -34,7 +34,7 @@ FLOW_STEPS: list[tuple[YouTubeVideoTaskEnum, str]] = [
 FLOW_STEP_JOB_TYPES: dict[str, str] = {
     "Start": "YouTubeVideo",
     "Fix Transcript": "YouTubeVideoSummarizer",
-    "Metadata Update": "YouTubeVideoMetadataUpdater",
+    "Metadata Selection": "YouTubeVideoMetadataUpdater",
     "Thumbnail Selection": "YouTubeVideoThumbnailPromptSuggester",
     "Complete": "YouTubeThumbnailUpdater",
 }
@@ -417,21 +417,20 @@ def render_task_progress(
                         ui.icon("chevron_right").classes("text-gray-400 text-xs")
 
 
-def _should_show_metadata_suggestions(tasks: list[TaskData]) -> bool:
-    latest_metadata_suggest_task: TaskData | None = None
-    for task in sorted(tasks, key=lambda t: t.created_at):
-        if _job_type_value(task) == "YouTubeVideoMetadataSuggester":
-            latest_metadata_suggest_task = task
-
-    return bool(
-        latest_metadata_suggest_task
-        and latest_metadata_suggest_task.status == TaskStatusEnum.REVIEW
+def _should_show_metadata_suggestions(video_job: JobData | None) -> bool:
+    if not video_job:
+        return False
+    return (
+        video_job.status == JobsStatusEnum.REVIEW
+        and video_job.task_data.get("task")
+        == YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection.value
     )
 
 
 def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
     latest_thumbnail_prompt_task: TaskData | None = None
     for task in sorted(tasks, key=lambda t: t.created_at):
+        breakpoint()
         if _job_type_value(task) == "YouTubeVideoThumbnailPromptSuggester":
             latest_thumbnail_prompt_task = task
 
@@ -929,7 +928,7 @@ async def youtube_video_page(
                     ).props("color=primary")
 
     flow_tasks = _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=section)
-    show_metadata_suggestions = _should_show_metadata_suggestions(flow_tasks)
+    show_metadata_suggestions = _should_show_metadata_suggestions(video_job)
     show_thumbnail_prompt_suggestions = _should_show_thumbnail_prompt_suggestions(
         flow_tasks
     )
@@ -964,7 +963,6 @@ async def youtube_video_page(
                         icon="edit",
                         on_click=transcript_dialog.open,
                     ).props("color=primary outline")
-
         render_task_progress(tasks=tasks, video_job=video_job, flow_job_id=section)
         _render_video_details(video)
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)

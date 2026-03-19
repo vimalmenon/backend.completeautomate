@@ -51,7 +51,6 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             self.job.id,
             self.task_data.task.value,
         )
-        breakpoint()
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoStart:
             return self.__create_video_db()
         if not self.video_from_db:
@@ -75,7 +74,12 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
         return self.__job_complete()
 
     def __check_if_video_is_older_than_two_weeks(self, published_at: datetime) -> bool:
-        delta = datetime.now() - published_at
+        current_time = (
+            datetime.now(tz=published_at.tzinfo)
+            if published_at.tzinfo is not None
+            else datetime.now()
+        )
+        delta = current_time - published_at
         return delta >= timedelta(weeks=2)
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
