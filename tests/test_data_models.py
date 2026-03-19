@@ -8,15 +8,11 @@ from backend.data.image import ImagePromptJobData
 from backend.data.prompt import PromptDBData
 from backend.data.s3 import S3Data
 from backend.data.youtube_channel import (
-    YouTubeJobData,
-    YouTubeVideoMetadataJobData,
-    YouTubeVideoSummarizeJobData,
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 from backend.enum import AIModelEnum, ImageTypeEnum
 from backend.enum.prompt import PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
-from backend.enum.status import TaskStatusEnum
 from backend.enum.team import TeamEnum
 
 
@@ -148,7 +144,6 @@ class TestYouTubeVideoThumbnailPromptSuggesterJobData:
             }
         )
         assert loaded.name == "YouTubeVideoThumbnailPromptSuggesterJobData"
-
 
 
 @pytest.mark.unit

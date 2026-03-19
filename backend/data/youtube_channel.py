@@ -5,8 +5,6 @@ from typing import Any, Self
 from uuid import UUID
 
 from backend.data.platform import PlatformDBData
-from backend.data.s3 import S3Data
-from backend.enum.status import JobStatusEnum
 
 NO_ITEMS_FOUND_ERROR = "No items found with in response"
 
@@ -145,7 +143,6 @@ class YouTubeChannelDBData:
     def past_update_time(self, days: int = 7) -> bool:
         delta = datetime.now() - self.last_updated_at
         return delta >= timedelta(days=days)
-
 
 
 @dataclass
