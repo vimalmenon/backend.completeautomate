@@ -283,7 +283,7 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             thumbnail = suggested_thumbnails[0]
             logger.info("Uploading promoted thumbnail for job %s", self.job.id)
             breakpoint()
-            S3Storage().download_data(s3_data=thumbnail.s3_data)
+            S3Storage().download_data(data=thumbnail.s3_data)
             breakpoint()
             self.youtube_api.update_thumbnail(
                 video_id=self.video_id,
