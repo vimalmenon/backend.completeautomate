@@ -10,7 +10,7 @@ class YouTubeVideoJob(BaseNewJob):
 
         if self.job.type == JobTypeEnum.YouTubeVideo:
             YouTubeVideoGenerator(job=self.job).generate()
-            return (JobsStatusEnum.FAILED, 0, None)
+            return (JobsStatusEnum.IN_PROGRESS, 0, None)
         if self.job.type == JobTypeEnum.YouTubeVideoStatsUpdater:
-            return (JobsStatusEnum.FAILED, 0, None)
+            return (JobsStatusEnum.IN_PROGRESS, 0, None)
         return (JobsStatusEnum.FAILED, 0, None)

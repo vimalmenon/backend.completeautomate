@@ -331,7 +331,7 @@ async def jobs_page(status: str = ""):
                         f"w-full gap-0 p-3 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700 {row_status_class}"
                     ):
                         ui.label(job_id).classes("w-1/5 text-sm")
-                        ui.label(job_type[:20]).classes("w-1/5 text-sm")
+                        ui.label(job_type).classes("w-1/5 text-sm")
                         ui.label(job_status).classes("w-1/8 text-sm")
                         ui.label(created_at).classes("w-1/8 text-sm font-medium")
 
