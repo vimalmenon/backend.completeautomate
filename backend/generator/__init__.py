@@ -5,9 +5,6 @@ from backend.generator.youtube_channel_creator import (
     YouTubeChannelOnboardingJob,
     YouTubeChannelVideoCheckerJob,
 )
-from backend.generator.youtube_thumbnail_updater import (
-    YouTubeThumbnailUpdater,
-)
 from backend.generator.youtube_topic_suggester import YouTubeTopicSuggester
 from backend.generator.youtube_video_reviewer import YouTubeVideoReviewer
 from backend.generator.youtube_video_summarizer import (
@@ -18,7 +15,6 @@ from backend.generator.youtube_video_thumbnail_image_prompt_suggester import (
 )
 
 __all__ = [
-    "YouTubeThumbnailUpdater",
     "YouTubeChannelCreator",
     "YouTubeVideoSummarizer",
     "PromptSuggester",
