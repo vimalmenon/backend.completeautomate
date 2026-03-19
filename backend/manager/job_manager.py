@@ -4,8 +4,9 @@ from uuid import UUID, uuid4
 
 from backend.data import (
     JobData,
+    TaskData,
 )
-from backend.database import JobDB
+from backend.database import JobDB, TaskDB
 from backend.enum import JobsStatusEnum, JobTypeEnum
 
 
@@ -87,3 +88,18 @@ class JobManager:
         )
         self.save_job(job_data=job_data)
         return job_data
+
+    # Backward-compatible helpers for UI code paths still reading CA#TASK records.
+    def get_task_by_ref_id(self, ref_id: str) -> list[TaskData]:
+        tasks = TaskDB().get_tasks()
+        return [
+            task
+            for task in tasks
+            if str(task.payload.get("ref_id", "")) == ref_id
+        ]
+
+    def update_task(self, task: TaskData) -> None:
+        TaskDB().update_task(task)
+
+    def add_task(self, task: TaskData) -> None:
+        TaskDB().add_task(task)

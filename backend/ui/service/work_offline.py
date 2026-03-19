@@ -14,8 +14,8 @@ from backend.factory import (
     youtube_video_factory,
 )
 from backend.manager import (
+    JobManager,
     PlatformManager,
-    TaskManager,
     YouTubeChannelManager,
     YouTubeVideoManager,
 )
@@ -55,4 +55,4 @@ def load_mock_data():
     # Adding Tasks
     payload = create_youtube_channel_job_factory(ref_id=channel_platform.ref_id)
     task = create_task_factory(payload=payload.to_json())
-    TaskManager().add_task(task)
+    JobManager().add_task(task)

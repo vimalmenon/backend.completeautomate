@@ -5,8 +5,8 @@ from nicegui import ui
 
 from backend.config.env import env
 from backend.data import PlatformDBData, PlatformYouTubeChannelDBData
-from backend.enum import PlatformEnum, TaskStatusEnum
-from backend.manager import TaskManager, YouTubeChannelManager, YouTubeVideoManager
+from backend.enum import JobsStatusEnum, PlatformEnum
+from backend.manager import JobManager, YouTubeChannelManager, YouTubeVideoManager
 from backend.ui.service.work_offline import load_initial_data
 
 channels = [env.YOUTUBE_CHANNEL_ID]
@@ -27,29 +27,29 @@ class MenuSection(TypedDict):
     items: list[MenuItem]
 
 
-tasks_cards = [
+jobs_cards = [
     {"label": "All Jobs", "value": "", "icon": "hourglass_empty", "color": "violet"},
     {
         "label": "IN PROGRESS",
-        "value": TaskStatusEnum.IN_PROGRESS.value,
+        "value": JobsStatusEnum.IN_PROGRESS.value,
         "icon": "schedule",
         "color": "blue",
     },
     {
         "label": "COMPLETED",
-        "value": TaskStatusEnum.COMPLETED.value,
+        "value": JobsStatusEnum.COMPLETE.value,
         "icon": "check_circle",
         "color": "green",
     },
     {
         "label": "IN REVIEW",
-        "value": TaskStatusEnum.REVIEW.value,
+        "value": JobsStatusEnum.REVIEW.value,
         "icon": "hourglass_empty",
         "color": "gray",
     },
     {
         "label": "FAILED",
-        "value": TaskStatusEnum.FAILED.value,
+        "value": JobsStatusEnum.FAILED.value,
         "icon": "error",
         "color": "red",
     },
@@ -57,18 +57,22 @@ tasks_cards = [
 
 
 def get_status_counts(status: str) -> int:
-    tasks = get_cached_tasks()
+    jobs = get_cached_jobs()
     if status == "":
-        return len(tasks)
-    return sum(1 for task in tasks if task.status == status)
+        return len(jobs)
+    return sum(
+        1
+        for job in jobs
+        if str(getattr(job.status, "value", job.status)) == status
+    )
 
 
 @lru_cache(maxsize=1)
-def get_cached_tasks():
-    return tuple(TaskManager().get_tasks())
+def get_cached_jobs():
+    return tuple(JobManager().get_all_jobs())
 
 
-def make_tasks_navigation_handler(status: str):
+def make_jobs_navigation_handler(status: str):
     def _handler() -> None:
         target = f"/jobs?status={status}" if status else "/jobs"
         ui.run_javascript(f'window.location.href = "{target}"')
@@ -90,8 +94,8 @@ def _render_hero_section() -> None:
     ui.separator().classes("my-6")
 
 
-def _render_tasks_header() -> None:
-    """Render the tasks section header."""
+def _render_jobs_header() -> None:
+    """Render the jobs section header."""
     with ui.row().classes("items-center"):
         with ui.avatar(color="blue", text_color="white", size="lg"):
             ui.icon("task", size="md")
@@ -102,22 +106,22 @@ def _render_tasks_header() -> None:
             )
 
 
-def _render_tasks_stats_cards() -> None:
-    """Render task status cards."""
+def _render_jobs_stats_cards() -> None:
+    """Render job status cards."""
     with ui.row().classes("w-full gap-4 mt-6 flex-wrap"):
-        for task in tasks_cards:
+        for job in jobs_cards:
             with (
                 ui.card()
                 .classes(
-                    f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{task['color']}-500"
+                    f"flex-1 min-w-[200px] shadow-md hover:shadow-lg transition-shadow border-t-4 border-{job['color']}-500"
                 )
-                .on("click", make_tasks_navigation_handler(task["value"]))
+                .on("click", make_jobs_navigation_handler(job["value"]))
             ):
-                with ui.avatar(color=task["color"], text_color="white", size="md"):
-                    ui.icon(task["icon"], size="md")
+                with ui.avatar(color=job["color"], text_color="white", size="md"):
+                    ui.icon(job["icon"], size="md")
                 with ui.column().classes("gap-0 "):
-                    ui.label(task["label"]).classes("text-subtitle2 text-gray-600")
-                    ui.label(str(get_status_counts(task["value"]))).classes(
+                    ui.label(job["label"]).classes("text-subtitle2 text-gray-600")
+                    ui.label(str(get_status_counts(job["value"]))).classes(
                         "text-h5 font-bold"
                     )
 
@@ -286,8 +290,8 @@ def main_page():
     # Load initial data for offline mode
     load_initial_data()
 
-    # Refresh cache per page render, then reuse cached tasks for all stat cards.
-    get_cached_tasks.cache_clear()
+    # Refresh cache per page render, then reuse cached jobs for all stat cards.
+    get_cached_jobs.cache_clear()
 
     menu_items: list[MenuSection] = [
         {
@@ -322,8 +326,8 @@ def main_page():
 
     # Render page sections
     _render_hero_section()
-    _render_tasks_header()
-    _render_tasks_stats_cards()
+    _render_jobs_header()
+    _render_jobs_stats_cards()
     ui.separator().classes("my-6")
     _render_youtube_channels_section()
     _render_navigation_section(menu_items)

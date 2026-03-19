@@ -9,7 +9,7 @@ from backend.data import (
     YouTubeVideoDBData,
 )
 from backend.enum import JobEnum, JobStatusEnum, PlatformEnum, TaskStatusEnum
-from backend.manager import TaskManager, YouTubeVideoManager
+from backend.manager import JobManager, YouTubeVideoManager
 from backend.ui.common.component_common import (
     render_common_header,
     render_separator,
@@ -75,7 +75,7 @@ def _show_task_status_dialog(task: TaskData) -> None:
                 task.completed_at = (
                     datetime.now() if task.status == TaskStatusEnum.COMPLETED else None
                 )
-                TaskManager().update_task(task)
+                JobManager().update_task(task)
                 ui.notify("Task status updated", type="positive")
                 dialog.close()
                 ui.run_javascript(
@@ -571,7 +571,7 @@ async def youtube_video_page(
         video, tasks = await run.io_bound(
             lambda: (
                 YouTubeVideoManager(ref_id=platform.ref_id).get_video(),
-                TaskManager().get_task_by_ref_id(ref_id=platform.ref_id),
+                JobManager().get_task_by_ref_id(ref_id=platform.ref_id),
             )
         )
 
