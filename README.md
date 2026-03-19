@@ -80,6 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Upload prompts to S3 Bucket
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
+      - [x] Make the image generation more generic to be used
+      - [x] Standardize the image generation
       - [ ] Upload Video Stats to S3
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove task manager and other references
@@ -87,8 +89,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
-      - [ ] Standardize the image generation
-      - [ ] Make the image generation more generic to be used
       - [ ] Put all the generated image prompt to review
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
@@ -108,7 +108,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Email
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Use `Job` instead of `Task`
+  - [x] Use `Job` instead of `Task`
+  - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
   - [ ] Change the status of tasks from the Video Page
