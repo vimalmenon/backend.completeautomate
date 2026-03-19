@@ -55,6 +55,9 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             return self.__create_video_db()
         if not self.video_from_db:
             raise AppException("There is no video available")
+        if not self.video_from_db.transcript:
+            logger.info("Skipping old video for job %s", self.job.id)
+            return self.__job_complete()
         if self.__check_if_video_is_older_than_two_weeks(
             self.video_from_db.published_at
         ):
