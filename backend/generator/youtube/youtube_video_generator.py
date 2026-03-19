@@ -51,13 +51,11 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             self.job.id,
             self.task_data.task.value,
         )
+        breakpoint()
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoStart:
             return self.__create_video_db()
         if not self.video_from_db:
             raise AppException("There is no video available")
-        if not self.video_from_db.transcript:
-            logger.info("Skipping old video for job %s", self.job.id)
-            return self.__job_complete()
         if self.__check_if_video_is_older_than_two_weeks(
             self.video_from_db.published_at
         ):
@@ -95,15 +93,16 @@ class YouTubeVideoGenerator(BaseGeneratorJob):
             youtube_data.transcript = self.__convert_transcript_to_text(
                 result=transcript
             )
-            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
-            return JobsStatusEnum.COMPLETE, self.task_data.to_json()
+            self.youtube_manager.save_data(data=youtube_data)
+            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoFixTranscript
+            return JobsStatusEnum.REVIEW, self.task_data.to_json()
         logger.info(
             "Transcript missing for video %s; saving video and moving to review",
             self.video_id,
         )
         self.youtube_manager.save_data(data=youtube_data)
-        self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoFixTranscript
-        return JobsStatusEnum.REVIEW, self.task_data.to_json()
+        self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+        return JobsStatusEnum.COMPLETE, self.task_data.to_json()
 
     def __create_transcript_summary(self, video_from_db: YouTubeVideoDBData) -> None:
         if not video_from_db.transcript:
