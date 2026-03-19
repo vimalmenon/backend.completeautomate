@@ -8,9 +8,6 @@ from backend.generator import (
     YouTubeChannelCreator,
     YouTubeThumbnailUpdater,
     YouTubeTopicSuggester,
-    YouTubeVideoCreator,
-    YouTubeVideoMetadataSuggester,
-    YouTubeVideoMetadataUpdater,
     YouTubeVideoReviewer,
     YouTubeVideoSummarizer,
     YoutubeVideoThumbnailImagePromptSuggester,
@@ -24,11 +21,8 @@ class YouTubeJob(BaseJob):
 
     HANDLERS: dict[JobEnum, Type] = {
         JobEnum.YouTubeChannel: YouTubeChannelCreator,
-        JobEnum.YouTubeVideo: YouTubeVideoCreator,
         JobEnum.YouTubeVideoSummarizer: YouTubeVideoSummarizer,
         JobEnum.YouTubeThumbnailUpdater: YouTubeThumbnailUpdater,
-        JobEnum.YouTubeVideoMetadataSuggester: YouTubeVideoMetadataSuggester,
-        JobEnum.YouTubeVideoMetadataUpdater: YouTubeVideoMetadataUpdater,
         JobEnum.YouTubeTopicSuggester: YouTubeTopicSuggester,
         JobEnum.YouTubeVideoReviewer: YouTubeVideoReviewer,
         JobEnum.YouTubeVideoThumbnailPromptSuggester: YoutubeVideoThumbnailImagePromptSuggester,
