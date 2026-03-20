@@ -340,8 +340,12 @@ def _render_channel_identity_with_button(channel_json: dict, channel_id: str) ->
         # Top row: Video count and Visit Channel button
         with ui.row().classes("w-full items-center justify-between mb-2"):
             video_count = channel_json.get("video_count", 0)
-            video_count_display = f"Videos: {int(video_count):,}" if video_count else "Videos: 0"
-            ui.label(video_count_display).classes("text-sm font-semibold text-purple-700 dark:text-purple-400")
+            video_count_display = (
+                f"Videos: {int(video_count):,}" if video_count else "Videos: 0"
+            )
+            ui.label(video_count_display).classes(
+                "text-sm font-semibold text-purple-700 dark:text-purple-400"
+            )
             ui.button(
                 "View Channel Detail",
                 icon="open_in_new",

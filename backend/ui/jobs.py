@@ -359,4 +359,3 @@ async def jobs_page(status: str = ""):
                                 ).props(
                                     'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                                 )
-
