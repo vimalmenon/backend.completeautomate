@@ -5,7 +5,6 @@ from nicegui import app
 from backend.config.env import env
 from backend.config.session import set_offline_mode
 from backend.factory import (
-    create_youtube_channel_job_factory,
     fake_uuid,
     platform_channel_factory,
     platform_video_factory,
@@ -13,7 +12,6 @@ from backend.factory import (
     youtube_video_factory,
 )
 from backend.manager import (
-    JobManager,
     PlatformManager,
     YouTubeChannelManager,
     YouTubeVideoManager,

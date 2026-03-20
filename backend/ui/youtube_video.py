@@ -49,27 +49,26 @@ JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, TaskStatusEnum] = {
     JobsStatusEnum.ARCHIVED: TaskStatusEnum.CLEAN_UP,
 }
 
-STATUS_STYLE: dict[TaskStatusEnum, dict[str, str]] = {
-    TaskStatusEnum.COMPLETED: {
+STATUS_STYLE: dict[JobsStatusEnum, dict[str, str]] = {
+    JobsStatusEnum.COMPLETED: {
         "icon": "check_circle",
         "color": "green",
         "label": "Completed",
     },
-    TaskStatusEnum.IN_PROGRESS: {
+    JobsStatusEnum.IN_PROGRESS: {
         "icon": "schedule",
         "color": "blue",
         "label": "In Progress",
     },
-    TaskStatusEnum.REVIEW: {
+    JobsStatusEnum.REVIEW: {
         "icon": "rate_review",
         "color": "orange",
         "label": "Review",
     },
-    TaskStatusEnum.FAILED: {"icon": "error", "color": "red", "label": "Failed"},
-    TaskStatusEnum.NEW: {"icon": "fiber_new", "color": "grey", "label": "New"},
-    TaskStatusEnum.PENDING: {"icon": "pending", "color": "grey", "label": "Pending"},
-    TaskStatusEnum.APPROVED: {"icon": "verified", "color": "teal", "label": "Approved"},
-    TaskStatusEnum.CLEAN_UP: {
+    JobsStatusEnum.FAILED: {"icon": "error", "color": "red", "label": "Failed"},
+    JobsStatusEnum.NEW: {"icon": "fiber_new", "color": "grey", "label": "New"},
+    JobsStatusEnum.PENDING: {"icon": "pending", "color": "grey", "label": "Pending"},
+    JobsStatusEnum.CLEAN_UP: {
         "icon": "cleaning_services",
         "color": "brown",
         "label": "Clean Up",

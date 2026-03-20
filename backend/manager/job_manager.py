@@ -16,7 +16,7 @@ class JobManager:
 
     def get_job_by_type(self, type: JobTypeEnum) -> list[JobData]:
         return JobDB().query_data_by_type(type)
-    
+
     def get_job_by_ref_id(self, ref_id: str):
         pass
 
