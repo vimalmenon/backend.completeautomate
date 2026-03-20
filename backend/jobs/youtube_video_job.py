@@ -1,9 +1,9 @@
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.generator.youtube import YouTubeVideoGenerator
-from backend.jobs.base_job import BaseNewJob
+from backend.jobs.base_job import BaseJob
 
 
-class YouTubeVideoJob(BaseNewJob):
+class YouTubeVideoJob(BaseJob):
     types = [JobTypeEnum.YouTubeVideo, JobTypeEnum.YouTubeVideoStatsUpdater]
 
     def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:

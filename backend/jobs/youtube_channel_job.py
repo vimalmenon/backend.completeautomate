@@ -7,12 +7,12 @@ from backend.generator import (
     YouTubeChannelOnboardingJob,
     YouTubeChannelVideoCheckerJob,
 )
-from backend.jobs.base_job import BaseNewJob
+from backend.jobs.base_job import BaseJob
 
 logger = logging.getLogger(__name__)
 
 
-class YouTubeChannelJob(BaseNewJob):
+class YouTubeChannelJob(BaseJob):
     types = [
         JobTypeEnum.YouTubeChannelOnboarding,
         JobTypeEnum.YouTubeChannel,

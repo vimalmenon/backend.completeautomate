@@ -1,7 +1,6 @@
 import logging
-import traceback
 
-from backend.enum import JobStatusEnum
+from backend.enum import JobsStatusEnum
 from backend.jobs.base_job import BaseJob
 
 logger = logging.getLogger(__name__)
@@ -9,12 +8,8 @@ logger = logging.getLogger(__name__)
 
 class PromptSuggesterJob(BaseJob):
 
-    def execute(self) -> tuple[JobStatusEnum, int]:
+    def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
         try:
-            pass
+            return JobsStatusEnum.IN_PROGRESS, 1, None
         except Exception:
-            error_msg = traceback.format_exc()
-            logger.error(
-                "Error executing PromptSuggester task %s: %s", self.task.id, error_msg
-            )
-            return (JobStatusEnum.FAILED, self.task.failed_count + 1)
+            return (JobsStatusEnum.FAILED, 0, None)
