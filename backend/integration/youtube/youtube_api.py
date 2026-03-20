@@ -1,6 +1,10 @@
+import os
+import tempfile
 from logging import getLogger
+from pathlib import Path
 from typing import Any
 
+from PIL import Image
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from backend.exception.app_exception import AppException
@@ -14,15 +18,120 @@ logger = getLogger(__name__)
 
 class YouTubeAPI:
 
+    MAX_THUMBNAIL_SIZE_BYTES = 2 * 1024 * 1024
+
     def __init__(self):
         self.auth = YouTubeAuth()
 
-    def update_thumbnail(self, video_id: str, thumbnail_path: str) -> bool:
-        try:
-            youtube = self.auth.get_authenticated_service()
-            request = youtube.thumbnails().set(
-                videoId=video_id, media_body=thumbnail_path
+    def _validate_thumbnail_source(self, thumbnail_path: str) -> Path:
+        source_path = Path(thumbnail_path)
+        if not source_path.exists():
+            raise AppException(f"Thumbnail not found: {thumbnail_path}")
+        return source_path
+
+    def _load_optimized_base_image(self, source_path: Path) -> Image.Image:
+        with Image.open(source_path) as image:
+            if image.mode in {"RGBA", "P"}:
+                return image.convert("RGB")
+            return image.copy()
+
+    def _create_temp_jpeg_path(self) -> Path:
+        temp_file = tempfile.NamedTemporaryFile(
+            prefix="yt-thumb-", suffix=".jpg", delete=False
+        )
+        temp_file.close()
+        return Path(temp_file.name)
+
+    def _save_image_at_qualities(
+        self,
+        image: Image.Image,
+        optimized_path: Path,
+        qualities: list[int],
+        max_size_bytes: int,
+    ) -> bool:
+        for quality in qualities:
+            image.save(
+                optimized_path,
+                format="JPEG",
+                quality=quality,
+                optimize=True,
+                progressive=True,
             )
+            if optimized_path.stat().st_size <= max_size_bytes:
+                return True
+        return False
+
+    def _resize_for_retry(self, image: Image.Image) -> Image.Image:
+        width, height = image.size
+        next_width = max(320, int(width * 0.85))
+        next_height = max(180, int(height * 0.85))
+        return image.resize((next_width, next_height), Image.Resampling.LANCZOS)
+
+    def _optimize_thumbnail_for_upload(
+        self,
+        thumbnail_path: str,
+        max_size_bytes: int,
+    ) -> tuple[str, bool]:
+        source_path = self._validate_thumbnail_source(thumbnail_path)
+
+        source_size = source_path.stat().st_size
+        if source_size <= max_size_bytes:
+            return str(source_path), False
+
+        try:
+            image = self._load_optimized_base_image(source_path)
+            optimized_path = self._create_temp_jpeg_path()
+
+            qualities = [90, 85, 80, 75, 70, 65, 60]
+            while True:
+                if self._save_image_at_qualities(
+                    image=image,
+                    optimized_path=optimized_path,
+                    qualities=qualities,
+                    max_size_bytes=max_size_bytes,
+                ):
+                    logger.info(
+                        "Thumbnail optimized from %s bytes to %s bytes",
+                        source_size,
+                        optimized_path.stat().st_size,
+                    )
+                    return str(optimized_path), True
+
+                if min(image.size) <= 320:
+                    break
+
+                image = self._resize_for_retry(image)
+
+            raise AppException(
+                "Unable to optimize thumbnail below target size. "
+                "Please choose a smaller image."
+            )
+        except AppException:
+            raise
+        except Exception as e:
+            raise AppException(f"Failed to optimize thumbnail: {str(e)}")
+
+    def reduce_image_size(
+        self,
+        image_path: str,
+        max_size_bytes: int = MAX_THUMBNAIL_SIZE_BYTES,
+    ) -> str:
+        optimized_path, _ = self._optimize_thumbnail_for_upload(
+            thumbnail_path=image_path,
+            max_size_bytes=max_size_bytes,
+        )
+        return optimized_path
+
+    def update_thumbnail(self, video_id: str, thumbnail_path: str) -> bool:
+        upload_path = thumbnail_path
+        should_cleanup = False
+        try:
+            upload_path, should_cleanup = self._optimize_thumbnail_for_upload(
+                thumbnail_path=thumbnail_path,
+                max_size_bytes=self.MAX_THUMBNAIL_SIZE_BYTES,
+            )
+            youtube = self.auth.get_authenticated_service()
+            request = youtube.thumbnails().set(videoId=video_id, media_body=upload_path)
             response = request.execute()
             logger.info(
                 f"Thumbnail updated successfully for video ID: {video_id} {response}"
@@ -31,6 +140,14 @@ class YouTubeAPI:
         except Exception as e:
             logger.error(f"An error occurred updating thumbnail: {e}")
             raise AppException(f"An error occurred updating thumbnail: {str(e)}")
+        finally:
+            if should_cleanup and upload_path != thumbnail_path:
+                try:
+                    os.remove(upload_path)
+                except OSError:
+                    logger.warning(
+                        "Failed to clean up optimized thumbnail: %s", upload_path
+                    )
 
     def update_video_metadata(
         self,

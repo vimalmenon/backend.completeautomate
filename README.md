@@ -86,7 +86,8 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove the errors from APP
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompts locally
-      - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical 
+      - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical
+      - [ ] Use SelectedRater than ENUM in youTube Task
       - [ ] Upload Video Stats to S3
       - [ ] Remove YouTube Tasks reference
       - [ ] Check if the video is gone thought the process

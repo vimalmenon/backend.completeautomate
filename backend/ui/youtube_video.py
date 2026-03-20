@@ -1,5 +1,6 @@
 import base64
 from datetime import datetime
+from typing import Any, Protocol
 
 from nicegui import run, ui
 
@@ -39,36 +40,65 @@ FLOW_STEP_JOB_TYPES: dict[str, str] = {
     "Complete": "YouTubeThumbnailUpdater",
 }
 
-JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, TaskStatusEnum] = {
-    JobsStatusEnum.NEW: TaskStatusEnum.NEW,
-    JobsStatusEnum.IN_PROGRESS: TaskStatusEnum.IN_PROGRESS,
-    JobsStatusEnum.COMPLETE: TaskStatusEnum.COMPLETED,
-    JobsStatusEnum.PENDING: TaskStatusEnum.PENDING,
-    JobsStatusEnum.REVIEW: TaskStatusEnum.REVIEW,
-    JobsStatusEnum.FAILED: TaskStatusEnum.FAILED,
-    JobsStatusEnum.ARCHIVED: TaskStatusEnum.CLEAN_UP,
+
+class TaskData(Protocol):
+    id: Any
+    trail: list[Any]
+    job_type: Any
+    created_at: datetime
+    status: Any
+    completed_at: datetime | None
+
+
+TASK_STATUS_VALUES = [
+    "NEW",
+    "IN_PROGRESS",
+    "PENDING",
+    "REVIEW",
+    "APPROVED",
+    "COMPLETED",
+    "CLEAN_UP",
+    "FAILED",
+]
+
+
+def _to_status_value(status: Any) -> str:
+    if hasattr(status, "value"):
+        return str(status.value)
+    return str(status)
+
+
+JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, str] = {
+    JobsStatusEnum.NEW: "NEW",
+    JobsStatusEnum.IN_PROGRESS: "IN_PROGRESS",
+    JobsStatusEnum.COMPLETE: "COMPLETED",
+    JobsStatusEnum.PENDING: "PENDING",
+    JobsStatusEnum.REVIEW: "REVIEW",
+    JobsStatusEnum.FAILED: "FAILED",
+    JobsStatusEnum.ARCHIVED: "CLEAN_UP",
 }
 
-STATUS_STYLE: dict[JobsStatusEnum, dict[str, str]] = {
-    JobsStatusEnum.COMPLETED: {
+STATUS_STYLE: dict[str, dict[str, str]] = {
+    "COMPLETED": {
         "icon": "check_circle",
         "color": "green",
         "label": "Completed",
     },
-    JobsStatusEnum.IN_PROGRESS: {
+    "IN_PROGRESS": {
         "icon": "schedule",
         "color": "blue",
         "label": "In Progress",
     },
-    JobsStatusEnum.REVIEW: {
+    "REVIEW": {
         "icon": "rate_review",
         "color": "orange",
         "label": "Review",
     },
-    JobsStatusEnum.FAILED: {"icon": "error", "color": "red", "label": "Failed"},
-    JobsStatusEnum.NEW: {"icon": "fiber_new", "color": "grey", "label": "New"},
-    JobsStatusEnum.PENDING: {"icon": "pending", "color": "grey", "label": "Pending"},
-    JobsStatusEnum.CLEAN_UP: {
+    "FAILED": {"icon": "error", "color": "red", "label": "Failed"},
+    "NEW": {"icon": "fiber_new", "color": "grey", "label": "New"},
+    "PENDING": {"icon": "pending", "color": "grey", "label": "Pending"},
+    "APPROVED": {"icon": "verified", "color": "teal", "label": "Approved"},
+    "CLEAN_UP": {
         "icon": "cleaning_services",
         "color": "brown",
         "label": "Clean Up",
@@ -83,7 +113,7 @@ def _resolve_flow_root_job_id(task: TaskData) -> str:
 
 
 def _job_type_value(task: TaskData) -> str:
-    return task.job_type.value
+    return str(task.job_type.value)
 
 
 def _filter_tasks_by_flow_job_id(
@@ -151,12 +181,12 @@ def _build_task_by_job(tasks: list[TaskData]) -> dict[str, TaskData]:
 
 def _get_flow_status_by_step_label(
     video_job: JobData | None,
-) -> dict[str, TaskStatusEnum]:
+) -> dict[str, str]:
     if not video_job:
         return {}
 
     if video_job.status == JobsStatusEnum.COMPLETE:
-        return {step_label: TaskStatusEnum.COMPLETED for _, step_label in FLOW_STEPS}
+        return {step_label: "COMPLETED" for _, step_label in FLOW_STEPS}
 
     current_task_value = video_job.task_data.get("task")
     if not current_task_value:
@@ -179,17 +209,15 @@ def _get_flow_status_by_step_label(
         for index, (_, step_label) in enumerate(FLOW_STEPS)
         if step_label == current_step_label
     )
-    current_status = JOB_STATUS_TO_TASK_STATUS.get(
-        video_job.status, TaskStatusEnum.PENDING
-    )
+    current_status = JOB_STATUS_TO_TASK_STATUS.get(video_job.status, "PENDING")
 
-    flow_statuses: dict[str, TaskStatusEnum] = {}
+    flow_statuses: dict[str, str] = {}
     for index, (_, step_label) in enumerate(FLOW_STEPS):
         if index < current_step_index:
-            flow_statuses[step_label] = TaskStatusEnum.COMPLETED
+            flow_statuses[step_label] = "COMPLETED"
             continue
         if index > current_step_index:
-            flow_statuses[step_label] = TaskStatusEnum.PENDING
+            flow_statuses[step_label] = "PENDING"
             continue
         flow_statuses[step_label] = current_status
     return flow_statuses
@@ -197,7 +225,7 @@ def _get_flow_status_by_step_label(
 
 def _get_visible_flow_steps(
     task_by_job: dict[str, TaskData],
-    flow_status_by_step_label: dict[str, TaskStatusEnum],
+    flow_status_by_step_label: dict[str, str],
 ) -> list[tuple[YouTubeVideoTaskEnum, str, str]]:
     visible_flow_steps: list[tuple[YouTubeVideoTaskEnum, str, str]] = []
     for flow_step, step_label in FLOW_STEPS:
@@ -211,7 +239,7 @@ def _attach_task_card_handlers(
     flow_step: YouTubeVideoTaskEnum,
     job_type: str,
     current_task: TaskData | None,
-    current_status: TaskStatusEnum | None,
+    current_status: str | None,
     step_label: str,
     video_job: JobData | None,
     task_card,
@@ -257,11 +285,11 @@ def _show_task_status_dialog(task: TaskData) -> None:
         ui.label("Edit Task Status").classes("text-h6 mb-2")
         ui.label(f"Task ID: {task.id}").classes("text-caption text-gray-600 mb-2")
 
-        status_options = [status.value for status in TaskStatusEnum]
+        status_options = TASK_STATUS_VALUES
         status_input = (
             ui.select(
                 options=status_options,
-                value=task.status.value,
+                value=_to_status_value(task.status),
                 label="Status",
             )
             .props("outlined dense")
@@ -272,11 +300,19 @@ def _show_task_status_dialog(task: TaskData) -> None:
             old_status = task.status
             old_completed_at = task.completed_at
             try:
-                task.status = TaskStatusEnum(str(status_input.value))
+                selected_status_value = str(status_input.value)
+                status_type = type(old_status)
+                try:
+                    task.status = status_type(selected_status_value)
+                except Exception:
+                    task.status = selected_status_value
                 task.completed_at = (
-                    datetime.now() if task.status == TaskStatusEnum.COMPLETED else None
+                    datetime.now()
+                    if _to_status_value(task.status) == "COMPLETED"
+                    else None
                 )
-                JobManager().update_task(task)
+                job_manager: Any = JobManager()
+                job_manager.update_task(task)
                 ui.notify("Task status updated", type="positive")
                 dialog.close()
                 ui.run_javascript(
@@ -369,11 +405,8 @@ def render_task_progress(
                     if current_task
                     else flow_status_by_step_label.get(step_label)
                 )
-                style = (
-                    STATUS_STYLE[status]
-                    if status and status in STATUS_STYLE
-                    else STATUS_STYLE[TaskStatusEnum.PENDING]
-                )
+                status_value = _to_status_value(status) if status else "PENDING"
+                style = STATUS_STYLE.get(status_value, STATUS_STYLE["PENDING"])
 
                 with ui.card().classes(
                     "min-w-[110px] flex-1 shadow-none border border-gray-200 dark:border-slate-700"
@@ -421,7 +454,7 @@ def _should_show_thumbnail_prompt_suggestions(tasks: list[TaskData]) -> bool:
 
     return bool(
         latest_thumbnail_prompt_task
-        and latest_thumbnail_prompt_task.status == TaskStatusEnum.REVIEW
+        and _to_status_value(latest_thumbnail_prompt_task.status) == "REVIEW"
     )
 
 

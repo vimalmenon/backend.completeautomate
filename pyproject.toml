@@ -32,6 +32,7 @@ langchain = "^1.2.12"
 boto3 = "^1.42.67"
 tabulate = "^0.10.0"
 langsmith = "^0.7.20"
+pillow = "^11.2.1"
 
 [tool.poetry.scripts]
 app = "main:main"

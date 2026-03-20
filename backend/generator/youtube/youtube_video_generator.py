@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 class YouTubeVideoGenerator(BaseGenerator):
+    SKIP_REVIEW = True
 
     def __init__(self, job: JobData):
         super().__init__(job=job)
@@ -278,48 +279,43 @@ class YouTubeVideoGenerator(BaseGenerator):
             for suggestion in video_from_db.thumbnails_suggestions
             if suggestion.status == JobStatusEnum.PROMOTE
         ]
-        breakpoint()
         if len(suggested_thumbnails) == 1:
             thumbnail = suggested_thumbnails[0]
             logger.info("Uploading promoted thumbnail for job %s", self.job.id)
-            breakpoint()
             S3Storage().download_data(data=thumbnail.s3_data)
-            breakpoint()
             self.youtube_api.update_thumbnail(
                 video_id=self.video_id,
                 thumbnail_path=thumbnail.s3_data.downloaded_path,
             )
-            breakpoint()
             youtube_response = self.youtube_api.fetch_video_details(
                 video_id=self.video_id
             )
             updated_youtube_response = video_from_db.to_cls_from_response(
-                youtube_response
+                {**youtube_response, "ref_id": self.task_data.ref_id}
             )
-            breakpoint()
             self.youtube_manager.update_thumbnail(
                 thumbnail_url=updated_youtube_response.thumbnail
             )
-            breakpoint()
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
 
     def __review_video(self, video_from_db: YouTubeVideoDBData):
-        logger.info("Reviewing YouTube video for job %s", self.job.id)
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoReview,
-            task_id=f"{str(self.job.id)}_review",
-            data={
-                "transcript": video_from_db.transcript,
-            },
-        )
-        agent = GeneralAgent(
-            service,
-        )
-        result = agent.invoke()
-        # TODO Need to get it reviewed by AI 2 times
-        return result["messages"][-1].content
+        if not self.SKIP_REVIEW:
+            logger.info("Reviewing YouTube video for job %s", self.job.id)
+            service = AgentService(
+                prompt_task=PromptTaskEnum.YouTubeVideoReview,
+                task_id=f"{str(self.job.id)}_review",
+                data={
+                    "transcript": video_from_db.transcript,
+                },
+            )
+            agent = GeneralAgent(
+                service,
+            )
+            result = agent.invoke()
+            # TODO Need to get it reviewed by AI 2 times
+            return result["messages"][-1].content
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
