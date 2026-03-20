@@ -93,7 +93,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         metadata_suggestions = [
             selection
             for selection in video_from_db.metadata_suggestions
-            if selection.status == JobStatusEnum.PROMOTE
+            if selection.selected
         ]
         if len(metadata_suggestions) == 1:
             selected_metadata = metadata_suggestions[0]
@@ -189,7 +189,6 @@ class YouTubeVideoGenerator(BaseGenerator):
                 title=data.title,
                 description=data.description,
                 tags=data.tags,
-                status=JobStatusEnum.REVIEW,
             )
             for data in structured_response.details
         ]

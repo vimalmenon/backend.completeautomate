@@ -1,50 +1,13 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Optional, Self
+from typing import Self
 from uuid import UUID
 
 from backend.data.platform import PlatformDBData
-from backend.data.s3 import S3Data
 from backend.enum import (
     ImageTypeEnum,
     JobStatusEnum,
 )
-
-
-@dataclass
-class ImageGeneratorJobData:
-    id: UUID
-    name: str
-    prompt: str
-    image_type: ImageTypeEnum
-    ref_id: str
-    data: S3Data
-    model: Optional[str] = None  # Optional model selection (e.g., "GROK", "FLUX")
-
-    def to_json(self) -> dict:
-        json_data = {
-            "id": str(self.id),
-            "prompt": self.prompt,
-            "name": self.name,
-            "image_type": self.image_type.value,
-            "data": self.data.to_json(),
-            "ref_id": self.ref_id,
-        }
-        if self.model:
-            json_data["model"] = self.model
-        return json_data
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            id=UUID(data["id"]),
-            name=data["name"],
-            prompt=data["prompt"],
-            image_type=ImageTypeEnum(data["image_type"]),
-            data=S3Data.to_cls(data["data"]),
-            ref_id=data["ref_id"],
-            model=data.get("model"),  # Optional model parameter
-        )
 
 
 @dataclass
@@ -54,6 +17,7 @@ class ImagePromptData:
     prompt: str
     negative_prompt: str | None = None
     status: JobStatusEnum = JobStatusEnum.NEW
+    selected: bool = False
 
     def to_json(self) -> dict:
         return {
@@ -62,6 +26,7 @@ class ImagePromptData:
             "description": self.description,
             "status": self.status.value,
             "negative_prompt": self.negative_prompt,
+            "selected": self.selected,
         }
 
     @classmethod
@@ -72,6 +37,7 @@ class ImagePromptData:
             description=data["description"],
             status=JobStatusEnum(data.get("status", JobStatusEnum.NEW.value)),
             negative_prompt=data.get("negative_prompt"),
+            selected=data.get("selected", False),
         )
 
 

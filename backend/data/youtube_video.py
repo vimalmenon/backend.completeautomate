@@ -67,14 +67,12 @@ class YouTubeVideoMetadataData:
     title: str
     description: str
     tags: list[str]
-    status: JobStatusEnum = JobStatusEnum.NEW
     selected: bool = False
 
     def to_json(self) -> dict:
         return {
             "title": self.title,
             "description": self.description,
-            "status": self.status.value,
             "tags": self.tags,
             "selected": self.selected,
         }
@@ -84,9 +82,8 @@ class YouTubeVideoMetadataData:
         return cls(
             title=data["title"],
             description=data["description"],
-            status=JobStatusEnum(data["status"]),
             tags=data["tags"],
-            selected=data["selected"],
+            selected=data.get("selected", False),
         )
 
 
@@ -119,11 +116,13 @@ class YouTubeVideoReviewData:
 class YouTubeVideoThumbnailData:
     s3_data: S3Data
     status: JobStatusEnum = JobStatusEnum.NEW
+    selected: bool = False
 
     def to_json(self) -> dict:
         return {
             "s3_data": self.s3_data.to_json(),
             "status": self.status.value,
+            "selected": self.selected,
         }
 
     @classmethod
@@ -131,6 +130,7 @@ class YouTubeVideoThumbnailData:
         return cls(
             s3_data=S3Data.to_cls(data["s3_data"]),
             status=JobStatusEnum(data["status"]),
+            selected=data.get("selected", False),
         )
 
 

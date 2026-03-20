@@ -681,7 +681,7 @@ def _update_metadata_option_status(
             ui.notify("Metadata option not found", type="warning")
             return
 
-        video.metadata_suggestions[option_index].status = JobStatusEnum(status_value)
+        video.metadata_suggestions[option_index].selected = status_value.lower() == "selected"
         video_manager.update_metadata_suggestions(video.metadata_suggestions)
         ui.notify("Option status updated", type="positive")
         ui.run_javascript(
@@ -717,7 +717,7 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
                 ui.label(video.comment).classes("text-wrap text-sm")
 
         for index, detail in enumerate(suggestions, start=1):
-            icon_name, color = status_styles.get(detail.status, ("info", "grey"))
+            icon_name, color = ("north_east", "green") if detail.selected else ("info", "grey")
             with ui.card().classes(
                 "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-amber-100 dark:border-amber-800"
             ):
@@ -728,15 +728,15 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
                     with ui.row().classes("items-center gap-2 flex-wrap justify-end"):
                         status_input = (
                             ui.select(
-                                options=[status.value for status in JobStatusEnum],
-                                value=detail.status.value,
-                                label="Status",
+                                options=["Selected", "Not Selected"],
+                                value="Selected" if detail.selected else "Not Selected",
+                                label="Selection",
                             )
                             .props("outlined dense")
                             .classes("min-w-40")
                         )
                         ui.button(
-                            "Update Status",
+                            "Update Selection",
                             icon="save",
                             on_click=lambda current_ref=video.ref_id, current_index=index - 1, current_status=status_input: _update_metadata_option_status(
                                 ref_id=current_ref,
@@ -745,7 +745,7 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
                             ),
                         ).props("color=primary")
                         ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
-                        ui.badge(detail.status.value, color=color).props("outline")
+                        ui.badge("Selected" if detail.selected else "Not Selected", color=color).props("outline")
 
                 with ui.column().classes("w-full gap-2"):
                     with ui.row().classes("w-full gap-4 items-start"):
