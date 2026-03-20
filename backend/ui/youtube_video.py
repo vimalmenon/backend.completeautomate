@@ -602,9 +602,9 @@ def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
         ui.label("Thumbnail Prompt Suggestions").classes("text-h6 font-bold mb-2")
 
         for index, detail in enumerate(suggestions, start=1):
-            style = STATUS_STYLE.get(
-                detail.selected, {"icon": "info", "color": "grey"}
-            )
+            default_style: dict[str, str] = {"icon": "info", "color": "grey"}
+            status_key: str = str(detail.selected)
+            style: dict[str, str] = STATUS_STYLE.get(status_key, default_style)
             icon_name, color = style["icon"], style["color"]
             with ui.card().classes(
                 "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-indigo-100 dark:border-indigo-800"
@@ -628,7 +628,9 @@ def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
                             else "color=primary outline"
                         )
                         ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
-                        ui.badge(detail.selected, color=color).props("outline")
+                        ui.badge(
+                            "Selected" if detail.selected else "", color=color
+                        ).props("outline")
 
                 with ui.column().classes("w-full gap-2"):
                     with ui.row().classes("w-full gap-4 items-start"):
