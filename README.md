@@ -81,10 +81,12 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Make Workflow as `Archive` tasks after 1 week
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Check if video need flow
+      - [ ] Store the video status in Video DB
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompts locally
       - [ ] Upload Video from DB to S3
       - [ ] Should be able to run the GUI and Flow Offline
+      - [ ] Ability to work Offline
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
       - [ ] Send Notification
@@ -95,6 +97,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
+
 - [ ] GUI Enhancements (Top priority)
   - [x] Use `Job` instead of `Task`
   - [ ] Remove the errors form UI
