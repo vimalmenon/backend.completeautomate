@@ -337,7 +337,20 @@ def _render_channel_detail_header() -> None:
 def _render_channel_identity_with_button(channel_json: dict, channel_id: str) -> None:
     """Render channel identity card with image, info, and visit button."""
     with ui.card().classes("w-full border-t-4 border-red-500"):
-        # Top section: Image, info, and button
+        # Top row: Video count and Visit Channel button
+        with ui.row().classes("w-full items-center justify-between mb-2"):
+            video_count = channel_json.get("video_count", 0)
+            video_count_display = f"Videos: {int(video_count):,}" if video_count else "Videos: 0"
+            ui.label(video_count_display).classes("text-sm font-semibold text-purple-700 dark:text-purple-400")
+            ui.button(
+                "View Channel Detail",
+                icon="open_in_new",
+                on_click=lambda: ui.run_javascript(
+                    f'window.open("https://www.youtube.com/channel/{channel_id}", "_blank")'
+                ),
+            ).props("color=red")
+
+        # Main section: Image and info
         with ui.row().classes("gap-6 items-start w-full justify-between"):
             # Channel thumbnail
             if channel_json.get("thumbnail_url"):
@@ -384,16 +397,6 @@ def _render_channel_identity_with_button(channel_json: dict, channel_id: str) ->
                         ui.label(description).classes(
                             "text-sm text-gray-600 dark:text-gray-400 text-wrap"
                         )
-
-            # Navigation button on the right
-            with ui.column().classes("flex-shrink-0"):
-                ui.button(
-                    "Visit Channel",
-                    icon="open_in_new",
-                    on_click=lambda: ui.run_javascript(
-                        f'window.open("https://www.youtube.com/channel/{channel_id}", "_blank")'
-                    ),
-                ).props("color=red")
 
 
 def _render_channel_info_card(channel_json: dict) -> None:
