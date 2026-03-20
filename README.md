@@ -81,19 +81,19 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Make the image generation more generic to be used
+      - [x] Put all the generated image prompt to review
+      - [x] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Check if video need flow
       - [ ] Standardize the image generation
       - [ ] Remove the errors from APP
       - [ ] Remove task manager and other references
-      - [ ] Keep the Prompt locally also
+      - [ ] Keep the Prompts locally
       - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical 
       - [ ] Upload Video Stats to S3
-      - [ ] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Remove YouTube Tasks reference
       - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
-      - [ ] Put all the generated image prompt to review
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
       - [ ] Review the raw `Transcript` and rate the video based on it 
