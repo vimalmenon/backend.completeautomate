@@ -68,6 +68,7 @@ class YouTubeVideoMetadataData:
     description: str
     tags: list[str]
     status: JobStatusEnum = JobStatusEnum.NEW
+    selected: bool = False
 
     def to_json(self) -> dict:
         return {
@@ -75,6 +76,7 @@ class YouTubeVideoMetadataData:
             "description": self.description,
             "status": self.status.value,
             "tags": self.tags,
+            "selected": self.selected,
         }
 
     @classmethod
@@ -84,6 +86,7 @@ class YouTubeVideoMetadataData:
             description=data["description"],
             status=JobStatusEnum(data["status"]),
             tags=data["tags"],
+            selected=data["selected"],
         )
 
 

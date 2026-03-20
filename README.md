@@ -81,7 +81,8 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Make the image generation more generic to be used
-      - [x] Standardize the image generation
+      - [ ] Check if video need flow
+      - [ ] Standardize the image generation
       - [ ] Remove the errors from APP
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompt locally also
