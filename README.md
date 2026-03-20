@@ -346,12 +346,13 @@ You can also toggle AWS offline mode at runtime from the dashboard header using 
 Dashboard pages:
 
 - Home: `http://localhost:8080/`
-- Tasks: `http://localhost:8080/tasks`
-- YouTube: `http://localhost:8080/youtube`
-- Channel Details: `http://localhost:8080/channel/{channel_id}`
-- Video Details: `http://localhost:8080/video/{ref_id}`
-- Prompts: `http://localhost:8080/prompt`
+- Jobs: `http://localhost:8080/jobs`
+- Tasks (alias): `http://localhost:8080/tasks`
+- YouTube Channel: `http://localhost:8080/youtube/{channel_id}`
+- YouTube Video: `http://localhost:8080/youtube/{channel_id}/{video_id}`
+- Prompt: `http://localhost:8080/prompt`
 - Prompt Details: `http://localhost:8080/prompt/{task_id}`
+- S3 Bucket: `http://localhost:8080/s3`
 
 ## YouTube OAuth Notes
 
