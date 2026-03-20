@@ -17,6 +17,7 @@ class QwenImageGeneration:
     def __init__(
         self,
         model: str = "qwen-image-max",
+        # TODO Need to fix this size hardcoding. Qwen image generation supports multiple sizes, and we should allow callers to specify desired size.
         size: str = "1328*1328",
     ):
         self.model = model

@@ -158,45 +158,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Analyzer (Analysis the data)
   - Generator (Generate Image / Video Sound)
 
-### YouTube Workflow Pipeline
-
-Task creation flows from top to bottom. Each stage is a separate scheduled job that fetches, processes, and creates the next task:
-
-```
-YouTubeChannelCreator (Initial Task)
-│
-├── Action: Fetch channel info from YouTube API
-├── Store: YouTubeChannelDB
-└── Creates: YouTubeVideoGenerator
-    │
-    ├── Action: Fetch all videos for channel
-    ├── Store: YouTubeVideoDB
-    └── Creates: YouTubeVideoAnalyzer
-        │
-        ├── Action: Analyze video stats and content
-        └── Creates: YouTubeMetadataSuggester
-            │
-            ├── Action: Use LLM to generate title/description/tags
-            ├── Store: Prompt + suggestions in DB
-            └── Creates: YouTubeMetadataUpdater (if enabled)
-                │
-                ├── Action: Update YouTube video with suggested metadata
-                └── Creates: ImagePromptSuggester (if thumbnail update enabled)
-                    │
-                    ├── Action: Generate image prompt from video content
-                    └── Creates: ImageGenerator
-                        │
-                        ├── Action: Generate thumbnail image from prompt
-                        └── Creates: YouTubeThumbnailUpdater
-                            │
-                            └── Action: Upload generated thumbnail to YouTube (FINAL STEP)
-```
-
-**Key Points:**
-- Start with `YouTubeChannelCreator` task via task dashboard
-- Each job runs independently at scheduled intervals
-- Each job can be retried or repositioned in the queue via dashboard
-
 **Ideas / Low Priority:**
 
 - Local text-to-speech
@@ -221,6 +182,49 @@ YouTubeChannelCreator (Initial Task)
 
 </details>
 
+
+## YouTube Workflow Pipeline
+
+Jobs and tasks flow from top to bottom. Channel-level jobs run continuously; video-level tasks are gated by user review at each `REVIEW` step.
+
+```
+[Dashboard] Create: YouTubeChannelOnboarding job
+│
+├── Job: YouTubeChannel  (YouTubeChannelCreatorJob)
+│     Action: Sync channel info from YouTube API → YouTubeChannelDB
+│
+└── Job: YouTubeChannelVideoChecker  (YouTubeChannelVideoCheckerJob)
+      Action: List all channel videos → create a YouTubeVideo job per new video
+      │
+      └── Job: YouTubeVideo  (YouTubeVideoGenerator)
+            Progresses through tasks in sequence:
+            │
+            ├── Task: YouTubeVideoStart
+            │     Action: Fetch video from YouTube API → store in YouTubeVideoDB
+            │
+            ├── Task: YouTubeVideoFixTranscript  [REVIEW]
+            │     Action: Generate transcript summary + metadata suggestions via AI
+            │     User: Review / edit transcript, then double-click to advance
+            │
+            ├── Task: YouTubeVideoMetadataSelection  [REVIEW]
+            │     Action: User selects best metadata option
+            │     Then:  Update YouTube video metadata, generate thumbnail prompt
+            │             suggestions, and generate thumbnail images
+            │
+            ├── Task: YouTubeVideoThumbnailSelection  [REVIEW]
+            │     Action: User selects best thumbnail
+            │     Then:  Upload thumbnail to YouTube, mark video as reviewed
+            │
+            └── Task: YouTubeVideoComplete
+                  Terminal state — pipeline finished for this video
+```
+
+**Key Points:**
+- Start by creating a `YouTubeChannelOnboarding` job from the Jobs dashboard
+- Channel-level jobs (`YouTubeChannel`, `YouTubeChannelVideoChecker`) run on a continuous schedule
+- The single `YouTubeVideo` job handles the full video pipeline via internal task stages
+- `[REVIEW]` stages pause and wait for user action in the dashboard before advancing
+- Each job can be retried or repositioned in the queue via the dashboard
 
 ## UI Routes
 
