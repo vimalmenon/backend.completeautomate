@@ -82,6 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Make the image generation more generic to be used
       - [x] Standardize the image generation
+      - [ ] Remove the errors from APP
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompt locally also
       - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical 
@@ -111,6 +112,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
   - [x] Use `Job` instead of `Task`
+  - [ ] Remove the errors form UI
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
