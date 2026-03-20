@@ -87,13 +87,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
-      - [ ] Review the raw `Transcript` and rate the video based on it 
-        - [ ] Check for grammar
-        - [ ] Points to improve 
-        - [ ] What went well
-      - [ ] Agent to analyze result
-        - [ ] Add AI review step for generated answers
-        - [ ] Agent to review tasks (only once)
       - [ ] Send Notification
         - [ ] Send Email
         - [ ] Send Signal
@@ -124,9 +117,16 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Basic pages
   - [ ] Show all features
   - [ ] Update workflow
+- [ ] Review the Video based on Audio
+  - [ ] Check for grammar
+  - [ ] Points to improve 
+  - [ ] What went well
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
+- [ ] Agent to analyze result
+  - [ ] Add AI review step for generated answers
+  - [ ] Agent to review tasks (only once)
 - [ ] Code improvement
   - [ ] Complete TODOs
   - [ ] Remove Deadcode
