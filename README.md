@@ -78,10 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [ ] App revamp
-      - [x] Upload prompts to S3 Bucket
-      - [x] Check if the video is gone thought the process
-      - [x] Set up image generation
-      - [x] Remove YouTube Tasks reference
       - [ ] Make Workflow as `Archive` tasks after 1 week
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Check if video need flow
