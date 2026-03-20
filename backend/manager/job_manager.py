@@ -90,11 +90,3 @@ class JobManager:
         )
         self.save_job(job_data=job_data)
         return job_data
-
-    # # Backward-compatible helpers for UI code paths still reading CA#TASK records.
-    # def get_task_by_ref_id(self, ref_id: str) -> list[TaskData]:
-    #     tasks = TaskDB().get_tasks()
-    #     return [task for task in tasks if str(task.payload.get("ref_id", "")) == ref_id]
-
-    # def update_task(self, task: JobData) -> None:
-    #     JobData().update_task(task)

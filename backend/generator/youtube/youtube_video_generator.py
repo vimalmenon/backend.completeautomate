@@ -26,7 +26,7 @@ from backend.generator.response_format import (
 )
 from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
-from backend.manager import YouTubeVideoManager
+from backend.manager import JobManager, YouTubeVideoManager
 from backend.services.agent_service import AgentImageService, AgentService
 
 logger = logging.getLogger(__name__)
@@ -45,6 +45,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         self.video_id = self.task_data.platform.video_id
         self.youtube_manager = YouTubeVideoManager(ref_id=self.task_data.ref_id)
         self.video_from_db = self.youtube_manager.get_video()
+        self.job_manager = JobManager()
 
     def generate(self) -> tuple[JobsStatusEnum, dict]:
         logger.info(
@@ -60,7 +61,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.video_from_db.published_at
         ):
             logger.info("Skipping old video for job %s", self.job.id)
-            return self.__job_complete()
+            return self.__job_complete(video_from_db=self.video_from_db)
         if self.task_data.task == YouTubeVideoTaskEnum.YouTubeVideoFixTranscript:
             logger.info("Creating transcript summary for job %s", self.job.id)
             self.__create_transcript_summary(video_from_db=self.video_from_db)
@@ -76,7 +77,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             )
             self.__upload_thumbnail(video_from_db=self.video_from_db)
             self.__review_video(video_from_db=self.video_from_db)
-            return self.__job_complete()
+            return self.__job_complete(video_from_db=self.video_from_db)
         raise AppException("Invalid task for YouTube video generator")
 
     def __check_if_video_is_older_than_two_weeks(self, published_at: datetime) -> bool:
@@ -314,7 +315,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             # TODO Need to get it reviewed by AI 2 times
             return result["messages"][-1].content
 
-    def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
+    def __job_complete(
+        self, video_from_db: YouTubeVideoDBData
+    ) -> tuple[JobsStatusEnum, dict]:
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
         logger.info("Completed YouTube video generator for job %s", self.job.id)
         return JobsStatusEnum.COMPLETE, self.task_data.to_json()

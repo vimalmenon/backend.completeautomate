@@ -3,7 +3,6 @@
 import pytest
 
 from backend.enum.ai import AICreativityLevelEnum, AIModelEnum
-from backend.enum.job import JobEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.enum.team import TeamEnum
 
@@ -24,12 +23,6 @@ class TestEnums:
         assert AICreativityLevelEnum.LOW is not None
         assert AICreativityLevelEnum.MEDIUM is not None
         assert AICreativityLevelEnum.HIGH is not None
-
-    def test_job_enum(self) -> None:
-        """Test JobEnum enum values"""
-        assert JobEnum.ImageGenerator is not None
-        assert JobEnum.ImagePrompt is not None
-        assert JobEnum.YouTubeVideo is not None
 
     def test_s3_content_type_enum(self) -> None:
         """Test S3ContentTypeEnum enum values"""
