@@ -23,7 +23,6 @@ from backend.data.task import (
     YouTubeVideoStatsUpdaterTaskData,
     YouTubeVideoTaskData,
 )
-from backend.data.team import GraphicDesignerClsData
 from backend.data.youtube_channel import (
     YouTubeChannelDBData,
     YouTubeJobData,
@@ -46,7 +45,6 @@ __all__ = [
     "YouTubeJobData",
     "YouTubeVideoDBData",
     "YouTubeVideoSummarizeJobData",
-    "GraphicDesignerClsData",
     "PromptDBData",
     "MessageDBData",
     "YouTubeVideoMetadataJobData",
