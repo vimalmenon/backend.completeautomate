@@ -7,7 +7,6 @@ from backend.data import (
     JobData,
     PlatformDBData,
     PlatformYouTubeVideoDBData,
-    TaskData,
     YouTubeVideoDBData,
 )
 from backend.enum import (
@@ -15,7 +14,6 @@ from backend.enum import (
     JobStatusEnum,
     JobTypeEnum,
     PlatformEnum,
-    TaskStatusEnum,
     YouTubeVideoTaskEnum,
 )
 from backend.integration.storage.s3_storage import S3Storage

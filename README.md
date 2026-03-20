@@ -82,10 +82,11 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Make the image generation more generic to be used
       - [x] Standardize the image generation
+      - [ ] Remove task manager and other references
       - [ ] Keep the Prompt locally also
+      - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical 
       - [ ] Upload Video Stats to S3
       - [ ] Higher lvl component (UI and Generator) should never access DB directly
-      - [ ] Remove task manager and other references
       - [ ] Remove YouTube Tasks reference
       - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
