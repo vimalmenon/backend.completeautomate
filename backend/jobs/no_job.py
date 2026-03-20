@@ -13,4 +13,4 @@ class NoJob(BaseJob):
             "No job handler available for task %s",
             self.job.id,
         )
-        return (JobsStatusEnum.FAILED, 0 , None)
+        return (JobsStatusEnum.FAILED, 0, None)

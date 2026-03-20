@@ -4,16 +4,14 @@ from backend.config.env import env
 from backend.data import (
     JobData,
     PlatformDBData,
-    PlatformYouTubeChannelDBData,
     PlatformYouTubeVideoDBData,
     YouTubeChannelDBData,
     YouTubeChannelTaskData,
     YouTubeChannelVideoCheckerTaskData,
-    YouTubeJobData,
     YouTubeVideoTaskData,
 )
-from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum, TaskStatusEnum
-from backend.generator.base_generator import BaseGenerator, BaseGeneratorJob
+from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum
+from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI
 from backend.manager import (
@@ -112,7 +110,7 @@ class YouTubeChannelOnboardingJob(BaseGenerator):
         return jobs_with_ref_id[0] if len(jobs_with_ref_id) > 0 else None
 
 
-class YouTubeChannelCreatorJob(BaseGeneratorJob):
+class YouTubeChannelCreatorJob(BaseGenerator):
 
     def __init__(self, job: JobData):
         super().__init__(job)
@@ -147,7 +145,7 @@ class YouTubeChannelCreatorJob(BaseGeneratorJob):
         return JobsStatusEnum.IN_PROGRESS, None
 
 
-class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
+class YouTubeChannelVideoCheckerJob(BaseGenerator):
 
     def __init__(self, job: JobData):
         super().__init__(job)
@@ -192,4 +190,3 @@ class YouTubeChannelVideoCheckerJob(BaseGeneratorJob):
             self.task_data.ref_id,
         )
         return PlatformManager().save_data(data)
-
