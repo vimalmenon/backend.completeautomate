@@ -6,7 +6,6 @@ from uuid import UUID
 from backend.data.platform import PlatformDBData
 from backend.enum import (
     ImageTypeEnum,
-    JobStatusEnum,
 )
 
 
@@ -16,7 +15,6 @@ class ImagePromptData:
     description: str
     prompt: str
     negative_prompt: str | None = None
-    status: JobStatusEnum = JobStatusEnum.NEW
     selected: bool = False
 
     def to_json(self) -> dict:
@@ -24,7 +22,6 @@ class ImagePromptData:
             "name": self.name,
             "prompt": self.prompt,
             "description": self.description,
-            "status": self.status.value,
             "negative_prompt": self.negative_prompt,
             "selected": self.selected,
         }
@@ -35,7 +32,6 @@ class ImagePromptData:
             name=data["name"],
             prompt=data["prompt"],
             description=data["description"],
-            status=JobStatusEnum(data.get("status", JobStatusEnum.NEW.value)),
             negative_prompt=data.get("negative_prompt"),
             selected=data.get("selected", False),
         )

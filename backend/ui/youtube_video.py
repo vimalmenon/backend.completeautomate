@@ -12,7 +12,6 @@ from backend.data import (
 )
 from backend.enum import (
     JobsStatusEnum,
-    JobStatusEnum,
     JobTypeEnum,
     PlatformEnum,
     YouTubeVideoTaskEnum,
@@ -492,9 +491,7 @@ def _select_thumbnail_option(ref_id: str, option_index: int) -> None:
             return
 
         for index, suggestion in enumerate(video.thumbnails_suggestions):
-            suggestion.status = (
-                JobStatusEnum.PROMOTE if index == option_index else JobStatusEnum.REVIEW
-            )
+            suggestion.selected = index == option_index
 
         video_manager.update_thumbnails_suggestions(video.thumbnails_suggestions)
         ui.notify("Thumbnail selected", type="positive")
@@ -521,7 +518,7 @@ def _render_thumbnail_suggestions(video: YouTubeVideoDBData) -> None:
 
         with ui.row().classes("w-full gap-3 flex-wrap"):
             for index, detail in enumerate(suggestions):
-                is_selected = detail.status == JobStatusEnum.PROMOTE
+                is_selected = detail.selected
                 image_source = _build_thumbnail_image_source(detail.s3_data)
 
                 with ui.card().classes(
@@ -547,7 +544,7 @@ def _render_thumbnail_suggestions(video: YouTubeVideoDBData) -> None:
 
                     with ui.row().classes("w-full items-center justify-between mt-3"):
                         badge_color = "green" if is_selected else "grey"
-                        badge_label = "Selected" if is_selected else detail.status.value
+                        badge_label = "Selected" if is_selected else "Not Selected"
                         ui.badge(badge_label, color=badge_color).props("outline")
                         ui.button(
                             "Select",
@@ -579,9 +576,7 @@ def _update_thumbnail_prompt_option_status(
             ui.notify("Thumbnail prompt option not found", type="warning")
             return
 
-        video.thumbnail_prompt_suggestions[option_index].status = JobStatusEnum(
-            status_value
-        )
+        video.thumbnail_prompt_suggestions[option_index].selected = True
         video_manager.update_thumbnail_prompt_suggestions(
             video.thumbnail_prompt_suggestions
         )
@@ -598,15 +593,7 @@ def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
     if not suggestions:
         return
 
-    status_styles: dict[JobStatusEnum, tuple[str, str]] = {
-        JobStatusEnum.NEW: ("fiber_new", "grey"),
-        JobStatusEnum.IN_PROGRESS: ("schedule", "blue"),
-        JobStatusEnum.REVIEW: ("rate_review", "orange"),
-        JobStatusEnum.APPROVED: ("verified", "teal"),
-        JobStatusEnum.PROMOTE: ("north_east", "green"),
-        JobStatusEnum.FAILED: ("error", "red"),
-        JobStatusEnum.CLEAN_UP: ("cleaning_services", "brown"),
-    }
+    # Use global STATUS_STYLE for icon/color/label
 
     with ui.card().classes(
         "w-full p-4 shadow-sm border border-indigo-200 dark:border-indigo-700 "
@@ -615,7 +602,10 @@ def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
         ui.label("Thumbnail Prompt Suggestions").classes("text-h6 font-bold mb-2")
 
         for index, detail in enumerate(suggestions, start=1):
-            icon_name, color = status_styles.get(detail.status, ("info", "grey"))
+            style = STATUS_STYLE.get(
+                detail.selected, {"icon": "info", "color": "grey"}
+            )
+            icon_name, color = style["icon"], style["color"]
             with ui.card().classes(
                 "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-indigo-100 dark:border-indigo-800"
             ):
@@ -624,26 +614,21 @@ def _render_thumbnail_prompt_suggestions(video: YouTubeVideoDBData) -> None:
                         "text-sm font-semibold text-indigo-700"
                     )
                     with ui.row().classes("items-center gap-2 flex-wrap justify-end"):
-                        status_input = (
-                            ui.select(
-                                options=[status.value for status in JobStatusEnum],
-                                value=detail.status.value,
-                                label="Status",
-                            )
-                            .props("outlined dense")
-                            .classes("min-w-40")
-                        )
                         ui.button(
-                            "Update Status",
-                            icon="save",
-                            on_click=lambda current_ref=video.ref_id, current_index=index - 1, current_status=status_input: _update_thumbnail_prompt_option_status(
+                            "Select",
+                            icon="check",
+                            on_click=lambda current_ref=video.ref_id, current_index=index - 1: _update_thumbnail_prompt_option_status(
                                 ref_id=current_ref,
                                 option_index=current_index,
-                                status_value=str(current_status.value),
+                                status_value="PROMOTE",
                             ),
-                        ).props("color=primary")
+                        ).props(
+                            "color=primary"
+                            if detail.selected
+                            else "color=primary outline"
+                        )
                         ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
-                        ui.badge(detail.status.value, color=color).props("outline")
+                        ui.badge(detail.selected, color=color).props("outline")
 
                 with ui.column().classes("w-full gap-2"):
                     with ui.row().classes("w-full gap-4 items-start"):
@@ -681,7 +666,9 @@ def _update_metadata_option_status(
             ui.notify("Metadata option not found", type="warning")
             return
 
-        video.metadata_suggestions[option_index].selected = status_value.lower() == "selected"
+        video.metadata_suggestions[option_index].selected = (
+            status_value.lower() == "selected"
+        )
         video_manager.update_metadata_suggestions(video.metadata_suggestions)
         ui.notify("Option status updated", type="positive")
         ui.run_javascript(
@@ -696,15 +683,7 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
     if not suggestions:
         return
 
-    status_styles: dict[JobStatusEnum, tuple[str, str]] = {
-        JobStatusEnum.NEW: ("fiber_new", "grey"),
-        JobStatusEnum.IN_PROGRESS: ("schedule", "blue"),
-        JobStatusEnum.REVIEW: ("rate_review", "orange"),
-        JobStatusEnum.APPROVED: ("verified", "teal"),
-        JobStatusEnum.PROMOTE: ("north_east", "green"),
-        JobStatusEnum.FAILED: ("error", "red"),
-        JobStatusEnum.CLEAN_UP: ("cleaning_services", "brown"),
-    }
+    # Use global STATUS_STYLE for icon/color/label
 
     with ui.card().classes(
         "w-full p-4 shadow-sm border border-amber-200 dark:border-amber-700 "
@@ -717,7 +696,11 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
                 ui.label(video.comment).classes("text-wrap text-sm")
 
         for index, detail in enumerate(suggestions, start=1):
-            icon_name, color = ("north_east", "green") if detail.selected else ("info", "grey")
+            icon_name, color = (
+                (STATUS_STYLE["COMPLETED"]["icon"], STATUS_STYLE["COMPLETED"]["color"])
+                if detail.selected
+                else ("info", "grey")
+            )
             with ui.card().classes(
                 "w-full bg-white dark:bg-slate-800 mt-2 shadow-none border border-amber-100 dark:border-amber-800"
             ):
@@ -745,7 +728,10 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
                             ),
                         ).props("color=primary")
                         ui.icon(icon_name).classes(f"text-{color}-600 text-sm")
-                        ui.badge("Selected" if detail.selected else "Not Selected", color=color).props("outline")
+                        ui.badge(
+                            "Selected" if detail.selected else "Not Selected",
+                            color=color,
+                        ).props("outline")
 
                 with ui.column().classes("w-full gap-2"):
                     with ui.row().classes("w-full gap-4 items-start"):

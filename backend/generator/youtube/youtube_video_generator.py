@@ -15,7 +15,6 @@ from backend.data import (
 )
 from backend.enum import (
     JobsStatusEnum,
-    JobStatusEnum,
     PromptTaskEnum,
     YouTubeVideoTaskEnum,
 )
@@ -251,7 +250,6 @@ class YouTubeVideoGenerator(BaseGenerator):
             )
             video_thumbnail_data = YouTubeVideoThumbnailData(
                 s3_data=s3_data,
-                status=JobStatusEnum.REVIEW,
             )
             service = AgentImageService(prompt=suggestion.prompt)
             agent = GeneralAgent(
@@ -276,7 +274,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         suggested_thumbnails = [
             suggestion
             for suggestion in video_from_db.thumbnails_suggestions
-            if suggestion.status == JobStatusEnum.PROMOTE
+            if suggestion.selected
         ]
         if len(suggested_thumbnails) == 1:
             thumbnail = suggested_thumbnails[0]

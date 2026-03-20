@@ -6,7 +6,6 @@ from typing import Any, Self
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
-from backend.enum import JobStatusEnum
 
 
 @dataclass
@@ -115,13 +114,11 @@ class YouTubeVideoReviewData:
 @dataclass
 class YouTubeVideoThumbnailData:
     s3_data: S3Data
-    status: JobStatusEnum = JobStatusEnum.NEW
     selected: bool = False
 
     def to_json(self) -> dict:
         return {
             "s3_data": self.s3_data.to_json(),
-            "status": self.status.value,
             "selected": self.selected,
         }
 
@@ -129,7 +126,6 @@ class YouTubeVideoThumbnailData:
     def to_cls(cls, data) -> Self:
         return cls(
             s3_data=S3Data.to_cls(data["s3_data"]),
-            status=JobStatusEnum(data["status"]),
             selected=data.get("selected", False),
         )
 
