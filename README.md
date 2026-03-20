@@ -80,8 +80,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Upload prompts to S3 Bucket
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
-      - [x] Make the image generation more generic to be used
-      - [x] Put all the generated image prompt to review
       - [x] Higher lvl component (UI and Generator) should never access DB directly
       - [ ] Check if video need flow
       - [ ] Standardize the image generation
@@ -103,14 +101,14 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Agent to analyze result
         - [ ] Add AI review step for generated answers
         - [ ] Agent to review tasks (only once)
+      - [ ] Send Notification
+        - [ ] Send Email
+        - [ ] Send Signal
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-- [ ] Send Notification
-  - [ ] Send Email
-  - [ ] Send Signal
 - [ ] GUI Enhancements (Top priority)
   - [x] Use `Job` instead of `Task`
   - [ ] Remove the errors form UI
