@@ -97,7 +97,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-
 - [ ] GUI Enhancements (Top priority)
   - [x] Use `Job` instead of `Task`
   - [ ] Remove the errors form UI
