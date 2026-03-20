@@ -83,17 +83,17 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Higher lvl component (UI and Generator) should never access DB directly
       - [x] Standardize the image generation
+      - [x] `JobStatusEnum` and `JobsStatusEnum` seems identical
       - [x] Remove the errors from APP
+      - [x] Use Selected rater than ENUM in youTube Task
       - [x] Fix the Image Size for YouTube Thumbnail
+      - [x] Test all the prompts once done
       - [ ] Check if video need flow
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompts locally
-      - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical
-      - [ ] Use SelectedRater than ENUM in youTube Task
-      - [ ] Upload Video Stats to S3
+      - [ ] Upload Video to S3
       - [ ] Remove YouTube Tasks reference
-      - [ ] Check if the video is gone thought the process
-      - [ ] Test all the prompts once done
+      - [ ] Check if the video is gone thought the process  
       - [ ] Set up image generation
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
