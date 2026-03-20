@@ -49,7 +49,3 @@ def load_mock_data():
     YouTubeChannelManager(channel_id).save_data(channel)
     YouTubeVideoManager(ref_id=video_platform.ref_id).save_data(video)
 
-    # Adding Tasks
-    # payload = create_youtube_channel_job_factory(ref_id=channel_platform.ref_id)
-    # task = create_task_factory(payload=payload.to_json())
-    # JobManager().add_task(task)

@@ -96,7 +96,7 @@ def _render_jobs_header() -> None:
     """Render the jobs section header."""
     with ui.row().classes("items-center"):
         with ui.avatar(color="blue", text_color="white", size="lg"):
-            ui.icon("task", size="md")
+            ui.icon("work", size="md")
         with ui.column().classes("gap-0"):
             ui.label("Jobs").classes("text-h6 font-bold")
             ui.label("Manage and schedule automated content creation jobs").classes(

@@ -360,6 +360,3 @@ async def jobs_page(status: str = ""):
                                     'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                                 )
 
-
-async def tasks_page(status: str = ""):
-    await jobs_page(status)

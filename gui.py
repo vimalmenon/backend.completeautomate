@@ -24,41 +24,12 @@ def root():
     dark = ui.dark_mode()
     ui.page_title("CompleteAutomate Dashboard")
 
-    # Navigation header with page change feedback
+    # Header
     with ui.header().classes("items-center justify-between shadow-lg"):
         with ui.row().classes("items-center"):
-            ui.icon("dashboard", size="md").classes("mr-2")
             ui.label("CompleteAutomate").classes("text-h5 font-bold")
 
         with ui.row().classes("gap-4 items-center"):
-            # Navigation buttons with icons
-            with ui.button(
-                icon="home",
-                on_click=lambda: ui.run_javascript('window.location.href = "/"'),
-            ).props("flat"):
-                ui.tooltip("Home")
-            with ui.button(
-                icon="task",
-                on_click=lambda: ui.run_javascript('window.location.href = "/jobs"'),
-            ).props("flat"):
-                ui.tooltip("Jobs")
-            with ui.button(
-                icon="video_library",
-                on_click=lambda: ui.run_javascript('window.location.href = "/youtube"'),
-            ).props("flat"):
-                ui.tooltip("YouTube")
-            with ui.button(
-                icon="article",
-                on_click=lambda: ui.run_javascript('window.location.href = "/prompt"'),
-            ).props("flat"):
-                ui.tooltip("Prompts")
-            with ui.button(
-                icon="cloud",
-                on_click=lambda: ui.run_javascript('window.location.href = "/s3"'),
-            ).props("flat"):
-                ui.tooltip("S3 Bucket")
-
-            ui.separator().props("vertical")
             ui.switch(
                 "Offline",
                 value=env.OFFLINE,
@@ -76,7 +47,6 @@ def root():
             {
                 "/": main_page,
                 "/jobs": jobs_page,
-                "/tasks": jobs_page,
                 "/youtube/{channel_id}": youtube_channel_page,
                 "/youtube/{channel_id}/{video_id}": youtube_video_page,
                 "/prompt": prompt_page,
