@@ -79,22 +79,15 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [ ] App revamp
       - [x] Upload prompts to S3 Bucket
-      - [x] Make Workflow as `Archive` tasks after 1 week
-      - [x] Only update the metadata and other flow for last 2 weeks old videos
-      - [x] Higher lvl component (UI and Generator) should never access DB directly
-      - [x] Standardize the image generation
-      - [x] `JobStatusEnum` and `JobsStatusEnum` seems identical
-      - [x] Remove the errors from APP
-      - [x] Use Selected rater than ENUM in youTube Task
-      - [x] Fix the Image Size for YouTube Thumbnail
-      - [x] Test all the prompts once done
+      - [x] Check if the video is gone thought the process
+      - [x] Set up image generation
+      - [x] Remove YouTube Tasks reference
+      - [ ] Make Workflow as `Archive` tasks after 1 week
+      - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Check if video need flow
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompts locally
-      - [ ] Upload Video to S3
-      - [ ] Remove YouTube Tasks reference
-      - [ ] Check if the video is gone thought the process  
-      - [ ] Set up image generation
+      - [ ] Upload Video from DB to S3
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
