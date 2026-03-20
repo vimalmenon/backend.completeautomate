@@ -16,6 +16,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
   - [2) Run the app](#2-run-the-app)
   - [3) Run the dashboard](#3-run-the-dashboard)
 - [YouTube OAuth Notes](#youtube-oauth-notes)
+- [Thumbnail Upload Size Handling](#thumbnail-upload-size-handling)
 - [Development Commands](#development-commands)
 - [Testing](#testing)
 - [Mock Data Factories](#mock-data-factories)
@@ -81,9 +82,10 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Only update the metadata and other flow for last 2 weeks old videos
       - [x] Higher lvl component (UI and Generator) should never access DB directly
+      - [x] Standardize the image generation
+      - [x] Remove the errors from APP
+      - [x] Fix the Image Size for YouTube Thumbnail
       - [ ] Check if video need flow
-      - [ ] Standardize the image generation
-      - [ ] Remove the errors from APP
       - [ ] Remove task manager and other references
       - [ ] Keep the Prompts locally
       - [ ] `JobStatusEnum` and `JobsStatusEnum` seems identical
@@ -93,6 +95,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Check if the video is gone thought the process
       - [ ] Test all the prompts once done
       - [ ] Set up image generation
+      - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
       - [ ] Review the raw `Transcript` and rate the video based on it 
@@ -238,8 +241,10 @@ The `/youtube/{channel_id}/{video_id}` page currently includes:
 - Video summary card with thumbnail, title, published/language badges, and tag badges
 - Inline latest video stats (views, likes, comments, stats updated)
 - Task Flow card showing pipeline stages and current status per stage
-- Double-click on **Summarize** task in Task Flow to update task status
+- Double-click on editable Task Flow steps (e.g., **Fix Transcript**, **Metadata Selection**, **Thumbnail Selection**) to update status
 - Metadata Suggestions section with per-option status update controls
+- Thumbnail Suggestions section with image preview and single-option select (promote) action
+- Thumbnail Prompt Suggestions section with per-option status update controls
 - Transcript card with fixed-height scroll area
 - Summarized Transcript card (shown when available) with fixed-height scroll area
 
@@ -248,6 +253,17 @@ Transcript editor dialog supports:
 - In-place editing and save to DB
 - Live character count
 - Persistent modal behavior (prevents accidental close by outside click)
+
+## Thumbnail Upload Size Handling
+
+YouTube rejects thumbnails larger than `2 MB` (`2097152` bytes). The backend now handles this automatically before upload:
+
+- Entry point: `YouTubeAPI.update_thumbnail`
+- Reusable function: `YouTubeAPI.reduce_image_size(image_path, max_size_bytes=2*1024*1024)`
+- Behavior:
+  - If image is already within size limit, it uploads as-is
+  - If oversized, it converts/compresses to JPEG and progressively resizes until under the limit
+  - Upload uses the optimized temporary file and cleans it up after request
 
 
 ## Requirements
