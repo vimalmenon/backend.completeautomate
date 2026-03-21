@@ -65,6 +65,7 @@ def create_tree(items: list[S3Data] = []):
 
     return to_list(tree)
 
+
 async def on_tree_select(e, table_container, prefix_input, max_keys_input):
     selected_prefix = e.args["id"]
     if selected_prefix.endswith("/"):
@@ -74,7 +75,7 @@ async def on_tree_select(e, table_container, prefix_input, max_keys_input):
         )
 
 
-async def render_tree(tree_container, table_container, prefix_input, max_keys_input):
+async def render_tree(tree_container):
     tree_container.clear()
     with tree_container:
         ui.label("S3 Folder Structure").classes("text-subtitle2 mb-2")
@@ -212,4 +213,4 @@ async def s3_bucket_page() -> None:
                 ),
             ).props("color=primary")
             await load_items(table_container, prefix_input, max_keys_input)
-        await render_tree(tree_container, table_container, prefix_input, max_keys_input)
+        await render_tree(tree_container)
