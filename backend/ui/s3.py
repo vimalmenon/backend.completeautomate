@@ -1,9 +1,9 @@
 from nicegui import app, run, ui
 
 from backend.config.env import env
+from backend.data import S3Data
 from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
-from backend.data import S3Data
 
 
 def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
@@ -51,10 +51,15 @@ def create_tree(items: list[S3Data] = []):
         for name, child in node.items():
             if name == "__files__":
                 for fname in child:
-                    result.append({"name": fname, "type": "file"})
+                    result.append({"name": fname, "id": fname, "type": "file"})
             else:
                 result.append(
-                    {"name": name, "type": "folder", "children": to_list(child)}
+                    {
+                        "name": name,
+                        "id": name,
+                        "type": "folder",
+                        "children": to_list(child),
+                    }
                 )
         return result
 
@@ -80,7 +85,12 @@ def build_tree(paths):
                     result.append({"name": fname, "id": fname, "type": "file"})
             else:
                 result.append(
-                    {"name": name, "id": name, "type": "folder", "children": to_list(child)}
+                    {
+                        "name": name,
+                        "id": name,
+                        "type": "folder",
+                        "children": to_list(child),
+                    }
                 )
         return result
 
@@ -112,7 +122,6 @@ async def render_tree(tree_container, table_container, prefix_input, max_keys_in
             for item in items[:10]:
                 ui.label(f"repr: {repr(item)}").classes("text-xs text-gray-400")
         structured_tree = create_tree(items)
-        print(structured_tree)
         ui.tree(
             structured_tree,
             # on_select=lambda e: on_tree_select(
