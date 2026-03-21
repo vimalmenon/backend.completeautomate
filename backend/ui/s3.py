@@ -3,6 +3,7 @@ from nicegui import app, run, ui
 from backend.config.env import env
 from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
+from backend.data import S3Data
 
 
 def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
@@ -31,6 +32,59 @@ def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> No
 
         if right_text:
             ui.label(right_text).classes("text-gray-500 dark:text-gray-400 text-xs")
+
+
+def create_tree(items: list[S3Data] = []):
+    tree = {}
+    for item in items:
+        node = tree
+        parts = item.s3_key.split("/")
+        for i, part in enumerate(parts):
+            if i == len(parts) - 1:
+                # It's a file
+                node.setdefault("__files__", []).append(part)
+            else:
+                node = node.setdefault(part, {})
+
+    def to_list(node):
+        result = []
+        for name, child in node.items():
+            if name == "__files__":
+                for fname in child:
+                    result.append({"name": fname, "type": "file"})
+            else:
+                result.append(
+                    {"name": name, "type": "folder", "children": to_list(child)}
+                )
+        return result
+
+    return to_list(tree)
+
+
+def build_tree(paths):
+    tree = {}
+    for parts in paths:
+        node = tree
+        for i, part in enumerate(parts):
+            if i == len(parts) - 1:
+                # It's a file
+                node.setdefault("__files__", []).append(part)
+            else:
+                node = node.setdefault(part, {})
+
+    def to_list(node):
+        result = []
+        for name, child in node.items():
+            if name == "__files__":
+                for fname in child:
+                    result.append({"name": fname, "type": "file"})
+            else:
+                result.append(
+                    {"name": name, "type": "folder", "children": to_list(child)}
+                )
+        return result
+
+    return to_list(tree)
 
 
 # --- Helper Functions ---
@@ -85,9 +139,9 @@ async def render_tree(tree_container, table_container, prefix_input, max_keys_in
         else:
             for item in items[:10]:
                 ui.label(f"repr: {repr(item)}").classes("text-xs text-gray-400")
-        tree_data = await build_s3_tree("")
+        structured_tree = create_tree(items)
         ui.tree(
-            tree_data,
+            structured_tree,
             on_select=lambda e: on_tree_select(
                 e, table_container, prefix_input, max_keys_input
             ),
