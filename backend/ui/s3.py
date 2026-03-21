@@ -77,42 +77,14 @@ def build_tree(paths):
         for name, child in node.items():
             if name == "__files__":
                 for fname in child:
-                    result.append({"name": fname, "type": "file"})
+                    result.append({"name": fname, "id": fname, "type": "file"})
             else:
                 result.append(
-                    {"name": name, "type": "folder", "children": to_list(child)}
+                    {"name": name, "id": name, "type": "folder", "children": to_list(child)}
                 )
         return result
 
     return to_list(tree)
-
-
-# --- Helper Functions ---
-async def build_s3_tree(prefix: str = "", max_depth: int = 2, depth: int = 0):
-    items = await run.io_bound(S3Storage().list_items, prefix=prefix, max_keys=1000)
-    folders = set()
-    files = []
-    for item in items:
-        key = item.key or ""
-        rel_key = key[len(prefix) :] if key.startswith(prefix) else key
-        if not rel_key:
-            continue
-        parts = rel_key.split("/", 1)
-        if len(parts) == 2:
-            folders.add(parts[0])
-        else:
-            files.append({"id": key, "label": rel_key, "icon": "insert_drive_file"})
-    children = []
-    for folder in sorted(folders):
-        folder_prefix = f"{prefix}{folder}/"
-        node = {"id": folder_prefix, "label": folder, "icon": "folder"}
-        if depth < max_depth:
-            sub_items = await build_s3_tree(folder_prefix, max_depth, depth + 1)
-            if sub_items:
-                node["children"] = sub_items
-        children.append(node)
-    children.extend(files)
-    return children
 
 
 async def on_tree_select(e, table_container, prefix_input, max_keys_input):
@@ -140,13 +112,14 @@ async def render_tree(tree_container, table_container, prefix_input, max_keys_in
             for item in items[:10]:
                 ui.label(f"repr: {repr(item)}").classes("text-xs text-gray-400")
         structured_tree = create_tree(items)
+        print(structured_tree)
         ui.tree(
             structured_tree,
-            on_select=lambda e: on_tree_select(
-                e, table_container, prefix_input, max_keys_input
-            ),
-            label_key="label",
-        ).classes("w-full")
+            # on_select=lambda e: on_tree_select(
+            #     e, table_container, prefix_input, max_keys_input
+            # ),
+            label_key="name",
+        ).expand().classes("w-full")
 
 
 async def load_items(table_container, prefix_input, max_keys_input, prefix=None):
