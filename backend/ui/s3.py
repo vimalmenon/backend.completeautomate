@@ -59,6 +59,81 @@ async def s3_bucket_page() -> None:
         saved_prefix = app.storage.user.get("s3_prefix", "")
         saved_max_keys = app.storage.user.get("s3_max_keys", 200)
 
+        # --- S3 Tree View Implementation ---
+        # Layout: left (tree), right (table)
+        main_row = ui.row().classes("w-full items-start gap-6")
+        tree_container = ui.column().classes("min-w-[260px] w-1/4 max-w-xs mb-4")
+        table_container = ui.column().classes("flex-1 w-3/4")
+
+        async def build_s3_tree(prefix: str = "", max_depth: int = 2, depth: int = 0):
+            # Recursively build a tree structure for S3 prefixes and objects
+            items = await run.io_bound(
+                S3Storage().list_items, prefix=prefix, max_keys=1000
+            )
+            folders = set()
+            files = []
+            for item in items:
+                key = item.key or ""
+                rel_key = key[len(prefix) :] if key.startswith(prefix) else key
+                if not rel_key:
+                    continue
+                parts = rel_key.split("/", 1)
+                if len(parts) == 2:
+                    folders.add(parts[0])
+                else:
+                    files.append(
+                        {"id": key, "label": rel_key, "icon": "insert_drive_file"}
+                    )
+            children = []
+            for folder in sorted(folders):
+                folder_prefix = f"{prefix}{folder}/"
+                node = {"id": folder_prefix, "label": folder, "icon": "folder"}
+                if depth < max_depth:
+                    sub_items = await build_s3_tree(folder_prefix, max_depth, depth + 1)
+                    if sub_items:
+                        node["children"] = sub_items
+                children.append(node)
+            children.extend(files)
+            return children
+
+        async def on_tree_select(e):
+            # When a folder is selected, update prefix and reload table
+            selected_prefix = e.args["id"]
+            if selected_prefix.endswith("/"):
+                app.storage.user["s3_prefix"] = selected_prefix
+                await load_items(prefix=selected_prefix)
+
+        async def render_tree():
+            tree_container.clear()
+            with tree_container:
+                ui.label("S3 Folder Structure").classes("text-subtitle2 mb-2")
+                # DEBUG: Show raw S3 items at root
+                items = await run.io_bound(
+                    S3Storage().list_items, prefix="", max_keys=1000
+                )
+                ui.label(f"DEBUG: {len(items)} items fetched from S3").classes(
+                    "text-xs text-gray-500"
+                )
+                if not items:
+                    ui.label("DEBUG: No items returned from S3.").classes(
+                        "text-xs text-red-500"
+                    )
+                else:
+                    for item in items[:10]:
+                        ui.label(f"repr: {repr(item)}").classes("text-xs text-gray-400")
+                tree_data = await build_s3_tree("")
+                ui.tree(
+                    tree_data,
+                    on_select=on_tree_select,
+                    label_key="label",
+                    id_key="id",
+                    icon_key="icon",
+                ).classes("w-full")
+
+        with main_row:
+            tree_container
+            table_container
+
         with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
             prefix_input = (
                 ui.input(
@@ -74,12 +149,13 @@ async def s3_bucket_page() -> None:
                 .props("outlined dense")
                 .classes("w-40")
             )
-            table_container = ui.column().classes("w-full")
 
-            async def load_items() -> None:
+            async def load_items(prefix=None):
                 table_container.clear()
 
-                prefix = str(prefix_input.value or "").strip()
+                # Use provided prefix (from tree) or input
+                if prefix is None:
+                    prefix = str(prefix_input.value or "").strip()
                 max_keys_raw = max_keys_input.value
                 try:
                     max_keys = int(max_keys_raw) if max_keys_raw else 200

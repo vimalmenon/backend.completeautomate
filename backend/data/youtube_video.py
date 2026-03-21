@@ -145,11 +145,11 @@ class YouTubeVideoDBData:
     summarized_transcript: str | None = None
     review: YouTubeVideoReviewData | None = None
     comment: str | None = None
+    metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
+    thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
     thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
         default_factory=list
     )
-    metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
-    thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
