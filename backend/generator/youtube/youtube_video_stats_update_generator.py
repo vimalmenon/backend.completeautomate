@@ -4,5 +4,5 @@ from backend.generator.base_generator import BaseGenerator
 
 class YouTubeVideoStatsUpdate(BaseGenerator):
 
-    def generate(self) -> tuple[JobsStatusEnum, dict | None]:
-        return JobsStatusEnum.IN_PROGRESS, None
+    def generate(self) -> tuple[JobsStatusEnum, dict]:
+        return JobsStatusEnum.IN_PROGRESS, {}

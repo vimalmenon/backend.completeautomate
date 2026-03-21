@@ -13,5 +13,5 @@ class YouTubeVideoJob(BaseJob):
             return (job_status, 0, task_data)
         if self.job.type == JobTypeEnum.YouTubeVideoStatsUpdater:
             job_status, task_data = YouTubeVideoStatsUpdate(job=self.job).generate()
-            return (job_status, 0, task_data)
+            return (job_status, 0, None)
         return (JobsStatusEnum.FAILED, 0, None)
