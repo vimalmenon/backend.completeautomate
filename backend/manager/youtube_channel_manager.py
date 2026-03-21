@@ -17,3 +17,6 @@ class YouTubeChannelManager:
 
     def update_channel(self, value: dict):
         self.channel_db.update_channel(value)
+
+    def get_channels(self) -> list[YouTubeChannelDBData]:
+        return self.channel_db.get_channels()

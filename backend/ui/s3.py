@@ -126,8 +126,6 @@ async def s3_bucket_page() -> None:
                     tree_data,
                     on_select=on_tree_select,
                     label_key="label",
-                    id_key="id",
-                    icon_key="icon",
                 ).classes("w-full")
 
         with main_row:

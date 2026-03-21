@@ -1,5 +1,7 @@
 from logging import getLogger
 
+from boto3.dynamodb.conditions import Key
+
 from backend.data import YouTubeChannelDBData
 from backend.database import DbManager
 from backend.enum import DbKeysEnum
@@ -33,6 +35,12 @@ class YouTubeChannelDB:
         if item:
             return YouTubeChannelDBData.to_cls(item)
         return None
+
+    def get_channels(self) -> list[YouTubeChannelDBData]:
+        results = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE)
+        )
+        return [YouTubeChannelDBData.to_cls(result) for result in results]
 
     def delete_channel(self) -> None:
         self.db_manager.remove_item(
