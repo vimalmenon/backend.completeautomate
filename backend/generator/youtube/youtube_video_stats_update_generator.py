@@ -1,0 +1,2 @@
+class YouTubeVideoStatsUpdate:
+    pass

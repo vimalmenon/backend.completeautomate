@@ -1,5 +1,5 @@
 from backend.enum import JobsStatusEnum, JobTypeEnum
-from backend.generator.youtube import YouTubeVideoGenerator
+from backend.generator import YouTubeVideoGenerator, YouTubeVideoStatsUpdate
 from backend.jobs.base_job import BaseJob
 
 
@@ -12,5 +12,6 @@ class YouTubeVideoJob(BaseJob):
             job_status, task_data = YouTubeVideoGenerator(job=self.job).generate()
             return (job_status, 0, task_data)
         if self.job.type == JobTypeEnum.YouTubeVideoStatsUpdater:
+            YouTubeVideoStatsUpdate()
             return (JobsStatusEnum.IN_PROGRESS, 0, None)
         return (JobsStatusEnum.FAILED, 0, None)
