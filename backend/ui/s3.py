@@ -35,7 +35,7 @@ def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> No
 
 
 def create_tree(items: list[S3Data] = []):
-    tree = {}
+    tree: dict = {}
     for item in items:
         node = tree
         parts = item.s3_key.split("/")
@@ -64,38 +64,6 @@ def create_tree(items: list[S3Data] = []):
         return result
 
     return to_list(tree)
-
-
-def build_tree(paths):
-    tree = {}
-    for parts in paths:
-        node = tree
-        for i, part in enumerate(parts):
-            if i == len(parts) - 1:
-                # It's a file
-                node.setdefault("__files__", []).append(part)
-            else:
-                node = node.setdefault(part, {})
-
-    def to_list(node):
-        result = []
-        for name, child in node.items():
-            if name == "__files__":
-                for fname in child:
-                    result.append({"name": fname, "id": fname, "type": "file"})
-            else:
-                result.append(
-                    {
-                        "name": name,
-                        "id": name,
-                        "type": "folder",
-                        "children": to_list(child),
-                    }
-                )
-        return result
-
-    return to_list(tree)
-
 
 async def on_tree_select(e, table_container, prefix_input, max_keys_input):
     selected_prefix = e.args["id"]
