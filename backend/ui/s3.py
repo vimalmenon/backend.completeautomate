@@ -170,9 +170,9 @@ async def s3_bucket_page() -> None:
         main_row = ui.row().classes("w-full items-start gap-6")
         tree_container = ui.column().classes("min-w-[260px] w-1/4 max-w-xs mb-4")
         table_container = ui.column().classes("flex-1 w-3/4")
-        # with main_row:
-        #     tree_container
-        #     table_container
+        with main_row:
+            tree_container
+            table_container
         with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
             prefix_input = (
                 ui.input(
