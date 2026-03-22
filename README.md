@@ -79,6 +79,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
+      - [ ] Create a local copy while sync
+        - [ ] prompt
+        - [ ] Channel
+        - [ ] Videos
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Add job to update YouTube Video Stats (Find the Best way)
       - [ ] Check if video need whole flow (Initial Videos doesn't need flow)
@@ -99,7 +103,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] GUI Enhancements (Top priority)
   - [x] Use `Job` instead of `Task`
-  - [ ] Remove the errors form UI
+  - [x] Remove the errors form UI
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI

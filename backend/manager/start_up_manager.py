@@ -9,6 +9,8 @@ from backend.helper.folder_helper.folder_helper import FolderHelper
 from backend.integration.storage.s3_storage import S3Storage
 from backend.manager.job_manager import JobManager
 from backend.manager.prompt_manager import PromptManager
+from backend.manager.youtube_channel_manager import YouTubeChannelManager
+from backend.manager.youtube_video_manager import YouTubeVideoManager
 
 logger = getLogger(__name__)
 
@@ -23,7 +25,9 @@ class StartUpManager:
     def end(self) -> None:
         self.__sync_prompts()
         self.__archive_old_jobs()
-        self.__show_jobs()
+        self.__sync_youtube_channels()
+        self.__sync_youtube_videos()
+        self.__show_active_jobs()
 
     def __add_start_up_file(self) -> None:
         for path in ["pickle/token.pickle", "json/client_secret.json"]:
@@ -66,7 +70,33 @@ class StartUpManager:
         S3Storage().upload_data(s3_data=s3_data, data=data)
         return True
 
-    def __show_jobs(self):
+    def __sync_youtube_channels(self) -> bool:
+        youtube_channels = YouTubeChannelManager(ref_id="").get_channels()
+        youtube_channels_data = [channel.to_json() for channel in youtube_channels]
+        s3_data = S3Data(
+            name="youtube_channels_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="youtube_channels_data.pickle"
+            ),
+        )
+        data = FolderHelper().create_pickle_data(data=youtube_channels_data)
+        S3Storage().upload_data(s3_data=s3_data, data=data)
+        return True
+
+    def __sync_youtube_videos(self) -> bool:
+        youtube_videos = YouTubeVideoManager(ref_id="").get_all_videos()
+        youtube_videos_data = [video.to_json() for video in youtube_videos]
+        s3_data = S3Data(
+            name="youtube_videos_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="youtube_videos_data.pickle"
+            ),
+        )
+        data = FolderHelper().create_pickle_data(data=youtube_videos_data)
+        S3Storage().upload_data(s3_data=s3_data, data=data)
+        return True
+
+    def __show_active_jobs(self):
         jobs = JobManager().get_all_active_jobs()
         data = [[job.id, job.type, job.status] for job in jobs]
         headers = ["ID", "Type", "Status"]
