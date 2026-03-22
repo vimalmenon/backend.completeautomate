@@ -80,16 +80,6 @@ async def render_tree(tree_container):
     with tree_container:
         ui.label("S3 Folder Structure").classes("text-subtitle2 mb-2")
         items = await run.io_bound(S3Storage().list_items, prefix="", max_keys=1000)
-        ui.label(f"DEBUG: {len(items)} items fetched from S3").classes(
-            "text-xs text-gray-500"
-        )
-        if not items:
-            ui.label("DEBUG: No items returned from S3.").classes(
-                "text-xs text-red-500"
-            )
-        else:
-            for item in items[:10]:
-                ui.label(f"repr: {repr(item)}").classes("text-xs text-gray-400")
         structured_tree = create_tree(items)
         ui.tree(
             structured_tree,
@@ -180,9 +170,9 @@ async def s3_bucket_page() -> None:
         main_row = ui.row().classes("w-full items-start gap-6")
         tree_container = ui.column().classes("min-w-[260px] w-1/4 max-w-xs mb-4")
         table_container = ui.column().classes("flex-1 w-3/4")
-        with main_row:
-            tree_container
-            table_container
+        # with main_row:
+        #     tree_container
+        #     table_container
         with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
             prefix_input = (
                 ui.input(

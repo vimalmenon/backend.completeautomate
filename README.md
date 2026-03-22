@@ -108,6 +108,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve the status of Video Page
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
+  - [ ] Improve the UI for S3 Page 
   - [ ] Option to upload image
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
