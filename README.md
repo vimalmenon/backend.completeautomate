@@ -95,13 +95,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] GUI Enhancements (Top priority)
-  - [x] Use `Job` instead of `Task`
-  - [x] Remove the errors form UI
+  - [x] Improve the status of Video Page
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
-  - [ ] Change the status of tasks from the Video Page
-  - [ ] Improve the status of Video Page
   - [ ] View images from S3 and Local
   - [ ] Button to download S3 Object to local
   - [ ] Improve the UI for S3 Page 
