@@ -80,9 +80,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Check if video need whole flow (Initial Videos doesn't need flow)
+      - [ ] Store the video status in Video DB
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Add job to update YouTube Video Stats (Find the Best way)
-      - [ ] Store the video status in Video DB
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
