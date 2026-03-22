@@ -68,6 +68,7 @@ class StartUpManager:
         )
         data = FolderHelper().create_pickle_data(data=prompts_data)
         S3Storage().upload_data(s3_data=s3_data, data=data)
+        FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
         return True
 
     def __sync_youtube_channels(self) -> bool:
@@ -81,6 +82,7 @@ class StartUpManager:
         )
         data = FolderHelper().create_pickle_data(data=youtube_channels_data)
         S3Storage().upload_data(s3_data=s3_data, data=data)
+        FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
         return True
 
     def __sync_youtube_videos(self) -> bool:
@@ -94,6 +96,7 @@ class StartUpManager:
         )
         data = FolderHelper().create_pickle_data(data=youtube_videos_data)
         S3Storage().upload_data(s3_data=s3_data, data=data)
+        FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
         return True
 
     def __show_active_jobs(self):
