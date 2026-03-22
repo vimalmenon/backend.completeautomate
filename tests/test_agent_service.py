@@ -22,7 +22,7 @@ class TestAgentService:
         mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
             prompt="Create 3 titles for {{ topic }} in {{ language }}.",
             system_message="You are a {{ role }} assistant.",
-            describe="",
+            description="",
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             ai=AIModelEnum.Grok,
@@ -48,7 +48,7 @@ class TestAgentService:
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             ai=AIModelEnum.Grok,
-            describe="",
+            description="",
             last_updated=datetime.now(),
         )
 

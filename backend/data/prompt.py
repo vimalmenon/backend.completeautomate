@@ -33,7 +33,7 @@ class PromptDBData:
     system_message: str
     task: PromptTaskEnum
     role: TeamEnum
-    describe: str
+    description: str
     prompt_data: PromptVersionDBData
     ai: AIModelEnum | AIImageModelEnum
     version: str = "LATEST"
@@ -50,7 +50,7 @@ class PromptDBData:
             "task": self.task.value,
             "role": self.role.role,
             "ai": self.ai.value,
-            "describe": self.describe,
+            "description": self.description,
             "version": self.version,
             "prompt_data": self.prompt_data.to_json(),
             "last_updated": self.last_updated.isoformat(),
@@ -67,7 +67,7 @@ class PromptDBData:
             version=data.get("version", "LATEST"),
             last_updated=datetime.fromisoformat(data["last_updated"]),
             # TODO Remove get after transformation
-            describe=data.get("describe", ""),
+            description=data.get("description", ""),
             prompt_data=PromptVersionDBData.to_cls(data.get("prompt_data", {})),
         )
 

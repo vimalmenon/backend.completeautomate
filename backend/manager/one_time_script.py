@@ -10,7 +10,7 @@ class OneTimeScript:
         self.ref_id = self.platform_db.get_platform_by_channel_id(
             channel_id=env.YOUTUBE_CHANNEL_ID
         )
-        self.video_db = YouTubeVideoManager(ref_id=self.ref_id)
+        self.video_db = YouTubeVideoManager(ref_id=self.ref_id or "")
 
     def start(self) -> bool:
         # Need to add when there is some transform data
