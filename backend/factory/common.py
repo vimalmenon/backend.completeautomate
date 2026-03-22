@@ -71,3 +71,8 @@ def pick_random_enum(enum_class: Type[T]) -> T:
         A random enum value.
     """
     return choice(list(enum_class))
+
+
+def fake_filename(extension: str = "txt") -> str:
+    """Generate a fake file name with the given extension (default: txt)."""
+    return faker.file_name(extension=extension)
