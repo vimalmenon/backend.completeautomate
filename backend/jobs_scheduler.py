@@ -2,7 +2,7 @@ import logging
 
 from backend.data import JobData
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
-from backend.manager import JobManager, StartUpManager
+from backend.manager import JobManager, OneTimeScript, StartUpManager
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ class JobScheduler:
         )
 
     def __transform_data(self) -> bool:
-        # Need to add when there is some transfrom data
+        OneTimeScript().start()
         return False
 
     def __run_test_script(self) -> bool:

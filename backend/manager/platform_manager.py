@@ -23,6 +23,7 @@ class PlatformManager:
         logger.info(f"Retrieving platform for channel_id: {channel_id}")
         try:
             ref_id = f"{PlatformEnum.YouTubeChannel.value}#{channel_id}"
+            # TODO  Need to fix the return type
             PlatformDB().get_data(ref_id)
             logger.info(f"Platform found for channel_id: {channel_id}")
             return ref_id
