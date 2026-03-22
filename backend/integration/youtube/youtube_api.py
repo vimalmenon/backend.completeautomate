@@ -447,6 +447,28 @@ class YouTubeAPI:
                 f"An error occurred while fetching video details: {str(e)}"
             )
 
+    def get_video_stats(self, video_id: str) -> Any:
+        try:
+            youtube = self.auth.get_authenticated_service()
+            request = youtube.videos().list(
+                part="statistics",
+                id=video_id,
+            )
+            response = request.execute()
+
+            if not response.get("items"):
+                raise AppException(f"Video with ID '{video_id}' not found")
+
+            video_data = response["items"][0]
+            logger.info(f"Video details retrieved successfully for ID: {video_id}")
+            return video_data
+
+        except Exception as e:
+            logger.error(f"An error occurred while fetching video details: {e}")
+            raise AppException(
+                f"An error occurred while fetching video details: {str(e)}"
+            )
+
     def get_transcript(
         self,
         video_id: str,

@@ -104,6 +104,8 @@ def add_prompt(
             system_message=system_message_value.strip(),
             task=PromptTaskEnum(selected_task),
             role=TeamEnum.from_value(selected_role),
+            describe="",
+            prompt_data={},
             ai=AIModelEnum(selected_ai),
             last_updated=datetime.now(),
         )
