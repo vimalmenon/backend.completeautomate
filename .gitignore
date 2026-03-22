@@ -113,6 +113,7 @@ venv.bak/
 
 # Application specific
 output/**/*
+.nicegui/**/*
 
 # Spyder project settings
 .spyderproject
