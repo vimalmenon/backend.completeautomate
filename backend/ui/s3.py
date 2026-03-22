@@ -167,7 +167,7 @@ async def s3_bucket_page() -> None:
         ui.separator()
         saved_prefix = app.storage.user.get("s3_prefix", "")
         saved_max_keys = app.storage.user.get("s3_max_keys", 200)
-        main_row = ui.row().classes("w-full items-start gap-6")
+        main_row = ui.column().classes("w-full items-start gap-6 flex-1")
         tree_container = ui.column().classes("min-w-[260px] w-1/4 max-w-xs mb-4")
         table_container = ui.column().classes("flex-1 w-3/4")
         with main_row:
