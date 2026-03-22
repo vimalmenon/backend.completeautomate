@@ -80,6 +80,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Store the video status in Video DB
+      - [ ] Excluded .nicegui from Git commit
       - [ ] Transform all the video data for new structure
       - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
       - [ ] Fix the Image Size for YouTube Thumbnail
