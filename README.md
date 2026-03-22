@@ -79,10 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
-      - [ ] Create a local copy while sync
-        - [ ] prompt
-        - [ ] Channel
-        - [ ] Videos
+      - [x] Create a local copy while sync
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Add job to update YouTube Video Stats (Find the Best way)
       - [ ] Check if video need whole flow (Initial Videos doesn't need flow)
