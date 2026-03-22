@@ -6,6 +6,7 @@ from typing import Any, Self
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
+from backend.enum import YouTubeVideoTaskEnum
 
 
 @dataclass
@@ -139,6 +140,7 @@ class YouTubeVideoDBData:
     title: str
     description: str
     thumbnail: str
+    status: YouTubeVideoTaskEnum
     tags: list[str]
     language: str
     stats: list[YouTubeVideoDBStats]
@@ -170,6 +172,7 @@ class YouTubeVideoDBData:
             thumbnail=data["thumbnail"],
             tags=data["tags"],
             language=data["language"],
+            status=data["status"] or YouTubeVideoTaskEnum.YouTubeVideoStart,
             transcript=data.get("transcript"),
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
@@ -204,6 +207,7 @@ class YouTubeVideoDBData:
             language=snippet["defaultLanguage"],
             last_updated_at=datetime.now(),
             stats=[stat],
+            status=item["status"],
         )
 
     def to_json(self) -> dict:
@@ -215,6 +219,7 @@ class YouTubeVideoDBData:
             "channel_id": self.channel_id,
             "thumbnail": self.thumbnail,
             "tags": self.tags,
+            "status": self.status,
             "language": self.language,
             "last_updated_at": self.last_updated_at.isoformat(),
             "stats": [stat.to_json() for stat in self.stats],

@@ -79,9 +79,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Improve features
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
-      - [x] Check if video need whole flow (Initial Videos doesn't need flow)
-      - [ ] Store the video status in Video DB
+      - [x] Check if video need whole flow (Initial videos doesn't need flow)
+      - [x] Store the video status in Video DB
+      - [ ] Transform all the video data
+      - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail)
       - [ ] Fix the Image Size for YouTube Thumbnail
+      - [ ] Show Stats for Channel as well
       - [ ] Add job to update YouTube Video Stats (Find the Best way)
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
