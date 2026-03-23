@@ -108,10 +108,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
-  - [ ] View images from S3 and Local
-  - [ ] Button to download S3 Object to local
-  - [ ] Improve the UI for S3 Page 
-  - [ ] Option to upload image
+  - [x] Improve the UI for S3 Page
+    - [ ] Tree on S3 to only show folder
+    - [ ] Display item based on the click
+    - [ ] Option to upload image
+    - [ ] Button to download S3 Object to local
+    - [ ] View images from S3 and Local
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
