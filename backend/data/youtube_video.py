@@ -146,7 +146,6 @@ class YouTubeVideoDBData:
     stats: list[YouTubeVideoDBStats]
     transcript: str | None = None
     summarized_transcript: str | None = None
-    review: YouTubeVideoReviewData | None = None
     comment: str | None = None
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)

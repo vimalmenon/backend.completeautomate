@@ -80,14 +80,16 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Store the video status in Video DB
-      - [ ] Script to upload from local
+      - [ ] Script to upload data from local to DB
       - [ ] Excluded .nicegui from Git commit
-      - [ ] Should be able to Test the Prompt generated
+      - [ ] Should be able to test the Prompt generated
       - [ ] Should use one data class for both prompt and prompt suggestions
       - [ ] Transform all the video data for new structure
+      - [ ] Transform the `Prompt Data`
+      - [ ] Improve on prompt suggester
       - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
       - [ ] Fix the Image Size for YouTube Thumbnail
-      - [ ] Show Stats for Channel as well
+      - [ ] Show stats for channel as well
       - [ ] Add job to update YouTube Video Stats (Find the Best way)
       - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Workflow improvement
@@ -95,11 +97,10 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Send Notification
         - [ ] Send Email
         - [ ] Send Signal
-        - [ ] Sens WhatsApp
+        - [ ] Send WhatsApp message
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
-  - [ ] Improve on prompt suggester
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
 - [ ] GUI Enhancements (Top priority)
   - [x] Improve the status of Video Page
@@ -114,12 +115,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
   - [ ] API to search the `Trends`
-  - [ ] Pointer for video to create
   - [ ] Generate the required images for presenting
   - [ ] Find next week topic
 - [ ] Create a pointer for YouTube Video
   - [ ] Create a images required
   - [ ] Create a pointers required
+  - [ ] Pointer for video to create
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
   - [ ] Basic pages
