@@ -167,40 +167,41 @@ async def s3_bucket_page() -> None:
         ui.separator()
         saved_prefix = app.storage.user.get("s3_prefix", "")
         saved_max_keys = app.storage.user.get("s3_max_keys", 200)
-        main_row = ui.row().classes("w-full items-start gap-6 flex-1")
-        tree_container = ui.column().classes("min-w-[260px] w-1/4 max-w-xs mb-4")
-        table_container = ui.column().classes("flex-1 w-3/4")
-        with main_row:
-            tree_container
-            table_container
-        with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
-            prefix_input = (
-                ui.input(
-                    label="Prefix",
-                    placeholder="images/ or json/",
-                    value=saved_prefix,
-                )
-                .props("outlined clearable dense")
-                .classes("min-w-[260px]")
-            )
-            max_keys_input = (
-                ui.number(label="Max Keys", value=saved_max_keys, min=1, max=5000)
-                .props("outlined dense")
-                .classes("w-40")
-            )
-            ui.button(
-                "Load Items",
-                icon="search",
-                on_click=lambda: load_items(
-                    table_container, prefix_input, max_keys_input
-                ),
-            ).props("color=primary")
-            ui.button(
-                "Download",
-                icon="download",
-                on_click=lambda: load_items(
-                    table_container, prefix_input, max_keys_input
-                ),
-            ).props("color=primary")
-            await load_items(table_container, prefix_input, max_keys_input)
-        await render_tree(tree_container)
+        with ui.row().classes("w-full items-start gap-6 flex-1"):
+            with ui.column().classes(
+                "min-w-[260px] w-1/4 max-w-xs mb-4 overflow-hidden overlay-hidden"
+            ) as tree_container:
+                await render_tree(tree_container)
+            with ui.column().classes("flex-1 w-3/4") as table_container:
+                with ui.row().classes("w-full items-end gap-3 my-4 flex-wrap"):
+                    prefix_input = (
+                        ui.input(
+                            label="Prefix",
+                            placeholder="images/ or json/",
+                            value=saved_prefix,
+                        )
+                        .props("outlined clearable dense")
+                        .classes("min-w-[260px]")
+                    )
+                    max_keys_input = (
+                        ui.number(
+                            label="Max Keys", value=saved_max_keys, min=1, max=5000
+                        )
+                        .props("outlined dense")
+                        .classes("w-40")
+                    )
+                    ui.button(
+                        "Load Items",
+                        icon="search",
+                        on_click=lambda: load_items(
+                            table_container, prefix_input, max_keys_input
+                        ),
+                    ).props("color=primary")
+                    ui.button(
+                        "Download",
+                        icon="download",
+                        on_click=lambda: load_items(
+                            table_container, prefix_input, max_keys_input
+                        ),
+                    ).props("color=primary")
+                    await load_items(table_container, prefix_input, max_keys_input)
