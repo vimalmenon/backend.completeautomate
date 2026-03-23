@@ -21,8 +21,6 @@ class StartUpManager:
 
     def end(self) -> None:
         self.__archive_old_jobs()
-        self.__sync_youtube_channels()
-        self.__sync_youtube_videos()
         self.__show_active_jobs()
 
     def __add_start_up_file(self) -> None:
