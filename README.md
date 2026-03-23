@@ -83,6 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Script to upload from local
       - [ ] Excluded .nicegui from Git commit
       - [ ] Should be able to Test the Prompt generated
+      - [ ] Should use one data class for both prompt and prompt suggestions
       - [ ] Transform all the video data for new structure
       - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
       - [ ] Fix the Image Size for YouTube Thumbnail
@@ -113,6 +114,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Use Google trends
   - [ ] API to search the `Trends`
   - [ ] Pointer for video to create
+  - [ ] Generate the required images for presenting
   - [ ] Find next week topic
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
@@ -169,7 +171,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - Scrape websites for contacts and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
-- Backup DB data to S3
 
 </details>
 
