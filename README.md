@@ -80,6 +80,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Store the video status in Video DB
+      - [ ] Script to upload from local
       - [ ] Excluded .nicegui from Git commit
       - [ ] Should be able to Test the Prompt generated
       - [ ] Transform all the video data for new structure
