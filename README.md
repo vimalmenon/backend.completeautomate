@@ -78,8 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
   - [ ] App revamp
-      - [x] Excluded .nicegui from Git commit
-      - [x] Transform all the video data for new structure
       - [ ] Should be able to run the GUI and Flow Offline
         - [ ] Check Offline and Upload the data
       - [ ] Script to upload data from local to DB
