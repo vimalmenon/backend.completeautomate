@@ -5,6 +5,7 @@ from backend.data import (
     YouTubeVideoThumbnailData,
 )
 from backend.database import YouTubeVideoDB
+from backend.enum import PlatformEnum
 
 
 class YouTubeVideoManager:
@@ -15,6 +16,10 @@ class YouTubeVideoManager:
 
     def get_video(self) -> YouTubeVideoDBData | None:
         return self.video_db.fetch_video_from_db()
+
+    def get_videos_by_channel(self, channel_id: str) -> list[YouTubeVideoDBData]:
+        channel_value = f"{PlatformEnum.YouTubeVideo}#{channel_id}"
+        return self.video_db.fetch_videos_by_channel(channel_value)
 
     def get_all_videos(self) -> list[YouTubeVideoDBData]:
         return self.video_db.get_all_videos_from_db()
