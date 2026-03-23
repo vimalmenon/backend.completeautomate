@@ -48,11 +48,11 @@ class YouTubeChannelOnboardingJob(BaseGenerator):
         return JobsStatusEnum.IN_PROGRESS, None
 
     def __create_channel_platform_if_not_exists(self, channel_id: str) -> str:
-        if ref_id := PlatformManager().get_platform_by_channel_id(channel_id):
+        if platform := PlatformManager().get_platform_by_channel_id(channel_id):
             logger.info(
-                f"Platform already exists for channel_id: {channel_id}, ref_id: {ref_id}"
+                f"Platform already exists for channel_id: {channel_id}, ref_id: {platform.ref_id}"
             )
-            return ref_id
+            return platform.ref_id
         else:
             channel_data = PlatformManager().create_channel_data(channel_id)
             logger.info(f"Creating new platform for channel_id: {channel_id}")

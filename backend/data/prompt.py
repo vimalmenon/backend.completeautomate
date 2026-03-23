@@ -69,8 +69,7 @@ class PromptDBData:
             ai=AIModelEnum(data["ai"]),
             use_version=int(data["use_version"]),
             last_updated=datetime.fromisoformat(data["last_updated"]),
-            # TODO Remove get after transformation
-            description=data.get("description", ""),
+            description=data["description"],
             versions=[
                 PromptVersionDBData.to_cls(version) for version in data["versions"]
             ],

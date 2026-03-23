@@ -95,6 +95,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Send Notification
         - [ ] Send Email
         - [ ] Send Signal
+        - [ ] Sens WhatsApp
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
@@ -161,7 +162,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - App / API Integration
   - Instagram
   - Twitter
-  - Redit
+  - Reddit
   - TikTok
   - LinkedIn
   - Email
@@ -170,7 +171,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - YouTube comments analysis
 - Remove teams as it looks of no use
 - Create Videos
-- Notify user on `REVIEW` via email, Telegram or WhatsApp
 - Scrape websites for contacts and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
