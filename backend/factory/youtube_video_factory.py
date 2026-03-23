@@ -1,4 +1,5 @@
 from backend.data import YouTubeVideoDBData
+from backend.enum import YouTubeVideoTaskEnum
 from backend.factory.common import fake_date, faker
 
 
@@ -11,6 +12,7 @@ def youtube_video_factory(**kwargs) -> YouTubeVideoDBData:
         description=faker.name(),
         thumbnail=faker.text(),
         tags=[],
+        status=YouTubeVideoTaskEnum.YouTubeVideoStart,
         language=faker.name(),
         stats=[],
     )

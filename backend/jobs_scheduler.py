@@ -17,6 +17,7 @@ class JobScheduler:
         job_id: str | None = None,
         transform: bool | None = False,
         test: bool | None = False,
+        upload: bool | None = False,
     ) -> None:
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
@@ -32,6 +33,11 @@ class JobScheduler:
             logger.info("Starting test script execution")
             self.__run_test_script()
             logger.info("Completed test script execution")
+            return
+        if upload:
+            logger.info("Starting upload script execution")
+            self.__run_upload_script()
+            logger.info("Completed upload script execution")
             return
         self.startup_manager.start()
         jobs = self.job_manager.get_all_active_jobs()
@@ -68,10 +74,13 @@ class JobScheduler:
         )
 
     def __transform_data(self) -> bool:
-        OneTimeScript().start()
+        OneTimeScript().transform()
         return False
 
     def __run_test_script(self) -> bool:
+        return False
+
+    def __run_upload_script(self) -> bool:
         return False
 
     def __run_job_by_id(self, job_id: str) -> None:
