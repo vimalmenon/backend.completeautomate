@@ -2,7 +2,7 @@ import logging
 
 from backend.data import JobData
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
-from backend.manager import JobManager, OneTimeScript, StartUpManager
+from backend.manager import DataManager, JobManager, OneTimeScript, StartUpManager
 
 logger = logging.getLogger(__name__)
 
@@ -16,8 +16,8 @@ class JobScheduler:
         self,
         job_id: str | None = None,
         transform: bool | None = False,
-        test: bool | None = False,
         upload: bool | None = False,
+        download: bool | None = False,
     ) -> None:
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
@@ -29,11 +29,10 @@ class JobScheduler:
             self.__transform_data()
             logger.info("Completed job transformation process")
             return
-        if test:
-            logger.info("Starting test script execution")
-            self.__run_test_script()
-            logger.info("Completed test script execution")
-            return
+        if download:
+            logger.info("Starting download script execution")
+            self.__run_download_script()
+            logger.info("Completed download script execution")
         if upload:
             logger.info("Starting upload script execution")
             self.__run_upload_script()
@@ -77,11 +76,11 @@ class JobScheduler:
         OneTimeScript().transform()
         return False
 
-    def __run_test_script(self) -> bool:
-        return False
-
     def __run_upload_script(self) -> bool:
-        return False
+        return DataManager().upload()
+
+    def __run_download_script(self) -> bool:
+        return DataManager().download()
 
     def __run_job_by_id(self, job_id: str) -> None:
         job = self.job_manager.get_job_by_id(job_id)

@@ -19,11 +19,15 @@ def main():
     parser.add_argument("--transform", dest="transform", required=False)
     parser.add_argument("--test", dest="test", required=False)
     parser.add_argument("--upload", dest="upload", required=False)
+    parser.add_argument("--download", dest="download", required=False)
 
     args = parser.parse_args()
 
     JobScheduler().start(
-        job_id=args.job_id, transform=args.transform, test=args.test, upload=args.upload
+        job_id=args.job_id,
+        transform=args.transform,
+        upload=args.upload,
+        download=args.download,
     )
 
     logger.info("Application completed successfully")

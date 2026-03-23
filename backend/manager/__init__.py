@@ -1,3 +1,4 @@
+from backend.manager.data_manager import DataManager
 from backend.manager.job_manager import JobManager
 from backend.manager.one_time_script import OneTimeScript
 from backend.manager.platform_manager import PlatformManager
@@ -14,4 +15,5 @@ __all__ = [
     "PromptManager",
     "JobManager",
     "OneTimeScript",
+    "DataManager",
 ]
