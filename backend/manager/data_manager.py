@@ -27,8 +27,7 @@ class DataManager:
             ),
         )
         data = FolderHelper().create_pickle_data(data=prompts_data)
-        S3Storage().upload_data(s3_data=s3_data, data=data)
-        FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
 
     def __download_youtube_channels(self):
         youtube_channels = YouTubeChannelManager(ref_id="").get_channels()
@@ -40,8 +39,7 @@ class DataManager:
             ),
         )
         data = FolderHelper().create_pickle_data(data=youtube_channels_data)
-        S3Storage().upload_data(s3_data=s3_data, data=data)
-        FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
 
     def __download_youtube_videos(self):
         youtube_videos = YouTubeVideoManager(ref_id="").get_all_videos()
@@ -53,5 +51,8 @@ class DataManager:
             ),
         )
         data = FolderHelper().create_pickle_data(data=youtube_videos_data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+
+    def __create_and_upload_pickle_file(self, s3_data: S3Data, data: bytes):
         S3Storage().upload_data(s3_data=s3_data, data=data)
         FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
