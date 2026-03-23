@@ -126,10 +126,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Basic pages
   - [ ] Show all features
   - [ ] Update workflow
-- [ ] Review the Video based on Audio
-  - [ ] Check for grammar
-  - [ ] Points to improve 
-  - [ ] What went well
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
@@ -148,7 +144,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-
+- [ ] Review the Video based on Audio
+  - [ ] Check for grammar
+  - [ ] Points to improve 
+  - [ ] What went well
 - Naming convention for generator
   - Updater (Update data to source)
   - Suggester (Suggest for Something mostly agent)
