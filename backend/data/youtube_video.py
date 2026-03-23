@@ -134,7 +134,6 @@ class YouTubeVideoThumbnailData:
 @dataclass
 class YouTubeVideoDBData:
     ref_id: str
-    channel_id: str
     published_at: datetime
     last_updated_at: datetime
     title: str
@@ -166,7 +165,6 @@ class YouTubeVideoDBData:
             ref_id=data["ref_id"],
             published_at=datetime.fromisoformat(data["published_at"]),
             title=data["title"],
-            channel_id=data["channel_id"],
             description=data["description"],
             thumbnail=data["thumbnail"],
             tags=data["tags"],
@@ -202,7 +200,6 @@ class YouTubeVideoDBData:
             description=snippet["description"],
             thumbnail=snippet["thumbnails"].get("default", {}).get("url"),
             tags=snippet.get("tags", []),
-            channel_id=item["channel_id"],
             language=snippet["defaultLanguage"],
             last_updated_at=datetime.now(),
             stats=[stat],
@@ -215,7 +212,6 @@ class YouTubeVideoDBData:
             "title": self.title,
             "description": self.description,
             "published_at": self.published_at.isoformat(),
-            "channel_id": self.channel_id,
             "thumbnail": self.thumbnail,
             "tags": self.tags,
             "status": self.status,

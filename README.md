@@ -80,6 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] App revamp
       - [x] Make Workflow as `Archive` tasks after 1 week
       - [x] Store the video status in Video DB
+      - [ ] Should be able to run the GUI and Flow Offline
+        - [ ] Check Offline and Upload the data
       - [ ] Script to upload data from local to DB
       - [ ] Excluded .nicegui from Git commit
       - [ ] Should be able to test the Prompt generated
@@ -90,8 +92,9 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
       - [ ] Fix the Image Size for YouTube Thumbnail
       - [ ] Show stats for channel as well
-      - [ ] Add job to update YouTube Video Stats (Find the Best way)
-      - [ ] Should be able to run the GUI and Flow Offline
+      - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
+        - [ ] Stats to be taken from created Videos and Channel
+        - [ ] Run only after 3 Days
       - [ ] Workflow improvement
         - [ ] Ability to run the agent tasks in parallel
       - [ ] Send Notification
@@ -102,6 +105,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
+  - [ ] Remove the deleted Videos
 - [ ] GUI Enhancements (Top priority)
   - [x] Improve the status of Video Page
   - [ ] View `Job` detail based on the Job
@@ -111,14 +115,15 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Button to download S3 Object to local
   - [ ] Improve the UI for S3 Page 
   - [ ] Option to upload image
+- [ ] Create Twitter Account
+  - [ ] Create API for POST
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
   - [ ] API to search the `Trends`
-  - [ ] Generate the required images for presenting
   - [ ] Find next week topic
 - [ ] Create a pointer for YouTube Video
-  - [ ] Create a images required
+  - [ ] Generate the required images for presenting
   - [ ] Create a pointers required
   - [ ] Pointer for video to create
 - [ ] Build an Mobile APP
