@@ -81,8 +81,10 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Check Offline and Upload the data
     - [ ] Should be able to test the Prompt generated
+    - [ ] Job to show error message
     - [ ] Should use one data class for both prompt and prompt suggestions
     - [ ] Transform the `Prompt Data`
+    - [ ] Need a database for Mocked Data
     - [ ] Improve on prompt suggester
     - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
     - [ ] Fix the Image Size for YouTube Thumbnail
@@ -102,7 +104,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
   - [ ] Remove the deleted Videos
 - [ ] GUI Enhancements (Top priority)
-  - [x] Improve the status of Video Page
+  - [ ] Improve the status of Video Page
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
@@ -110,8 +112,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Button to download S3 Object to local
   - [ ] Improve the UI for S3 Page 
   - [ ] Option to upload image
-- [ ] Create Twitter Account
-  - [ ] Create API for POST
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
