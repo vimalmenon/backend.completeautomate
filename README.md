@@ -116,6 +116,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Pointer for video to create
   - [ ] Generate the required images for presenting
   - [ ] Find next week topic
+- [ ] Create a pointer for YouTube Video
+  - [ ] Create a images required
+  - [ ] Create a pointers required
 - [ ] Build an Mobile APP
   - [ ] Basic Auth
   - [ ] Basic pages

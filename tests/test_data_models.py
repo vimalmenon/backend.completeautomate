@@ -181,10 +181,12 @@ class TestPromptDBDataCopy:
         original = PromptDBData(
             prompt="test prompt",
             system_message="test system message",
+            description="",
+            versions=[],
             task=PromptTaskEnum.YouTubeVideoSummarization,
             role=TeamEnum.OWNER,
             ai=AIModelEnum.Grok,
-            version="1.0",
+            use_version=1,
         )
 
         # Create a copy
@@ -199,18 +201,20 @@ class TestPromptDBDataCopy:
         assert copied.task == original.task
         assert copied.role == original.role
         assert copied.ai == original.ai
-        assert copied.version == original.version
+        assert copied.versions == original.versions
         assert copied.last_updated == original.last_updated
 
     def test_prompt_db_data_copy_modification(self) -> None:
         """Test that modifying copy doesn't affect original."""
         original = PromptDBData(
             prompt="test prompt",
+            description="",
+            versions=[],
+            use_version=1,
             system_message="test system message",
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.OWNER,
             ai=AIModelEnum.Deepseek,
-            version="1.0",
         )
 
         # Create a copy

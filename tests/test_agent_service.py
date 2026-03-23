@@ -23,6 +23,8 @@ class TestAgentService:
             prompt="Create 3 titles for {{ topic }} in {{ language }}.",
             system_message="You are a {{ role }} assistant.",
             description="",
+            versions=[],
+            use_version=1,
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             ai=AIModelEnum.Grok,
@@ -48,6 +50,8 @@ class TestAgentService:
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             ai=AIModelEnum.Grok,
+            versions=[],
+            use_version=1,
             description="",
             last_updated=datetime.now(),
         )

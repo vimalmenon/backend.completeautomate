@@ -9,13 +9,15 @@ from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum, TeamEnum
 class PromptVersionDBData:
     prompt: str
     system_message: str
-    version: str
+    version: int
+    comment: str
 
     def to_json(self) -> dict:
         return {
             "prompt": self.prompt,
             "system_message": self.system_message,
-            "version": self.version,
+            "version": int(self.version),
+            "comment": self.comment,
         }
 
     @classmethod
@@ -23,7 +25,8 @@ class PromptVersionDBData:
         return cls(
             prompt=data["prompt"],
             system_message=data["system_message"],
-            version=data["version"],
+            version=int(data["version"]),
+            comment=data["comment"],
         )
 
 
@@ -34,16 +37,15 @@ class PromptDBData:
     task: PromptTaskEnum
     role: TeamEnum
     description: str
-    prompt_data: PromptVersionDBData
+    versions: list[PromptVersionDBData]
     ai: AIModelEnum | AIImageModelEnum
-    version: str = "LATEST"
+    use_version: int
     last_updated: datetime = datetime.now()
 
     def get_agent_name(self) -> str:
         return self.role.display_name
 
     def to_json(self) -> dict:
-
         return {
             "prompt": self.prompt,
             "system_message": self.system_message,
@@ -51,24 +53,27 @@ class PromptDBData:
             "role": self.role.role,
             "ai": self.ai.value,
             "description": self.description,
-            "version": self.version,
-            "prompt_data": self.prompt_data.to_json(),
+            "use_version": self.use_version,
+            "versions": [version.to_json() for version in self.versions],
             "last_updated": self.last_updated.isoformat(),
         }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
+
         return cls(
             prompt=data["prompt"],
             system_message=data["system_message"],
             task=PromptTaskEnum(data["task"]),
             role=TeamEnum.from_value(data["role"]),
             ai=AIModelEnum(data["ai"]),
-            version=data.get("version", "LATEST"),
+            use_version=int(data["use_version"]),
             last_updated=datetime.fromisoformat(data["last_updated"]),
             # TODO Remove get after transformation
             description=data.get("description", ""),
-            prompt_data=PromptVersionDBData.to_cls(data.get("prompt_data", {})),
+            versions=[
+                PromptVersionDBData.to_cls(version) for version in data["versions"]
+            ],
         )
 
     def copy(self) -> Self:

@@ -104,10 +104,11 @@ def add_prompt(
             system_message=system_message_value.strip(),
             task=PromptTaskEnum(selected_task),
             role=TeamEnum.from_value(selected_role),
-            describe="",
-            prompt_data={},
+            description="",
+            versions=[],
             ai=AIModelEnum(selected_ai),
             last_updated=datetime.now(),
+            use_version=1,
         )
         PromptDB().save_prompt(prompt_data)
         ui.notify("Prompt created", type="positive")
