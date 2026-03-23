@@ -91,12 +91,12 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
       - [ ] Show stats for channel as well
       - [ ] Stats to be taken from created Videos and Channel
-      - [ ] Run only after 3 Days
+      - [ ] Run after every 3 Days
     - [ ] Workflow improvement
       - [ ] Ability to run the agent tasks in parallel
     - [ ] Send Notification
-      - [ ] Send Email
       - [ ] Send Signal
+      - [ ] Send Email
       - [ ] Send WhatsApp message
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
@@ -111,8 +111,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Improve the UI for S3 Page
     - [ ] Tree on S3 to only show folder
     - [ ] Display item based on the click
-    - [ ] Option to upload image
-    - [ ] Button to download S3 Object to local
+    - [ ] Ability to upload image
+    - [ ] Ability to download S3 Object to local
     - [ ] View images from S3 and Local
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
@@ -150,12 +150,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Check for grammar
   - [ ] Points to improve 
   - [ ] What went well
-- Naming convention for generator
-  - Updater (Update data to source)
-  - Suggester (Suggest for Something mostly agent)
-  - Creator (Create Data on DB)
-  - Analyzer (Analysis the data)
-  - Generator (Generate Image / Video Sound)
+
 
 **Ideas / Low Priority:**
 
