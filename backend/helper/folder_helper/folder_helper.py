@@ -55,9 +55,13 @@ class FolderHelper:
         return pickle.dumps(data)
 
     def unpack_pickle_data(self, path: str) -> Any:
-        # normalized_path = Path(path)
-        # with normalized_path.open("r") as pickle_file:
-        #     pickle_file.read(serialized_data)
-        # TODO need to check implementation
-        # return pickle.loads(path)
-        pass
+        """
+        Load and return the object from a pickle file at the given path.
+        Raises FileNotFoundError if the file does not exist.
+        Raises pickle.UnpicklingError if the file is not a valid pickle.
+        """
+        normalized_path = Path(path)
+        if not normalized_path.is_file():
+            raise FileNotFoundError(f"Pickle file not found: {normalized_path}")
+        with normalized_path.open("rb") as pickle_file:
+            return pickle.load(pickle_file)
