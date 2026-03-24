@@ -101,8 +101,9 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Send Signal
       - [ ] Send Email
       - [ ] Send WhatsApp message
-  - [ ] Send the logs to some common place (AWS Logger)
-  - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
+  - [ ] Loggers
+    - [ ] Send the logs to some common place (AWS Logger)
+    - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Remove the deleted Videos
   - [ ] Make a Webpage based on the post
