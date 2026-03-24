@@ -32,7 +32,7 @@ class DataManager:
             path=s3_data.downloaded_path
         )
         for prompt in prompts:
-            PromptManager().add_prompt(data=prompt) 
+            PromptManager().add_prompt(data=prompt)
 
     def __upload_youtube_channel(self) -> None:
         s3_data = S3Data(
