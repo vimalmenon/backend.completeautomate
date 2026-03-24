@@ -85,7 +85,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Job to show error message
     - [ ] Should use one data class for both prompt and prompt suggestions
     - [ ] Transform the `Prompt Data`
-    - [ ] Need a database for Mocked Data
+    - [ ] Need a database for Mocked API
     - [ ] Improve on prompt suggester
     - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
     - [ ] Fix the Image Size for YouTube Thumbnail

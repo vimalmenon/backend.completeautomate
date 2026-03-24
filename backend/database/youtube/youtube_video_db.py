@@ -28,13 +28,13 @@ class YouTubeVideoDB:
         return None
 
     def fetch_videos_by_channel(self, secondary: str) -> list[YouTubeVideoDBData]:
-        # TODO Need to fix this, find exact expression
-        # results = self.db_manager.query_items(
-        #     Key(DbKeysEnum.Primary.value).eq(self.TABLE)
-        #     and key(DbKeysEnum.Secondary.value).begins_with(secondary)
-        # )
-        # return [YouTubeVideoDBData.to_cls(result) for result in results]
-        return []
+        results = self.db_manager.query_items(
+            keys=(
+                Key(DbKeysEnum.Primary.value).eq(self.TABLE)
+                & Key(DbKeysEnum.Secondary.value).begins_with(secondary)
+            )
+        )
+        return [YouTubeVideoDBData.to_cls(result) for result in results]
 
     def delete_video(self, video_id: str) -> None:
         self.db_manager.remove_item(
