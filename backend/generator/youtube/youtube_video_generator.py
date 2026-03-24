@@ -33,7 +33,6 @@ logger = logging.getLogger(__name__)
 
 
 class YouTubeVideoGenerator(BaseGenerator):
-    SKIP_REVIEW = True
 
     def __init__(self, job: JobData):
         super().__init__(job=job)
@@ -299,7 +298,22 @@ class YouTubeVideoGenerator(BaseGenerator):
         raise AppException("More than one thumbnail was selected")
 
     def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> None:
-        pass
+        # TODO need to fix this
+        service = AgentService(
+            prompt_task=PromptTaskEnum.YouTubeVideoCommunityPost,
+            task_id=f"{str(self.job.id)}_community_post",
+            data=YouTubeThumbnailImageGenerationPromptData(
+                title=video_from_db.title,
+                description=video_from_db.description,
+                video_summary=video_from_db.summarized_transcript or "",
+            ).to_json(),
+        )
+        agent = GeneralAgent(
+            service,
+            response_format=ImagePromptsListRequest,
+        )
+        result = agent.invoke()
+        return result["system_message"]
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
