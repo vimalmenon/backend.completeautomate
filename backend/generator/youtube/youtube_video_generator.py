@@ -76,6 +76,7 @@ class YouTubeVideoGenerator(BaseGenerator):
                 "Uploading thumbnail and reviewing video for job %s", self.job.id
             )
             self.__upload_thumbnail(video_from_db=self.video_from_db)
+            self.__create_community_post(video_from_db=self.video_from_db)
             return self.__job_complete()
         raise AppException("Invalid task for YouTube video generator")
 
@@ -296,6 +297,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
+
+    def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> None:
+        pass
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete

@@ -34,6 +34,7 @@ from backend.data.youtube_video import (
     YouTubeVideoDBData,
     YouTubeVideoMetadataData,
     YouTubeVideoReviewerJobData,
+    YouTubeVideoStatsUpdateJobData,
     YouTubeVideoThumbnailData,
 )
 
@@ -64,4 +65,5 @@ __all__ = [
     "YouTubeChannelVideoCheckerTaskData",
     "YouTubeVideoTaskData",
     "YouTubeVideoThumbnailData",
+    "YouTubeVideoStatsUpdateJobData",
 ]

@@ -10,6 +10,24 @@ from backend.enum import YouTubeVideoTaskEnum
 
 
 @dataclass
+class YouTubeVideoStatsUpdateJobData:
+    ref_id: str
+
+    def to_json(self) -> dict:
+        return {"ref_id": self.ref_id}
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(ref_id=data["ref_id"])
+
+    @cached_property
+    def platform(self) -> PlatformDBData:
+        from backend.database.platform.platform_database import PlatformDB
+
+        return PlatformDB().get_data(self.ref_id)
+
+
+@dataclass
 class YouTubeVideoReviewerJobData:
     ref_id: str
     transcript: str
