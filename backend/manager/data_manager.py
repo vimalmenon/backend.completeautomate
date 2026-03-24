@@ -13,12 +13,14 @@ class DataManager:
         self.__upload_the_prompt()
         self.__upload_youtube_channel()
         self.__upload_youtube_videos()
+        self.__upload_to_s3()
         return True
 
     def download(self) -> bool:
         self.__download_prompts()
         self.__download_youtube_channels()
         self.__download_youtube_videos()
+        self.__download_for_s3()
         return True
 
     def __upload_the_prompt(self) -> None:
@@ -54,6 +56,10 @@ class DataManager:
         videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         for video in videos:
             YouTubeVideoManager(ref_id="").save_data(video)
+
+    def __upload_to_s3(self):
+        # TODO Need to implement
+        pass
 
     def __download_prompts(self) -> None:
         prompts = PromptManager().get_prompts()
@@ -92,6 +98,10 @@ class DataManager:
         )
         data = FolderHelper().create_pickle_data(data=youtube_videos_data)
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+
+    def __download_for_s3(self):
+        # TODO Need to implement
+        pass
 
     def __create_and_upload_pickle_file(self, s3_data: S3Data, data: bytes):
         S3Storage().upload_data(s3_data=s3_data, data=data)

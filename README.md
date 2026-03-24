@@ -78,12 +78,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
   - Offline Feature
-    - [ ] Script to upload data from local to DB
     - [ ] Script to download data from db to local
-    - [ ] Should be able to list and show S3 keep some offline data
+    - [ ] Script to upload data from local to DB
+    - [ ] Should be able to list and show S3 items for offline data
     - [ ] Should be able to run the GUI and Flow Offline
     - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
+    - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Improve on prompt suggester
     - [ ] Transform the `Prompt Data`
     - [ ] Should be able to test the Prompt generated
@@ -148,11 +149,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
 - [ ] Test Coverage
-  - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [ ] Review the Video based on Audio
+- [ ] Review the Video based on Audio (No Longer Needed)
   - [ ] Check for grammar
   - [ ] Points to improve 
   - [ ] What went well
@@ -177,6 +177,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - Scrape websites for contacts and potential client
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
+- Set Up N8N
 
 </details>
 
