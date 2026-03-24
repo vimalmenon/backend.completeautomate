@@ -80,7 +80,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - Offline Feature
     - [ ] Script to upload data from local to DB
     - [ ] Script to download data from db to local
-    - [ ] Should be able to list keep some offline data
+    - [ ] Should be able to list and show S3 keep some offline data
     - [ ] Should be able to run the GUI and Flow Offline
     - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
@@ -89,10 +89,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
-  - [ ] Fix the Image Size for YouTube Thumbnail
-  - [ ] Start multiple tasks in parallel
-  - [ ] `JobData` to show error message
   - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
     - [ ] Show stats for channel as well
     - [ ] Stats to be taken from created Videos and Channel
@@ -106,6 +102,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Loggers
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
+  - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
+  - [ ] Fix the Image Size for YouTube Thumbnail
+  - [ ] Start multiple tasks in parallel
+  - [ ] `JobData` to show error message
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Remove the deleted Videos
   - [ ] Make a Webpage based on the post
