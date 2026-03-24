@@ -36,6 +36,7 @@ class JobScheduler:
             logger.info("Starting download script execution")
             self.__run_download_script()
             logger.info("Completed download script execution")
+            return
         if upload:
             logger.info("Starting upload script execution")
             self.__run_upload_script()
