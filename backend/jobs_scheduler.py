@@ -2,6 +2,7 @@ import logging
 
 from backend.config.env import env
 from backend.data import JobData
+from backend.exception.app_exception import AppException
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
 from backend.manager import DataManager, JobManager, StartUpManager
 
@@ -80,6 +81,7 @@ class JobScheduler:
     def __run_upload_script(self) -> bool:
         if env.OFFLINE:
             return self.data_manager.upload()
+        raise AppException("Upload is only available when Offline")
 
     def __run_download_script(self) -> bool:
         return self.data_manager.download()
