@@ -85,6 +85,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
+  - [ ] Create Community Post
+    - [ ] Add workflow for community post
+    - [ ] Give multiple options to community post
   - [ ] Improve on prompt suggester
     - [ ] Transform the `Prompt Data`
     - [ ] Should be able to test the Prompt generated

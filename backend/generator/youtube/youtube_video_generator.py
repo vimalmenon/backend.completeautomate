@@ -293,7 +293,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.youtube_manager.update_thumbnail(
                 thumbnail_url=updated_youtube_response.thumbnail
             )
-            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoCommunityPost
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
 
