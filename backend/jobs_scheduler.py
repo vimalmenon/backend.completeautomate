@@ -2,7 +2,7 @@ import logging
 
 from backend.data import JobData
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
-from backend.manager import DataManager, JobManager, OneTimeScript, StartUpManager
+from backend.manager import DataManager, JobManager, StartUpManager
 
 logger = logging.getLogger(__name__)
 
@@ -11,6 +11,7 @@ class JobScheduler:
     def __init__(self):
         self.job_manager = JobManager()
         self.startup_manager = StartUpManager()
+        self.data_manager = DataManager()
 
     def start(
         self,
@@ -73,14 +74,13 @@ class JobScheduler:
         )
 
     def __transform_data(self) -> bool:
-        OneTimeScript().transform()
-        return False
+        return self.data_manager.transform()
 
     def __run_upload_script(self) -> bool:
-        return DataManager().upload()
+        return self.data_manager.upload()
 
     def __run_download_script(self) -> bool:
-        return DataManager().download()
+        return self.data_manager.download()
 
     def __run_job_by_id(self, job_id: str) -> None:
         job = self.job_manager.get_job_by_id(job_id)

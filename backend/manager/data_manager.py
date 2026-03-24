@@ -23,6 +23,10 @@ class DataManager:
         self.__download_for_s3()
         return True
 
+    def transform(self) -> bool:
+        # Need to add when there is some transform data
+        return False
+
     def __upload_the_prompt(self) -> None:
         s3_data = S3Data(
             name="prompt_data.pickle",
