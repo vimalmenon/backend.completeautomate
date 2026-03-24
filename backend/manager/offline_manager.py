@@ -1,2 +1,4 @@
 class OfflineManager:
-    pass
+
+    def start(self):
+        pass
