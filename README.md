@@ -83,17 +83,18 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Check Offline and Upload the data
     - [ ] Start multiple tasks in parallel
     - [ ] Job data to show error message
-    - [ ] Transform the `Prompt Data`
     - [ ] Need a database for Mocked API
     - [ ] Improve on prompt suggester
+      - [ ] Transform the `Prompt Data`
       - [ ] Should be able to test the Prompt generated
       - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
+      - [ ] Add one shot / few shot prompt examples for image and other generation tasks
     - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
     - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
       - [ ] Show stats for channel as well
       - [ ] Stats to be taken from created Videos and Channel
-      - [ ] Run after every 3 Days
+      - [ ] Update after every 3 Days
     - [ ] Workflow improvement
       - [ ] Ability to run the agent tasks in parallel
     - [ ] Send Notification
@@ -103,7 +104,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Add playlist details to YouTube Video DB
-  - [ ] Add one shot / few shot prompt examples for image and other generation tasks
   - [ ] Remove the deleted Videos
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
