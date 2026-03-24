@@ -11,6 +11,8 @@ class DataManager:
 
     def upload(self) -> bool:
         self.__upload_the_prompt()
+        self.__upload_youtube_channel()
+        self.__upload_youtube_videos()
         return True
 
     def download(self) -> bool:
@@ -19,7 +21,7 @@ class DataManager:
         self.__download_youtube_videos()
         return True
 
-    def __upload_the_prompt(self):
+    def __upload_the_prompt(self) -> None:
         s3_data = S3Data(
             name="prompt_data.pickle",
             content_type=S3Data.detect_content_type_from_name(
@@ -29,8 +31,29 @@ class DataManager:
         prompts: list[PromptDBData] = FolderHelper().unpack_pickle_data(
             path=s3_data.downloaded_path
         )
+        for prompt in prompts:
+            PromptManager().add_prompt(data=prompt) 
 
-        [PromptManager().add_prompt(data=prompt) for prompt in prompts]
+    def __upload_youtube_channel(self) -> None:
+        s3_data = S3Data(
+            name="youtube_channels_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="youtube_channels_data.pickle"
+            ),
+        )
+        channel = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        YouTubeChannelManager(ref_id="").add_channel(channel)
+
+    def __upload_youtube_videos(self) -> None:
+        s3_data = S3Data(
+            name="youtube_videos_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="youtube_videos_data.pickle"
+            ),
+        )
+        videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        for video in videos:
+            YouTubeVideoManager(ref_id="").save_data(video)
 
     def __download_prompts(self) -> None:
         prompts = PromptManager().get_prompts()

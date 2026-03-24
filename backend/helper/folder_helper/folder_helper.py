@@ -54,5 +54,10 @@ class FolderHelper:
     def create_pickle_data(self, data: Any) -> bytes:
         return pickle.dumps(data)
 
-    def unpack_pickle_data(self, path: str):
-        return pickle.loads(path)
+    def unpack_pickle_data(self, path: str) -> Any:
+        # normalized_path = Path(path)
+        # with normalized_path.open("r") as pickle_file:
+        #     pickle_file.read(serialized_data)
+        # TODO need to check implementation
+        # return pickle.loads(path)
+        pass
