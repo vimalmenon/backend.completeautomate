@@ -77,8 +77,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] Improve features
-    - [ ] Script to upload data from local to DB
-    - [ ] Script to download data from db to local
+    - Offline Feature
+      - [ ] Script to upload data from local to DB
+      - [ ] Script to download data from db to local
+      - [ ] Should be able to list keep some offline data
     - [ ] Should be able to run the GUI and Flow Offline
       - [x] Check Offline and Upload the data
     - [ ] Start multiple tasks in parallel
