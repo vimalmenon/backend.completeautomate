@@ -5,5 +5,5 @@ class PromptTaskEnum(str, Enum):
     YouTubeThumbnailImageGenerationPrompt = "YouTubeThumbnailImageGenerationPrompt"
     YouTubeVideoSummarization = "YouTubeVideoSummarization"
     YouTubeVideoAnalysis = "YouTubeVideoAnalysis"
-    YouTubeVideoReview = "YouTubeVideoReview"
+    YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
     PromptAnalysis = "PromptAnalysis"

@@ -6,4 +6,5 @@ class YouTubeVideoTaskEnum(str, Enum):
     YouTubeVideoFixTranscript = "YouTubeVideoFixTranscript"
     YouTubeVideoMetadataSelection = "YouTubeVideoMetadataSelection"
     YouTubeVideoThumbnailSelection = "YouTubeVideoThumbnailSelection"
+    YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
     YouTubeVideoComplete = "YouTubeVideoComplete"

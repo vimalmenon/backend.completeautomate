@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to run the GUI and Flow Offline
       - [ ] Check Offline and Upload the data
     - [ ] Should be able to test the Prompt generated
+    - [ ] Start multiple task in parallel
     - [ ] Job to show error message
     - [ ] Should use one data class for both prompt and prompt suggestions
     - [ ] Transform the `Prompt Data`
@@ -303,11 +304,6 @@ poetry run app --transform true
 ```
 Use `--transform true` for a one-time transformation run.
 
-Run one-time test script and exit:
-
-```sh
-poetry run app --test true
-```
 
 ## Image Generation Models
 

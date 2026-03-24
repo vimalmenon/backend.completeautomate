@@ -76,7 +76,6 @@ class YouTubeVideoGenerator(BaseGenerator):
                 "Uploading thumbnail and reviewing video for job %s", self.job.id
             )
             self.__upload_thumbnail(video_from_db=self.video_from_db)
-            self.__review_video(video_from_db=self.video_from_db)
             return self.__job_complete()
         raise AppException("Invalid task for YouTube video generator")
 
@@ -297,23 +296,6 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
-
-    def __review_video(self, video_from_db: YouTubeVideoDBData):
-        if not self.SKIP_REVIEW:
-            logger.info("Reviewing YouTube video for job %s", self.job.id)
-            service = AgentService(
-                prompt_task=PromptTaskEnum.YouTubeVideoReview,
-                task_id=f"{str(self.job.id)}_review",
-                data={
-                    "transcript": video_from_db.transcript,
-                },
-            )
-            agent = GeneralAgent(
-                service,
-            )
-            result = agent.invoke()
-            # TODO Need to get it reviewed by AI 2 times
-            return result["messages"][-1].content
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
