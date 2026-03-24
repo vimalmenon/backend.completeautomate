@@ -78,7 +78,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 
   - Offline Feature
-    - [ ] Script to download data from db to local
+    - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
     - [ ] Should be able to list and show S3 items for offline data
     - [ ] Should be able to run the GUI and Flow Offline
@@ -115,7 +115,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
-  - [x] Improve the UI for S3 Page
+  - [ ] Improve the UI for S3 Page
     - [ ] Tree on S3 to only show folder
     - [ ] Display item based on the click
     - [ ] Ability to upload image
