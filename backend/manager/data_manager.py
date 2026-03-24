@@ -1,3 +1,4 @@
+from backend.config.env import env
 from backend.data import S3Data
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
@@ -42,7 +43,9 @@ class DataManager:
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
 
     def __download_youtube_videos(self):
-        youtube_videos = YouTubeVideoManager(ref_id="").get_all_videos()
+        youtube_videos = YouTubeVideoManager(ref_id="").get_videos_by_channel(
+            channel_id=env.YOUTUBE_CHANNEL_ID
+        )
         youtube_videos_data = [video.to_json() for video in youtube_videos]
         s3_data = S3Data(
             name="youtube_videos_data.pickle",
