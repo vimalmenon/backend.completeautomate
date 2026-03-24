@@ -1,5 +1,6 @@
 import logging
 
+from backend.config.env import env
 from backend.data import JobData
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
 from backend.manager import DataManager, JobManager, StartUpManager
@@ -77,7 +78,8 @@ class JobScheduler:
         return self.data_manager.transform()
 
     def __run_upload_script(self) -> bool:
-        return self.data_manager.upload()
+        if env.OFFLINE:
+            return self.data_manager.upload()
 
     def __run_download_script(self) -> bool:
         return self.data_manager.download()
