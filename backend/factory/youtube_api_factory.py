@@ -1,5 +1,6 @@
 from typing import Any
 
+from backend.config.env import env
 from backend.factory.common import fake_date, fake_url
 
 
@@ -23,25 +24,7 @@ class MockYouTubeAPI:
         return True
 
     def get_channel_info(self, channel_id: str) -> dict[str, Any]:
-        return {
-            "id": channel_id,
-            "snippet": {
-                "title": "Mock Channel",
-                "description": "Mock channel description for offline mode.",
-                "customUrl": "@mockchannel",
-                "publishedAt": "2020-01-01T00:00:00Z",
-                "thumbnails": {
-                    "high": {"url": "https://example.com/mock_channel_thumb.jpg"}
-                },
-            },
-            "statistics": {
-                "viewCount": "100000",
-                "subscriberCount": "5000",
-                "videoCount": "3",
-            },
-            "status": {"privacyStatus": "public"},
-            "brandingSettings": {},
-        }
+        return youtube_channel_api_factory()
 
     def create_text_post(
         self, channel_id: str, text: str, video_id: str | None = None
@@ -54,10 +37,10 @@ class MockYouTubeAPI:
     def list_all_videos(
         self, channel_id: str, max_results: int = 50
     ) -> list[dict[str, Any]]:
-        return [self._mock_video_item(f"mock_video_{i}") for i in range(1, 4)]
+        return [self._mock_video_item() for _i in range(1, 4)]
 
     def fetch_video_details(self, video_id: str) -> dict[str, Any]:
-        return self._mock_video_item(video_id)
+        return self._mock_video_item()
 
     def get_transcript(self, video_id: str) -> str:
         return (
@@ -66,7 +49,8 @@ class MockYouTubeAPI:
             "can be exercised without a live YouTube connection."
         )
 
-    def _mock_video_item(self, video_id: str) -> dict[str, Any]:
+    def _mock_video_item(self) -> dict[str, Any]:
+        video_id = env.YOUTUBE_API_KEY
         return {
             "id": video_id,
             "snippet": {
@@ -88,18 +72,21 @@ class MockYouTubeAPI:
 
 
 def youtube_channel_api_factory(**kwargs) -> dict:
+    video_id = env.YOUTUBE_API_KEY
     return {
-        "id": kwargs.get("channel_id"),
+        "id": video_id,
         "snippet": {
             "title": "Mock Channel",
             "description": "Mock channel description for offline mode.",
             "customUrl": "@mockchannel",
-            "publishedAt": fake_date,
-            "thumbnails": {"high": {"url": fake_url}},
+            "publishedAt": fake_date(),
+            "thumbnails": {
+                "high": {"url": "https://example.com/mock_channel_thumb.jpg"}
+            },
         },
         "statistics": {
-            "viewCount": "100",
-            "subscriberCount": "5",
+            "viewCount": "100000",
+            "subscriberCount": "5000",
             "videoCount": "3",
         },
         "status": {"privacyStatus": "public"},

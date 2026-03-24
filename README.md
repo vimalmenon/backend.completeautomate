@@ -82,7 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to run the GUI and Flow Offline
       - [x] Check Offline and Upload the data
     - [ ] Start multiple tasks in parallel
-    - [ ] Job data to show error message
+    - [ ] `JobData` to show error message
     - [ ] Need a database for Mocked API
     - [ ] Improve on prompt suggester
       - [ ] Transform the `Prompt Data`

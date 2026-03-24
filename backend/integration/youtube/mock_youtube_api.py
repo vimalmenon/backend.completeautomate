@@ -1,5 +1,7 @@
 from typing import Any
 
+from backend.factory.youtube_api_factory import youtube_channel_api_factory
+
 
 class MockYouTubeAPI:
     """Drop-in mock for YouTubeAPI, returned when OFFLINE mode is enabled.
@@ -21,25 +23,7 @@ class MockYouTubeAPI:
         return True
 
     def get_channel_info(self, channel_id: str) -> dict[str, Any]:
-        return {
-            "id": channel_id,
-            "snippet": {
-                "title": "Mock Channel",
-                "description": "Mock channel description for offline mode.",
-                "customUrl": "@mockchannel",
-                "publishedAt": "2020-01-01T00:00:00Z",
-                "thumbnails": {
-                    "high": {"url": "https://example.com/mock_channel_thumb.jpg"}
-                },
-            },
-            "statistics": {
-                "viewCount": "100000",
-                "subscriberCount": "5000",
-                "videoCount": "3",
-            },
-            "status": {"privacyStatus": "public"},
-            "brandingSettings": {},
-        }
+        return youtube_channel_api_factory()
 
     def create_text_post(
         self, channel_id: str, text: str, video_id: str | None = None
