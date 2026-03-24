@@ -83,7 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Check Offline and Upload the data
     - [ ] Start multiple tasks in parallel
     - [ ] `JobData` to show error message
-    - [ ] Need a database for Mocked API
+    - [ ] Need a database for Mocked API when Offline
     - [ ] Improve on prompt suggester
       - [ ] Transform the `Prompt Data`
       - [ ] Should be able to test the Prompt generated

@@ -53,3 +53,6 @@ class FolderHelper:
 
     def create_pickle_data(self, data: Any) -> bytes:
         return pickle.dumps(data)
+
+    def unpack_pickle_data(self, path: str):
+        return pickle.loads(path)

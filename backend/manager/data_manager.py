@@ -1,5 +1,5 @@
 from backend.config.env import env
-from backend.data import S3Data
+from backend.data import PromptDBData, S3Data
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.prompt_manager import PromptManager
@@ -10,6 +10,7 @@ from backend.manager.youtube_video_manager import YouTubeVideoManager
 class DataManager:
 
     def upload(self) -> bool:
+        self.__upload_the_prompt()
         return True
 
     def download(self) -> bool:
@@ -17,6 +18,19 @@ class DataManager:
         self.__download_youtube_channels()
         self.__download_youtube_videos()
         return True
+
+    def __upload_the_prompt(self):
+        s3_data = S3Data(
+            name="prompt_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="prompt_data.pickle"
+            ),
+        )
+        prompts: list[PromptDBData] = FolderHelper().unpack_pickle_data(
+            path=s3_data.downloaded_path
+        )
+
+        [PromptManager().add_prompt(data=prompt) for prompt in prompts]
 
     def __download_prompts(self) -> None:
         prompts = PromptManager().get_prompts()

@@ -7,5 +7,5 @@ class PromptManager:
     def get_prompts(self) -> list[PromptDBData]:
         return PromptDB().get_all_prompts()
 
-    def start_prompt_improver(self):
-        pass
+    def add_prompt(self, data: PromptDBData) -> None:
+        return PromptDB().save_prompt(data=data)
