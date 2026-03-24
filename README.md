@@ -78,15 +78,16 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] Improve features
     - [ ] Script to upload data from local to DB
+    - [ ] Script to download data from db to local
     - [ ] Should be able to run the GUI and Flow Offline
-      - [ ] Check Offline and Upload the data
-    - [ ] Should be able to test the Prompt generated
-    - [ ] Start multiple task in parallel
-    - [ ] Job to show error message
-    - [ ] Should use one data class for both prompt and prompt suggestions
+      - [x] Check Offline and Upload the data
+    - [ ] Start multiple tasks in parallel
+    - [ ] Job data to show error message
     - [ ] Transform the `Prompt Data`
     - [ ] Need a database for Mocked API
     - [ ] Improve on prompt suggester
+      - [ ] Should be able to test the Prompt generated
+      - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
     - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
@@ -104,6 +105,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add playlist details to YouTube Video DB
   - [ ] Add one shot / few shot prompt examples for image and other generation tasks
   - [ ] Remove the deleted Videos
+  - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
   - [ ] View `Job` detail based on the Job
