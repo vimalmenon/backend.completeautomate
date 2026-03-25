@@ -77,9 +77,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [x] Update Status of the Task in Job
+  - [ ] YouTube Video referred as Task Status
   - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
+    - [ ] Script to upload data from S3 to DB when lost
     - [ ] Should be able to list and show S3 items for offline data
     - [ ] Should be able to run the GUI and Flow Offline
     - [ ] Check Offline and Upload the data
@@ -115,11 +117,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] Make a Webpage based on the post
+- [ ] Add Monthly Update Video to a playlist
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
   - [ ] View `Job` detail based on the Job
-  - [ ] Clicking on `Job` navigate button should route to correct page
+  - [ ] Clicking on `Job` navigate button should route to correct page when available
   - [ ] Ability to perform all actions from GUI
   - [ ] Improve the UI for S3 Page
     - [ ] Tree on S3 to only show folder

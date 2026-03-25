@@ -23,23 +23,6 @@ class TestImageGeneratorJob:
 
 
 @pytest.mark.unit
-class TestYouTubeJob:
-    """Test cases for YouTubeJob"""
-
-    @patch("backend.jobs.youtube_job.YouTubeJob")
-    def test_execute_youtube_job(self, mock_job: MagicMock) -> None:
-        """Test executing YouTube job"""
-        mock_job.execute.return_value = {
-            "status": "completed",
-            "video_id": "test_video_123",
-        }
-
-        result = mock_job.execute()
-        assert result["status"] == "completed"
-        assert "video_id" in result
-
-
-@pytest.mark.unit
 class TestNoJob:
     """Test cases for NoJob"""
 
