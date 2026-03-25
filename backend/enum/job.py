@@ -8,6 +8,7 @@ class JobTypeEnum(str, Enum):
     YouTubeVideo = "YouTubeVideo"
     YouTubeVideoStatsUpdater = "YouTubeVideoStatsUpdater"
     PromptImprover = "PromptImprover"
+    YouTubeStatsUpdater = "YouTubeStatsUpdater"
 
 
 # JOB DESCRIPTIONS :

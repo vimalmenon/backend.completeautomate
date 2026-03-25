@@ -78,6 +78,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
   - [x] Update Status of the Task in Job
   - [ ] Add `Playlist` details to YouTube Video DB
+  - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] YouTube Video referred as Task Status
     - [x] Updated values in data
     - [ ] Transform `YouTube Video` data
@@ -120,7 +121,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
-  - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
