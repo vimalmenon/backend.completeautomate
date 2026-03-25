@@ -76,8 +76,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-
-  - Offline Feature
+  - [x] Update Status of the job
+  - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
     - [ ] Should be able to list and show S3 items for offline data
@@ -85,10 +85,10 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
-  - [ ] Update Status of the job
   - [ ] Create Community Post
     - [ ] Add workflow for community post
     - [ ] Give multiple options to community post
+    - [ ] Store the result from the community post
   - [ ] Improve on prompt suggester
     - [ ] Transform the `Prompt Data`
     - [ ] Make sure the workflow is working
@@ -117,6 +117,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
+  - [ ] Show the generated `Community Post` in UI Page
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page
   - [ ] Ability to perform all actions from GUI
@@ -143,7 +144,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
-- [ ] Agent to analyze result
+- [ ] Agent to evaluate result
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Code improvement

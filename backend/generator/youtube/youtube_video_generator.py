@@ -303,7 +303,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
 
-    def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> None:
+    def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> Any:
         # TODO need to fix this
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoCommunityPost,
