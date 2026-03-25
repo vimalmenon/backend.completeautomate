@@ -263,6 +263,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             S3Storage().upload_data(s3_data=s3_data, data=image_data)
             thumbnails_suggestions.append(video_thumbnail_data)
         self.youtube_manager.update_thumbnails_suggestions(thumbnails_suggestions)
+        self.youtube_manager.update_status(
+            status=YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
+        )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         logger.info(
             "Generated %s thumbnail suggestions for job %s",
