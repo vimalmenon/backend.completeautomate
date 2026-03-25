@@ -187,7 +187,7 @@ class YouTubeVideoDBData:
             thumbnail=data["thumbnail"],
             tags=data["tags"],
             language=data["language"],
-            status=data["status"] or YouTubeVideoTaskEnum.YouTubeVideoStart,
+            status=YouTubeVideoTaskEnum(data["status"]),
             transcript=data.get("transcript"),
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
