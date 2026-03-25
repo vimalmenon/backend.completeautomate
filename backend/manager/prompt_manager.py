@@ -1,5 +1,6 @@
 from backend.data import PromptDBData
 from backend.database import PromptDB
+from backend.enum import PromptTaskEnum
 
 
 class PromptManager:
@@ -9,3 +10,6 @@ class PromptManager:
 
     def add_prompt(self, data: PromptDBData) -> None:
         return PromptDB().save_prompt(data=data)
+
+    def delete_prompt(self, prompt_task: PromptTaskEnum) -> None:
+        return PromptDB().delete_prompt(prompt_task=prompt_task)

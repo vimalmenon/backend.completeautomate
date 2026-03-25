@@ -34,11 +34,10 @@ class DataManager:
                 name="prompt_data.pickle"
             ),
         )
-        prompts: list[PromptDBData] = FolderHelper().unpack_pickle_data(
-            path=s3_data.downloaded_path
-        )
+        prompts_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        prompts = FolderHelper().binary_to_list_or_dict(binary_data=prompts_binary)
         for prompt in prompts:
-            PromptManager().add_prompt(data=prompt)
+            PromptManager().add_prompt(data=PromptDBData.to_cls(prompt))
 
     def __upload_youtube_channel(self) -> None:
         s3_data = S3Data(

@@ -65,14 +65,13 @@ class PromptDBData:
             "role": self.role.role,
             "version": str(self.version),
             "description": self.description,
-            "prompt_data": [version.to_json() for version in self.versions],
+            "versions": [version.to_json() for version in self.versions],
             "comment": self.comment,
             "last_updated": self.last_updated.isoformat(),
         }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        # TODO Remove get after transformation
         return cls(
             task=PromptTaskEnum(data["task"]),
             role=TeamEnum.from_value(data["role"]),

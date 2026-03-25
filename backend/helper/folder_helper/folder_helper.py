@@ -5,6 +5,15 @@ from typing import Any
 
 
 class FolderHelper:
+    def binary_to_list_or_dict(self, binary_data: bytes) -> list | dict:
+        """
+        Convert binary pickle data to a list or dict.
+        Raises TypeError if the unpickled object is not a list or dict.
+        """
+        obj = pickle.loads(binary_data)
+        if not isinstance(obj, (dict, list)):
+            raise TypeError(f"Unpickled object is not a dict or list: {type(obj)}")
+        return obj
 
     def create_missing_folders(self, path: str) -> None:
         normalized_path = Path(path)
@@ -56,9 +65,10 @@ class FolderHelper:
 
     def unpack_pickle_data(self, path: str) -> Any:
         """
-        Load and return the object from a pickle file at the given path.
+        Load and return a dict object from a pickle file at the given path.
         Raises FileNotFoundError if the file does not exist.
         Raises pickle.UnpicklingError if the file is not a valid pickle.
+        Raises TypeError if the unpickled object is not a dict.
         """
         normalized_path = Path(path)
         if not normalized_path.is_file():

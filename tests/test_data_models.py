@@ -226,7 +226,7 @@ class TestPromptDBDataCopy:
             ai=AIModelEnum.Deepseek,
         )
         original = PromptDBData(
-            task=PromptTaskEnum.YouTubeVideoAnalysis,
+            task=PromptTaskEnum.YouTubeVideoSummarization,
             role=TeamEnum.OWNER,
             description="",
             versions=[version],

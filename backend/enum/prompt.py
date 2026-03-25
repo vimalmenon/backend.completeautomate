@@ -6,4 +6,3 @@ class PromptTaskEnum(str, Enum):
     YouTubeVideoSummarization = "YouTubeVideoSummarization"
     YouTubeVideoMetadata = "YouTubeVideoMetadata"
     YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
-    YouTubeVideoAnalysis = "YouTubeVideoAnalysis"
