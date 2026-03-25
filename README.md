@@ -76,7 +76,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [x] Update Status of the job
+  - [x] Update Status of the Task in Job
   - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
@@ -91,7 +91,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Store the result from the community post
   - [ ] Improve on prompt suggester
     - [ ] Transform the `Prompt Data`
-    - [ ] Make sure the workflow is working
+    - [ ] Make sure the workflow is working (Test tomorrow)
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
@@ -112,8 +112,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
-  - [ ] Add playlist details to YouTube Video DB
-  - [ ] Remove the deleted Videos
+  - [ ] Add `Playlist` details to YouTube Video DB
+  - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
