@@ -99,16 +99,25 @@ def add_prompt(
         return
 
     try:
-        prompt_data = PromptDBData(
+        # Create a PromptVersionDBData for the initial version
+        from uuid import uuid4
+
+        from backend.data.prompt import PromptVersionDBData
+
+        version_id = uuid4()
+        version = PromptVersionDBData(
             prompt=prompt_value.strip(),
             system_message=system_message_value.strip(),
+            version=version_id,
+            ai=AIModelEnum(selected_ai),
+        )
+        prompt_data = PromptDBData(
             task=PromptTaskEnum(selected_task),
             role=TeamEnum.from_value(selected_role),
             description="",
-            versions=[],
-            ai=AIModelEnum(selected_ai),
+            versions=[version],
+            version=version_id,
             last_updated=datetime.now(),
-            use_version=1,
         )
         PromptDB().save_prompt(prompt_data)
         ui.notify("Prompt created", type="positive")
@@ -130,7 +139,7 @@ def render_add_prompt_form() -> None:
                 task_input = (
                     ui.select(
                         options=task_options,
-                        value=PromptTaskEnum.PromptAnalysis.value,
+                        value=task_options[0] if task_options else None,
                         label="Task",
                     )
                     .props("outlined dense")

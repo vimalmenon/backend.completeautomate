@@ -51,3 +51,11 @@ class PromptDB:
             UpdateExpression=f"SET {', '.join(update_expression)}",
             ExpressionAttributeValues=expression_attribute_values,
         )
+
+    def delete_prompt(self, prompt_task: PromptTaskEnum) -> None:
+        self.db_manager.remove_item(
+            {
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: prompt_task.value,
+            }
+        )

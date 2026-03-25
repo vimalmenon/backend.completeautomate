@@ -19,20 +19,28 @@ class TestAgentService:
     def test_get_prompt_renders_jinja_with_data(
         self, mock_prompt_db: MagicMock
     ) -> None:
-        mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
+        from uuid import uuid4
+
+        from backend.data.prompt import PromptVersionDBData
+
+        version_id = uuid4()
+        version = PromptVersionDBData(
             prompt="Create 3 titles for {{ topic }} in {{ language }}.",
             system_message="You are a {{ role }} assistant.",
-            description="",
-            versions=[],
-            use_version=1,
-            task=PromptTaskEnum.YouTubeVideoAnalysis,
-            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
+            version=version_id,
             ai=AIModelEnum.Grok,
+        )
+        mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
+            task=PromptTaskEnum.YouTubeVideoMetadata,
+            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
+            description="",
+            versions=[version],
+            version=version_id,
             last_updated=datetime.now(),
         )
 
         service = AgentService(
-            PromptTaskEnum.YouTubeVideoAnalysis,
+            PromptTaskEnum.YouTubeVideoMetadata,
             task_id="123456",
             data={"topic": "Python testing", "language": "English", "role": "helpful"},
         )
@@ -44,20 +52,28 @@ class TestAgentService:
     def test_get_prompt_raises_for_missing_template_value(
         self, mock_prompt_db: MagicMock
     ) -> None:
-        mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
+        from uuid import uuid4
+
+        from backend.data.prompt import PromptVersionDBData
+
+        version_id = uuid4()
+        version = PromptVersionDBData(
             prompt="Create a title about {{ topic }}",
             system_message="You are a content expert",
-            task=PromptTaskEnum.YouTubeVideoAnalysis,
-            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
+            version=version_id,
             ai=AIModelEnum.Grok,
-            versions=[],
-            use_version=1,
+        )
+        mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
+            task=PromptTaskEnum.YouTubeVideoMetadata,
+            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             description="",
+            versions=[version],
+            version=version_id,
             last_updated=datetime.now(),
         )
 
         service = AgentService(
-            PromptTaskEnum.YouTubeVideoAnalysis, task_id="123456", data={}
+            PromptTaskEnum.YouTubeVideoMetadata, task_id="123456", data={}
         )
 
         with pytest.raises(AppException, match="Error rendering prompt template"):

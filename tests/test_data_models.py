@@ -178,15 +178,23 @@ class TestPromptDBDataCopy:
 
     def test_prompt_db_data_copy(self) -> None:
         """Test that copy creates a new instance with same values."""
-        original = PromptDBData(
+        from uuid import uuid4
+
+        from backend.data.prompt import PromptVersionDBData
+
+        version_id = uuid4()
+        version = PromptVersionDBData(
             prompt="test prompt",
             system_message="test system message",
-            description="",
-            versions=[],
+            version=version_id,
+            ai=AIModelEnum.Grok,
+        )
+        original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
             role=TeamEnum.OWNER,
-            ai=AIModelEnum.Grok,
-            use_version=1,
+            description="",
+            versions=[version],
+            version=version_id,
         )
 
         # Create a copy
@@ -206,15 +214,23 @@ class TestPromptDBDataCopy:
 
     def test_prompt_db_data_copy_modification(self) -> None:
         """Test that modifying copy doesn't affect original."""
-        original = PromptDBData(
+        from uuid import uuid4
+
+        from backend.data.prompt import PromptVersionDBData
+
+        version_id = uuid4()
+        version = PromptVersionDBData(
             prompt="test prompt",
-            description="",
-            versions=[],
-            use_version=1,
             system_message="test system message",
+            version=version_id,
+            ai=AIModelEnum.Deepseek,
+        )
+        original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoAnalysis,
             role=TeamEnum.OWNER,
-            ai=AIModelEnum.Deepseek,
+            description="",
+            versions=[version],
+            version=version_id,
         )
 
         # Create a copy
