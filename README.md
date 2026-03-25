@@ -85,6 +85,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
+  - [ ] Update Status of the job
   - [ ] Create Community Post
     - [ ] Add workflow for community post
     - [ ] Give multiple options to community post
