@@ -70,6 +70,10 @@ class PromptDBData:
             "last_updated": self.last_updated.isoformat(),
         }
 
+    def add_prompt_version(self, data: PromptVersionDBData) -> Self:
+        self.versions.append(data)
+        return self
+
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(

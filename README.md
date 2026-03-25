@@ -79,8 +79,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Update Status of the Task in Job
   - [ ] YouTube Video referred as Task Status
   - [ ] Remove Role from Prompt as it seems irrelevant
-  - [ ] Transform YouTube Video data
-  - [ ] Make One Job to update Video and Data
+  - [ ] Transform `YouTube Video` data
+  - [ ] Make one job to update Video and Channel stats
+  - [ ] Add Monthly Update Video to a playlist
   - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
@@ -120,7 +121,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] Make a Webpage based on the post
-- [ ] Add Monthly Update Video to a playlist
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
@@ -133,6 +133,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Ability to upload image
     - [ ] Ability to download S3 Object to local
     - [ ] View images from S3 and Local
+  - [ ] Prompt Update
+    - [ ] Update Prompt from UI
+    - [ ] Run Prompt Improver
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
