@@ -46,7 +46,8 @@ class DataManager:
                 name="youtube_channels_data.pickle"
             ),
         )
-        channel = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        channel_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        channel = FolderHelper().binary_to_list_or_dict(binary_data=channel_binary)
         YouTubeChannelManager(ref_id="").add_channel(channel)
 
     def __upload_youtube_videos(self) -> None:
