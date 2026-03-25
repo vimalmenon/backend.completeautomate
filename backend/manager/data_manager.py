@@ -1,5 +1,5 @@
 from backend.config.env import env
-from backend.data import PromptDBData, S3Data
+from backend.data import PromptDBData, S3Data, YouTubeChannelDBData
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.prompt_manager import PromptManager
@@ -48,7 +48,10 @@ class DataManager:
         )
         channel_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         channel = FolderHelper().binary_to_list_or_dict(binary_data=channel_binary)
-        YouTubeChannelManager(ref_id="").add_channel(channel)
+        if isinstance(channel, dict):
+            YouTubeChannelManager(ref_id="").add_channel(
+                data=YouTubeChannelDBData.to_cls(channel)
+            )
 
     def __upload_youtube_videos(self) -> None:
         s3_data = S3Data(

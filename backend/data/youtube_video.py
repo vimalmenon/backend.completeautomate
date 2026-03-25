@@ -157,7 +157,7 @@ class YouTubeVideoDBData:
     title: str
     description: str
     thumbnail: str
-    status: YouTubeVideoTaskEnum
+    task_status: YouTubeVideoTaskEnum
     tags: list[str]
     language: str
     stats: list[YouTubeVideoDBStats]
@@ -187,7 +187,7 @@ class YouTubeVideoDBData:
             thumbnail=data["thumbnail"],
             tags=data["tags"],
             language=data["language"],
-            status=YouTubeVideoTaskEnum(data["status"]),
+            task_status=YouTubeVideoTaskEnum(data["task_status"]),
             transcript=data.get("transcript"),
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
@@ -221,7 +221,7 @@ class YouTubeVideoDBData:
             language=snippet["defaultLanguage"],
             last_updated_at=datetime.now(),
             stats=[stat],
-            status=item["status"],
+            task_status=item["task_status"],
         )
 
     def to_json(self) -> dict:
@@ -232,7 +232,7 @@ class YouTubeVideoDBData:
             "published_at": self.published_at.isoformat(),
             "thumbnail": self.thumbnail,
             "tags": self.tags,
-            "status": self.status,
+            "task_status": self.task_status,
             "language": self.language,
             "last_updated_at": self.last_updated_at.isoformat(),
             "stats": [stat.to_json() for stat in self.stats],
@@ -270,6 +270,6 @@ class YouTubeVideoDBData:
             updated_values["language"] = self.language
         if self.comment != result.comment:
             updated_values["comment"] = self.comment
-        if self.status != result.status:
-            updated_values["status"] = self.comment
+        if self.task_status != result.task_status:
+            updated_values["task_status"] = self.task_status
         return updated_values

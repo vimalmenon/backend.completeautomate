@@ -78,6 +78,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 
   - [x] Update Status of the Task in Job
   - [ ] YouTube Video referred as Task Status
+  - [ ] Remove Role from Prompt as it seems irrelevant
+  - [ ] Transform YouTube Video data
+  - [ ] Make One Job to update Video and Data
   - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB

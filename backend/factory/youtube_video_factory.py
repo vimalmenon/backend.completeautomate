@@ -12,7 +12,7 @@ def youtube_video_factory(**kwargs) -> YouTubeVideoDBData:
         description=faker.name(),
         thumbnail=faker.text(),
         tags=[],
-        status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
         language=faker.name(),
         stats=[],
     )
