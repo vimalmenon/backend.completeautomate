@@ -77,8 +77,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [x] Update Status of the Task in Job
+  - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] YouTube Video referred as Task Status
-  - [ ] Transform `YouTube Video` data
+    - [ ] Updated values in data
+    - [ ] Transform `YouTube Video` data
   - [ ] Make one job to update Video and Channel stats
   - [ ] Add Monthly Update Video to a playlist
   - [ ] Offline Feature
@@ -118,7 +120,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
-  - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Remove the deleted Videos (or make status inactive)
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
