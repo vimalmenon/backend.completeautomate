@@ -270,4 +270,6 @@ class YouTubeVideoDBData:
             updated_values["language"] = self.language
         if self.comment != result.comment:
             updated_values["comment"] = self.comment
+        if self.status != result.status:
+            updated_values["status"] = self.comment
         return updated_values
