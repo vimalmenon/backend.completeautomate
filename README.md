@@ -91,6 +91,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Give multiple options to community post
   - [ ] Improve on prompt suggester
     - [ ] Transform the `Prompt Data`
+    - [ ] Make sure the workflow is working
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks

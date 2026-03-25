@@ -192,6 +192,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             for data in structured_response.details
         ]
         self.youtube_manager.update_metadata_suggestions(video_metadata_suggestions)
+        self.youtube_manager.update_status(
+            status=YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
+        )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         logger.info(
             "Stored %s metadata suggestions for job %s",
@@ -316,6 +319,9 @@ class YouTubeVideoGenerator(BaseGenerator):
         return result["system_message"]
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
+        self.youtube_manager.update_status(
+            status=YouTubeVideoTaskEnum.YouTubeVideoComplete
+        )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
         logger.info("Completed YouTube video generator for job %s", self.job.id)
         return JobsStatusEnum.COMPLETE, self.task_data.to_json()

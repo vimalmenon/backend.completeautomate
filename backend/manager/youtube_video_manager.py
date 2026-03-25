@@ -5,7 +5,7 @@ from backend.data import (
     YouTubeVideoThumbnailData,
 )
 from backend.database import YouTubeVideoDB
-from backend.enum import PlatformEnum
+from backend.enum import PlatformEnum, YouTubeVideoTaskEnum
 
 
 class YouTubeVideoManager:
@@ -61,3 +61,6 @@ class YouTubeVideoManager:
 
     def update_thumbnail(self, thumbnail_url: str) -> None:
         self.video_db.update_values({"thumbnail": thumbnail_url})
+
+    def update_status(self, status: YouTubeVideoTaskEnum) -> None:
+        self.video_db.update_values({"status": status.value})
