@@ -6,7 +6,7 @@ from typing import Any, Self
 from backend.data.image import ImagePromptData
 from backend.data.platform import PlatformDBData
 from backend.data.s3 import S3Data
-from backend.enum import YouTubeVideoTaskEnum
+from backend.enum import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
 
 
 @dataclass
@@ -169,6 +169,7 @@ class YouTubeVideoDBData:
     thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
         default_factory=list
     )
+    status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -205,6 +206,7 @@ class YouTubeVideoDBData:
                 YouTubeVideoThumbnailData.to_cls(suggestion)
                 for suggestion in data.get("thumbnails_suggestions", [])
             ],
+            status=YouTubeVideoStatusEnum(data["status"]),
         )
 
     @classmethod
@@ -248,6 +250,7 @@ class YouTubeVideoDBData:
             "thumbnails_suggestions": [
                 suggestion.to_json() for suggestion in self.thumbnails_suggestions
             ],
+            "status": self.status.value,
         }
 
     def past_update_time(self, days: int = 7) -> bool:
@@ -272,4 +275,6 @@ class YouTubeVideoDBData:
             updated_values["comment"] = self.comment
         if self.task_status != result.task_status:
             updated_values["task_status"] = self.task_status
+        if self.status != result.status:
+            updated_values["status"] = self.status
         return updated_values

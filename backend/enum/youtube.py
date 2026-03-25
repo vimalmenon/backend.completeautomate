@@ -8,3 +8,8 @@ class YouTubeVideoTaskEnum(str, Enum):
     YouTubeVideoThumbnailSelection = "YouTubeVideoThumbnailSelection"
     YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
     YouTubeVideoComplete = "YouTubeVideoComplete"
+
+
+class YouTubeVideoStatusEnum(str, Enum):
+    Active = "Active"
+    Inactive = "Inactive"
