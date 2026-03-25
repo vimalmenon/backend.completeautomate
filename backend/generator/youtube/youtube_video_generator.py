@@ -169,7 +169,7 @@ class YouTubeVideoGenerator(BaseGenerator):
     ) -> tuple[JobsStatusEnum, dict]:
         logger.info("Generating metadata suggestions for job %s", self.job.id)
         service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoAnalysis,
+            prompt_task=PromptTaskEnum.YouTubeVideoMetadata,
             task_id=f"{str(self.job.id)}_metadata",
             data={
                 "transcript": video_from_db.summarized_transcript,
