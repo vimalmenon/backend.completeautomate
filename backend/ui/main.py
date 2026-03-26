@@ -172,48 +172,48 @@ def _render_channel_card(channel: str, channel_detail, channel_videos) -> None:
     """Render a single channel card."""
     with ui.card().classes("w-full border-t-4 border-red-500"):
         # Top section: Image and basic info
-        with ui.row().classes("gap-6 items-start w-full"):
-            # Channel thumbnail
-            ui.image(channel_detail.thumbnail_url).classes(
-                "w-32 h-32 rounded-full flex-shrink-0 object-cover"
-            )
-
-            # Channel info section
-            with ui.column().classes("flex-1 gap-2"):
-                # Channel name
-                ui.label(channel_detail.title).classes(
-                    "text-h6 font-bold text-gray-900 dark:text-white"
+        with ui.column().classes("w-full flex-row gap-4 p-4"):
+            with ui.row().classes("basis-3/4"):
+                ui.image(channel_detail.thumbnail_url).classes(
+                    "w-32 h-32 rounded-full flex-shrink-0 object-cover"
                 )
-
-                # Channel URL
-                if hasattr(channel_detail, "custom_url") and channel_detail.custom_url:
-                    with ui.row().classes("items-center gap-2"):
-                        ui.label("URL:").classes(
-                            "font-semibold text-sm text-gray-700 dark:text-gray-300"
-                        )
-                        ui.label(channel_detail.custom_url).classes(
-                            "text-sm text-blue-600 dark:text-blue-400 break-all"
-                        )
-
-                # Description
-                if channel_detail.description:
-                    ui.label(channel_detail.description).classes(
-                        "text-sm text-gray-600 dark:text-gray-400 text-wrap mt-2"
+                # Channel info section
+                with ui.column().classes("flex-1 gap-2"):
+                    # Channel name
+                    ui.label(channel_detail.title).classes(
+                        "text-h6 font-bold text-gray-900 dark:text-white"
                     )
+
+                    # Channel URL
+                    if (
+                        hasattr(channel_detail, "custom_url")
+                        and channel_detail.custom_url
+                    ):
+                        with ui.row().classes("items-center gap-2"):
+                            ui.label("URL:").classes(
+                                "font-semibold text-sm text-gray-700 dark:text-gray-300"
+                            )
+                            ui.label(channel_detail.custom_url).classes(
+                                "text-sm text-blue-600 dark:text-blue-400 break-all"
+                            )
+
+                    # Description
+                    if channel_detail.description:
+                        ui.label(channel_detail.description).classes(
+                            "text-sm text-gray-600 dark:text-gray-400 text-wrap mt-2"
+                        )
+
+            with ui.row().classes("basis-1/4 justify-end"):
+                ui.button(
+                    "View Channel Details",
+                    icon="arrow_forward",
+                    on_click=lambda target=channel: ui.run_javascript(
+                        f'window.location.href = "/youtube/{target}"'
+                    ),
+                ).props("color=red")
 
         # Statistics section
         _render_channel_stats(channel_detail, channel_videos)
-
-        # Navigation button
-        ui.separator().classes("my-4")
-        with ui.row().classes("w-full justify-end"):
-            ui.button(
-                "View Channel Details",
-                icon="arrow_forward",
-                on_click=lambda target=channel: ui.run_javascript(
-                    f'window.location.href = "/youtube/{target}"'
-                ),
-            ).props("color=red")
 
 
 def _render_youtube_channels_section() -> None:
