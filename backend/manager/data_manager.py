@@ -116,7 +116,9 @@ class DataManager:
             S3Data.to_cls_from_path(
                 "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
             ),
+            S3Data.to_cls_from_path("data/prompt_data.pickle"),
         ]
+
         for value in s3_values:
             S3Storage().download_data(value)
 
