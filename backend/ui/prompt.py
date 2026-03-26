@@ -240,11 +240,10 @@ async def prompt_page():
                     ui.label("Action").classes("w-1/6 text-center")
 
                 for prompt in prompts:
-                    prompt_json = prompt.to_json()
-                    task = prompt_json.get("task", "")
-                    role = prompt_json.get("role", "")
-                    ai = prompt_json.get("ai", "")
-                    last_updated = prompt_json.get("last_updated", "")
+                    task = prompt.task.value
+                    role = prompt.role
+                    ai = prompt.ai
+                    last_updated = prompt.last_updated
 
                     with ui.row().classes(
                         "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700 cursor-pointer gap-3"
@@ -323,7 +322,7 @@ async def prompt_detail_page(task_id: str) -> None:
 
             with ui.row().classes("w-full gap-4 items-start"):
                 ui.label("AI:").classes("w-1/4 font-bold")
-                ui.label(prompt_json.get("ai", "")).classes("w-3/4 text-wrap")
+                ui.label(prompt.ai).classes("w-3/4 text-wrap")
 
             with ui.row().classes("w-full gap-4 items-start"):
                 ui.label("Version:").classes("w-1/4 font-bold")
@@ -335,11 +334,11 @@ async def prompt_detail_page(task_id: str) -> None:
 
         with ui.card().classes("w-full dark:bg-slate-800"):
             ui.label("Prompt").classes("text-h6 mb-3")
-            ui.label(prompt_json.get("prompt", "")).classes("w-full text-wrap text-sm")
+            ui.label(prompt.prompt).classes("w-full text-wrap text-sm")
 
         with ui.card().classes("w-full dark:bg-slate-800"):
             ui.label("System Message").classes("text-h6 mb-3")
-            ui.label(prompt_json.get("system_message", "")).classes(
+            ui.label(prompt.system_message).classes(
                 "w-full text-wrap text-sm"
             )
 
