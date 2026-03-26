@@ -8,6 +8,8 @@ logs/
 __pycache__/
 *.py[cod]
 *$py.class
+.venv/
+backend/manager/transform.py
 
 # C extensions
 *.so
@@ -114,6 +116,7 @@ venv.bak/
 # Application specific
 output/**/*
 .nicegui/**/*
+backend/manager/transform.py
 
 # Spyder project settings
 .spyderproject
