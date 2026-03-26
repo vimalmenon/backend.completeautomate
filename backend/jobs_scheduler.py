@@ -2,6 +2,7 @@ import logging
 
 from backend.config.env import env
 from backend.data import JobData
+from backend.enum import ActionEnum
 from backend.exception.app_exception import AppException
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
 from backend.manager import DataManager, JobManager, StartUpManager
@@ -21,6 +22,7 @@ class JobScheduler:
         transform: bool | None = False,
         upload: bool | None = False,
         download: bool | None = False,
+        action: ActionEnum | None = None,
     ) -> None:
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)

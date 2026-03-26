@@ -20,6 +20,7 @@ def main():
     parser.add_argument("--test", dest="test", required=False)
     parser.add_argument("--upload", dest="upload", required=False)
     parser.add_argument("--download", dest="download", required=False)
+    parser.add_argument("--action", dest="action", required=False)
 
     args = parser.parse_args()
 
@@ -28,6 +29,7 @@ def main():
         transform=args.transform,
         upload=args.upload,
         download=args.download,
+        action=args.action,
     )
 
     logger.info("Application completed successfully")

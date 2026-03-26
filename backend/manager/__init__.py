@@ -1,3 +1,4 @@
+from backend.manager.action_manager import ActionManager
 from backend.manager.data_manager import DataManager
 from backend.manager.job_manager import JobManager
 from backend.manager.offline_manager import OfflineManager
@@ -16,4 +17,5 @@ __all__ = [
     "JobManager",
     "DataManager",
     "OfflineManager",
+    "ActionManager",
 ]
