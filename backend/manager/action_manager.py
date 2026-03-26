@@ -22,6 +22,4 @@ class ActionManager:
         elif self.action == ActionEnum.download_to_local:
             DataManager().download()
         elif self.action == ActionEnum.restore_from_local:
-            pass
-        else:
-            pass
+            DataManager().upload()

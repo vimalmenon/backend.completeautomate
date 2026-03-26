@@ -77,7 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Add `Playlist` details to YouTube Video DB
-  - [ ] `poetry run app -- action` this should determine the job action 
+  - [x] `poetry run app -- action` this should determine the job action 
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
@@ -99,7 +99,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Give multiple options for community post
     - [ ] Store the result for community post in YouTubeData
   - [ ] Improve on prompt suggester
-    - [ ] Transform the `Prompt Data`
+    - [x] Transform the `Prompt Data`
     - [ ] Remove Role from Prompt as it seems irrelevant
     - [ ] Make sure the workflow is working (Test tomorrow)
     - [ ] Should be able to test the Prompt generated

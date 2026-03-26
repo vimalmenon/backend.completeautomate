@@ -1,8 +1,6 @@
 import logging
 
-from backend.config.env import env
 from backend.data import JobData
-from backend.exception.app_exception import AppException
 from backend.jobs import YouTubeChannelJob, YouTubeVideoJob
 from backend.manager import ActionManager, DataManager, JobManager, StartUpManager
 
@@ -18,7 +16,6 @@ class JobScheduler:
     def start(
         self,
         job_id: str | None = None,
-        upload: bool | None = False,
         action: str | None = None,
     ) -> None:
         if action:
@@ -28,11 +25,6 @@ class JobScheduler:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
             self.__run_job_by_id(job_id)
             logger.info("Completed one-time job execution for job_id=%s", job_id)
-            return
-        if upload:
-            logger.info("Starting upload script execution")
-            self.__run_upload_script()
-            logger.info("Completed upload script execution")
             return
         self.startup_manager.start()
         jobs = self.job_manager.get_all_active_jobs()
@@ -67,11 +59,6 @@ class JobScheduler:
         logger.info(
             f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
         )
-
-    def __run_upload_script(self) -> bool:
-        if env.OFFLINE:
-            return self.data_manager.upload()
-        raise AppException("Upload is only available when Offline")
 
     def __run_job_by_id(self, job_id: str) -> None:
         job = self.job_manager.get_job_by_id(job_id)
