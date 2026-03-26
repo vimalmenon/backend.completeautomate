@@ -25,6 +25,7 @@ class JobScheduler:
     ) -> None:
         if action:
             ActionManager(action).execute()
+            return
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
             self.__run_job_by_id(job_id)
