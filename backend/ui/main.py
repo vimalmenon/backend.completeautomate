@@ -143,8 +143,6 @@ def _render_channel_stats(channel_detail, channel_videos) -> None:
             ui.label(str(len(channel_videos))).classes(
                 "text-h5 font-bold text-blue-600 dark:text-blue-400"
             )
-        print()
-        print()
 
         # Subscribers
         with ui.column().classes("gap-1 items-center flex-1"):
