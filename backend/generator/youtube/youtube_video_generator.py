@@ -121,7 +121,11 @@ class YouTubeVideoGenerator(BaseGenerator):
         logger.info("Fetching YouTube video details for video %s", self.video_id)
         youtube_response = self.youtube_api.fetch_video_details(video_id=self.video_id)
         youtube_data = YouTubeVideoDBData.to_cls_from_response(
-            {**youtube_response, "ref_id": self.task_data.ref_id}
+            {
+                **youtube_response,
+                "ref_id": self.task_data.ref_id,
+                "task_status": YouTubeVideoTaskEnum.YouTubeVideoStart.value,
+            }
         )
         transcript = self.youtube_api.get_transcript(video_id=self.video_id)
         if transcript:
@@ -129,6 +133,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             youtube_data.transcript = self.__convert_transcript_to_text(
                 result=transcript
             )
+            youtube_data.task_status = YouTubeVideoTaskEnum.YouTubeVideoFixTranscript
             self.youtube_manager.save_data(data=youtube_data)
             self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoFixTranscript
             return JobsStatusEnum.REVIEW, self.task_data.to_json()
@@ -136,6 +141,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             "Transcript missing for video %s; saving video and moving to review",
             self.video_id,
         )
+        youtube_data.task_status = YouTubeVideoTaskEnum.YouTubeVideoComplete
         self.youtube_manager.save_data(data=youtube_data)
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
         return JobsStatusEnum.COMPLETE, self.task_data.to_json()

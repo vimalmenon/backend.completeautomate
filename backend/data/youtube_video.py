@@ -223,7 +223,7 @@ class YouTubeVideoDBData:
             language=snippet["defaultLanguage"],
             last_updated_at=datetime.now(),
             stats=[stat],
-            task_status=item["task_status"],
+            task_status=YouTubeVideoTaskEnum(item["task_status"]),
         )
 
     def to_json(self) -> dict:
