@@ -82,7 +82,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
-    - [ ] Updated every 2 Days
+    - [ ] Updated every every 2 Days
+    - [ ] Remove all the references of value to update
   - [ ] YouTube Video referred as Task Status
     - [x] Updated values in data
     - [ ] Transform `YouTube Video` data
