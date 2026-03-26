@@ -17,5 +17,11 @@ class ActionManager:
             transform_data()
         elif self.action == ActionEnum.backup_up_db:
             DataManager().backup_db()
+        elif self.action == ActionEnum.restore_db:
+            pass
+        elif self.action == ActionEnum.download_to_local:
+            DataManager().download()
+        elif self.action == ActionEnum.restore_from_local:
+            pass
         else:
             pass

@@ -19,7 +19,6 @@ class JobScheduler:
         self,
         job_id: str | None = None,
         upload: bool | None = False,
-        download: bool | None = False,
         action: str | None = None,
     ) -> None:
         if action:
@@ -29,11 +28,6 @@ class JobScheduler:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
             self.__run_job_by_id(job_id)
             logger.info("Completed one-time job execution for job_id=%s", job_id)
-            return
-        if download:
-            logger.info("Starting download script execution")
-            self.__run_download_script()
-            logger.info("Completed download script execution")
             return
         if upload:
             logger.info("Starting upload script execution")
@@ -78,9 +72,6 @@ class JobScheduler:
         if env.OFFLINE:
             return self.data_manager.upload()
         raise AppException("Upload is only available when Offline")
-
-    def __run_download_script(self) -> bool:
-        return self.data_manager.download()
 
     def __run_job_by_id(self, job_id: str) -> None:
         job = self.job_manager.get_job_by_id(job_id)
