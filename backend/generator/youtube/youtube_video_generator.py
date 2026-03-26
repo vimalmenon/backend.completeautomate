@@ -300,7 +300,11 @@ class YouTubeVideoGenerator(BaseGenerator):
                 video_id=self.video_id
             )
             updated_youtube_response = video_from_db.to_cls_from_response(
-                {**youtube_response, "ref_id": self.task_data.ref_id}
+                {
+                    **youtube_response,
+                    "ref_id": self.task_data.ref_id,
+                    "task_status": YouTubeVideoTaskEnum.YouTubeVideoCommunityPost.value,
+                }
             )
             self.youtube_manager.update_thumbnail(
                 thumbnail_url=updated_youtube_response.thumbnail
