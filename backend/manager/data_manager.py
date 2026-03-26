@@ -106,8 +106,19 @@ class DataManager:
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
 
     def __download_for_s3(self):
-        # TODO Need to implement
-        pass
+        s3_values = [
+            S3Data.to_cls_from_path(
+                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-curious-2.jpg"
+            ),
+            S3Data.to_cls_from_path(
+                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-excited-3.jpg"
+            ),
+            S3Data.to_cls_from_path(
+                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
+            ),
+        ]
+        for value in s3_values:
+            S3Storage().download_data(value)
 
     def __create_and_upload_pickle_file(self, s3_data: S3Data, data: bytes):
         S3Storage().upload_data(s3_data=s3_data, data=data)
