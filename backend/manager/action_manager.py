@@ -6,4 +6,5 @@ class ActionManager:
         self.action = ActionEnum(action)
 
     def execute(self) -> None:
-        pass
+        if self.action == ActionEnum.transform:
+            pass
