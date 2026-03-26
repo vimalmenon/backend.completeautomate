@@ -79,6 +79,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Update Status of the Task in Job
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Remove the deleted Videos (or make status inactive)
+  - [ ] `poetry run app action` this should determine the job action
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
