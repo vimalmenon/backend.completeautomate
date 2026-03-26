@@ -18,7 +18,6 @@ class JobScheduler:
     def start(
         self,
         job_id: str | None = None,
-        transform: bool | None = False,
         upload: bool | None = False,
         download: bool | None = False,
         action: str | None = None,
@@ -30,11 +29,6 @@ class JobScheduler:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
             self.__run_job_by_id(job_id)
             logger.info("Completed one-time job execution for job_id=%s", job_id)
-            return
-        if transform:
-            logger.info("Starting job transformation process")
-            self.__transform_data()
-            logger.info("Completed job transformation process")
             return
         if download:
             logger.info("Starting download script execution")
@@ -79,9 +73,6 @@ class JobScheduler:
         logger.info(
             f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
         )
-
-    def __transform_data(self) -> bool:
-        return self.data_manager.transform()
 
     def __run_upload_script(self) -> bool:
         if env.OFFLINE:

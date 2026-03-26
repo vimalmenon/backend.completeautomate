@@ -16,7 +16,6 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--job-id", dest="job_id", required=False)
-    parser.add_argument("--transform", dest="transform", required=False)
     parser.add_argument("--test", dest="test", required=False)
     parser.add_argument("--upload", dest="upload", required=False)
     parser.add_argument("--download", dest="download", required=False)
@@ -26,7 +25,6 @@ def main():
 
     JobScheduler().start(
         job_id=args.job_id,
-        transform=args.transform,
         upload=args.upload,
         download=args.download,
         action=args.action,

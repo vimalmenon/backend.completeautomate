@@ -76,10 +76,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [x] Update Status of the Task in Job
   - [ ] Add `Playlist` details to YouTube Video DB
-  - [ ] Remove the deleted Videos (or make status inactive)
-  - [ ] `poetry run app -- action` this should determine the job action
+  - [ ] `poetry run app -- action` this should determine the job action 
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
@@ -104,9 +102,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Give multiple options for community post
     - [ ] Store the result for community post in YouTubeData
   - [ ] Improve on prompt suggester
-    - [x] Transform the `Prompt Data`
-    - [x] Make sure the workflow is working (Test tomorrow)
+    - [ ] Transform the `Prompt Data`
     - [ ] Remove Role from Prompt as it seems irrelevant
+    - [ ] Make sure the workflow is working (Test tomorrow)
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
@@ -200,7 +198,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
 - Set Up N8N
-
+- Remove the deleted Videos
 </details>
 
 
