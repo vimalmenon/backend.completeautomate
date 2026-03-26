@@ -62,5 +62,5 @@ class YouTubeVideoManager:
     def update_thumbnail(self, thumbnail_url: str) -> None:
         self.video_db.update_values({"thumbnail": thumbnail_url})
 
-    def update_status(self, status: YouTubeVideoTaskEnum) -> None:
-        self.video_db.update_values({"status": status.value})
+    def update_task_status(self, task_status: YouTubeVideoTaskEnum) -> None:
+        self.video_db.update_values({"task_status": task_status.value})
