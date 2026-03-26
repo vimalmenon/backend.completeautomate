@@ -198,8 +198,8 @@ class YouTubeVideoGenerator(BaseGenerator):
             for data in structured_response.details
         ]
         self.youtube_manager.update_metadata_suggestions(video_metadata_suggestions)
-        self.youtube_manager.update_status(
-            status=YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
+        self.youtube_manager.update_task_status(
+            task_status=YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         logger.info(
@@ -269,8 +269,8 @@ class YouTubeVideoGenerator(BaseGenerator):
             S3Storage().upload_data(s3_data=s3_data, data=image_data)
             thumbnails_suggestions.append(video_thumbnail_data)
         self.youtube_manager.update_thumbnails_suggestions(thumbnails_suggestions)
-        self.youtube_manager.update_status(
-            status=YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
+        self.youtube_manager.update_task_status(
+            task_status=YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoThumbnailSelection
         logger.info(
@@ -328,8 +328,8 @@ class YouTubeVideoGenerator(BaseGenerator):
         return result["system_message"]
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
-        self.youtube_manager.update_status(
-            status=YouTubeVideoTaskEnum.YouTubeVideoComplete
+        self.youtube_manager.update_task_status(
+            task_status=YouTubeVideoTaskEnum.YouTubeVideoComplete
         )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
         logger.info("Completed YouTube video generator for job %s", self.job.id)
