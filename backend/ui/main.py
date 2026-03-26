@@ -143,29 +143,26 @@ def _render_channel_stats(channel_detail, channel_videos) -> None:
             ui.label(str(len(channel_videos))).classes(
                 "text-h5 font-bold text-blue-600 dark:text-blue-400"
             )
+        print()
+        print()
 
         # Subscribers
-        if (
-            hasattr(channel_detail, "subscriber_count")
-            and channel_detail.subscriber_count
-        ):
-            with ui.column().classes("gap-1 items-center flex-1"):
-                ui.label("Subscribers").classes(
-                    "text-xs font-semibold text-gray-600 dark:text-gray-400"
-                )
-                ui.label(_format_count(channel_detail.subscriber_count)).classes(
-                    "text-h5 font-bold text-green-600 dark:text-green-400"
-                )
+        with ui.column().classes("gap-1 items-center flex-1"):
+            ui.label("Subscribers").classes(
+                "text-xs font-semibold text-gray-600 dark:text-gray-400"
+            )
+            ui.label(_format_count(channel_detail.stats[-1].subscriber_count)).classes(
+                "text-h5 font-bold text-green-600 dark:text-green-400"
+            )
 
         # Total Views
-        if hasattr(channel_detail, "view_count") and channel_detail.view_count:
-            with ui.column().classes("gap-1 items-center flex-1"):
-                ui.label("Total Views").classes(
-                    "text-xs font-semibold text-gray-600 dark:text-gray-400"
-                )
-                ui.label(_format_count(channel_detail.view_count)).classes(
-                    "text-h5 font-bold text-purple-600 dark:text-purple-400"
-                )
+        with ui.column().classes("gap-1 items-center flex-1"):
+            ui.label("Total Views").classes(
+                "text-xs font-semibold text-gray-600 dark:text-gray-400"
+            )
+            ui.label(_format_count(channel_detail.stats[-1].view_count)).classes(
+                "text-h5 font-bold text-purple-600 dark:text-purple-400"
+            )
 
 
 def _render_channel_card(channel: str, channel_detail, channel_videos) -> None:
@@ -328,4 +325,5 @@ def main_page():
     _render_jobs_stats_cards()
     ui.separator().classes("my-6")
     _render_youtube_channels_section()
+    ui.separator().classes("my-6")
     _render_navigation_section(menu_items)

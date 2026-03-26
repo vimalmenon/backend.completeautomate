@@ -77,7 +77,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Add `Playlist` details to YouTube Video DB
-  - [x] `poetry run app -- action` this should determine the job action 
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
