@@ -79,6 +79,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [x] Update Status of the Task in Job
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Remove the deleted Videos (or make status inactive)
+  - [ ] YouTube Stats
+    - [ ] Update YouTubeChannel Stats
+    - [ ] Update YouTubeVideo Stats
+    - [ ] Updated every 2 Days
   - [ ] YouTube Video referred as Task Status
     - [x] Updated values in data
     - [ ] Transform `YouTube Video` data

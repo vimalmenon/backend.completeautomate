@@ -118,25 +118,27 @@ class YouTubeChannelDBData:
             "last_updated_at": self.last_updated_at.isoformat(),
         }
 
-    def values_to_update(self, result: Self) -> dict[str, Any]:
+    def values_to_update(self, old_value: Self) -> dict[str, Any]:
         updated_values: dict[str, Any] = {}
-        updated_values["stats"] = [stat.to_json() for stat in self.stats + result.stats]
+        updated_values["stats"] = [
+            stat.to_json() for stat in self.stats + old_value.stats
+        ]
         updated_values["last_updated_at"] = datetime.now().isoformat()
-        if self.title != result.title:
+        if self.title != old_value.title:
             updated_values["title"] = self.title
-        if self.description != result.description:
+        if self.description != old_value.description:
             updated_values["description"] = self.description
-        if self.custom_url != result.custom_url:
+        if self.custom_url != old_value.custom_url:
             updated_values["custom_url"] = self.custom_url
-        if self.country != result.country:
+        if self.country != old_value.country:
             updated_values["country"] = self.country
-        if self.thumbnail_url != result.thumbnail_url:
+        if self.thumbnail_url != old_value.thumbnail_url:
             updated_values["thumbnail_url"] = self.thumbnail_url
-        if self.banner_image_url != result.banner_image_url:
+        if self.banner_image_url != old_value.banner_image_url:
             updated_values["banner_image_url"] = self.banner_image_url
-        if self.privacy_status != result.privacy_status:
+        if self.privacy_status != old_value.privacy_status:
             updated_values["privacy_status"] = self.privacy_status
-        if self.made_for_kids != result.made_for_kids:
+        if self.made_for_kids != old_value.made_for_kids:
             updated_values["made_for_kids"] = self.made_for_kids
         return updated_values
 

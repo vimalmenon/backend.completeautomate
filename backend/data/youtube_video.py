@@ -257,24 +257,26 @@ class YouTubeVideoDBData:
         delta = datetime.now() - self.last_updated_at
         return delta >= timedelta(days=days)
 
-    def values_to_update(self, result: Self) -> dict:
+    def values_to_update(self, old_value: Self) -> dict:
         updated_values: dict[str, Any] = {}
-        updated_values["stats"] = [stat.to_json() for stat in self.stats + result.stats]
+        updated_values["stats"] = [
+            stat.to_json() for stat in self.stats + old_value.stats
+        ]
         updated_values["last_updated_at"] = datetime.now().isoformat()
-        if self.title != result.title:
+        if self.title != old_value.title:
             updated_values["title"] = self.title
-        if self.description != result.description:
+        if self.description != old_value.description:
             updated_values["description"] = self.description
-        if self.thumbnail != result.thumbnail:
+        if self.thumbnail != old_value.thumbnail:
             updated_values["thumbnail"] = self.thumbnail
-        if self.tags != result.tags:
+        if self.tags != old_value.tags:
             updated_values["tags"] = self.tags
-        if self.language != result.language:
+        if self.language != old_value.language:
             updated_values["language"] = self.language
-        if self.comment != result.comment:
+        if self.comment != old_value.comment:
             updated_values["comment"] = self.comment
-        if self.task_status != result.task_status:
+        if self.task_status != old_value.task_status:
             updated_values["task_status"] = self.task_status
-        if self.status != result.status:
+        if self.status != old_value.status:
             updated_values["status"] = self.status
         return updated_values
