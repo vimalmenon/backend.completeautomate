@@ -32,6 +32,14 @@ s3_db_data: dict[str, S3Data] = {
             name="offline_jobs_data.pickle"
         ),
     ),
+    "client_secret_data": S3Data(
+        name="client_secret.json",
+        content_type=S3Data.detect_content_type_from_name(name="client_secret.json"),
+    ),
+    "token_data": S3Data(
+        name="token.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="token.pickle"),
+    ),
 }
 
 
@@ -56,6 +64,11 @@ class DataManager:
         self.__download_youtube_videos_and_upload_to_s3()
         self.__download_offline_jobs_and_upload_to_s3()
 
+    def start_up_script(self) -> None:
+        for data in [s3_db_data["client_secret_data"], s3_db_data["token_data"]]:
+            if not FolderHelper().check_if_file_exists(data.downloaded_path):
+                S3Storage().download_data(data)
+
     def __get_db_data(self) -> list[S3Data]:
         return [value for _, value in s3_db_data.items()]
 
@@ -77,7 +90,8 @@ class DataManager:
 
     def __upload_youtube_videos(self) -> None:
         s3_data = s3_db_data["youtube_videos_data"]
-        videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        videos_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        videos = FolderHelper().binary_to_list_or_dict(binary_data=videos_binary)
         for video in videos:
             YouTubeVideoManager(ref_id="").save_data(video)
 

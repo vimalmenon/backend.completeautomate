@@ -3,10 +3,8 @@ from logging import getLogger
 
 from tabulate import tabulate
 
-from backend.data import S3Data
 from backend.enum import JobsStatusEnum
-from backend.helper.folder_helper.folder_helper import FolderHelper
-from backend.integration.storage.s3_storage import S3Storage
+from backend.manager.data_manager import DataManager
 from backend.manager.job_manager import JobManager
 
 logger = getLogger(__name__)
@@ -15,22 +13,13 @@ logger = getLogger(__name__)
 class StartUpManager:
     def start(self) -> None:
         logger.info("Starting startup manager flow")
-        self.__add_start_up_file()
+        DataManager().start_up_script()
         self.__add_start_up_jobs()
         logger.info("Startup manager flow completed")
 
     def end(self) -> None:
         self.__archive_old_jobs()
         self.__show_active_jobs()
-
-    def __add_start_up_file(self) -> None:
-        for path in ["pickle/token.pickle", "json/client_secret.json"]:
-            data = S3Data.to_cls_from_path(path)
-            if not FolderHelper().check_if_file_exists(data.downloaded_path):
-                logger.info(f"Startup file missing locally, downloading: {path}")
-                S3Storage().download_data(data)
-            else:
-                logger.debug(f"Startup file already present: {path}")
 
     def __add_start_up_jobs(self) -> bool:
         JobManager().create_youtube_channel_onboarding_job()
