@@ -14,16 +14,12 @@ class StartUpManager:
     def start(self) -> None:
         logger.info("Starting startup manager flow")
         DataManager().start_up_script()
-        self.__add_start_up_jobs()
+        JobManager().create_youtube_channel_onboarding_job()
         logger.info("Startup manager flow completed")
 
     def end(self) -> None:
         self.__archive_old_jobs()
         self.__show_active_jobs()
-
-    def __add_start_up_jobs(self) -> bool:
-        JobManager().create_youtube_channel_onboarding_job()
-        return True
 
     def __archive_old_jobs(self):
         job_manager = JobManager()
