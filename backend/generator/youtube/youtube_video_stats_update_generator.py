@@ -21,7 +21,7 @@ class YouTubeVideoStatsUpdate(BaseGenerator):
                     video_id=video.platform.video_id
                 )
                 new_video = YouTubeVideoDBData.to_cls_from_response(api_response)
-                values = video.values_to_update(new_video)
+                values = new_video.values_to_update(old_value=video)
                 self.youtube_db.update_values(values=values)
                 return JobsStatusEnum.IN_PROGRESS, self.task_data.to_json()
         return JobsStatusEnum.IN_PROGRESS, self.task_data.to_json()

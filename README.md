@@ -85,6 +85,10 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Updated every every 2 Days
     - [ ] Remove all the references of value to update
     - [ ] Make one job to update Video and Channel stats
+    - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
+      - [ ] Show stats for channel as well
+      - [ ] Stats to be taken from created Videos and Channel
+      - [ ] Update after every 3 Days
   - [ ] Standardize the DB Method
     - [ ] Get Data
     - [ ] Save Data
@@ -103,10 +107,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-  - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
-    - [ ] Show stats for channel as well
-    - [ ] Stats to be taken from created Videos and Channel
-    - [ ] Update after every 3 Days
   - [ ] Workflow improvement
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Send Notification

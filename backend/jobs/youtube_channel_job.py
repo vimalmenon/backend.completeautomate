@@ -1,6 +1,5 @@
 import logging
 
-from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.generator import (
     YouTubeChannelCreatorJob,
@@ -18,9 +17,6 @@ class YouTubeChannelJob(BaseJob):
         JobTypeEnum.YouTubeChannel,
         JobTypeEnum.YouTubeChannelVideoChecker,
     ]
-
-    def __init__(self, job: JobData):
-        self.job = job
 
     def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
         if self.job.type == JobTypeEnum.YouTubeChannel:
