@@ -2,6 +2,7 @@ from backend.config.env import env
 from backend.data import PromptDBData, S3Data, YouTubeChannelDBData
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
+from backend.manager.job_manager import JobManager
 from backend.manager.prompt_manager import PromptManager
 from backend.manager.youtube_channel_manager import YouTubeChannelManager
 from backend.manager.youtube_video_manager import YouTubeVideoManager
@@ -21,6 +22,7 @@ class DataManager:
         self.__download_youtube_channels()
         self.__download_youtube_videos()
         self.__download_for_s3()
+        self.__download_offline_jobs()
         return True
 
     def backup_db(self) -> None:
@@ -117,10 +119,24 @@ class DataManager:
                 "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
             ),
             S3Data.to_cls_from_path("data/prompt_data.pickle"),
+            S3Data.to_cls_from_path("data/offline_jobs_data.pickle"),
+            S3Data.to_cls_from_path("data/youtube_channels_data.pickle"),
+            S3Data.to_cls_from_path("data/youtube_videos_data.pickle"),
         ]
-
         for value in s3_values:
             S3Storage().download_data(value)
+
+    def __download_offline_jobs(self):
+        jobs = JobManager().get_all_active_jobs()
+        job_data = [job.to_json() for job in jobs]
+        s3_data = S3Data(
+            name="offline_jobs_data.pickle",
+            content_type=S3Data.detect_content_type_from_name(
+                name="offline_jobs_data.pickle"
+            ),
+        )
+        data = FolderHelper().create_pickle_data(data=job_data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
 
     def __create_and_upload_pickle_file(self, s3_data: S3Data, data: bytes):
         S3Storage().upload_data(s3_data=s3_data, data=data)

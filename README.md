@@ -84,6 +84,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Remove all the references of value to update
     - [ ] Make one job to update Video and Channel stats
   - [ ] Add Update Video to a playlist
+  - [ ] Download In Progress and Failed Job
   - [ ] Offline Feature
     - [x] Script to download data from db to local
     - [ ] Script to upload data from local to DB
