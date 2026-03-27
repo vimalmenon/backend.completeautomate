@@ -287,9 +287,9 @@ def _render_offline_mode():
         ui.label("Offline Mode").classes("text-h5 font-bold mb-4")
         with ui.row().classes("basis-1/4 justify-end"):
             ui.button(
-                "Upload to DB",
-                icon="upload",
-                on_click=lambda: DataManager().upload(),
+                "Download to local",
+                icon="download",
+                on_click=lambda: DataManager().download(),
             )
 
 

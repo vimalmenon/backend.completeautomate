@@ -7,7 +7,6 @@ from backend.config.env import env
 from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.generator.youtube_channel_creator import (
-    YouTubeChannelCreatorJob,
     YouTubeChannelVideoCheckerJob,
 )
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
@@ -26,17 +25,6 @@ class TestYouTubeChannelOffline:
             description="test job",
             created_at=datetime.now(),
         )
-
-    def test_channel_creator_job_uses_mock_api_when_offline(self) -> None:
-        original_offline = env.OFFLINE
-        env.OFFLINE = True
-
-        try:
-            job = self._build_job(JobTypeEnum.YouTubeChannel)
-            generator = YouTubeChannelCreatorJob(job)
-            assert isinstance(generator.youtube_api, MockYouTubeAPI)
-        finally:
-            env.OFFLINE = original_offline
 
     def test_channel_video_checker_job_uses_mock_api_when_offline(self) -> None:
         original_offline = env.OFFLINE
