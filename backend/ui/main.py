@@ -6,8 +6,12 @@ from nicegui import ui
 from backend.config.env import env
 from backend.data import PlatformDBData, PlatformYouTubeChannelDBData
 from backend.enum import JobsStatusEnum, PlatformEnum
-from backend.manager import JobManager, YouTubeChannelManager, YouTubeVideoManager
-from backend.ui.service.work_offline import load_initial_data
+from backend.manager import (
+    DataManager,
+    JobManager,
+    YouTubeChannelManager,
+    YouTubeVideoManager,
+)
 
 channels = [env.YOUTUBE_CHANNEL_ID]
 
@@ -278,10 +282,19 @@ def _render_navigation_section(menu_items: list[MenuSection]) -> None:
                                     ui.icon("chevron_right").classes("text-gray-400")
 
 
+def _render_offline_mode():
+    with ui.card().classes("w-full border-t-4 border-red-500"):
+        ui.label("Offline Mode").classes("text-h5 font-bold mb-4")
+        with ui.row().classes("basis-1/4 justify-end"):
+            ui.button(
+                "Upload to DB",
+                icon="upload",
+                on_click=lambda: DataManager().upload(),
+            )
+
+
 def main_page():
     """Render the main dashboard page."""
-    # Load initial data for offline mode
-    load_initial_data()
 
     # Refresh cache per page render, then reuse cached jobs for all stat cards.
     get_cached_jobs.cache_clear()
@@ -321,6 +334,8 @@ def main_page():
     _render_hero_section()
     _render_jobs_header()
     _render_jobs_stats_cards()
+    ui.separator().classes("my-6")
+    _render_offline_mode()
     ui.separator().classes("my-6")
     _render_youtube_channels_section()
     ui.separator().classes("my-6")

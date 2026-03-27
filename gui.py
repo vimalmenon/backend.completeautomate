@@ -13,12 +13,15 @@ from backend.ui import (
     youtube_channel_page,
     youtube_video_page,
 )
-from backend.ui.service.work_offline import toggle_offline_mode
+from backend.ui.service.work_offline import load_initial_data, toggle_offline_mode
 
 logger = logging.getLogger(__name__)
 
 
 def root():
+
+    # Load initial data based on offline mode
+    load_initial_data(env.OFFLINE)
 
     # Dark mode toggle
     dark = ui.dark_mode()

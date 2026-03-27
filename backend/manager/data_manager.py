@@ -1,7 +1,13 @@
 from typing import Any
 
 from backend.config.env import env
-from backend.data import PromptDBData, S3Data, YouTubeChannelDBData
+from backend.data import (
+    JobData,
+    PromptDBData,
+    S3Data,
+    YouTubeChannelDBData,
+    YouTubeVideoDBData,
+)
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.job_manager import JobManager
@@ -49,6 +55,7 @@ class DataManager:
         self.__upload_the_prompt()
         self.__upload_youtube_channel()
         self.__upload_youtube_videos()
+        self.__upload_offline_jobs()
         self.__upload_to_s3()
 
     def download(self) -> None:
@@ -74,15 +81,13 @@ class DataManager:
 
     def __upload_the_prompt(self) -> None:
         s3_data = s3_db_data["prompt_data"]
-        prompts_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        prompts = FolderHelper().binary_to_list_or_dict(binary_data=prompts_binary)
+        prompts = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         for prompt in prompts:
             PromptManager().add_prompt(data=PromptDBData.to_cls(prompt))
 
     def __upload_youtube_channel(self) -> None:
         s3_data = s3_db_data["youtube_channels_data"]
-        channel_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        channel = FolderHelper().binary_to_list_or_dict(binary_data=channel_binary)
+        channel = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         if isinstance(channel, dict):
             YouTubeChannelManager(ref_id="").add_channel(
                 data=YouTubeChannelDBData.to_cls(channel)
@@ -90,10 +95,17 @@ class DataManager:
 
     def __upload_youtube_videos(self) -> None:
         s3_data = s3_db_data["youtube_videos_data"]
-        videos_binary = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        videos = FolderHelper().binary_to_list_or_dict(binary_data=videos_binary)
+        videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         for video in videos:
-            YouTubeVideoManager(ref_id="").save_data(video)
+            YouTubeVideoManager(ref_id="").save_data(
+                data=YouTubeVideoDBData.to_cls(video)
+            )
+
+    def __upload_offline_jobs(self) -> None:
+        s3_data = s3_db_data["offline_jobs_data"]
+        jobs = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        for job in jobs:
+            JobManager().save_job(JobData.to_cls(job))
 
     def __upload_to_s3(self):
         s3_values = self.__get_s3_values()
