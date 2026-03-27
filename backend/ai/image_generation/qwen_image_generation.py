@@ -18,10 +18,10 @@ class QwenImageGeneration:
         self,
         model: str = "qwen-image-max",
         # TODO Need to fix this size hardcoding. Qwen image generation supports multiple sizes, and we should allow callers to specify desired size.
-        size: str = "1328*1328",
+        # size: str = "1328*1328",
     ):
         self.model = model
-        self.size = size
+        # self.size = size
         dashscope.api_key = str(env.QWEN_API_KEY.get_secret_value())
         dashscope.base_http_api_url = "https://dashscope-intl.aliyuncs.com/api/v1"
 
@@ -43,7 +43,7 @@ class QwenImageGeneration:
                 watermark=False,
                 prompt_extend=True,
                 negative_prompt="",
-                size=self.size,
+                # size=self.size,
             )
             return self._parse_response(response)
         except Exception as e:
