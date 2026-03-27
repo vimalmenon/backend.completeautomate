@@ -93,11 +93,11 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Delete Data
     - [ ] Update Data
   - [ ] Offline Feature
-    - [ ] Script to upload data from local to DB
+    - [x] Script to upload data from local to DB
+    - [x] Should be able to list and show S3 items for offline data
+    - [x] Should be able to run the GUI and Flow Offline
+    - [x] Check Offline and Upload the data
     - [ ] Script to upload data from S3 to DB when lost
-    - [ ] Should be able to list and show S3 items for offline data
-    - [ ] Should be able to run the GUI and Flow Offline
-    - [ ] Check Offline and Upload the data
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Create Community Post
