@@ -169,7 +169,8 @@ class YouTubeVideoDBData:
     thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
         default_factory=list
     )
-    status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
+    status: YouTubeVideoStatusEnum = (YouTubeVideoStatusEnum.Active,)
+    community_posts: list[str] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -207,6 +208,7 @@ class YouTubeVideoDBData:
                 for suggestion in data.get("thumbnails_suggestions", [])
             ],
             status=YouTubeVideoStatusEnum(data["status"]),
+            community_posts=data.get("community_posts", []),
         )
 
     @classmethod
@@ -251,6 +253,7 @@ class YouTubeVideoDBData:
                 suggestion.to_json() for suggestion in self.thumbnails_suggestions
             ],
             "status": self.status.value,
+            "community_posts": self.community_posts,
         }
 
     def past_update_time(self, days: int = 7) -> bool:
@@ -279,4 +282,6 @@ class YouTubeVideoDBData:
             updated_values["task_status"] = self.task_status
         if self.status != old_value.status:
             updated_values["status"] = self.status
+        if self.community_posts != old_value.community_posts:
+            updated_values["community_posts"] = self.community_posts
         return updated_values
