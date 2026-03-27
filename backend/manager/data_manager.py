@@ -1,3 +1,5 @@
+from typing import Any
+
 from backend.config.env import env
 from backend.data import PromptDBData, S3Data, YouTubeChannelDBData
 from backend.helper import FolderHelper
@@ -110,15 +112,15 @@ class DataManager:
         prompts = PromptManager().get_prompts()
         prompts_data = [prompt.to_json() for prompt in prompts]
         s3_data = s3_db_data["prompt_data"]
-        data = FolderHelper().create_pickle_data(data=prompts_data)
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=prompts_data)
 
     def __download_youtube_channels(self):
         youtube_channels = YouTubeChannelManager(ref_id="").get_channels()
         youtube_channels_data = [channel.to_json() for channel in youtube_channels]
         s3_data = s3_db_data["youtube_channels_data"]
-        data = FolderHelper().create_pickle_data(data=youtube_channels_data)
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+        self.__create_and_upload_pickle_file(
+            s3_data=s3_data, data=youtube_channels_data
+        )
 
     def __download_youtube_videos(self):
         youtube_videos = YouTubeVideoManager(ref_id="").get_videos_by_channel(
@@ -126,16 +128,15 @@ class DataManager:
         )
         youtube_videos_data = [video.to_json() for video in youtube_videos]
         s3_data = s3_db_data["youtube_videos_data"]
-        data = FolderHelper().create_pickle_data(data=youtube_videos_data)
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=youtube_videos_data)
 
     def __download_offline_jobs(self):
         jobs = JobManager().get_all_active_jobs()
         job_data = [job.to_json() for job in jobs]
         s3_data = s3_db_data["offline_jobs_data"]
-        data = FolderHelper().create_pickle_data(data=job_data)
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=data)
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=job_data)
 
-    def __create_and_upload_pickle_file(self, s3_data: S3Data, data: bytes):
-        S3Storage().upload_data(s3_data=s3_data, data=data)
+    def __create_and_upload_pickle_file(self, s3_data: S3Data, data: Any):
+        pickle_data = FolderHelper().create_pickle_data(data=data)
+        S3Storage().upload_data(s3_data=s3_data, data=pickle_data)
         FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
