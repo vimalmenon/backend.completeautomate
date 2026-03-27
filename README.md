@@ -76,14 +76,16 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
+  - [x] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt) (Not Required)
   - [ ] Add `Playlist` details to YouTube Video DB
+  - [ ] Fix the Image Size for YouTube Thumbnail
+  - [ ] Add Update Video to a playlist
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
     - [ ] Updated every every 2 Days
     - [ ] Remove all the references of value to update
     - [ ] Make one job to update Video and Channel stats
-  - [ ] Add Update Video to a playlist
   - [ ] Standardize the DB Method
     - [ ] Get Data
     - [ ] Save Data
@@ -120,8 +122,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Loggers
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
-  - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
-  - [x] Fix the Image Size for YouTube Thumbnail
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
   - [ ] Make a Webpage based on the post
@@ -136,8 +136,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Display item based on the click
     - [ ] Ability to upload image
     - [ ] View images from S3 and Local
-    - [x] Ability to download S3 Object to local
-    - [x] Delete Item from S3
   - [ ] Prompt Update
     - [ ] Update Prompt from UI
     - [ ] Run Prompt Improver
