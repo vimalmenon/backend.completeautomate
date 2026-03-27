@@ -103,7 +103,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Give multiple options for community post
     - [ ] Store the result for community post in YouTubeData
   - [ ] Improve on prompt suggester
-    - [x] Transform the `Prompt Data`
     - [ ] Remove Role from Prompt as it seems irrelevant
     - [ ] Make sure the workflow is working (Test tomorrow)
     - [ ] Should be able to test the Prompt generated

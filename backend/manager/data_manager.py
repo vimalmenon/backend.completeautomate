@@ -37,25 +37,24 @@ s3_db_data: dict[str, S3Data] = {
 
 class DataManager:
 
-    def upload(self) -> bool:
+    def upload(self) -> None:
         self.__upload_the_prompt()
         self.__upload_youtube_channel()
         self.__upload_youtube_videos()
         self.__upload_to_s3()
-        return True
 
-    def download(self) -> bool:
-        self.__download_prompts()
-        self.__download_youtube_channels()
-        self.__download_youtube_videos()
+    def download(self) -> None:
+        self.__download_prompts_and_upload_to_s3()
+        self.__download_youtube_channels_and_upload_to_s3()
+        self.__download_youtube_videos_and_upload_to_s3()
+        self.__download_offline_jobs_and_upload_to_s3()
         self.__download_for_s3()
-        self.__download_offline_jobs()
-        return True
 
     def backup_db(self) -> None:
-        db_data = self.__get_db_data()
-        for data in db_data:
-            pass
+        self.__download_prompts_and_upload_to_s3()
+        self.__download_youtube_channels_and_upload_to_s3()
+        self.__download_youtube_videos_and_upload_to_s3()
+        self.__download_offline_jobs_and_upload_to_s3()
 
     def __get_db_data(self) -> list[S3Data]:
         return [value for _, value in s3_db_data.items()]
@@ -108,13 +107,13 @@ class DataManager:
             ),
         ] + db_data
 
-    def __download_prompts(self) -> None:
+    def __download_prompts_and_upload_to_s3(self) -> None:
         prompts = PromptManager().get_prompts()
         prompts_data = [prompt.to_json() for prompt in prompts]
         s3_data = s3_db_data["prompt_data"]
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=prompts_data)
 
-    def __download_youtube_channels(self):
+    def __download_youtube_channels_and_upload_to_s3(self):
         youtube_channels = YouTubeChannelManager(ref_id="").get_channels()
         youtube_channels_data = [channel.to_json() for channel in youtube_channels]
         s3_data = s3_db_data["youtube_channels_data"]
@@ -122,7 +121,7 @@ class DataManager:
             s3_data=s3_data, data=youtube_channels_data
         )
 
-    def __download_youtube_videos(self):
+    def __download_youtube_videos_and_upload_to_s3(self):
         youtube_videos = YouTubeVideoManager(ref_id="").get_videos_by_channel(
             channel_id=env.YOUTUBE_CHANNEL_ID
         )
@@ -130,7 +129,7 @@ class DataManager:
         s3_data = s3_db_data["youtube_videos_data"]
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=youtube_videos_data)
 
-    def __download_offline_jobs(self):
+    def __download_offline_jobs_and_upload_to_s3(self):
         jobs = JobManager().get_all_active_jobs()
         job_data = [job.to_json() for job in jobs]
         s3_data = s3_db_data["offline_jobs_data"]
