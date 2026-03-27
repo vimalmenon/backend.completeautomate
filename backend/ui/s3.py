@@ -131,7 +131,8 @@ async def load_items(table_container, prefix_input, max_keys_input, prefix=None)
                 ui.label("Type").classes("w-1/12")
                 ui.label("Key").classes("w-1/5")
                 ui.label("S3 Path").classes("w-1/3")
-                ui.label("Local Path").classes("w-1/4")
+                ui.label("Actions").classes("w-1/4")
+
             for item in items:
                 with ui.row().classes(
                     "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-start flex-nowrap border-b border-gray-200 dark:border-slate-700 gap-3"
@@ -140,9 +141,11 @@ async def load_items(table_container, prefix_input, max_keys_input, prefix=None)
                     ui.label(item.content_type.value).classes("w-1/12 text-sm")
                     ui.label(item.key or "-").classes("w-1/5 text-sm break-all")
                     ui.label(item.s3_key).classes("w-1/3 text-sm font-mono break-all")
-                    ui.label(item.downloaded_path).classes(
-                        "w-1/4 text-sm font-mono break-all"
-                    )
+                    with ui.row().classes("gap-2 w-1/4"):
+                        ui.button(
+                            icon="download",
+                            on_click=lambda i=item: S3Storage().download_data(i),
+                        ).props("color=primary rounded")
 
 
 async def s3_bucket_page() -> None:
