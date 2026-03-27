@@ -16,16 +16,6 @@ class FolderHelper:
         with normalized_path.open("rb") as f:
             return f.read()
 
-    def binary_to_list_or_dict(self, binary_data: bytes) -> Any:
-        """
-        Convert binary pickle data to a list or dict.
-        Raises TypeError if the unpickled object is not a list or dict.
-        """
-        # Ensure binary_data is bytes before unpickling
-        if isinstance(binary_data, list):
-            binary_data = bytes(binary_data)
-        return pickle.loads(binary_data)
-
     def create_missing_folders(self, path: str) -> None:
         normalized_path = Path(path)
 

@@ -3,6 +3,7 @@ from typing import Any
 from backend.config.env import env
 from backend.data import (
     JobData,
+    PlatformDBData,
     PromptDBData,
     S3Data,
     YouTubeChannelDBData,
@@ -11,6 +12,7 @@ from backend.data import (
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.job_manager import JobManager
+from backend.manager.platform_manager import PlatformManager
 from backend.manager.prompt_manager import PromptManager
 from backend.manager.youtube_channel_manager import YouTubeChannelManager
 from backend.manager.youtube_video_manager import YouTubeVideoManager
@@ -38,6 +40,10 @@ s3_db_data: dict[str, S3Data] = {
             name="offline_jobs_data.pickle"
         ),
     ),
+    "platform_data": S3Data(
+        name="platform_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
+    ),
     "client_secret_data": S3Data(
         name="client_secret.json",
         content_type=S3Data.detect_content_type_from_name(name="client_secret.json"),
@@ -57,8 +63,10 @@ class DataManager:
         self.__upload_youtube_videos()
         self.__upload_offline_jobs()
         self.__upload_to_s3()
+        self.__upload_platform()
 
     def download(self) -> None:
+        self.__download_platform_to_s3()
         self.__download_prompts_and_upload_to_s3()
         self.__download_youtube_channels_and_upload_to_s3()
         self.__download_youtube_videos_and_upload_to_s3()
@@ -87,11 +95,17 @@ class DataManager:
 
     def __upload_youtube_channel(self) -> None:
         s3_data = s3_db_data["youtube_channels_data"]
-        channel = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        if isinstance(channel, dict):
+        channels = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        for channel in channels:
             YouTubeChannelManager(ref_id="").add_channel(
                 data=YouTubeChannelDBData.to_cls(channel)
             )
+
+    def __upload_platform(self) -> None:
+        s3_data = s3_db_data["platform_data"]
+        platforms = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
+        for platform in platforms:
+            PlatformManager().save_data(PlatformDBData.to_cls(platform))
 
     def __upload_youtube_videos(self) -> None:
         s3_data = s3_db_data["youtube_videos_data"]
@@ -146,6 +160,12 @@ class DataManager:
         self.__create_and_upload_pickle_file(
             s3_data=s3_data, data=youtube_channels_data
         )
+
+    def __download_platform_to_s3(self) -> None:
+        s3_data = s3_db_data["platform_data"]
+        platforms = PlatformManager().get_all_platforms()
+        platforms_data = [platform.to_json() for platform in platforms]
+        self.__create_and_upload_pickle_file(s3_data=s3_data, data=platforms_data)
 
     def __download_youtube_videos_and_upload_to_s3(self):
         youtube_videos = YouTubeVideoManager(ref_id="").get_videos_by_channel(

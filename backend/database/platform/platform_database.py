@@ -1,6 +1,8 @@
 from functools import lru_cache
 from typing import Any
 
+from boto3.dynamodb.conditions import Key
+
 from backend.data import (
     PlatformDBData,
 )
@@ -41,3 +43,9 @@ class PlatformDB:
         )
         self._get_item_cached.cache_clear()
         return data.ref_id
+
+    def get_platforms(self) -> list[PlatformDBData]:
+        items = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE)
+        )
+        return [PlatformDBData.to_cls(item) for item in items]

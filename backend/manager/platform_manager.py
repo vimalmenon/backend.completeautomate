@@ -9,6 +9,16 @@ logger = getLogger(__name__)
 
 class PlatformManager:
 
+    def get_all_platforms(self) -> list[PlatformDBData]:
+        logger.info("Retrieving all platforms")
+        try:
+            platforms = PlatformDB().get_platforms()
+            logger.info(f"Retrieved {len(platforms)} platforms")
+            return platforms
+        except Exception as e:
+            logger.error(f"Failed to retrieve platforms: {e}", exc_info=True)
+            raise
+
     def save_data(self, platform: PlatformDBData) -> str:
         logger.info(f"Saving platform data: {platform.platform_type}")
         try:
