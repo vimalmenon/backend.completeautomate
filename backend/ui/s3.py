@@ -131,7 +131,7 @@ async def load_items(table_container, prefix_input, max_keys_input, prefix=None)
                 ui.label("Type").classes("w-1/12")
                 ui.label("Key").classes("w-1/5")
                 ui.label("S3 Path").classes("w-1/3")
-                ui.label("Actions").classes("w-1/4")
+                ui.label("Actions").classes("w-1/4 text-right")
 
             for item in items:
                 with ui.row().classes(
@@ -141,10 +141,14 @@ async def load_items(table_container, prefix_input, max_keys_input, prefix=None)
                     ui.label(item.content_type.value).classes("w-1/12 text-sm")
                     ui.label(item.key or "-").classes("w-1/5 text-sm break-all")
                     ui.label(item.s3_key).classes("w-1/3 text-sm font-mono break-all")
-                    with ui.row().classes("gap-2 w-1/4"):
+                    with ui.row().classes("gap-2 w-1/4 justify-end"):
                         ui.button(
                             icon="download",
                             on_click=lambda i=item: S3Storage().download_data(i),
+                        ).props("color=primary rounded")
+                        ui.button(
+                            icon="delete",
+                            on_click=lambda i=item: S3Storage().delete_data(i),
                         ).props("color=primary rounded")
 
 

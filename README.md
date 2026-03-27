@@ -121,7 +121,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt)
-  - [ ] Fix the Image Size for YouTube Thumbnail
+  - [x] Fix the Image Size for YouTube Thumbnail
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
   - [ ] Make a Webpage based on the post
@@ -135,8 +135,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Tree on S3 to only show folder
     - [ ] Display item based on the click
     - [ ] Ability to upload image
-    - [ ] Ability to download S3 Object to local
     - [ ] View images from S3 and Local
+    - [x] Ability to download S3 Object to local
+    - [x] Delete Item from S3
   - [ ] Prompt Update
     - [ ] Update Prompt from UI
     - [ ] Run Prompt Improver
