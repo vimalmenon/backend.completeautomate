@@ -251,7 +251,7 @@ async def prompt_page():
                         ui.label(task).classes("w-1/4 text-sm font-medium")
                         ui.label(role).classes("w-1/6 text-sm")
                         ui.label(ai).classes("w-1/6 text-sm")
-                        ui.label(last_updated).classes("w-1/3 text-sm")
+                        ui.label(str(last_updated)).classes("w-1/3 text-sm")
                         with ui.row().classes(
                             "w-1/6 justify-center items-center gap-2"
                         ):
