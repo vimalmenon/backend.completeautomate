@@ -338,11 +338,11 @@ async def prompt_detail_page(task_id: str) -> None:
 
         with ui.card().classes("w-full dark:bg-slate-800"):
             ui.label("Prompt").classes("text-h6 mb-3")
-            ui.label(prompt.prompt).classes("w-full text-wrap text-sm")
+            ui.markdown(prompt.prompt).classes("w-full whitespace-pre-wrap")
 
         with ui.card().classes("w-full dark:bg-slate-800"):
             ui.label("System Message").classes("text-h6 mb-3")
-            ui.label(prompt.system_message).classes("w-full text-wrap text-sm")
+            ui.markdown(prompt.system_message).classes("w-full whitespace-pre-wrap")
 
         with ui.row().classes("w-full justify-end gap-2 mt-4"):
             ui.button(
