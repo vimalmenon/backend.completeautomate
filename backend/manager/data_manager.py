@@ -58,12 +58,12 @@ s3_db_data: dict[str, S3Data] = {
 class DataManager:
 
     def upload(self) -> None:
+        self.__upload_platform()
         self.__upload_the_prompt()
         self.__upload_youtube_channel()
         self.__upload_youtube_videos()
         self.__upload_offline_jobs()
         self.__upload_to_s3()
-        self.__upload_platform()
 
     def download(self) -> None:
         self.__download_platform_to_s3()
@@ -111,9 +111,8 @@ class DataManager:
         s3_data = s3_db_data["youtube_videos_data"]
         videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         for video in videos:
-            YouTubeVideoManager(ref_id="").save_data(
-                data=YouTubeVideoDBData.to_cls(video)
-            )
+            data = YouTubeVideoDBData.to_cls(video)
+            YouTubeVideoManager(ref_id=data.ref_id).save_data(data=data)
 
     def __upload_offline_jobs(self) -> None:
         s3_data = s3_db_data["offline_jobs_data"]

@@ -18,7 +18,7 @@ class YouTubeVideoManager:
         return self.video_db.fetch_video_from_db()
 
     def get_videos_by_channel(self, channel_id: str) -> list[YouTubeVideoDBData]:
-        channel_value = f"{PlatformEnum.YouTubeVideo}#{channel_id}"
+        channel_value = f"{PlatformEnum.YouTubeVideo.value}#{channel_id}"
         return self.video_db.fetch_videos_by_channel(channel_value)
 
     def get_all_videos(self) -> list[YouTubeVideoDBData]:
