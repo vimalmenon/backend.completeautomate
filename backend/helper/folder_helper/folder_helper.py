@@ -5,6 +5,17 @@ from typing import Any
 
 
 class FolderHelper:
+    def read_file(self, path: str) -> bytes:
+        """
+        Read the contents of a file as bytes.
+        Raises FileNotFoundError if the file does not exist.
+        """
+        normalized_path = Path(path)
+        if not normalized_path.is_file():
+            raise FileNotFoundError(f"File not found: {normalized_path}")
+        with normalized_path.open("rb") as f:
+            return f.read()
+
     def binary_to_list_or_dict(self, binary_data: bytes) -> list | dict:
         """
         Convert binary pickle data to a list or dict.
