@@ -16,9 +16,9 @@ class ActionManager:
         if self.action == ActionEnum.transform:
             transform_data()
         elif self.action == ActionEnum.backup_db:
-            DataManager().backup_db()
+            DataManager().download_data_and_upload_to_s3()
         elif self.action == ActionEnum.restore_db:
-            DataManager()
+            DataManager().restore_db_from_s3()
         elif self.action == ActionEnum.download_to_local:
             DataManager().download()
         elif self.action == ActionEnum.restore_from_local:

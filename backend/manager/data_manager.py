@@ -66,18 +66,19 @@ class DataManager:
         self.__upload_to_s3()
 
     def download(self) -> None:
-        self.__download_platform_to_s3()
-        self.__download_prompts_and_upload_to_s3()
-        self.__download_youtube_channels_and_upload_to_s3()
-        self.__download_youtube_videos_and_upload_to_s3()
-        self.__download_offline_jobs_and_upload_to_s3()
+        self.download_data_and_upload_to_s3()
         self.__download_for_s3()
 
-    def backup_db(self) -> None:
+    def download_data_and_upload_to_s3(self) -> None:
+        self.__download_platform_and_upload_to_s3()
         self.__download_prompts_and_upload_to_s3()
         self.__download_youtube_channels_and_upload_to_s3()
         self.__download_youtube_videos_and_upload_to_s3()
         self.__download_offline_jobs_and_upload_to_s3()
+
+    def restore_db_from_s3(self) -> None:
+        self.download()
+        self.upload()
 
     def start_up_script(self) -> None:
         for data in [s3_db_data["client_secret_data"], s3_db_data["token_data"]]:
@@ -160,7 +161,7 @@ class DataManager:
             s3_data=s3_data, data=youtube_channels_data
         )
 
-    def __download_platform_to_s3(self) -> None:
+    def __download_platform_and_upload_to_s3(self) -> None:
         s3_data = s3_db_data["platform_data"]
         platforms = PlatformManager().get_all_platforms()
         platforms_data = [platform.to_json() for platform in platforms]

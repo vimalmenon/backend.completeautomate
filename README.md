@@ -80,6 +80,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
+  - [x] Clear action
+    - [x] DB download to local
+    - [x] DB upload to S3
+    - [x] DB restore from local
+    - [x] DB restore from S3
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
