@@ -169,7 +169,7 @@ class YouTubeVideoDBData:
     thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
         default_factory=list
     )
-    status: YouTubeVideoStatusEnum = (YouTubeVideoStatusEnum.Active,)
+    status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
     community_posts: list[str] = field(default_factory=list)
 
     @cached_property
