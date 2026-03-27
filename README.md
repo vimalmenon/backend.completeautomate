@@ -76,15 +76,9 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [x] Remove the unselected Data from Video DB like (Metadata, Thumbnail, ImagePrompt) (Not Required)
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
-  - [x] Clear action
-    - [x] DB download to local
-    - [x] DB upload to S3
-    - [x] DB restore from local
-    - [x] DB restore from S3
   - [ ] YouTube Stats
     - [ ] Update YouTubeChannel Stats
     - [ ] Update YouTubeVideo Stats
@@ -98,11 +92,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Delete Data
     - [ ] Update Data
   - [ ] Offline Feature
-    - [x] Script to upload data from local to DB
-    - [x] Should be able to list and show S3 items for offline data
-    - [x] Should be able to run the GUI and Flow Offline
-    - [x] Check Offline and Upload the data
-    - [ ] Script to upload data from S3 to DB when lost
+    - [x] Script to upload data from S3 to DB when lost
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
   - [ ] Create Community Post
