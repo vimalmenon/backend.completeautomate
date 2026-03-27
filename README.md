@@ -104,7 +104,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Store the result for community post in YouTubeData
   - [ ] Improve on prompt suggester
     - [ ] Remove Role from Prompt as it seems irrelevant
-    - [x] Make sure the workflow is working (Test tomorrow)
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
