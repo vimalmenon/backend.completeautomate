@@ -325,6 +325,10 @@ async def prompt_detail_page(task_id: str) -> None:
                 ui.label(prompt.ai).classes("w-3/4 text-wrap")
 
             with ui.row().classes("w-full gap-4 items-start"):
+                ui.label("Description:").classes("w-1/4 font-bold")
+                ui.label(prompt.description).classes("w-3/4 text-wrap")
+
+            with ui.row().classes("w-full gap-4 items-start"):
                 ui.label("Version:").classes("w-1/4 font-bold")
                 ui.label(prompt_json.get("version", "")).classes("w-3/4 text-wrap")
 
@@ -338,9 +342,7 @@ async def prompt_detail_page(task_id: str) -> None:
 
         with ui.card().classes("w-full dark:bg-slate-800"):
             ui.label("System Message").classes("text-h6 mb-3")
-            ui.label(prompt.system_message).classes(
-                "w-full text-wrap text-sm"
-            )
+            ui.label(prompt.system_message).classes("w-full text-wrap text-sm")
 
         with ui.row().classes("w-full justify-end gap-2 mt-4"):
             ui.button(
