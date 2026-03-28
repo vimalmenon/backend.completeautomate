@@ -8,6 +8,13 @@ from backend.database.youtube import YouTubeChannelDB, YouTubeVideoDB
 from backend.enum import PlatformEnum
 
 
+def _render_stat_card(icon: str, label: str, value: str) -> None:
+    with ui.card().classes("flex-1 min-w-32 p-4 text-center"):
+        ui.icon(icon).classes("text-3xl text-primary")
+        ui.label(value).classes("text-2xl font-bold mt-1")
+        ui.label(label).classes("text-sm text-gray-500")
+
+
 def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
     """Render breadcrumb navigation.
 
@@ -248,58 +255,44 @@ def _render_channel_statistics(channel_json: dict) -> None:
 
     with ui.card().classes("w-full dark:bg-slate-800"):
         ui.label("Channel Statistics").classes("text-h6 mb-4 font-bold")
+        with ui.row().classes("w-full gap-3 flex-wrap"):
+            _render_stat_card(
+                "visibility",
+                "Subscribers",
+                (
+                    f"{int(latest_stats.get('subscriber_count', 0)):,}"
+                    if latest_stats.get("subscriber_count")
+                    else "0"
+                ),
+            )
+            _render_stat_card(
+                "visibility",
+                "Views",
+                (
+                    f"{int(latest_stats.get('view_count', 0)):,}"
+                    if latest_stats.get("view_count")
+                    else "0"
+                ),
+            )
+            _render_stat_card(
+                "visibility",
+                "Videos",
+                (
+                    f"{int(latest_stats.get('video_count', 0)):,}"
+                    if latest_stats.get("video_count")
+                    else "0"
+                ),
+            )
+            # Optionally show stats updated date if available
+            ts = latest_stats.get("timestamp")
+            if ts:
+                try:
+                    from datetime import datetime
 
-        with ui.row().classes("w-full gap-4 justify-between"):
-            # Subscribers card
-            subscriber_count = latest_stats.get("subscriber_count", 0)
-            if isinstance(subscriber_count, str):
-                sub_display = subscriber_count
-            else:
-                sub_display = f"{int(subscriber_count):,}" if subscriber_count else "0"
-
-            with ui.column().classes(
-                "flex-1 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 rounded"
-            ):
-                ui.label("Subscribers").classes(
-                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
-                )
-                ui.label(sub_display).classes(
-                    "text-h5 font-bold text-blue-600 dark:text-blue-400 mt-2"
-                )
-
-            # Views card
-            view_count = latest_stats.get("view_count", 0)
-            if isinstance(view_count, str):
-                view_display = view_count
-            else:
-                view_display = f"{int(view_count):,}" if view_count else "0"
-
-            with ui.column().classes(
-                "flex-1 px-4 py-3 bg-green-50 dark:bg-green-900/20 rounded"
-            ):
-                ui.label("Total Views").classes(
-                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
-                )
-                ui.label(view_display).classes(
-                    "text-h5 font-bold text-green-600 dark:text-green-400 mt-2"
-                )
-
-            # Videos card
-            video_count = latest_stats.get("video_count", 0)
-            if isinstance(video_count, str):
-                video_display = video_count
-            else:
-                video_display = f"{int(video_count):,}" if video_count else "0"
-
-            with ui.column().classes(
-                "flex-1 px-4 py-3 bg-purple-50 dark:bg-purple-900/20 rounded"
-            ):
-                ui.label("Videos").classes(
-                    "text-sm font-semibold text-gray-700 dark:text-gray-300"
-                )
-                ui.label(video_display).classes(
-                    "text-h5 font-bold text-purple-600 dark:text-purple-400 mt-2"
-                )
+                    date_str = datetime.fromisoformat(ts).strftime("%Y-%m-%d")
+                except Exception:
+                    date_str = str(ts)
+                _render_stat_card("update", "Stats Updated", date_str)
 
 
 def _render_channel_detail_header() -> None:
@@ -316,7 +309,7 @@ def _render_channel_detail_header() -> None:
 def _render_channel_identity_with_button(channel_json: dict, channel_id: str) -> None:
     """Render channel identity card with image, info, and visit button."""
     with ui.card().classes("w-full border-t-4 border-red-500"):
-        # Top row: Video count and Visit Channel button
+        # Top row: Video count, View Stats, and Visit Channel button
         with ui.row().classes("w-full items-center justify-between mb-2"):
             video_count = channel_json.get("video_count", 0)
             video_count_display = (
@@ -325,13 +318,20 @@ def _render_channel_identity_with_button(channel_json: dict, channel_id: str) ->
             ui.label(video_count_display).classes(
                 "text-sm font-semibold text-purple-700 dark:text-purple-400"
             )
-            ui.button(
-                "View Channel Detail",
-                icon="open_in_new",
-                on_click=lambda: ui.run_javascript(
-                    f'window.open("https://www.youtube.com/channel/{channel_id}", "_blank")'
-                ),
-            ).props("color=red")
+            with ui.row().classes("gap-2"):
+                if channel_json.get("stats"):
+                    ui.button(
+                        "View Stats",
+                        icon="bar_chart",
+                        on_click=lambda: open_channel_stats_chart_dialog(channel_json),
+                    ).props("color=primary")
+                ui.button(
+                    "View Channel Detail",
+                    icon="open_in_new",
+                    on_click=lambda: ui.run_javascript(
+                        f'window.open("https://www.youtube.com/channel/{channel_id}", "_blank")'
+                    ),
+                ).props("color=red")
 
         # Main section: Image and info
         with ui.row().classes("gap-6 items-start w-full justify-between"):
@@ -546,6 +546,7 @@ async def youtube_channel_page(channel_id: str, tab: str | None = None) -> None:
         ui.separator()
         _render_channel_info_card(channel_json)
         ui.separator()
+
         _render_channel_statistics(channel_json)
         _render_channel_description(channel_json)
         ui.separator().classes("my-4")
