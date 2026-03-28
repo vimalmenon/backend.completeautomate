@@ -53,4 +53,4 @@ class YouTubeStatsUpdater(BaseGenerator):
                 }
             )
             values = video_db.values_to_update(old_value=video)
-            self.video_manager.update_video(values=values)
+            YouTubeVideoManager(ref_id=video.ref_id).update_video(values=values)
