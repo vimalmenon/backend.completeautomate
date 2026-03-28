@@ -47,9 +47,11 @@ async def on_tree_select(e, table_container, prefix_input, max_keys_input):
             table_container, prefix_input, max_keys_input, prefix=selected_prefix
         )
 
+
 @ui.refreshable
 def selected_item(testing):
     ui.label(f"{testing} test").classes("text-h4")
+
 
 async def render_tree(tree_container):
     tree_container.clear()
@@ -62,6 +64,7 @@ async def render_tree(tree_container):
             on_select=lambda e: selected_item(e.value),
             label_key="name",
         ).expand().classes("w-full")
+
 
 @ui.refreshable
 async def load_items(table_container, prefix_input, max_keys_input, prefix=None):

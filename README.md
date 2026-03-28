@@ -80,8 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
   - [ ] Remove unwanted jobs
-  - [ ] Standardize the DB Method
   - [ ] Button when the values are not synced
+  - [ ] Standardize the DB Method
     - [ ] Get Data
     - [ ] Save Data
     - [ ] Query Data
