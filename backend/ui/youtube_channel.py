@@ -218,26 +218,6 @@ def _render_channel_identity(channel_json: dict) -> None:
                     )
 
 
-def _render_channel_metadata(channel_json: dict) -> None:
-    with ui.card().classes("w-full dark:bg-slate-800"):
-        ui.label("Metadata").classes("text-h6 mb-3")
-
-        with ui.row().classes("w-full gap-4 items-start"):
-            ui.label("Status:").classes("w-1/4 font-bold")
-            ui.label(channel_json.get("privacy_status", "")).classes("w-3/4")
-
-        with ui.row().classes("w-full gap-4 items-start"):
-            ui.label("Made for Kids:").classes("w-1/4 font-bold")
-            ui.label(str(channel_json.get("made_for_kids", False))).classes("w-3/4")
-
-        with ui.row().classes("w-full gap-4 items-start"):
-            ui.label("Published:").classes("w-1/4 font-bold")
-            ui.label(channel_json.get("published_at", "")).classes("w-3/4")
-
-        with ui.row().classes("w-full gap-4 items-start"):
-            ui.label("Last Updated:").classes("w-1/4 font-bold")
-            ui.label(channel_json.get("last_updated_at", "")).classes("w-3/4")
-
 
 def _render_channel_description(channel_json: dict) -> None:
     description = channel_json.get("description")
@@ -467,12 +447,14 @@ def _render_channel_videos(videos: list[Any], channel_id: str) -> None:
             ui.label("Video ID").classes("w-1/6")
             ui.label("Title").classes("w-1/2")
             ui.label("Published").classes("w-1/4")
+            ui.label("Last Updated").classes("w-1/4")
             ui.label("Action").classes("w-1/12 text-center")
 
         for video in videos:
             route_id = _get_video_route_id(video)
             title = str(getattr(video, "title", "Untitled"))
             published_at = str(getattr(video, "published_at", ""))
+            last_updated_at = str(getattr(video, "last_updated_at", ""))
             short_id = route_id[:16]
 
             with ui.row().classes(
@@ -481,6 +463,7 @@ def _render_channel_videos(videos: list[Any], channel_id: str) -> None:
                 ui.label(short_id).classes("w-1/6 text-sm")
                 ui.label(title).classes("w-1/2 text-sm")
                 ui.label(published_at).classes("w-1/4 text-sm")
+                ui.label(last_updated_at).classes("w-1/4 text-sm")
                 with ui.row().classes("w-1/12 justify-center"):
                     ui.button(
                         icon="open_in_new",

@@ -80,9 +80,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
   - [ ] YouTube Stats
-    - [ ] Update YouTubeChannel Stats
-    - [ ] Update YouTubeVideo Stats
-    - [ ] Updated every every 2 Days
+    - [x] Update YouTubeChannel Stats
+    - [x] Update YouTubeVideo Stats
+    - [x] Updated every every 2 Days
+    - [ ] Remove unwanted jobs
     - [ ] Remove all the references of value to update
     - [ ] Make one job to update Video and Channel stats
     - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
