@@ -359,3 +359,11 @@ async def jobs_page(status: str = ""):
                                 ).props(
                                     'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                                 )
+                            ui.button(
+                                icon="delete",
+                                on_click=lambda current_job=job: JobManager().delete_job(
+                                    job_data=current_job
+                                ),
+                            ).props(
+                                'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                            )

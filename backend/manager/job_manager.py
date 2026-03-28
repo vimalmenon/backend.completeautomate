@@ -11,8 +11,11 @@ from backend.enum import JobsStatusEnum, JobTypeEnum
 
 class JobManager:
 
-    def save_job(self, job_data: JobData):
+    def save_job(self, job_data: JobData) -> None:
         JobDB().save_data(job_data)
+
+    def delete_job(self, job_data: JobData) -> None:
+        JobDB().delete_data(job_id=str(job_data.id))
 
     def get_job_by_type(self, type: JobTypeEnum) -> list[JobData]:
         return JobDB().query_data_by_type(type)

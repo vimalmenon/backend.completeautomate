@@ -22,6 +22,14 @@ class JobDB:
             }
         )
 
+    def delete_data(self, job_id: str) -> None:
+        self.db_manager.remove_item(
+            data={
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: job_id,
+            }
+        )
+
     def get_job_by_id(self, job_id: str) -> JobData | None:
         item = self.db_manager.get_item(
             key={

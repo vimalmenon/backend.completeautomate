@@ -203,12 +203,16 @@ async def s3_bucket_page() -> None:
                         on_click=lambda: load_items(
                             table_container, prefix_input, max_keys_input
                         ),
-                    ).props("color=primary")
+                    ).props(
+                        'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                    )
                     ui.button(
                         "Download",
                         icon="download",
                         on_click=lambda: load_items(
                             table_container, prefix_input, max_keys_input
                         ),
-                    ).props("color=primary")
+                    ).props(
+                        'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                    )
                     await load_items(table_container, prefix_input, max_keys_input)
