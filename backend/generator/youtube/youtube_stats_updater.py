@@ -29,7 +29,7 @@ class YouTubeStatsUpdater(BaseGenerator):
                 channel_id=channel.platform.channel_id
             )
             channel_db = YouTubeChannelDBData.to_cls_from_response(channel=channel_data)
-            self.channel_manager.update_channel(
+            YouTubeChannelManager(ref_id=channel.ref_id).update_channel(
                 value=channel_db.values_to_update(old_value=channel)
             )
 
