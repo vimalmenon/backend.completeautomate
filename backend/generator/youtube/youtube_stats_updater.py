@@ -45,7 +45,12 @@ class YouTubeStatsUpdater(BaseGenerator):
             video_api = self.youtube_api.fetch_video_details(
                 video_id=video.platform.video_id
             )
-            video_db = YouTubeVideoDBData.to_cls_from_response(item=video_api)
-            self.video_manager.update_video(
-                values=video_db.values_to_update(old_value=video)
+            video_db = YouTubeVideoDBData.to_cls_from_response(
+                item={
+                    **video_api,
+                    "task_status": video.task_status.value,
+                    "ref_id": video.ref_id,
+                }
             )
+            values = video_db.values_to_update(old_value=video)
+            self.video_manager.update_video(values=values)

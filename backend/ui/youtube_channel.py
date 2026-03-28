@@ -218,7 +218,6 @@ def _render_channel_identity(channel_json: dict) -> None:
                     )
 
 
-
 def _render_channel_description(channel_json: dict) -> None:
     description = channel_json.get("description")
     if description:
