@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add Update Video to a playlist
   - [ ] Remove unwanted jobs
   - [ ] Standardize the DB Method
+  - [ ] Button when the values are not synced
     - [ ] Get Data
     - [ ] Save Data
     - [ ] Query Data

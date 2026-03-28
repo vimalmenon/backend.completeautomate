@@ -4,34 +4,7 @@ from backend.config.env import env
 from backend.data import S3Data
 from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
-
-
-def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
-    """Render breadcrumb navigation.
-
-    Args:
-        items: List of (label, url) tuples. Last item is current page (no link).
-        right_text: Optional text to display on the right side.
-    """
-    with ui.row().classes("items-center justify-between w-full mb-3 text-sm"):
-        with ui.row().classes("items-center gap-2"):
-            for index, (label, url) in enumerate(items):
-                if index > 0:
-                    ui.label("/").classes("text-gray-400")
-
-                if index == len(items) - 1:
-                    # Current page - no link
-                    ui.label(label).classes(
-                        "text-gray-600 dark:text-gray-400 font-medium"
-                    )
-                else:
-                    # Clickable breadcrumb
-                    ui.link(label, url).classes(
-                        "text-blue-600 dark:text-blue-400 hover:underline"
-                    )
-
-        if right_text:
-            ui.label(right_text).classes("text-gray-500 dark:text-gray-400 text-xs")
+from backend.ui.common.component_common import render_breadcrumbs
 
 
 def create_tree(items: list[S3Data] = []):
@@ -145,11 +118,15 @@ async def load_items(table_container, prefix_input, max_keys_input, prefix=None)
                         ui.button(
                             icon="download",
                             on_click=lambda i=item: S3Storage().download_data(i),
-                        ).props("color=primary rounded")
+                        ).props(
+                            'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                        )
                         ui.button(
                             icon="delete",
                             on_click=lambda i=item: S3Storage().delete_data(i),
-                        ).props("color=primary rounded")
+                        ).props(
+                            'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                        )
 
 
 async def s3_bucket_page() -> None:
