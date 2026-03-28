@@ -47,6 +47,9 @@ async def on_tree_select(e, table_container, prefix_input, max_keys_input):
             table_container, prefix_input, max_keys_input, prefix=selected_prefix
         )
 
+@ui.refreshable
+def selected_item(testing):
+    ui.label(f"{testing} test").classes("text-h4")
 
 async def render_tree(tree_container):
     tree_container.clear()
@@ -56,13 +59,11 @@ async def render_tree(tree_container):
         structured_tree = create_tree(items)
         ui.tree(
             structured_tree,
-            # on_select=lambda e: on_tree_select(
-            #     e, table_container, prefix_input, max_keys_input
-            # ),
+            on_select=lambda e: selected_item(e.value),
             label_key="name",
         ).expand().classes("w-full")
 
-
+@ui.refreshable
 async def load_items(table_container, prefix_input, max_keys_input, prefix=None):
     table_container.clear()
     if prefix is None:
@@ -192,4 +193,5 @@ async def s3_bucket_page() -> None:
                     ).props(
                         'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                     )
+                    selected_item(None)
                     await load_items(table_container, prefix_input, max_keys_input)
