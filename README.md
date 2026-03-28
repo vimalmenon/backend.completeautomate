@@ -79,18 +79,18 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
+  - [ ] Remove unwanted jobs
   - [ ] YouTube Stats
     - [x] Update YouTubeChannel Stats
     - [x] Update YouTubeVideo Stats
     - [x] Updated every every 2 Days
-    - [ ] Last Update is not getting updated or it's not reflected
-    - [ ] Remove unwanted jobs
-    - [ ] Remove all the references of value to update
-    - [ ] Make one job to update Video and Channel stats
-    - [ ] Add job to update YouTube Video & Channel Stats (Find the Best way)
-      - [ ] Show stats for channel as well
-      - [ ] Stats to be taken from created Videos and Channel
-      - [ ] Update after every 3 Days
+    - [x] Last Update is not getting updated or it's not reflected
+    - [x] Remove all the references of value to update
+    - [x] Make one job to update Video and Channel stats
+    - [x] Add job to update YouTube Video & Channel Stats (Find the Best way)
+      - [x] Show stats for channel as well
+      - [x] Stats to be taken from created Videos and Channel
+      - [x] Update after every 3 Days
   - [ ] Standardize the DB Method
     - [ ] Get Data
     - [ ] Save Data
