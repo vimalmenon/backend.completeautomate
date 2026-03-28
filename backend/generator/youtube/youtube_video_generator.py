@@ -23,6 +23,7 @@ from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import (
     ImagePromptsListRequest,
     YouTubeVideoAnalyzerListResponse,
+    YouTubeVideoCommunityPostsResponse,
 )
 from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
@@ -209,7 +210,9 @@ class YouTubeVideoGenerator(BaseGenerator):
         )
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
-    def __create_thumbnail_prompt_suggestions(self, video_from_db: YouTubeVideoDBData):
+    def __create_thumbnail_prompt_suggestions(
+        self, video_from_db: YouTubeVideoDBData
+    ) -> None:
         logger.info("Generating thumbnail prompt suggestions for job %s", self.job.id)
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
@@ -280,9 +283,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         )
         return JobsStatusEnum.REVIEW, self.task_data.to_json()
 
-    def __upload_thumbnail(
-        self, video_from_db: YouTubeVideoDBData
-    ) -> tuple[JobsStatusEnum, dict]:
+    def __upload_thumbnail(self, video_from_db: YouTubeVideoDBData) -> None:
         suggested_thumbnails = [
             suggestion
             for suggestion in video_from_db.thumbnails_suggestions
@@ -309,12 +310,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.youtube_manager.update_thumbnail(
                 thumbnail_url=updated_youtube_response.thumbnail
             )
-            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoCommunityPost
-            return JobsStatusEnum.COMPLETE, self.task_data.to_json()
         raise AppException("More than one thumbnail was selected")
 
-    def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> Any:
-        # TODO need to fix this
+    def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> None:
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoCommunityPost,
             task_id=f"{str(self.job.id)}_community_post",
@@ -326,10 +324,15 @@ class YouTubeVideoGenerator(BaseGenerator):
         )
         agent = GeneralAgent(
             service,
-            response_format=ImagePromptsListRequest,
+            response_format=YouTubeVideoCommunityPostsResponse,
         )
         result = agent.invoke()
-        return result["system_message"]
+
+        structured_response: YouTubeVideoCommunityPostsResponse = result.get(
+            "structured_response", []
+        )
+        post_response = [data for data in structured_response.posts]
+        self.youtube_manager.update_community_posts(community_posts=post_response)
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.youtube_manager.update_task_status(

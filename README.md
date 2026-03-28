@@ -82,11 +82,11 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Remove unwanted jobs
   - [ ] Button when the values are not synced
   - [ ] Standardize the DB Method
-    - [ ] Get Data
-    - [ ] Save Data
-    - [ ] Query Data
-    - [ ] Delete Data
-    - [ ] Update Data
+    - [ ] Get Item
+    - [ ] Save Item
+    - [ ] Query values
+    - [ ] Delete Item
+    - [ ] Update values
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
