@@ -1,4 +1,4 @@
-from backend.generator.youtube import YouTubeVideoGenerator
+from backend.generator.youtube import YouTubeStatsUpdater, YouTubeVideoGenerator
 from backend.generator.youtube_channel_creator import (
     YouTubeChannelCreatorJob,
     YouTubeChannelOnboardingJob,
@@ -10,4 +10,5 @@ __all__ = [
     "YouTubeChannelVideoCheckerJob",
     "YouTubeChannelOnboardingJob",
     "YouTubeVideoGenerator",
+    "YouTubeStatsUpdater",
 ]
