@@ -81,12 +81,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add Update Video to a playlist
   - [ ] Remove unwanted jobs
   - [ ] Button when the values are not synced
-  - [ ] Standardize the DB Method
-    - [ ] Get Item
-    - [ ] Save Item
-    - [ ] Query values
-    - [ ] Delete Item
-    - [ ] Update values
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
@@ -110,6 +104,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
+  - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
