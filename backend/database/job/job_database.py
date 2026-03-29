@@ -63,10 +63,19 @@ class JobDB:
         )
         return [JobData.to_cls(item) for item in items]
 
+    def get_jobs_by_statuses(self, statuses: list[JobsStatusEnum]) -> list[JobData]:
+        items = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE),
+            filter_expression=Attr("status").is_in(
+                [status.value for status in statuses]
+            ),
+        )
+        return [JobData.to_cls(item) for item in items]
+
     def get_jobs_by_status(self, status: JobsStatusEnum) -> list[JobData]:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
-            filter_expression=Attr("status").eq(status),
+            filter_expression=Attr("status").eq(status.value),
         )
         return [JobData.to_cls(item) for item in items]
 

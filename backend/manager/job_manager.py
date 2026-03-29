@@ -32,6 +32,15 @@ class JobManager:
     def get_all_active_jobs(self) -> list[JobData]:
         return JobDB().get_all_active_jobs()
 
+    def get_all_offline_jobs(self) -> list[JobData]:
+        return JobDB().get_jobs_by_statuses(
+            statuses=[
+                JobsStatusEnum.IN_PROGRESS,
+                JobsStatusEnum.FAILED,
+                JobsStatusEnum.REVIEW,
+            ]
+        )
+
     def get_all_completed_job(self) -> list[JobData]:
         return JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE)
 

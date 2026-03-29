@@ -176,7 +176,7 @@ class DataManager:
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=youtube_videos_data)
 
     def __download_offline_jobs_and_upload_to_s3(self):
-        jobs = JobManager().get_all_active_jobs()
+        jobs = JobManager().get_all_offline_jobs()
         job_data = [job.to_json() for job in jobs]
         s3_data = s3_db_data["offline_jobs_data"]
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=job_data)
