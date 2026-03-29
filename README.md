@@ -80,14 +80,15 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Add Update Video to a playlist
   - [ ] Remove unwanted jobs
+  - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
   - [ ] Button when the values are not synced
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
-  - [ ] Create Community Post
-    - [ ] Add workflow for community post
-    - [ ] Give multiple options for community post
-    - [ ] Store the result for community post in YouTubeData
+  - [x] Create Community Post
+    - [x] Add workflow for community post
+    - [x] Give multiple options for community post
+    - [x] Store the result for community post in YouTubeData
   - [ ] Improve on prompt suggester
     - [ ] Remove Role from Prompt as it seems irrelevant
     - [ ] Should be able to test the Prompt generated
@@ -104,7 +105,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
   - [ ] `JobData` to show error message
-  - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
