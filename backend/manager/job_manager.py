@@ -44,6 +44,9 @@ class JobManager:
     def get_all_completed_job(self) -> list[JobData]:
         return JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE)
 
+    def get_all_cleanup_job(self) -> list[JobData]:
+        return JobDB().get_jobs_by_status(status=JobsStatusEnum.CLEAN_UP)
+
     def create_job(
         self,
         type: JobTypeEnum,

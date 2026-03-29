@@ -74,7 +74,7 @@ JOB_STATUS_TO_TASK_STATUS: dict[JobsStatusEnum, str] = {
     JobsStatusEnum.PENDING: "PENDING",
     JobsStatusEnum.REVIEW: "REVIEW",
     JobsStatusEnum.FAILED: "FAILED",
-    JobsStatusEnum.ARCHIVED: "CLEAN_UP",
+    JobsStatusEnum.CLEAN_UP: "CLEAN_UP",
 }
 
 STATUS_STYLE: dict[str, dict[str, str]] = {
