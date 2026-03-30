@@ -3,6 +3,7 @@ from uuid import UUID
 
 from backend.data import JobData
 from backend.jobs import (
+    NoJob,
     PromptSuggesterJob,
     YouTubeChannelJob,
     YouTubeStatsUpdaterJob,
@@ -44,34 +45,21 @@ class JobScheduler:
             f"Starting scheduled job execution for job_id={job.id}, type={job.type}"
         )
         if job.type in YouTubeChannelJob.types:
-            (
-                status,
-                failed_count,
-                task_data,
-            ) = YouTubeChannelJob(job=job).execute()
+            job_response = YouTubeChannelJob(job=job).execute()
         elif job.type in YouTubeVideoJob.types:
-            (
-                status,
-                failed_count,
-                task_data,
-            ) = YouTubeVideoJob(job=job).execute()
+            job_response = YouTubeVideoJob(job=job).execute()
         elif job.type in YouTubeStatsUpdaterJob.types:
-            (
-                status,
-                failed_count,
-                task_data,
-            ) = YouTubeStatsUpdaterJob(job=job).execute()
+            job_response = YouTubeStatsUpdaterJob(job=job).execute()
         elif job.type in PromptSuggesterJob.types:
-            (
-                status,
-                failed_count,
-                task_data,
-            ) = PromptSuggesterJob(job=job).execute()
+            job_response = PromptSuggesterJob(job=job).execute()
+        else:
+            job_response = NoJob(job=job).execute()
         self.job_manager.update_job_data(
             job_id=job.id,
-            status=status,
-            failed_count=failed_count,
-            task_data=task_data,
+            status=job_response.status,
+            failed_count=job_response.failed_count,
+            task_data=job_response.task_data,
+            error_msg=job_response.error_msg,
         )
 
         logger.info(

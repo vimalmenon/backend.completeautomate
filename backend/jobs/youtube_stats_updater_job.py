@@ -1,3 +1,4 @@
+from backend.data import JobDataResponse
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.generator import YouTubeStatsUpdater
 from backend.integration import YouTubeAPI
@@ -14,10 +15,10 @@ class YouTubeStatsUpdaterJob(BaseJob):
         self.video_manager = YouTubeVideoManager(ref_id="")
         self.youtube_api = YouTubeAPI()
 
-    def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
+    def execute(self) -> JobDataResponse:
         try:
             status, data = YouTubeStatsUpdater(self.job).generate()
-            return (status, 0, data)
+            return JobDataResponse(status=status, task_data=data)
         except Exception:
             self.job.failed_count += 1
             status = (
@@ -25,4 +26,4 @@ class YouTubeStatsUpdaterJob(BaseJob):
                 if self.job.failed_count >= 4
                 else JobsStatusEnum.IN_PROGRESS
             )
-            return (status, 1, None)
+            return JobDataResponse(status=status, failed_count=self.job.failed_count)

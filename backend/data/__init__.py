@@ -2,7 +2,7 @@ from backend.data.image import (
     ImagePromptData,
     ImagePromptJobData,
 )
-from backend.data.job import JobData
+from backend.data.job import JobData, JobDataResponse
 from backend.data.message import MessageDBData
 from backend.data.platform import (
     PlatformDBData,
@@ -68,4 +68,5 @@ __all__ = [
     "YouTubeVideoThumbnailData",
     "YouTubeVideoStatsUpdateJobData",
     "YouTubeStatsUpdaterTaskData",
+    "JobDataResponse",
 ]

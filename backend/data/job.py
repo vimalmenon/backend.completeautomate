@@ -53,3 +53,11 @@ class JobData:
             ),
             error_msg=data.get("error_msg"),
         )
+
+
+@dataclass
+class JobDataResponse:
+    status: JobsStatusEnum
+    failed_count: int = 0
+    task_data: dict | None = None
+    error_msg: str | None = None

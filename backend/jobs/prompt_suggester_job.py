@@ -1,5 +1,6 @@
 import logging
 
+from backend.data import JobDataResponse
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.jobs.base_job import BaseJob
 
@@ -11,8 +12,8 @@ class PromptSuggesterJob(BaseJob):
         JobTypeEnum.PromptImprover,
     ]
 
-    def execute(self) -> tuple[JobsStatusEnum, int, dict | None]:
+    def execute(self) -> JobDataResponse:
         try:
-            return JobsStatusEnum.IN_PROGRESS, 1, None
+            return JobDataResponse(status=JobsStatusEnum.IN_PROGRESS)
         except Exception:
-            return (JobsStatusEnum.FAILED, 0, None)
+            return JobDataResponse(status=JobsStatusEnum.FAILED)
