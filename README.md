@@ -82,6 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
+    - [ ] `user_video_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData`  (Need to think)
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
@@ -92,7 +93,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Should be able to test the Prompt generated
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
-
   - [ ] Workflow improvement
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Send Notification
