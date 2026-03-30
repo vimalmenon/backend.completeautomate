@@ -106,31 +106,6 @@ class YouTubeVideoMetadataData:
 
 
 @dataclass
-class YouTubeVideoReviewData:
-    upsides: list[str]
-    downsides: list[str]
-    overall: str
-    rating: int
-
-    def to_json(self) -> dict:
-        return {
-            "upsides": self.upsides,
-            "downsides": self.downsides,
-            "overall": self.overall,
-            "rating": int(self.rating),
-        }
-
-    @classmethod
-    def to_cls(cls, data) -> Self:
-        return cls(
-            upsides=data["upsides"],
-            downsides=data["downsides"],
-            overall=data["overall"],
-            rating=int(data["rating"]),
-        )
-
-
-@dataclass
 class YouTubeVideoThumbnailData:
     s3_data: S3Data
     selected: bool = False
