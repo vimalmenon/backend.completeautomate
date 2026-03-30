@@ -120,12 +120,12 @@ class YouTubeVideoDBData:
     transcript: str | None = None
     summarized_transcript: str | None = None
     comment: str | None = None
+    status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
     thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
         default_factory=list
     )
-    status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
     community_posts: list[str] = field(default_factory=list)
 
     @cached_property
