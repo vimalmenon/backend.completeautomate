@@ -1,4 +1,9 @@
-from backend.data import YouTubeChannelDBData, YouTubeVideoDBData
+from backend.data import (
+    JobData,
+    YouTubeChannelDBData,
+    YouTubeStatsUpdaterTaskData,
+    YouTubeVideoDBData,
+)
 from backend.enum import (
     JobsStatusEnum,
 )
@@ -10,11 +15,12 @@ from backend.manager import YouTubeChannelManager, YouTubeVideoManager
 class YouTubeStatsUpdater(BaseGenerator):
     UPDATE_DAYS = 2
 
-    def __init__(self, job):
-        self.job = job
+    def __init__(self, job: JobData):
+        super().__init__(job=job)
         self.channel_manager = YouTubeChannelManager(ref_id="")
         self.video_manager = YouTubeVideoManager(ref_id="")
         self.youtube_api = YouTubeAPI()
+        self.task_data = YouTubeStatsUpdaterTaskData.to_cls(job.task_data)
 
     def generate(self) -> tuple[JobsStatusEnum, dict]:
         channels = self.channel_manager.get_channels()

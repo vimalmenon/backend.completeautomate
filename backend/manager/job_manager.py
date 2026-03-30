@@ -105,3 +105,14 @@ class JobManager:
         )
         self.save_job(job_data=job_data)
         return job_data
+
+    def create_prompt_improvement_onboarding_job(self) -> JobData:
+        if jobs := self.get_job_by_type(type=JobTypeEnum.PromptImprover):
+            return jobs[0]
+        job_data = self.create_job(
+            type=JobTypeEnum.PromptImprover,
+            task_data={},
+            description="Improve the prompts for better response",
+        )
+        self.save_job(job_data=job_data)
+        return job_data

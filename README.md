@@ -76,10 +76,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [ ] Add `Playlist` details to YouTube Video DB
   - [ ] Fix the Image Size for YouTube Thumbnail
-  - [ ] Add Update Video to a playlist
-  - [ ] Remove unwanted jobs
+  - [ ] Fix Jobs
+    - [ ] Add `PromptImprover`
+    - [ ] Complete YouTubeChannel (As YouTubeStatsUpdater does same job) 
+    - [ ] Add `YouTubeStatsUpdaterTaskData` transform data for job
+    - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
   - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
   - [ ] Button when the values are not synced
   - [ ] Offline Feature

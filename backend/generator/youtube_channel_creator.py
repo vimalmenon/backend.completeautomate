@@ -11,6 +11,7 @@ from backend.data import (
     YouTubeVideoTaskData,
 )
 from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum
+from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI
@@ -129,17 +130,17 @@ class YouTubeChannelCreatorJob(BaseGenerator):
                 {**result, "ref_id": self.task_data.ref_id}
             )
             self.channel_manager.add_channel(channel_from_api)
-            return JobsStatusEnum.IN_PROGRESS, None
-        if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
-            result = self.youtube_api.get_channel_info(channel_id=self.channel_id)
-            latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
-                {**result, "ref_id": self.task_data.ref_id}
-            )
-            self.channel_manager.update_channel(
-                latest_channel_from_api.values_to_update(channel_from_db)
-            )
-
-        return JobsStatusEnum.IN_PROGRESS, None
+            return JobsStatusEnum.COMPLETE, None
+        # if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
+        #     result = self.youtube_api.get_channel_info(channel_id=self.channel_id)
+        #     latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
+        #         {**result, "ref_id": self.task_data.ref_id}
+        #     )
+        #     self.channel_manager.update_channel(
+        #         latest_channel_from_api.values_to_update(channel_from_db)
+        #     )
+        # return JobsStatusEnum.IN_PROGRESS, None
+        raise AppException("Channel DB already exists")
 
 
 class YouTubeChannelVideoCheckerJob(BaseGenerator):

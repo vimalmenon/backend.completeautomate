@@ -42,7 +42,7 @@ class YouTubeChannelJob(BaseJob):
                     status.value,
                     self.job.failed_count,
                 )
-                return (status, 1, None)
+                return (status, self.job.failed_count, None)
         if self.job.type == JobTypeEnum.YouTubeChannelVideoChecker:
             try:
                 logger.info(
@@ -68,7 +68,7 @@ class YouTubeChannelJob(BaseJob):
                     status.value,
                     self.job.failed_count,
                 )
-                return (status, 1, None)
+                return (status, self.job.failed_count, None)
         if self.job.type == JobTypeEnum.YouTubeChannelOnboarding:
             try:
                 logger.info("Executing YouTube channel onboarding job %s", self.job.id)
@@ -92,7 +92,7 @@ class YouTubeChannelJob(BaseJob):
                     status.value,
                     self.job.failed_count,
                 )
-                return (status, 1, None)
+                return (status, self.job.failed_count, None)
         logger.warning(
             "Unsupported YouTube channel job type %s for job %s",
             self.job.type.value,

@@ -84,6 +84,18 @@ class YouTubeVideoCheckerTaskData:
 
 
 @dataclass
+class YouTubeStatsUpdaterTaskData:
+    poll_frequency_in_days: int
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(poll_frequency_in_days=int(data["poll_frequency_in_days"]))
+
+    def to_json(self) -> dict:
+        return {"poll_frequency_in_days": self.poll_frequency_in_days}
+
+
+@dataclass
 class YouTubeVideoTaskData:
     ref_id: str
     task: YouTubeVideoTaskEnum = YouTubeVideoTaskEnum.YouTubeVideoStart

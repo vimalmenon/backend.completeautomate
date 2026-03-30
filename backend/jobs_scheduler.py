@@ -1,7 +1,12 @@
 import logging
 
 from backend.data import JobData
-from backend.jobs import YouTubeChannelJob, YouTubeStatsUpdaterJob, YouTubeVideoJob
+from backend.jobs import (
+    PromptSuggesterJob,
+    YouTubeChannelJob,
+    YouTubeStatsUpdaterJob,
+    YouTubeVideoJob,
+)
 from backend.manager import ActionManager, DataManager, JobManager, StartUpManager
 
 logger = logging.getLogger(__name__)
@@ -55,6 +60,12 @@ class JobScheduler:
                 failed_count,
                 task_data,
             ) = YouTubeStatsUpdaterJob(job=job).execute()
+        elif job.type in PromptSuggesterJob.types:
+            (
+                status,
+                failed_count,
+                task_data,
+            ) = PromptSuggesterJob().execute()
         self.job_manager.update_job_data(
             job_id=job.id,
             status=status,
