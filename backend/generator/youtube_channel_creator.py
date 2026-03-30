@@ -130,17 +130,7 @@ class YouTubeChannelCreatorJob(BaseGenerator):
                 {**result, "ref_id": self.task_data.ref_id}
             )
             self.channel_manager.add_channel(channel_from_api)
-        return JobsStatusEnum.COMPLETE, None
-        # TODO Remove this once ran
-        # if channel_from_db.past_update_time(int(self.task_data.poll_frequency_in_days)):
-        #     result = self.youtube_api.get_channel_info(channel_id=self.channel_id)
-        #     latest_channel_from_api = YouTubeChannelDBData.to_cls_from_response(
-        #         {**result, "ref_id": self.task_data.ref_id}
-        #     )
-        #     self.channel_manager.update_channel(
-        #         latest_channel_from_api.values_to_update(channel_from_db)
-        #     )
-        # return JobsStatusEnum.IN_PROGRESS, None
+            return JobsStatusEnum.COMPLETE, None
         raise AppException("Channel DB already exists")
 
 
