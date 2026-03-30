@@ -11,7 +11,6 @@ from backend.data.platform import (
 )
 from backend.data.prompt import (
     PromptDBData,
-    PromptSuggesterDBData,
     PromptVersionDBData,
     YouTubeThumbnailImageGenerationPromptData,
 )
@@ -54,7 +53,6 @@ __all__ = [
     "PlatformYouTubeChannelDBData",
     "PlatformYouTubeVideoDBData",
     "PromptVersionDBData",
-    "PromptSuggesterDBData",
     "YouTubeVideoThumbnailPromptSuggesterJobData",
     "YouTubeThumbnailImageGenerationPromptData",
     "YouTubeVideoReviewerJobData",

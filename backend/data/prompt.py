@@ -94,34 +94,6 @@ class PromptDBData:
 
 
 @dataclass
-class PromptSuggesterDBData:
-    task: PromptTaskEnum
-    description: str
-    versions: list[PromptVersionDBData]
-    comment: str | None
-
-    def to_json(self) -> dict:
-        return {
-            "task": self.task.value,
-            "description": self.description,
-            "comment": self.comment,
-            "versions": [version.to_json() for version in self.versions],
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(
-            task=PromptTaskEnum(data["task"]),
-            description=data["description"],
-            comment=data.get("comment"),
-            versions=[
-                PromptVersionDBData.to_cls(version)
-                for version in data.get("versions", [])
-            ],
-        )
-
-
-@dataclass
 class YouTubeThumbnailImageGenerationPromptData:
     title: str
     description: str

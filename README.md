@@ -146,10 +146,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [ ] Review the Video based on Audio (No Longer Needed)
-  - [ ] Check for grammar
-  - [ ] Points to improve 
-  - [ ] What went well
 
 
 **Ideas / Low Priority:**
