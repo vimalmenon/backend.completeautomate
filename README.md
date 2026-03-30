@@ -78,7 +78,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 
   - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Fix Jobs
-    - [ ] Add `PromptImprover`
     - [ ] Complete YouTubeChannel (As YouTubeStatsUpdater does same job) 
     - [ ] Add `YouTubeStatsUpdaterTaskData` transform data for job
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
@@ -92,6 +91,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Should be able to test the Prompt generated
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
     - [ ] Add one shot / few shot prompt examples for image and other generation tasks
+    - [ ] Add `PromptImprover`
+    - [ ] Need to pass data To `Prompt Improver`
   - [ ] Workflow improvement
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Send Notification
