@@ -254,9 +254,10 @@ def render_add_job_form() -> None:
 
 def navigation_to_youtube_page(job: JobData) -> None:
     platform = PlatformManager().get_platform_by_ref_id(job.task_data.get("ref_id", ""))
-    ui.run_javascript(
-        f'window.location.href = "/youtube/{platform.channel_id}/{platform.video_id}"'
-    )
+    if platform:
+        ui.run_javascript(
+            f'window.location.href = "/youtube/{platform.channel_id}/{platform.video_id}"'
+        )
 
 
 async def jobs_page(status: str = ""):
@@ -374,7 +375,10 @@ async def jobs_page(status: str = ""):
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
-                            if job.type == JobTypeEnum.YouTubeVideo:
+                            if job.type in [
+                                JobTypeEnum.YouTubeVideo,
+                                JobTypeEnum.YouTubeChannel,
+                            ]:
                                 ui.button(
                                     icon="open_in_new",
                                     on_click=lambda current_job=job: navigation_to_youtube_page(
