@@ -78,12 +78,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in Next Upload
-  - [ ] Fix Jobs
-    - [ ] Complete `YouTubeChannel` Job (As YouTubeStatsUpdater does same job) 
-    - [ ] Add `YouTubeStatsUpdaterTaskData` transform data for job
+  - [ ] Fix / improve YouTube
+    - [x] Complete `YouTubeChannel` Job (As YouTubeStatsUpdater does same job) 
+    - [x] Add `YouTubeStatsUpdaterTaskData` transform data for job
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
-  - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
-  - [ ] Button when the values are not synced
+    - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
+
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
@@ -110,6 +110,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] View `Job` detail based on the Job
   - [ ] Clicking on `Job` navigate button should route to correct page when available
   - [ ] Ability to perform all actions from GUI
+  - [ ] Button when the values are not synced
   - [ ] Improve the UI for S3 Page
     - [ ] Tree on S3 to only show folder
     - [ ] Display item based on the click

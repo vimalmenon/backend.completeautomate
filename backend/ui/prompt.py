@@ -6,7 +6,6 @@ from backend.data.prompt import PromptDBData
 from backend.database import PromptDB
 from backend.enum.ai import AIModelEnum
 from backend.enum.prompt import PromptTaskEnum
-from backend.enum.team import TeamEnum
 from backend.exception.app_exception import AppException
 
 
@@ -89,7 +88,6 @@ def open_edit_prompt_dialog(prompt_data) -> None:
 
 def add_prompt(
     selected_task: str,
-    selected_role: str,
     selected_ai: str,
     prompt_value: str,
     system_message_value: str,
@@ -129,7 +127,6 @@ def add_prompt(
 
 def render_add_prompt_form() -> None:
     task_options = [task.value for task in PromptTaskEnum]
-    role_options = [team.role for team in TeamEnum]
     ai_options = [ai.value for ai in AIModelEnum]
 
     with ui.expansion("Add New Prompt", icon="add_circle").classes("w-full my-3"):
@@ -140,15 +137,6 @@ def render_add_prompt_form() -> None:
                         options=task_options,
                         value=task_options[0] if task_options else None,
                         label="Task",
-                    )
-                    .props("outlined dense")
-                    .classes("w-1/3")
-                )
-                role_input = (
-                    ui.select(
-                        options=role_options,
-                        value=TeamEnum.SOCIAL_MEDIA_MANAGER.role,
-                        label="Role",
                     )
                     .props("outlined dense")
                     .classes("w-1/3")
@@ -180,7 +168,6 @@ def render_add_prompt_form() -> None:
                     icon="add",
                     on_click=lambda: add_prompt(
                         str(task_input.value),
-                        str(role_input.value),
                         str(ai_input.value),
                         str(prompt_input.value),
                         str(system_message_input.value),

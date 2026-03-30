@@ -29,6 +29,16 @@ class PlatformManager:
             logger.error(f"Failed to save platform data: {e}", exc_info=True)
             raise
 
+    def get_platform_by_ref_id(self, ref_id: str) -> PlatformDBData | None:
+        logger.info(f"Retrieving platform for ref_id: {ref_id}")
+        try:
+            platform = PlatformDB().get_data(ref_id)
+            logger.info(f"Platform found for ref_id: {ref_id}")
+            return platform
+        except Exception as e:
+            logger.warning(f"Platform not found for ref_id {ref_id}: {e}")
+            return None
+
     def get_platform_by_channel_id(self, channel_id: str) -> PlatformDBData | None:
         logger.info(f"Retrieving platform for channel_id: {channel_id}")
         try:

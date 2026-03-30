@@ -7,7 +7,7 @@ from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.exception.app_exception import AppException
 from backend.jobs_scheduler import JobScheduler
-from backend.manager import JobManager
+from backend.manager import JobManager, PlatformManager
 from backend.ui.common.component_common import (
     render_breadcrumbs,
     render_common_header,
@@ -252,6 +252,13 @@ def render_add_job_form() -> None:
     ).classes("my-3")
 
 
+def navigation_to_youtube_page(job: JobData) -> None:
+    platform = PlatformManager().get_platform_by_ref_id(job.task_data.get("ref_id", ""))
+    ui.run_javascript(
+        f'window.location.href = "/youtube/{platform.channel_id}/{platform.video_id}"'
+    )
+
+
 async def jobs_page(status: str = ""):
     with ui.card().classes("w-full gap-0 page-transition"):
         render_common_header(page_title="Job Management")
@@ -367,3 +374,12 @@ async def jobs_page(status: str = ""):
                             ).props(
                                 'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
                             )
+                            if job.type == JobTypeEnum.YouTubeVideo:
+                                ui.button(
+                                    icon="open_in_new",
+                                    on_click=lambda current_job=job: navigation_to_youtube_page(
+                                        current_job
+                                    ),
+                                ).props(
+                                    'flat dense onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"'
+                                )
