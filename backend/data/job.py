@@ -61,3 +61,4 @@ class JobDataResponse:
     failed_count: int = 0
     task_data: dict | None = None
     error_msg: str | None = None
+    pending_on: list[JobData] = field(default_factory=list)

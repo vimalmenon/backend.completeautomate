@@ -60,6 +60,7 @@ class JobScheduler:
             failed_count=job_response.failed_count,
             task_data=job_response.task_data,
             error_msg=job_response.error_msg,
+            # job_response.pending_on
         )
 
         logger.info(

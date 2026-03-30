@@ -81,6 +81,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Fix / improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
+    - [ ] `pending_on` on `JobData` should be string or class (Need to think)
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
