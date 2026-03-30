@@ -33,7 +33,6 @@ from backend.data.youtube_channel import (
 from backend.data.youtube_video import (
     YouTubeVideoDBData,
     YouTubeVideoMetadataData,
-    YouTubeVideoReviewerJobData,
     YouTubeVideoStatsUpdateJobData,
     YouTubeVideoThumbnailData,
 )
@@ -55,7 +54,6 @@ __all__ = [
     "PromptVersionDBData",
     "YouTubeVideoThumbnailPromptSuggesterJobData",
     "YouTubeThumbnailImageGenerationPromptData",
-    "YouTubeVideoReviewerJobData",
     "YouTubeVideoMetadataData",
     "JobData",
     "YouTubeChannelTaskData",
