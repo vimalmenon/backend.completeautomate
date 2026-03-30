@@ -69,6 +69,7 @@ class JobManager:
         status: JobsStatusEnum,
         failed_count: int,
         task_data: dict | None = None,
+        error_msg: str | None = None,
     ) -> None:
         values: dict[str, Any] = {
             "status": status.value,
@@ -76,6 +77,8 @@ class JobManager:
         }
         if task_data:
             values["task_data"] = task_data
+        if error_msg:
+            values["error_msg"] = error_msg
 
         JobDB().update_data(
             job_id=job_id,

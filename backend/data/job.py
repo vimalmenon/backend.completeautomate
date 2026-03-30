@@ -17,6 +17,7 @@ class JobData:
     failed_count: int = 0
     pending_on: list[Self] = field(default_factory=list)
     completed_at: datetime | None = None
+    error_msg: str | None = None
 
     def to_json(self) -> dict:
         return {
@@ -31,6 +32,7 @@ class JobData:
             "completed_at": (
                 self.completed_at.isoformat() if self.completed_at else None
             ),
+            "error_msg": self.error_msg,
         }
 
     @classmethod
@@ -49,4 +51,5 @@ class JobData:
                 if data.get("completed_at")
                 else None
             ),
+            error_msg=data.get("error_msg"),
         )
