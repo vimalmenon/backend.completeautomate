@@ -17,8 +17,6 @@ class StartUpManager:
     def start(self) -> None:
         logger.info("Starting startup manager flow")
         DataManager().start_up_script()
-        JobManager().create_youtube_channel_onboarding_job()
-        JobManager().create_prompt_improvement_onboarding_job()
         logger.info("Startup manager flow completed")
 
     def end(self) -> None:

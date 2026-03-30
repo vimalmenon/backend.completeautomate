@@ -98,27 +98,5 @@ class JobManager:
             values=values,
         )
 
-    def create_youtube_channel_onboarding_job(self) -> JobData:
-        if jobs := self.get_job_by_type(type=JobTypeEnum.YouTubeChannelOnboarding):
-            return jobs[0]
-        job_data = self.create_job(
-            type=JobTypeEnum.YouTubeChannelOnboarding,
-            task_data={},
-            description="Onboard YouTube Channels",
-        )
-        self.save_job(job_data=job_data)
-        return job_data
-
-    def create_prompt_improvement_onboarding_job(self) -> JobData:
-        if jobs := self.get_job_by_type(type=JobTypeEnum.PromptImprover):
-            return jobs[0]
-        job_data = self.create_job(
-            type=JobTypeEnum.PromptImprover,
-            task_data={},
-            description="Improve the prompts for better response",
-        )
-        self.save_job(job_data=job_data)
-        return job_data
-
     def update_job_values(self, job_id: UUID, job_dict: dict):
         JobDB().update_data(job_id, values=job_dict)
