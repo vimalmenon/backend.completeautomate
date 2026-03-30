@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 from typing import Any, Self
 from uuid import UUID
@@ -43,6 +43,7 @@ class PromptDBData:
     version: UUID
     comment: str | None = None
     last_updated: datetime = datetime.now()
+    prompt_data: list[dict] = field(default_factory=list)
 
     def __post_init__(self):
         selected_prompts = [
@@ -63,6 +64,7 @@ class PromptDBData:
             "versions": [version.to_json() for version in self.versions],
             "comment": self.comment,
             "last_updated": self.last_updated.isoformat(),
+            "prompt_data": self.prompt_data,
         }
 
     def add_prompt_version(self, data: PromptVersionDBData) -> Self:
@@ -80,6 +82,7 @@ class PromptDBData:
             ],
             comment=data.get("comment"),
             description=data["description"],
+            prompt_data=data["prompt_data"],
         )
 
     def copy(self) -> Self:
