@@ -11,19 +11,16 @@ from backend.enum import (
 @dataclass
 class YouTubeChannelTaskData:
     ref_id: str
-    poll_frequency_in_days: int = 3
 
     def to_dict(self) -> dict:
         return {
             "ref_id": self.ref_id,
-            "poll_frequency_in_days": int(self.poll_frequency_in_days),
         }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
-            poll_frequency_in_days=data.get("poll_frequency_in_days", 3),
         )
 
     @cached_property

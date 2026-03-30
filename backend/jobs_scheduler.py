@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from backend.data import JobData
 from backend.jobs import (
@@ -28,7 +29,7 @@ class JobScheduler:
             return
         if job_id:
             logger.info("Starting one-time job execution for job_id=%s", job_id)
-            self.__run_job_by_id(job_id)
+            self.__run_job_by_id(job_id=UUID(job_id))
             logger.info("Completed one-time job execution for job_id=%s", job_id)
             return
         self.startup_manager.start()
@@ -65,7 +66,7 @@ class JobScheduler:
                 status,
                 failed_count,
                 task_data,
-            ) = PromptSuggesterJob().execute()
+            ) = PromptSuggesterJob(job=job).execute()
         self.job_manager.update_job_data(
             job_id=job.id,
             status=status,
@@ -77,7 +78,7 @@ class JobScheduler:
             f"Completed scheduled job execution for job_id={job.id}, type={job.type}"
         )
 
-    def __run_job_by_id(self, job_id: str) -> None:
+    def __run_job_by_id(self, job_id: UUID) -> None:
         job = self.job_manager.get_job_by_id(job_id)
         if job:
             self.__run_job(job)

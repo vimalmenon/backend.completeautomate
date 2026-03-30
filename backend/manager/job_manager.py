@@ -23,8 +23,8 @@ class JobManager:
     def get_job_by_ref_id(self, ref_id: str):
         pass
 
-    def get_job_by_id(self, job_id: str) -> JobData | None:
-        return JobDB().get_job_by_id(job_id)
+    def get_job_by_id(self, job_id: UUID) -> JobData | None:
+        return JobDB().get_job_by_id(job_id=str(job_id))
 
     def get_all_jobs(self) -> list[JobData]:
         return JobDB().get_all_jobs()
@@ -116,3 +116,6 @@ class JobManager:
         )
         self.save_job(job_data=job_data)
         return job_data
+
+    def update_job_values(self, job_id: UUID, job_dict: dict):
+        JobDB().update_data(job_id, values=job_dict)
