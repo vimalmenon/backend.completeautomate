@@ -102,8 +102,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Start multiple tasks in parallel
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
-  - [x] Clicking on `Job` navigate button should route to correct page when available
-  - [x] Navigate to Channel
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
   - [ ] View `Job` detail based on the Job
