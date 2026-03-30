@@ -47,7 +47,6 @@ class TestGeneralAgent:
 
         assert result["messages"][-1].content == "Sure, here are tests"
         mock_create_agent.assert_called_once_with(
-            name=TeamEnum.MANAGER.name,
             model="test-model",
             response_format=None,
         )
