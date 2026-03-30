@@ -13,7 +13,6 @@ from backend.data.youtube_channel import (
 from backend.enum import AIModelEnum, ImageTypeEnum
 from backend.enum.prompt import PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
-from backend.enum.team import TeamEnum
 
 
 @pytest.mark.unit
@@ -191,7 +190,6 @@ class TestPromptDBDataCopy:
         )
         original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
-            role=TeamEnum.OWNER,
             description="",
             versions=[version],
             version=version_id,
@@ -207,7 +205,6 @@ class TestPromptDBDataCopy:
         assert copied.prompt == original.prompt
         assert copied.system_message == original.system_message
         assert copied.task == original.task
-        assert copied.role == original.role
         assert copied.ai == original.ai
         assert copied.versions == original.versions
         assert copied.last_updated == original.last_updated
@@ -227,7 +224,6 @@ class TestPromptDBDataCopy:
         )
         original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
-            role=TeamEnum.OWNER,
             description="",
             versions=[version],
             version=version_id,

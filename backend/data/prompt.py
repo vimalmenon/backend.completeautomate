@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, Self
 from uuid import UUID
 
-from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum
+from backend.enum import AIModelEnum, PromptTaskEnum
 from backend.exception.app_exception import AppException
 
 
@@ -38,7 +38,6 @@ class PromptVersionDBData:
 @dataclass
 class PromptDBData:
     task: PromptTaskEnum
-    role: TeamEnum
     description: str
     versions: list[PromptVersionDBData]
     version: UUID
@@ -56,13 +55,9 @@ class PromptDBData:
         else:
             raise AppException("Cannot find prompt for this version")
 
-    def get_agent_name(self) -> str:
-        return self.role.display_name
-
     def to_json(self) -> dict:
         return {
             "task": self.task.value,
-            "role": self.role.role,
             "version": str(self.version),
             "description": self.description,
             "versions": [version.to_json() for version in self.versions],
@@ -78,7 +73,6 @@ class PromptDBData:
     def to_cls(cls, data: dict) -> Self:
         return cls(
             task=PromptTaskEnum(data["task"]),
-            role=TeamEnum.from_value(data["role"]),
             version=UUID(data["version"]),
             last_updated=datetime.fromisoformat(data["last_updated"]),
             versions=[

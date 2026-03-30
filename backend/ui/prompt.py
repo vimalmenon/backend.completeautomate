@@ -113,7 +113,6 @@ def add_prompt(
         )
         prompt_data = PromptDBData(
             task=PromptTaskEnum(selected_task),
-            role=TeamEnum.from_value(selected_role),
             description="",
             versions=[version],
             version=version_id,
@@ -234,14 +233,12 @@ async def prompt_page():
                     "w-full bg-gray-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-600 p-3 font-bold flex-nowrap items-center"
                 ):
                     ui.label("Task").classes("w-1/4")
-                    ui.label("Role").classes("w-1/6")
                     ui.label("AI").classes("w-1/6")
                     ui.label("Updated").classes("w-1/3")
                     ui.label("Action").classes("w-1/6 text-center")
 
                 for prompt in prompts:
                     task = prompt.task.value
-                    role = prompt.role
                     ai = prompt.ai
                     last_updated = prompt.last_updated
 
@@ -249,7 +246,6 @@ async def prompt_page():
                         "w-full p-3 hover:bg-blue-50 dark:hover:bg-blue-900/40 items-center flex-nowrap border-b border-gray-200 dark:border-slate-700 cursor-pointer gap-3"
                     ):
                         ui.label(task).classes("w-1/4 text-sm font-medium")
-                        ui.label(role).classes("w-1/6 text-sm")
                         ui.label(ai).classes("w-1/6 text-sm")
                         ui.label(str(last_updated)).classes("w-1/3 text-sm")
                         with ui.row().classes(

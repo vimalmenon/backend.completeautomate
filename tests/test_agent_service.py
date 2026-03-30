@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from backend.data.prompt import PromptDBData
-from backend.enum import AIModelEnum, PromptTaskEnum, TeamEnum
+from backend.enum import AIModelEnum, PromptTaskEnum
 from backend.exception.app_exception import AppException
 from backend.services.agent_service import AgentService
 
@@ -32,7 +32,6 @@ class TestAgentService:
         )
         mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoMetadata,
-            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             description="",
             versions=[version],
             version=version_id,
@@ -65,7 +64,6 @@ class TestAgentService:
         )
         mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoMetadata,
-            role=TeamEnum.SOCIAL_MEDIA_MANAGER,
             description="",
             versions=[version],
             version=version_id,

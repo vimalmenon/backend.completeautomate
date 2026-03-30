@@ -77,8 +77,10 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Fix the Image Size for YouTube Thumbnail
+    - [ ] Check in Next Upload
   - [ ] Fix Jobs
-    - [ ] Complete YouTubeChannel (As YouTubeStatsUpdater does same job) 
+    - [x] `JobData` to show error message
+    - [ ] Complete `YouTubeChannel` Job (As YouTubeStatsUpdater does same job) 
     - [ ] Add `YouTubeStatsUpdaterTaskData` transform data for job
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
   - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
@@ -103,7 +105,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
-  - [ ] `JobData` to show error message
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page

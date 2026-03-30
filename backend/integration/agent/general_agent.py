@@ -24,16 +24,13 @@ class GeneralAgent:
             if not prompt_data:
                 raise AppException("Prompt data is required for GeneralAgent")
             self.agent_db = AgentMessageDB()
-            self.team = prompt_data.role
             self.prompt = agent.get_prompt()
             self.response_format = response_format
-            logger.debug("GeneralAgent initialized for team=%s", self.team.name)
         if isinstance(agent, AgentImageService):
             self.agent = agent
 
     def invoke(self):
         if isinstance(self.agent, AgentService):
-            logger.info("Invoking general agent for team=%s", self.team.name)
             messages = [
                 SystemMessage(content=self.agent.get_system_message()),
                 HumanMessage(content=self.agent.get_prompt()),
@@ -56,9 +53,6 @@ class GeneralAgent:
                 messages=self.parse_messages_to_dict(result["messages"]),
             )
             self.agent_db.save_message(data)
-            logger.info(
-                "General agent invocation completed for team=%s", self.team.name
-            )
             return result
         raise AppException("Not a valid instance")
 
@@ -92,14 +86,12 @@ class GeneralAgent:
             messages=self.parse_messages_to_dict(result["messages"]),
         )
         self.agent_db.update_message(data)
-        logger.info("General agent invocation completed for team=%s", self.team.name)
+        logger.info("General agent invocation completed for")
         return result
 
     def __create_agent(self):
         assert isinstance(self.agent, AgentService)
-        logger.debug("Creating LangChain agent for team=%s", self.team.name)
         return create_agent(
-            name=self.team.name,
             model=self.agent.get_model(),
             response_format=self.response_format,
         )
