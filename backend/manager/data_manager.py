@@ -33,11 +33,11 @@ youtube_videos_data = DbData(
             name="youtube_videos_data.pickle"
         ),
     ),
-    get_data=lambda self: YouTubeVideoManager(ref_id="").get_videos_by_channel(
+    get_data=lambda: YouTubeVideoManager(ref_id="").get_videos_by_channel(
         channel_id=env.YOUTUBE_CHANNEL_ID
     ),
-    upload_data=lambda self: YouTubeVideoManager(ref_id="").save_data(
-        data=YouTubeVideoDBData.to_cls(self)
+    upload_data=lambda data: YouTubeVideoManager(ref_id=data["ref_id"]).save_data(
+        data=YouTubeVideoDBData.to_cls(data)
     ),
 )
 
@@ -60,7 +60,9 @@ prompt_data = DbData(
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
     get_data=lambda: PromptManager().get_all_prompts(),
-    upload_data=lambda prompt: PromptManager().save_data(prompt=PromptDBData.to_cls(prompt)),
+    upload_data=lambda prompt: PromptManager().save_data(
+        prompt=PromptDBData.to_cls(prompt)
+    ),
 )
 
 
