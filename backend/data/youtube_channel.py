@@ -10,6 +10,14 @@ NO_ITEMS_FOUND_ERROR = "No items found with in response"
 
 
 @dataclass
+class YouTubeChannelPlaylist:
+    id: str
+    title: str
+    description: str
+    thumbnail: str
+
+
+@dataclass
 class YouTubeChannelStatsDBData:
     subscriber_count: int
     view_count: int
