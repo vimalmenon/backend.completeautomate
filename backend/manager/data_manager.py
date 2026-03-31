@@ -1,4 +1,5 @@
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Callable
 
 from backend.config.env import env
 from backend.data import (
@@ -16,6 +17,39 @@ from backend.manager.platform_manager import PlatformManager
 from backend.manager.prompt_manager import PromptManager
 from backend.manager.youtube_channel_manager import YouTubeChannelManager
 from backend.manager.youtube_video_manager import YouTubeVideoManager
+
+
+@dataclass
+class DbData:
+    sb_data: S3Data
+    unpickle_data: Callable
+    get_data: Callable
+    pickle_data: Callable
+
+
+youtube_videos_data = DbData(
+    sb_data=S3Data(
+        name="youtube_videos_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(
+            name="youtube_videos_data.pickle"
+        ),
+    ),
+    unpickle_data=lambda self: print(self),
+    get_data=lambda self: print(self),
+    pickle_data=lambda self: print(self),
+)
+
+youtube_channels_data = DbData(
+    sb_data=S3Data(
+        name="youtube_channels_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(
+            name="youtube_channels_data.pickle"
+        ),
+    ),
+    unpickle_data=lambda self: print(self),
+    get_data=lambda self: print(self),
+    pickle_data=lambda self: print(self),
+)
 
 s3_db_data: dict[str, S3Data] = {
     "youtube_videos_data": S3Data(
@@ -185,3 +219,12 @@ class DataManager:
         pickle_data = FolderHelper().create_pickle_data(data=data)
         S3Storage().upload_data(s3_data=s3_data, data=pickle_data)
         FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
+
+
+class FileSync:
+    def __init__(self):
+        for (
+            key,
+            value,
+        ) in s3_db_data.items():
+            print(value)
