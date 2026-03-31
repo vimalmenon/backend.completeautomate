@@ -99,6 +99,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Can We use One cls for PromptImprover and Prompt?
     - [ ] Should be able to test the Prompt generated
     - [ ] Add one shot / few shot prompt for prompts
+    - [ ] Run PromptImprover in parallel
   - [ ] Send Notification
     - [ ] Send Signal
     - [ ] Send Email
