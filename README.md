@@ -92,6 +92,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
+    - [ ] All data needs to be mocked
   - [ ] DB Improvement
     - [ ] Do Caching on backed up DB Data
   - [ ] Improve on prompt Improver
@@ -145,10 +146,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Code improvement
-  - [ ] Complete TODOs
+  - [x] Complete TODOs
   - [ ] Remove Deadcode
-- [ ] Mock data (use factory)
-  - [ ] All data needs to be mocked
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
 - [ ] Test Coverage

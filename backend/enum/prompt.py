@@ -6,10 +6,12 @@ class PromptTaskEnum(str, Enum):
     YouTubeVideoSummarization = "YouTubeVideoSummarization"
     YouTubeVideoMetadata = "YouTubeVideoMetadata"
     YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
+    # TODO need to implement
+    YouTubeVideoTwitterPost = "YouTubeVideoTwitterPost"
 
 
 class PromptStatusEnum(str, Enum):
     IN_PROGRESS = "IN_PROGRESS"
-    COMPLETE = "COMPLETE"
     REVIEW = "REVIEW"
+    COMPLETE = "COMPLETE"
     CLEAN_UP = "CLEAN_UP"

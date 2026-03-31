@@ -127,6 +127,7 @@ class YouTubeVideoDBData:
         default_factory=list
     )
     community_posts: list[str] = field(default_factory=list)
+    twitter_posts: list[str] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -165,6 +166,7 @@ class YouTubeVideoDBData:
             ],
             status=YouTubeVideoStatusEnum(data["status"]),
             community_posts=data.get("community_posts", []),
+            twitter_posts=data.get("twitter_posts", []),
         )
 
     @classmethod
@@ -210,6 +212,7 @@ class YouTubeVideoDBData:
             ],
             "status": self.status.value,
             "community_posts": self.community_posts,
+            "twitter_posts": self.twitter_posts,
         }
 
     def past_update_time(self, days: int = 7) -> bool:
@@ -240,4 +243,6 @@ class YouTubeVideoDBData:
             updated_values["status"] = self.status
         if self.community_posts != old_value.community_posts:
             updated_values["community_posts"] = self.community_posts
+        if self.twitter_posts != old_value.twitter_posts:
+            updated_values["twitter_posts"] = self.twitter_posts
         return updated_values
