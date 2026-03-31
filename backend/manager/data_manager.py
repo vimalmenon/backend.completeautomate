@@ -133,7 +133,7 @@ class DataManager:
         self.__download_prompts_and_upload_to_s3()
         self.__download_youtube_channels_and_upload_to_s3()
         self.__download_youtube_videos_and_upload_to_s3()
-        self.__download_offline_jobs_and_upload_to_s3()
+        self.__download_jobs_and_upload_to_s3()
 
     def restore_db_from_s3(self) -> None:
         self.download()
@@ -234,10 +234,10 @@ class DataManager:
         s3_data = s3_db_data["youtube_videos_data"]
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=youtube_videos_data)
 
-    def __download_offline_jobs_and_upload_to_s3(self):
-        jobs = JobManager().get_all_offline_jobs()
+    def __download_jobs_and_upload_to_s3(self):
+        jobs = JobManager().get_all_jobs()
         job_data = [job.to_json() for job in jobs]
-        s3_data = s3_db_data["offline_jobs_data"]
+        s3_data = s3_db_data["jobs_data"]
         self.__create_and_upload_pickle_file(s3_data=s3_data, data=job_data)
 
     def __create_and_upload_pickle_file(self, s3_data: S3Data, data: Any):

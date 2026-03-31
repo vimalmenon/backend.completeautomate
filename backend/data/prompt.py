@@ -82,7 +82,7 @@ class PromptDBData:
             ],
             comment=data.get("comment"),
             description=data["description"],
-            prompt_data=data["prompt_data"],
+            prompt_data=data.get("prompt_data", []),
         )
 
     def copy(self) -> Self:

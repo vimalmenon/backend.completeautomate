@@ -76,6 +76,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
+  - [x] Rename from `offline_job_data` to `job_data`
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
@@ -108,7 +109,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
-  - [ ] Rename from `offline_job_data` to `job_data`
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
