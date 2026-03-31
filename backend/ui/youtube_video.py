@@ -692,10 +692,10 @@ def _render_metadata_suggestions(video: YouTubeVideoDBData) -> None:
         "bg-amber-50 dark:bg-amber-900/20"
     ):
         ui.label("Metadata Suggestions").classes("text-h6 font-bold mb-2")
-        if video.comment:
+        if video.user_message:
             with ui.row().classes("w-full gap-4 items-start mb-3"):
                 ui.label("Comment:").classes("font-bold text-amber-700 text-sm")
-                ui.label(video.comment).classes("text-wrap text-sm")
+                ui.label(video.user_message).classes("text-wrap text-sm")
 
         for index, detail in enumerate(suggestions, start=1):
             icon_name, color = (

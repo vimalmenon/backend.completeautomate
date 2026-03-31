@@ -217,8 +217,8 @@ class YouTubeVideoDBData:
             updated_values["tags"] = self.tags
         if self.language != old_value.language:
             updated_values["language"] = self.language
-        if self.comment != old_value.comment:
-            updated_values["comment"] = self.comment
+        if self.user_message != old_value.user_message:
+            updated_values["user_message"] = self.user_message
         if self.task_status != old_value.task_status:
             updated_values["task_status"] = self.task_status
         if self.status != old_value.status:
