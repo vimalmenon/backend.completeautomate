@@ -6,7 +6,7 @@ import pytest
 from backend.config.env import env
 from backend.data import JobData
 from backend.enum import JobsStatusEnum, JobTypeEnum
-from backend.generator.youtube_channel_creator import (
+from backend.generator import (
     YouTubeChannelVideoCheckerJob,
 )
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
