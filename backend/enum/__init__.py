@@ -4,7 +4,7 @@ from backend.enum.db_keys import DbKeysEnum
 from backend.enum.image import ImageTypeEnum
 from backend.enum.job import JobsStatusEnum, JobTypeEnum
 from backend.enum.platform import PlatformEnum
-from backend.enum.prompt import PromptTaskEnum
+from backend.enum.prompt import PromptStatusEnum, PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.enum.team import TeamEnum
 from backend.enum.youtube import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
@@ -24,4 +24,5 @@ __all__ = [
     "AIImageModelEnum",
     "YouTubeVideoStatusEnum",
     "ActionEnum",
+    "PromptStatusEnum",
 ]

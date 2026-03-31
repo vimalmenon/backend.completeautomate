@@ -62,12 +62,20 @@ prompt_data = DbData(
 )
 
 
-offline_jobs_data = DbData(
+jobs_data = DbData(
     sb_data=S3Data(
-        name="offline_jobs_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(
-            name="offline_jobs_data.pickle"
-        ),
+        name="jobs_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
+    ),
+    unpickle_data=lambda self: print(self),
+    get_data=lambda self: print(self),
+    pickle_data=lambda self: print(self),
+)
+
+platform_data = DbData(
+    sb_data=S3Data(
+        name="platform_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
     ),
     unpickle_data=lambda self: print(self),
     get_data=lambda self: print(self),
