@@ -82,7 +82,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
-    - [ ] `user_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData` (Need to think)
+    - [x] `user_message` should be on `YouTubeVideo` or `YouTubeVideoTaskData`
+      - [x] `user_message` added to `YouTubeVideo`
     - [ ] Add Twitter Post Suggestion
     - [ ] Get all playlist
     - [ ] Add playlist to videos

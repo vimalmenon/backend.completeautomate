@@ -96,21 +96,18 @@ class YouTubeStatsUpdaterTaskData:
 class YouTubeVideoTaskData:
     ref_id: str
     task: YouTubeVideoTaskEnum = YouTubeVideoTaskEnum.YouTubeVideoStart
-    user_video_comment: str | None = None
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             ref_id=data["ref_id"],
             task=YouTubeVideoTaskEnum(data["task"]),
-            user_video_comment=data.get("user_video_comment"),
         )
 
     def to_json(self) -> dict:
         return {
             "ref_id": self.ref_id,
             "task": self.task.value,
-            "user_video_comment": self.user_video_comment,
         }
 
     @cached_property

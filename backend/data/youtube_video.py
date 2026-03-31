@@ -101,7 +101,7 @@ class YouTubeVideoDBData:
     stats: list[YouTubeVideoDBStats]
     transcript: str | None = None
     summarized_transcript: str | None = None
-    comment: str | None = None
+    user_message: str | None = None
     status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
     metadata_suggestions: list[YouTubeVideoMetadataData] = field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = field(default_factory=list)
@@ -133,7 +133,7 @@ class YouTubeVideoDBData:
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
             stats=stats,
-            comment=data.get("comment"),
+            user_message=data.get("user_message"),
             metadata_suggestions=[
                 YouTubeVideoMetadataData.to_cls(suggestion)
                 for suggestion in data.get("metadata_suggestions", [])
@@ -182,7 +182,7 @@ class YouTubeVideoDBData:
             "stats": [stat.to_json() for stat in self.stats],
             "transcript": self.transcript,
             "summarized_transcript": self.summarized_transcript,
-            "comment": self.comment,
+            "user_message": self.user_message,
             "metadata_suggestions": [
                 suggestion.to_json() for suggestion in self.metadata_suggestions
             ],
