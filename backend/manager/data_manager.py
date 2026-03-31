@@ -44,8 +44,10 @@ youtube_channels_data = DbData(
             name="youtube_channels_data.pickle"
         ),
     ),
-    get_data=lambda self: print(self),
-    upload_data=lambda self: print(self),
+    get_data=lambda: YouTubeChannelManager(ref_id="").get_channels(),
+    upload_data=lambda data: YouTubeChannelManager(ref_id="").add_channel(
+        data=YouTubeChannelDBData.to_cls(data)
+    ),
 )
 
 prompt_data = DbData(
@@ -72,11 +74,19 @@ platform_data = DbData(
         name="platform_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
     ),
-    get_data=lambda: [
-        platform.to_json() for platform in PlatformManager().get_all_platforms()
-    ],
-    upload_data=lambda self: print(self),
+    get_data=lambda: PlatformManager().get_all_platforms(),
+    upload_data=lambda platform: PlatformManager().save_data(
+        platform=PlatformDBData.to_cls(platform)
+    ),
 )
+
+db_data = [
+    youtube_videos_data,
+    youtube_channels_data,
+    prompt_data,
+    jobs_data,
+    platform_data,
+]
 
 s3_db_data: dict[str, S3Data] = {
     "youtube_videos_data": S3Data(
