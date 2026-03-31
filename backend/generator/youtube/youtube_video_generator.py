@@ -148,21 +148,21 @@ class YouTubeVideoGenerator(BaseGenerator):
         return JobsStatusEnum.COMPLETE, self.task_data.to_json()
 
     def __create_transcript_summary(self, video_from_db: YouTubeVideoDBData) -> None:
-        if not video_from_db.transcript:
+        if not video_from_db.transcript and video_from_db.user_message:
             raise AppException("Transcript not found")
         logger.info("Summarizing transcript for job %s", self.job.id)
-        summarize = self.__summarize_transcript(video_from_db.transcript)
+        summarize = self.__summarize_transcript(
+            video_from_db.transcript, video_from_db.user_message
+        )
         self.youtube_manager.update_summarized_transcript(
             summarized_transcript=summarize,
         )
 
-    def __summarize_transcript(self, text_transcript: str) -> Any:
+    def __summarize_transcript(self, text_transcript: str, user_message: str) -> Any:
         service = AgentService(
             prompt_task=PromptTaskEnum.YouTubeVideoSummarization,
             task_id=f"{str(self.job.id)}_summarize",
-            data={
-                "transcript": text_transcript,
-            },
+            data={"transcript": text_transcript, "user_message": user_message},
         )
         agent = GeneralAgent(
             service,
