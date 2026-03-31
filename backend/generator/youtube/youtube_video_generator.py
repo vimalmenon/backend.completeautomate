@@ -180,6 +180,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             task_id=f"{str(self.job.id)}_metadata",
             data={
                 "transcript": video_from_db.summarized_transcript,
+                "user_message": video_from_db.user_message,
             },
         )
         agent = GeneralAgent(

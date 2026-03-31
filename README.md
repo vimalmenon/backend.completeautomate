@@ -80,11 +80,12 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
-    - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
     - [ ] `user_message` added to `YouTubeVideo`
       - [x] `user_message` added to `YouTubeVideo`
-      - [ ] Add user_message on all the AI Request
+      - [ ] Add `user_message` on all the AI Request
+      - [ ] Metadata suggestion to be provided with `user_message`
+      - [ ] summarize to have accense for `user_message`
     - [ ] Others
       - [ ] Enable Web Search in AI
       - [ ] Do Caching on backed up DB Data
@@ -92,7 +93,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Get all playlist
     - [ ] Add playlist to videos
   - [ ] Improve Job
-    - [ ] Run Job in parallel
+    - [ ] Run Jobs in parallel
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
