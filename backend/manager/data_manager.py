@@ -22,10 +22,8 @@ from backend.manager.youtube_video_manager import YouTubeVideoManager
 @dataclass
 class DbData:
     sb_data: S3Data
-    unpickle_data: Callable
     get_data: Callable
     upload_data: Callable
-    pickle_data: Callable
 
 
 youtube_videos_data = DbData(
@@ -35,9 +33,8 @@ youtube_videos_data = DbData(
             name="youtube_videos_data.pickle"
         ),
     ),
-    unpickle_data=lambda self: print(self),
     get_data=lambda self: print(self),
-    pickle_data=lambda self: print(self),
+    upload_data=lambda self: print(self),
 )
 
 youtube_channels_data = DbData(
@@ -47,11 +44,8 @@ youtube_channels_data = DbData(
             name="youtube_channels_data.pickle"
         ),
     ),
-    unpickle_data=lambda data: FolderHelper().unpack_pickle_data(
-        path=data.s3_data.downloaded_path
-    ),
     get_data=lambda self: print(self),
-    pickle_data=lambda self: print(self),
+    upload_data=lambda self: print(self),
 )
 
 prompt_data = DbData(
@@ -59,11 +53,8 @@ prompt_data = DbData(
         name="prompt_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
-    unpickle_data=lambda data: FolderHelper().unpack_pickle_data(
-        path=data.s3_data.downloaded_path
-    ),
     get_data=lambda self: print(self),
-    pickle_data=lambda self: print(self),
+    upload_data=lambda self: print(self),
 )
 
 
@@ -72,11 +63,8 @@ jobs_data = DbData(
         name="jobs_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
     ),
-    unpickle_data=lambda data: FolderHelper().unpack_pickle_data(
-        path=data.s3_data.downloaded_path
-    ),
     get_data=lambda self: print(self),
-    pickle_data=lambda self: print(self),
+    upload_data=lambda self: print(self),
 )
 
 platform_data = DbData(
@@ -84,13 +72,10 @@ platform_data = DbData(
         name="platform_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
     ),
-    unpickle_data=lambda data: FolderHelper().unpack_pickle_data(
-        path=data.s3_data.downloaded_path
-    ),
     get_data=lambda: [
         platform.to_json() for platform in PlatformManager().get_all_platforms()
     ],
-    pickle_data=lambda self: print(self),
+    upload_data=lambda self: print(self),
 )
 
 s3_db_data: dict[str, S3Data] = {
@@ -264,9 +249,13 @@ class DataManager:
 
 
 class FileSync:
-    def __init__(self):
+
+    def check(self) -> bool:
         for (
             key,
             value,
         ) in s3_db_data.items():
+            if value.downloaded_path:
+                return False
             print(value)
+        return True
