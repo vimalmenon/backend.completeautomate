@@ -84,6 +84,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
     - [ ] `user_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData` (Need to think)
     - [ ] Add Twitter Post Suggestion
+    - [ ] Get all playlist
+    - [ ] Add playlist to videos
   - [ ] Improve Job
     - [ ] Run Job in parallel
     - [ ] Ability to run the agent tasks in parallel
@@ -97,7 +99,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
     - [ ] Can We use one cls for PromptImprover and Prompt? (Need to think)
         - [ ] Should use one `@dataclass` for both prompt and prompt suggestions (Need to Think)
-    - [ ] Should be able to test the Prompt generated
+    - [ ] Should be able to test the prompts generated
     - [ ] Add one shot / few shot prompt for prompts
     - [ ] Run PromptImprover in parallel
   - [ ] Send Notification
