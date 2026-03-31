@@ -33,8 +33,12 @@ youtube_videos_data = DbData(
             name="youtube_videos_data.pickle"
         ),
     ),
-    get_data=lambda self: print(self),
-    upload_data=lambda self: print(self),
+    get_data=lambda self: YouTubeVideoManager(ref_id="").get_videos_by_channel(
+        channel_id=env.YOUTUBE_CHANNEL_ID
+    ),
+    upload_data=lambda self: YouTubeVideoManager(ref_id="").save_data(
+        data=YouTubeVideoDBData.to_cls(self)
+    ),
 )
 
 youtube_channels_data = DbData(
@@ -55,8 +59,8 @@ prompt_data = DbData(
         name="prompt_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
-    get_data=lambda self: print(self),
-    upload_data=lambda self: print(self),
+    get_data=lambda: PromptManager().get_all_prompts(),
+    upload_data=lambda prompt: PromptManager().save_data(prompt=PromptDBData.to_cls(prompt)),
 )
 
 
@@ -65,8 +69,8 @@ jobs_data = DbData(
         name="jobs_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
     ),
-    get_data=lambda self: print(self),
-    upload_data=lambda self: print(self),
+    get_data=lambda: JobManager().get_all_jobs(),
+    upload_data=lambda job: JobManager().save_data(job=JobData.to_cls(job)),
 )
 
 platform_data = DbData(
