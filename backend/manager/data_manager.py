@@ -95,11 +95,9 @@ s3_db_data: dict[str, S3Data] = {
         name="prompt_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
-    "offline_jobs_data": S3Data(
-        name="offline_jobs_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(
-            name="offline_jobs_data.pickle"
-        ),
+    "jobs_data": S3Data(
+        name="jobs_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
     ),
     "platform_data": S3Data(
         name="platform_data.pickle",
