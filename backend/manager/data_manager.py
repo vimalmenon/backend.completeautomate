@@ -59,9 +59,9 @@ prompt_data = DbData(
         name="prompt_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
-    get_data=lambda: PromptManager().get_all_prompts(),
-    upload_data=lambda prompt: PromptManager().save_data(
-        prompt=PromptDBData.to_cls(prompt)
+    get_data=lambda: PromptManager().get_prompts(),
+    upload_data=lambda prompt: PromptManager().add_prompt(
+        data=PromptDBData.to_cls(prompt)
     ),
 )
 
@@ -72,7 +72,7 @@ jobs_data = DbData(
         content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
     ),
     get_data=lambda: JobManager().get_all_jobs(),
-    upload_data=lambda job: JobManager().save_data(job=JobData.to_cls(job)),
+    upload_data=lambda job: JobManager().save_job(job_data=JobData.to_cls(job)),
 )
 
 platform_data = DbData(
