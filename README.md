@@ -104,6 +104,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
+  - [ ] Rename from `offline_job_data` to `job_data`
   - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page

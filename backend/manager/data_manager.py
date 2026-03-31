@@ -51,6 +51,29 @@ youtube_channels_data = DbData(
     pickle_data=lambda self: print(self),
 )
 
+prompt_data = DbData(
+    sb_data=S3Data(
+        name="prompt_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
+    ),
+    unpickle_data=lambda self: print(self),
+    get_data=lambda self: print(self),
+    pickle_data=lambda self: print(self),
+)
+
+
+offline_jobs_data = DbData(
+    sb_data=S3Data(
+        name="offline_jobs_data.pickle",
+        content_type=S3Data.detect_content_type_from_name(
+            name="offline_jobs_data.pickle"
+        ),
+    ),
+    unpickle_data=lambda self: print(self),
+    get_data=lambda self: print(self),
+    pickle_data=lambda self: print(self),
+)
+
 s3_db_data: dict[str, S3Data] = {
     "youtube_videos_data": S3Data(
         name="youtube_videos_data.pickle",
