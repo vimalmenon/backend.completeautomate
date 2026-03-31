@@ -94,9 +94,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Do Caching on backed up DB Data
   - [ ] Improve on prompt Improver
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
-    - [ ] Pass real data to `prompt_data` to PromptImprover (2 data to be given)
-    - [ ] Should use one `@dataclass` for both prompt and prompt suggestions (Need to Think)
-    - [ ] Can We use One cls for PromptImprover and Prompt?
+    - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
+    - [ ] Can We use one cls for PromptImprover and Prompt? (Need to think)
+        - [ ] Should use one `@dataclass` for both prompt and prompt suggestions (Need to Think)
     - [ ] Should be able to test the Prompt generated
     - [ ] Add one shot / few shot prompt for prompts
     - [ ] Run PromptImprover in parallel

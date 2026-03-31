@@ -17,8 +17,113 @@ logger = getLogger(__name__)
 
 
 class YouTubeAPI:
-
     MAX_THUMBNAIL_SIZE_BYTES = 2 * 1024 * 1024
+
+    def list_videos_in_playlist(
+        self, playlist_id: str, max_results: int = 50
+    ) -> list[dict]:
+        """
+        List all videos in a given playlist.
+
+        Args:
+            playlist_id: The YouTube playlist ID
+            max_results: Maximum number of videos to retrieve per page (default: 50, max: 50)
+
+        Returns:
+            List of video dictionaries containing:
+            - videoId: Video ID
+            - title: Video title
+            - description: Video description
+            - publishedAt: When video was/will be published
+            - thumbnails: Video thumbnails
+        """
+        try:
+            youtube = self.auth.get_authenticated_service()
+            videos = []
+            next_page_token = None
+
+            while True:
+                request = youtube.playlistItems().list(
+                    part="snippet,contentDetails",
+                    playlistId=playlist_id,
+                    maxResults=max_results,
+                    pageToken=next_page_token,
+                )
+                response = request.execute()
+
+                for item in response.get("items", []):
+                    video_info = {
+                        "videoId": item["contentDetails"]["videoId"],
+                        "title": item["snippet"].get("title", ""),
+                        "description": item["snippet"].get("description", ""),
+                        "publishedAt": item["contentDetails"].get(
+                            "videoPublishedAt", ""
+                        ),
+                        "thumbnails": item["snippet"].get("thumbnails", {}),
+                    }
+                    videos.append(video_info)
+
+                next_page_token = response.get("nextPageToken")
+                if not next_page_token:
+                    break
+
+            logger.info(
+                f"Retrieved {len(videos)} videos from playlist ID: {playlist_id}"
+            )
+            return videos
+
+        except Exception as e:
+            logger.error(f"An error occurred while fetching playlist videos: {e}")
+            raise AppException(
+                f"An error occurred while fetching playlist videos: {str(e)}"
+            )
+
+    def list_all_playlists(self, channel_id: str, max_results: int = 50) -> list[dict]:
+        """
+        List all playlists from a channel.
+
+        Args:
+            channel_id: The YouTube channel ID
+            max_results: Maximum number of playlists to retrieve per page (default: 50, max: 50)
+
+        Returns:
+            List of playlist dictionaries containing:
+            - id: Playlist ID
+            - title: Playlist title
+            - description: Playlist description
+            - publishedAt: When playlist was created
+            - thumbnails: Playlist thumbnails
+            - itemCount: Number of videos in the playlist
+        """
+        try:
+            youtube = self.auth.get_authenticated_service()
+            playlists = []
+            next_page_token = None
+
+            while True:
+                request = youtube.playlists().list(
+                    part="snippet,contentDetails",
+                    channelId=channel_id,
+                    maxResults=max_results,
+                    pageToken=next_page_token,
+                )
+                response = request.execute()
+
+                for item in response.get("items", []):
+                    playlists.append(item)
+
+                next_page_token = response.get("nextPageToken")
+                if not next_page_token:
+                    break
+
+            logger.info(
+                f"Retrieved {len(playlists)} playlists from channel ID: {channel_id}"
+            )
+            return playlists
+
+        except Exception as e:
+            logger.error(f"An error occurred while fetching playlists: {e}")
+            raise AppException(f"An error occurred while fetching playlists: {str(e)}")
 
     def __init__(self):
         self.auth = YouTubeAuth()
