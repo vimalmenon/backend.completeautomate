@@ -82,8 +82,12 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
-    - [x] `user_message` should be on `YouTubeVideo` or `YouTubeVideoTaskData`
+    - [ ] `user_message` added to `YouTubeVideo`
       - [x] `user_message` added to `YouTubeVideo`
+      - [ ] Add user_message on all the AI Request
+    - [ ] Others
+      - [ ] Enable Web Search in AI
+      - [ ] Do Caching on backed up DB Data
     - [ ] Add Twitter Post Suggestion
     - [ ] Get all playlist
     - [ ] Add playlist to videos
@@ -94,8 +98,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
     - [ ] All data needs to be mocked
-  - [ ] DB Improvement
-    - [ ] Do Caching on backed up DB Data
   - [ ] Improve on prompt Improver
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
