@@ -87,11 +87,12 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
-  - [ ] Improve on prompt suggester
+  - [ ] Improve on prompt Improver
     - [x] Add `PromptImprover` to Job
     - [x] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover
     - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
+    - [ ] Can We use One cls for PromptImprover and Prompt?
     - [ ] Should be able to test the Prompt generated
     - [ ] Add one shot / few shot prompt for prompts
   - [ ] Workflow improvement
