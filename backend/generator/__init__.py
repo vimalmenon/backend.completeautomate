@@ -1,9 +1,10 @@
 from backend.generator.prompt.prompt_reviewer import PromptReviewer
-from backend.generator.youtube import YouTubeStatsUpdater, YouTubeVideoGenerator
-from backend.generator.youtube_channel_creator import (
+from backend.generator.youtube import (
     YouTubeChannelCreatorJob,
     YouTubeChannelOnboardingJob,
     YouTubeChannelVideoCheckerJob,
+    YouTubeStatsUpdater,
+    YouTubeVideoGenerator,
 )
 
 __all__ = [

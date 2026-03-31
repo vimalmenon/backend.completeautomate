@@ -82,7 +82,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
-    - [ ] `user_video_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData`  (Need to think)
+    - [ ] `user_video_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData` (Need to think)
     - [ ] Add Twitter Post Suggestion
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
