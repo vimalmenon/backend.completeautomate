@@ -77,18 +77,21 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Fix the Image Size for YouTube Thumbnail
-    - [ ] Check in Next Upload
+    - [ ] Check in next upload
   - [ ] Fix / improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] Metadata Suggestion on `YouTube Video` to be driven by comments given by User
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
     - [ ] `user_video_comment` should be on `YouTubeVideo` or `YouTubeVideoTaskData` (Need to think)
     - [ ] Add Twitter Post Suggestion
+  - [ ] Improve Job
+    - [ ] Run Job in parallel
+    - [ ] Ability to run the agent tasks in parallel
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
     - [ ] Mock data from Agents (Positive and Negative)
   - [ ] DB Improvement
-    - Do Caching on backed up DB Data
+    - [ ] Do Caching on backed up DB Data
   - [ ] Improve on prompt Improver
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover
@@ -96,8 +99,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Can We use One cls for PromptImprover and Prompt?
     - [ ] Should be able to test the Prompt generated
     - [ ] Add one shot / few shot prompt for prompts
-  - [ ] Workflow improvement
-    - [ ] Ability to run the agent tasks in parallel
   - [ ] Send Notification
     - [ ] Send Signal
     - [ ] Send Email
@@ -107,7 +108,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
   - [ ] Rename from `offline_job_data` to `job_data`
-  - [ ] Make a Webpage based on the post
 - [ ] GUI Enhancements (Top priority)
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
@@ -175,7 +175,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - Tailor made email with video for potential client
 - Adopt GIT branching strategies
 - Set Up N8N
-- Remove the deleted Videos
+- Make a Webpage based on the post
 </details>
 
 
