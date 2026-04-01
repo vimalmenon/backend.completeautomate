@@ -168,7 +168,10 @@ class YouTubeVideoGenerator(BaseGenerator):
             service,
         )
         result = agent.invoke()
+
         # TODO Need to get it reviewed by AI 2 times
+        result = agent.reinvoke(message="Go trough the result one more time")
+
         return result["messages"][-1].content
 
     def __create_metadata_suggestions(

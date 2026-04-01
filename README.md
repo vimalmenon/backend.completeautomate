@@ -101,8 +101,10 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Improve on prompt Improver
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
-    - [ ] Can We use one cls for PromptImprover and Prompt? (Need to think)
-        - [ ] Should use one `@dataclass` for both prompt and prompt suggestions (Need to Think)
+    - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
+        - [ ] Should use one `@dataclass` for both prompt and prompt suggestions
+        - [ ] Cannot one class / DB for both prompt and improver
+        - [ ] Create another table for `PromptResult`
     - [ ] Should be able to test the prompts generated
     - [ ] Add one shot / few shot prompt for prompts
     - [ ] Run PromptImprover in parallel
