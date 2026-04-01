@@ -88,7 +88,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Get all playlist
     - [ ] Add playlist to videos
     - [ ] Others
-      - [ ] Enable Web Search in AI
+      - [ ] Enable Web Search in AI (DeepSeek)
       - [ ] Do caching on backed up DB Data
     - [ ] Add Twitter Post Suggestion
   - [ ] Improve Job
