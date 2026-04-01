@@ -121,6 +121,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] View `Job` detail based on the Job
   - [ ] Ability to perform all actions from GUI
   - [ ] Button when the values are not synced
+  - [ ] Add field to update `user_message` for `YouTube Video`
   - [ ] Improve the UI for S3 Page
     - [ ] Tree on S3 to only show folder
     - [ ] Display item based on the click
@@ -150,7 +151,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add AI review step for generated answers
   - [ ] Agent to review tasks (only once)
 - [ ] Code improvement
-  - [x] Complete TODOs
   - [ ] Remove Deadcode
 - [ ] Set Up GitHub Cron Job
   - [ ] Set up Env and Variable
