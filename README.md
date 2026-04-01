@@ -82,7 +82,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] `pending_on` on `JobData` should be string or class (Need to think)
     - [ ] `user_message` added to `YouTubeVideo`
-      - [ ] Add `user_message` on all the AI Request
+      - [ ] Add `user_message` on all the AI Request expect thumbnail
+      - [ ] Add `user_message` to the prompt
       - [ ] Metadata suggestion to be provided with `user_message`
       - [ ] Summarize to have some essence `user_message`
     - [ ] Get all playlist
