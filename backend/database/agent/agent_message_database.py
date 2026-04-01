@@ -30,4 +30,11 @@ class AgentMessageDB:
         return None
 
     def update_message(self, data: MessageDBData):
-        pass
+        key = {
+            DbKeysEnum.Primary.value: self.TABLE,
+            DbKeysEnum.Secondary.value: data.task_id,
+        }
+        self.db_manager.update_data(
+            key=key,
+            values=data.to_json(),
+        )
