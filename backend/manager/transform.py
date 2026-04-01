@@ -2,8 +2,8 @@ from backend.database import PromptDB, YouTubeVideoDB
 
 video_mapping = {
     "Vw_ilJWdzK8": """
-This is the first video in a series of videos created for AI teams.
-In this series of videos, I break down various AI teams, as many of us are not familiar with these terms.
+This is the first video in a series of videos created for AI terms.
+In this series of videos, I break down various AI terms, as many of us are not familiar with these terms.
 Ensure the proper part number is given at the end or beginning of the video title as per the best YouTube title convention.
 
 
@@ -12,8 +12,8 @@ The first video link is as follows.
 https://youtu.be/Vw_ilJWdzK8
 """,
     "second video": """
-This is the second video in a series of videos created for AI teams.
-In this series of videos, I break down various AI teams, as many of us are not familiar with these terms.
+This is the second video in a series of videos created for AI terms.
+In this series of videos, I break down various AI terms, as many of us are not familiar with these terms.
 Ensure the proper part number is given at the end or beginning of the video title as per the best YouTube title convention.
 
 The first video link is as follows.
