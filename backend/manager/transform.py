@@ -1,4 +1,4 @@
-from backend.database import AgentMessageDB, PromptDB, YouTubeVideoDB
+from backend.database import PromptDB, YouTubeVideoDB
 
 video_mapping = {
     "first video": """
@@ -17,9 +17,9 @@ First video link is as below
 """,
 }
 
-prompt_mapping = {
+# prompt_mapping = {
 
-}
+# }
 
 IS_READY = False
 
