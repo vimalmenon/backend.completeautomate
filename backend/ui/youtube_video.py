@@ -1007,6 +1007,37 @@ async def youtube_video_page(
                     )
                 )
 
+            # ── Footer ────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; padding:12px 24px; border-top:1px solid #e2e8f0; "
+                "align-items:center; justify-content:space-between; width:100%;"
+            ):
+                char_hint = ui.label("").style("font-size:0.8rem; color:#9ca3af;")
+                transcript_area.on(
+                    "input",
+                    lambda e, lbl=char_hint: lbl.set_text(
+                        f"{len(e.args.get('value', '') if isinstance(e.args, dict) else '')} characters"
+                    ),
+                )
+                with ui.row().style("gap:12px; align-items:center;"):
+                    ui.button("Cancel", on_click=transcript_dialog.close).props("flat")
+
+                    async def save_transcript() -> None:
+                        new_text = transcript_area.value
+                        save_btn.props("loading=true disabled=true")
+                        await run.io_bound(
+                            lambda: YouTubeVideoManager(
+                                ref_id=platform.ref_id
+                            ).update_transcript(new_text)
+                        )
+                        save_btn.props("loading=false disabled=false")
+                        transcript_dialog.close()
+                        ui.notify("Transcript saved", type="positive", position="top")
+
+                    save_btn = ui.button(
+                        "Save Changes", icon="save", on_click=save_transcript
+                    ).props("color=primary")
+
     # Build user_message dialog before the top bar so the button can open it
     with ui.dialog().props("persistent") as user_message_dialog:
         with ui.card().style(
@@ -1075,36 +1106,25 @@ async def youtube_video_page(
                         f"{len(e.args.get('value', '') if isinstance(e.args, dict) else '')} characters"
                     ),
                 )
-
-            # ── Footer ────────────────────────────────────────────────────
-            with ui.row().style(
-                "flex-shrink:0; padding:12px 24px; border-top:1px solid #e2e8f0; "
-                "align-items:center; justify-content:space-between; width:100%;"
-            ):
-                char_hint = ui.label("").style("font-size:0.8rem; color:#9ca3af;")
-                transcript_area.on(
-                    "input",
-                    lambda e, lbl=char_hint: lbl.set_text(
-                        f"{len(e.args.get('value', '') if isinstance(e.args, dict) else '')} characters"
-                    ),
-                )
                 with ui.row().style("gap:12px; align-items:center;"):
-                    ui.button("Cancel", on_click=transcript_dialog.close).props("flat")
+                    ui.button("Cancel", on_click=user_message_dialog.close).props(
+                        "flat"
+                    )
 
-                    async def save_transcript() -> None:
-                        new_text = transcript_area.value
+                    async def save_user_message() -> None:
+                        new_text = user_message_area.value
                         save_btn.props("loading=true disabled=true")
                         await run.io_bound(
                             lambda: YouTubeVideoManager(
                                 ref_id=platform.ref_id
-                            ).update_transcript(new_text)
+                            ).update_user_message(new_text)
                         )
                         save_btn.props("loading=false disabled=false")
-                        transcript_dialog.close()
-                        ui.notify("Transcript saved", type="positive", position="top")
+                        user_message_dialog.close()
+                        ui.notify("User message saved", type="positive", position="top")
 
                     save_btn = ui.button(
-                        "Save Changes", icon="save", on_click=save_transcript
+                        "Save Changes", icon="save", on_click=save_user_message
                     ).props("color=primary")
 
     flow_tasks = _filter_tasks_by_flow_job_id(tasks=tasks, flow_job_id=section)

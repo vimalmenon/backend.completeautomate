@@ -76,6 +76,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
+  - [ ] Bug
+    - [ ] 2 Jobs got created running the app
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
