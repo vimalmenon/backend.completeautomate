@@ -37,14 +37,13 @@ class PromptDB:
         )
         return [PromptDBData.to_cls(item) for item in items]
 
-    def update_prompt(self, prompt_task: PromptTaskEnum, channel: dict) -> None:
-        breakpoint()
+    def update_prompt(self, prompt_task: PromptTaskEnum, values: dict) -> None:
         self.db_manager.update_data(
             key={
                 DbKeysEnum.Primary.value: self.TABLE,
                 DbKeysEnum.Secondary.value: prompt_task.value,
             },
-            values=channel,
+            values=values,
         )
 
     def delete_prompt(self, prompt_task: PromptTaskEnum) -> None:
