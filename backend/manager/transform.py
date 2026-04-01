@@ -11,7 +11,7 @@ The first video link is as follows.
 
 https://youtu.be/Vw_ilJWdzK8
 """,
-    "second video": """
+    "d4j2OTJdO94": """
 This is the second video in a series of videos created for AI terms.
 In this series of videos, I break down various AI terms, as many of us are not familiar with these terms.
 Ensure the proper part number is given at the end or beginning of the video title as per the best YouTube title convention.
