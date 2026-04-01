@@ -6,6 +6,7 @@ from nicegui import run, ui
 from backend.data import PlatformDBData, PlatformYouTubeChannelDBData
 from backend.database.youtube import YouTubeChannelDB, YouTubeVideoDB
 from backend.enum import PlatformEnum
+from backend.ui.common.component_common import render_breadcrumbs
 
 
 def _render_stat_card(icon: str, label: str, value: str) -> None:
@@ -13,34 +14,6 @@ def _render_stat_card(icon: str, label: str, value: str) -> None:
         ui.icon(icon).classes("text-3xl text-primary")
         ui.label(value).classes("text-2xl font-bold mt-1")
         ui.label(label).classes("text-sm text-gray-500")
-
-
-def render_breadcrumbs(items: list[tuple[str, str]], right_text: str = "") -> None:
-    """Render breadcrumb navigation.
-
-    Args:
-        items: List of (label, url) tuples. Last item is current page (no link).
-        right_text: Optional text to display on the right side.
-    """
-    with ui.row().classes("items-center justify-between w-full mb-3 text-sm"):
-        with ui.row().classes("items-center gap-2"):
-            for index, (label, url) in enumerate(items):
-                if index > 0:
-                    ui.label("/").classes("text-gray-400")
-
-                if index == len(items) - 1:
-                    # Current page - no link
-                    ui.label(label).classes(
-                        "text-gray-600 dark:text-gray-400 font-medium"
-                    )
-                else:
-                    # Clickable breadcrumb
-                    ui.link(label, url).classes(
-                        "text-blue-600 dark:text-blue-400 hover:underline"
-                    )
-
-        if right_text:
-            ui.label(right_text).classes("text-gray-500 dark:text-gray-400 text-xs")
 
 
 def open_channel_stats_chart_dialog(channel_json: dict) -> None:
@@ -170,61 +143,6 @@ def _render_channel_page_header(channel_json: dict | None = None) -> None:
             ).props("flat")
 
 
-def _render_channel_identity(channel_json: dict) -> None:
-    # Channel banner if available.
-    if channel_json.get("banner_image_url"):
-        with ui.image(channel_json["banner_image_url"]).classes(
-            "w-full h-48 object-cover mb-4 rounded"
-        ):
-            pass
-
-    with ui.row().classes("w-full gap-6 items-start"):
-        # Thumbnail on the left
-        if channel_json.get("thumbnail_url"):
-            ui.image(channel_json["thumbnail_url"]).classes(
-                "w-32 h-32 rounded-full flex-shrink-0"
-            )
-
-        # Channel info in the middle
-        with ui.column().classes("flex-1 gap-3"):
-            # Channel name
-            ui.label(channel_json.get("title", "")).classes(
-                "text-h5 font-bold text-gray-900 dark:text-white"
-            )
-
-            # URL
-            if channel_json.get("custom_url"):
-                url_text = channel_json["custom_url"]
-                with ui.row().classes("w-full items-center gap-2"):
-                    ui.label("URL:").classes(
-                        "font-semibold text-sm text-gray-700 dark:text-gray-300"
-                    )
-                    ui.label(url_text).classes(
-                        "text-sm text-blue-600 dark:text-blue-400"
-                    )
-
-            # Country
-            if channel_json.get("country"):
-                with ui.row().classes("w-full items-center gap-2"):
-                    ui.label("Country:").classes(
-                        "font-semibold text-sm text-gray-700 dark:text-gray-300"
-                    )
-                    ui.label(channel_json["country"]).classes(
-                        "text-sm text-gray-600 dark:text-gray-400"
-                    )
-
-            # Description
-            description = channel_json.get("description", "").strip()
-            if description:
-                with ui.column().classes("w-full mt-2"):
-                    ui.label("About").classes(
-                        "text-sm font-semibold text-gray-700 dark:text-gray-300"
-                    )
-                    ui.label(description).classes(
-                        "text-sm text-gray-600 dark:text-gray-400 text-wrap"
-                    )
-
-
 def _render_channel_description(channel_json: dict) -> None:
     description = channel_json.get("description")
     if description:
@@ -239,15 +157,8 @@ def _render_channel_statistics(channel_json: dict) -> None:
 
     # Get latest stats from the stats array, or use channel-level stats
     if stats and len(stats) > 0:
-        latest_stats = stats[-1]
+        latest_stats = stats[0]
 
-    # If no stats array, try to get stats from channel_json directly
-    if not latest_stats:
-        latest_stats = {
-            "subscriber_count": channel_json.get("subscriber_count", 0),
-            "view_count": channel_json.get("view_count", 0),
-            "video_count": channel_json.get("video_count", 0),
-        }
 
     # Only render if we have at least some stats
     if not latest_stats or all(v in (None, 0, "0") for v in latest_stats.values()):
