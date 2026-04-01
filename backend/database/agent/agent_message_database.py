@@ -29,7 +29,7 @@ class AgentMessageDB:
             return MessageDBData.to_cls(item)
         return None
 
-    def update_message(self, data: MessageDBData):
+    def update_message(self, data: MessageDBData) -> None:
         key = {
             DbKeysEnum.Primary.value: self.TABLE,
             DbKeysEnum.Secondary.value: data.task_id,
@@ -37,4 +37,12 @@ class AgentMessageDB:
         self.db_manager.update_data(
             key=key,
             values=data.to_json(),
+        )
+
+    def delete_message(self, data: MessageDBData) -> None:
+        self.db_manager.remove_item(
+            {
+                DbKeysEnum.Primary.value: self.TABLE,
+                DbKeysEnum.Secondary.value: data.task_id,
+            }
         )

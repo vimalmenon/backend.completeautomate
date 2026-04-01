@@ -179,3 +179,10 @@ class GeneralAgent:
             logger.warning("Failed to build mock structured response: %s", exc)
 
         return None
+
+    def clean_up_messages(self):
+        data = MessageDBData(
+            task_id=self.task_id,
+            messages=[],
+        )
+        self.agent_db.delete_message(data)

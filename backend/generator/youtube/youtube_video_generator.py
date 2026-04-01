@@ -209,6 +209,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             task_status=YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
+        agent.clean_up_messages()
         logger.info(
             "Stored %s metadata suggestions for job %s",
             len(video_metadata_suggestions),
@@ -257,6 +258,7 @@ class YouTubeVideoGenerator(BaseGenerator):
             len(prompt_response),
             self.job.id,
         )
+        agent.clean_up_messages()
 
     def __generate_thumbnails(
         self, video_from_db: YouTubeVideoDBData
@@ -343,6 +345,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         self.youtube_manager.update_community_posts(
             community_posts=structured_response.posts
         )
+        agent.clean_up_messages()
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.youtube_manager.update_task_status(

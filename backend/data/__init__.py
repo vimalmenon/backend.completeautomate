@@ -12,7 +12,6 @@ from backend.data.platform import (
 from backend.data.prompt import (
     PromptDBData,
     PromptVersionDBData,
-    YouTubeThumbnailImageGenerationPromptData,
 )
 from backend.data.s3 import S3Data
 from backend.data.task import (
@@ -31,6 +30,7 @@ from backend.data.youtube_channel import (
     YouTubeVideoThumbnailPromptSuggesterJobData,
 )
 from backend.data.youtube_video import (
+    YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoDBData,
     YouTubeVideoMetadataData,
     YouTubeVideoThumbnailData,
