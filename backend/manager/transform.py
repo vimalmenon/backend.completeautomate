@@ -1,19 +1,23 @@
 from backend.database import PromptDB, YouTubeVideoDB
 
 video_mapping = {
-    "first video": """
-This is first video in series of videos created for AI teams.
-In this series of videos, I am breaking down various AI teams used as many of us are not aware of these terms.
-Make sure you have proper part number at the end or beginnering of video title as per best youtube title convension
+    "Vw_ilJWdzK8": """
+This is the first video in a series of videos created for AI teams.
+In this series of videos, I break down various AI teams, as many of us are not familiar with these terms.
+Ensure the proper part number is given at the end or beginning of the video title as per the best YouTube title convention.
 
-First video link is as below
+
+The first video link is as follows.
+
+https://youtu.be/Vw_ilJWdzK8
 """,
     "second video": """
-This is second video in series of videos created for AI teams.
-In this series of videos, I am breaking down various AI teams used as many of us are not aware of these terms.
-Make sure you have proper part number at the end or beginnering of video title as per best youtube title convension
+This is the second video in a series of videos created for AI teams.
+In this series of videos, I break down various AI teams, as many of us are not familiar with these terms.
+Ensure the proper part number is given at the end or beginning of the video title as per the best YouTube title convention.
 
-First video link is as below
+The first video link is as follows.
+https://youtu.be/Vw_ilJWdzK8
 """,
 }
 
