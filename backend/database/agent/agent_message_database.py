@@ -1,4 +1,3 @@
-
 from backend.data import MessageDBData
 from backend.database.dynamo_database import DbManager
 from backend.enum.db_keys import DbKeysEnum
