@@ -169,7 +169,7 @@ class YouTubeVideoGenerator(BaseGenerator):
         )
         result = agent.invoke()
 
-        # # TODO Need to get it reviewed by AI 2 times
+        # # TODO Need to get it reviewed one more time
         # result = agent.reinvoke(message="Go trough the result one more time")
 
         return result["messages"][-1].content
@@ -191,6 +191,8 @@ class YouTubeVideoGenerator(BaseGenerator):
             response_format=YouTubeVideoAnalyzerListResponse,
         )
         result = agent.invoke()
+        # result = agent.reinvoke(message="Go trough the result one more time")
+
         structured_response: YouTubeVideoAnalyzerListResponse = result.get(
             "structured_response", YouTubeVideoAnalyzerListResponse(details=[])
         )
@@ -232,6 +234,9 @@ class YouTubeVideoGenerator(BaseGenerator):
             response_format=ImagePromptsListRequest,
         )
         result = agent.invoke()
+
+        # result = agent.reinvoke(message="Go trough the result one more time")
+
         structured_response: ImagePromptsListRequest = result.get(
             "structured_response", []
         )
@@ -335,8 +340,9 @@ class YouTubeVideoGenerator(BaseGenerator):
         structured_response: YouTubeVideoCommunityPostsResponse = result.get(
             "structured_response", []
         )
-        post_response = [data for data in structured_response.posts]
-        self.youtube_manager.update_community_posts(community_posts=post_response)
+        self.youtube_manager.update_community_posts(
+            community_posts=structured_response.posts
+        )
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.youtube_manager.update_task_status(
