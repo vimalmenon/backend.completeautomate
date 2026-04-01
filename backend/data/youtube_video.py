@@ -207,24 +207,20 @@ class YouTubeVideoDBData:
             stat.to_json() for stat in self.stats + old_value.stats
         ]
         updated_values["last_updated_at"] = datetime.now().isoformat()
-        if self.title != old_value.title:
-            updated_values["title"] = self.title
-        if self.description != old_value.description:
-            updated_values["description"] = self.description
-        if self.thumbnail != old_value.thumbnail:
-            updated_values["thumbnail"] = self.thumbnail
-        if self.tags != old_value.tags:
-            updated_values["tags"] = self.tags
-        if self.language != old_value.language:
-            updated_values["language"] = self.language
-        if self.user_message != old_value.user_message:
-            updated_values["user_message"] = self.user_message
-        if self.task_status != old_value.task_status:
-            updated_values["task_status"] = self.task_status
-        if self.status != old_value.status:
-            updated_values["status"] = self.status
-        if self.community_posts != old_value.community_posts:
-            updated_values["community_posts"] = self.community_posts
-        if self.twitter_posts != old_value.twitter_posts:
-            updated_values["twitter_posts"] = self.twitter_posts
+        values_to_check = [
+            "title",
+            "description",
+            "thumbnail",
+            "tags",
+            "language",
+            "user_message",
+            "task_status",
+            "status",
+            "community_posts",
+            "twitter_posts",
+        ]
+        for props in values_to_check:
+            if getattr(self, props) != getattr(old_value, props):
+                updated_values[props] = getattr(self, props)
+
         return updated_values
