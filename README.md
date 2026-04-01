@@ -84,12 +84,12 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] `user_message` added to `YouTubeVideo`
       - [ ] Add `user_message` on all the AI Request
       - [ ] Metadata suggestion to be provided with `user_message`
-      - [ ] summarize to have some assense `user_message`
+      - [ ] Summarize to have some essence `user_message`
     - [ ] Get all playlist
     - [ ] Add playlist to videos
     - [ ] Others
       - [ ] Enable Web Search in AI
-      - [ ] Do Caching on backed up DB Data
+      - [ ] Do caching on backed up DB Data
     - [ ] Add Twitter Post Suggestion
   - [ ] Improve Job
     - [ ] Run Jobs in parallel

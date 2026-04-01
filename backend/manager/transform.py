@@ -4,14 +4,14 @@ video_mapping = {
     "first video": """
 This is first video on series of videos created for AI teams.
 In this series of videos, I am breaking down various AI teams used as many of us are not aware of these terms.
-Make sure you have proper part number at the end or beginnering of video title as per test youtube title convention
+Make sure you have proper part number at the end or beginnering of video title as per best youtube title convension
 
 First video link is as below
 """,
     "second video": """
 This is second video on series of videos created for AI teams.
 In this series of videos, I am breaking down various AI teams used as many of us are not aware of these terms.
-Make sure you have proper part number at the end or beginnering of video title as per test youtube title convention
+Make sure you have proper part number at the end or beginnering of video title as per best youtube title convension
 
 First video link is as below
 """,
