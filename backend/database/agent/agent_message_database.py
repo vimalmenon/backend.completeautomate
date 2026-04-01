@@ -1,3 +1,5 @@
+from boto3.dynamodb.conditions import Key
+
 from backend.data import MessageDBData
 from backend.database.dynamo_database import DbManager
 from backend.enum.db_keys import DbKeysEnum
@@ -17,6 +19,13 @@ class AgentMessageDB:
                 **data.to_json(),
             }
         )
+
+    def get_all_messages(self) -> list[MessageDBData]:
+        # TODO remove this
+        messages = self.db_manager.query_items(
+            keys=Key(DbKeysEnum.Primary.value).eq(self.TABLE)
+        )
+        return [MessageDBData.to_cls(message) for message in messages]
 
     def get_messages_by_task_id(self, task_id: str) -> MessageDBData | None:
         item = self.db_manager.get_item(

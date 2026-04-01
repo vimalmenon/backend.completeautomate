@@ -1,4 +1,4 @@
-from backend.database import PromptDB, YouTubeVideoDB
+from backend.database import AgentMessageDB, PromptDB, YouTubeVideoDB
 
 video_mapping = {
     "first video": """
@@ -23,6 +23,7 @@ IS_READY = False
 def transform_data() -> bool:
     update_videos()
     update_prompt()
+    delete_messages()
     return False
 
 
@@ -41,3 +42,8 @@ def update_prompt():
         prompts = PromptDB().get_all_prompts()
         for prompt in prompts:
             PromptDB().update_prompt(prompt.task, values={"prompt": prompt.prompt})
+
+def delete_messages():
+    messages = AgentMessageDB().get_all_messages()
+    for message in messages:
+        AgentMessageDB().delete_message(message)
