@@ -37,6 +37,7 @@ def update_videos():
 
 
 def update_prompt():
-    prompts = PromptDB().get_all_prompts()
-    for prompt in prompts:
-        PromptDB().update_prompt(prompt.task, values={"prompt": prompt.prompt})
+    if IS_READY:
+        prompts = PromptDB().get_all_prompts()
+        for prompt in prompts:
+            PromptDB().update_prompt(prompt.task, values={"prompt": prompt.prompt})
