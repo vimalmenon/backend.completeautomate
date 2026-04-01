@@ -1007,6 +1007,75 @@ async def youtube_video_page(
                     )
                 )
 
+    # Build user_message dialog before the top bar so the button can open it
+    with ui.dialog().props("persistent") as user_message_dialog:
+        with ui.card().style(
+            "width:min(720px, 92vw); height:min(400px, 60vh); border-radius:16px; display:flex; flex-direction:column; "
+            "padding:0; gap:0; overflow:hidden;"
+        ):
+            # ── Header ────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; background:var(--q-primary); color:white; "
+                "padding:12px 24px; align-items:center; justify-content:space-between; width:100%;"
+            ):
+                with ui.row().style("align-items:center; gap:12px;"):
+                    ui.icon("edit_note").style("font-size:1.5rem;")
+                    with ui.column().style("gap:2px;"):
+                        ui.label("Edit User Message").style(
+                            "font-size:1.1rem; font-weight:700;"
+                        )
+                        ui.label(
+                            f"{video.title} • Published {video.published_at.strftime('%Y-%m-%d')}"
+                        ).style("font-size:0.8rem; opacity:0.75; max-width:480px;")
+                ui.button(icon="close", on_click=user_message_dialog.close).props(
+                    "flat round dense color=white"
+                )
+
+            # ── Hint ──────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; padding:8px 24px 0; align-items:center; gap:8px;"
+            ):
+                ui.icon("info").style("font-size:1rem; color:#6b7280;")
+                ui.label(
+                    "Edit the user message below. Click Save Changes when done."
+                ).style("font-size:0.85rem; color:#6b7280;")
+
+            # ── Textarea ──────────────────────────────────────────────────
+            with ui.element("div").style(
+                "flex:1; min-height:0; width:100%; height:100%; padding:12px 24px; overflow:hidden; display:flex; flex-direction:column;"
+            ):
+                user_message_area = (
+                    ui.textarea(value=video.user_message or "")
+                    .classes(
+                        "w-full h-full "
+                        "[&_.q-field__inner]:h-full "
+                        "[&_.q-field__control]:h-full "
+                        "[&_.q-field__native]:h-full"
+                    )
+                    .props(
+                        "input-class=h-full "
+                        "input-style=width:100%; height:100%; min-height:100%;"
+                    )
+                    .style(
+                        "flex:1 1 auto; width:100%; height:100%; min-height:100%; "
+                        "font-family:ui-monospace,SFMono-Regular,Menlo,monospace; "
+                        "font-size:0.85rem; line-height:1.7; resize:none;"
+                    )
+                )
+
+            # ── Footer ────────────────────────────────────────────────────
+            with ui.row().style(
+                "flex-shrink:0; padding:12px 24px; border-top:1px solid #e2e8f0; "
+                "align-items:center; justify-content:space-between; width:100%;"
+            ):
+                char_hint = ui.label("").style("font-size:0.8rem; color:#9ca3af;")
+                user_message_area.on(
+                    "input",
+                    lambda e, lbl=char_hint: lbl.set_text(
+                        f"{len(e.args.get('value', '') if isinstance(e.args, dict) else '')} characters"
+                    ),
+                )
+
             # ── Footer ────────────────────────────────────────────────────
             with ui.row().style(
                 "flex-shrink:0; padding:12px 24px; border-top:1px solid #e2e8f0; "
@@ -1078,6 +1147,20 @@ async def youtube_video_page(
         render_task_progress(tasks=tasks, video_job=video_job, flow_job_id=section)
         _render_video_details(video)
         _render_transcript_section(video, platform.ref_id, video_id, transcript_dialog)
+        # User message section
+        with ui.card().classes(
+            "w-full p-4 shadow-sm border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800"
+        ):
+            ui.label("User Message").classes("text-h6 font-bold mb-2")
+            with ui.scroll_area().classes("w-full").style("height: 120px;"):
+                ui.label(video.user_message or "(No user message available)").classes(
+                    "text-sm whitespace-pre-wrap font-mono leading-relaxed p-4"
+                )
+            ui.button(
+                "Edit User Message",
+                icon="edit_note",
+                on_click=user_message_dialog.open,
+            ).props("color=primary outline")
         if show_metadata_suggestions:
             _render_metadata_suggestions(video)
         if show_thumbnail_suggestions:

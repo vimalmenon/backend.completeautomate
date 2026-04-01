@@ -9,6 +9,8 @@ from backend.enum import PlatformEnum, YouTubeVideoTaskEnum
 
 
 class YouTubeVideoManager:
+    def update_user_message(self, user_message: str) -> None:
+        self.video_db.update_values({"user_message": user_message})
 
     def __init__(self, ref_id: str):
         self.ref_id = ref_id
