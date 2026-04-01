@@ -191,7 +191,7 @@ class DataManager:
             YouTubeVideoManager(ref_id=data.ref_id).save_data(data=data)
 
     def __upload_offline_jobs(self) -> None:
-        s3_data = s3_db_data["offline_jobs_data"]
+        s3_data = s3_db_data["jobs_data"]
         jobs = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
         for job in jobs:
             JobManager().save_job(JobData.to_cls(job))
