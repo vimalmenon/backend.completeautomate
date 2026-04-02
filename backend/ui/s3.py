@@ -4,7 +4,7 @@ from backend.config.env import env
 from backend.data import S3Data
 from backend.exception.app_exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
-from backend.ui.common.component_common import render_breadcrumbs
+from backend.ui.common.common_component import render_breadcrumbs
 
 
 def create_tree(items: list[S3Data] = []):

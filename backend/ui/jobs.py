@@ -8,7 +8,7 @@ from backend.enum import JobsStatusEnum, JobTypeEnum
 from backend.exception.app_exception import AppException
 from backend.jobs_scheduler import JobScheduler
 from backend.manager import JobManager, PlatformManager
-from backend.ui.common.component_common import (
+from backend.ui.common.common_component import (
     render_breadcrumbs,
     render_common_header,
     render_not_found_message,

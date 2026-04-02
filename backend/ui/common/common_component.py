@@ -58,3 +58,23 @@ def render_not_found_message(message: str, icon: str | None = None):
         if icon:
             ui.icon("inbox", size="xl").classes("text-gray-400")
         ui.label(message).classes("text-h6 text-gray-500")
+
+
+def render_textarea(label, value):
+    return (
+        ui.textarea(label=label, value=value)
+        .props("outlined autogrow")
+        .classes("w-full mt-3")
+    )
+
+
+def render_select_option(label, value, options):
+    return (
+        ui.select(
+            options=options,
+            value=value,
+            label=label,
+        )
+        .props("outlined dense")
+        .classes("w-full")
+    )

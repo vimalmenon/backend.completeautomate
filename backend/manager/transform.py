@@ -8,7 +8,6 @@ def transform_data() -> bool:
     return False
 
 
-
 def update_prompt():
     if IS_READY:
         prompts = PromptDB().get_all_prompts()

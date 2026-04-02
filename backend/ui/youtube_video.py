@@ -18,7 +18,7 @@ from backend.enum import (
 )
 from backend.integration.storage.s3_storage import S3Storage
 from backend.manager import JobManager, YouTubeVideoManager
-from backend.ui.common.component_common import (
+from backend.ui.common.common_component import (
     render_common_header,
     render_separator,
 )

@@ -6,7 +6,7 @@ from nicegui import run, ui
 from backend.data import PlatformDBData, PlatformYouTubeChannelDBData
 from backend.database.youtube import YouTubeChannelDB, YouTubeVideoDB
 from backend.enum import PlatformEnum
-from backend.ui.common.component_common import render_breadcrumbs
+from backend.ui.common.common_component import render_breadcrumbs
 
 
 def _render_stat_card(icon: str, label: str, value: str) -> None:
