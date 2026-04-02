@@ -33,9 +33,11 @@ boto3 = "^1.42.67"
 tabulate = "^0.10.0"
 langsmith = "^0.7.20"
 pillow = "^11.2.1"
+fastapi = {extras = ["standard"], version = "^0.135.3"}
 
 [tool.poetry.scripts]
 app = "main:main"
+dev = "backend.api.main:run_dev"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.19.1"
