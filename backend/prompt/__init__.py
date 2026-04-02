@@ -1,5 +1,3 @@
-from backend.prompt.youtube_video_summarization.youtube_video_summarization_prompt import (
-    YouTubeVideoSummarizationPrompt,
-)
+from backend.prompt.prompt_agent import PromptAgent
 
-__all__ = ["YouTubeVideoSummarizationPrompt"]
+__all__ = ["PromptAgent"]
