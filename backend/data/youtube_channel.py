@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import cached_property
 from typing import Any, Self
@@ -15,6 +15,23 @@ class YouTubeChannelPlaylist:
     title: str
     description: str
     thumbnail: str
+
+    def to_json(self) -> dict:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "thumbnail": self.thumbnail,
+        }
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(
+            id=data["id"],
+            title=data["title"],
+            description=data["description"],
+            thumbnail=data["thumbnail"],
+        )
 
 
 @dataclass
@@ -65,6 +82,7 @@ class YouTubeChannelDBData:
     privacy_status: str
     made_for_kids: bool
     stats: list[YouTubeChannelStatsDBData]
+    playlist: list[YouTubeChannelPlaylist] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -87,6 +105,7 @@ class YouTubeChannelDBData:
             made_for_kids=data.get("made_for_kids", False),
             stats=[YouTubeChannelStatsDBData.to_cls(stat) for stat in data["stats"]],
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
+            playlist=[],
         )
 
     @classmethod
@@ -111,6 +130,7 @@ class YouTubeChannelDBData:
         )
 
     def to_json(self) -> dict:
+        playlist = [playlist.to_json() for playlist in self.playlist]
         return {
             "title": self.title,
             "ref_id": self.ref_id,
@@ -124,6 +144,7 @@ class YouTubeChannelDBData:
             "made_for_kids": self.made_for_kids,
             "stats": [stat.to_json() for stat in self.stats],
             "last_updated_at": self.last_updated_at.isoformat(),
+            "playlist": playlist,
         }
 
     def values_to_update(self, old_value: Self) -> dict[str, Any]:

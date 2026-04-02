@@ -159,7 +159,6 @@ def _render_channel_statistics(channel_json: dict) -> None:
     if stats and len(stats) > 0:
         latest_stats = stats[0]
 
-
     # Only render if we have at least some stats
     if not latest_stats or all(v in (None, 0, "0") for v in latest_stats.values()):
         return
