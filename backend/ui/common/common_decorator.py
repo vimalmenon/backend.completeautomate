@@ -3,8 +3,11 @@ from nicegui import ui
 
 def ui_dialog_box(on_save, render_item):
 
-    with ui.dialog() as dialog, ui.card().classes("width:min(960px, 92vw) height:min(760px, 88vh)"):
-         with ui.card().style(
+    with (
+        ui.dialog() as dialog,
+        ui.card().classes("width:min(960px, 92vw) height:min(760px, 88vh)"),
+    ):
+        with ui.card().style(
             "width:min(960px, 92vw); height:min(760px, 88vh);display:flex; flex-direction:column; "
             "padding:0; gap:0;"
         ):
