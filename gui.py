@@ -81,6 +81,7 @@ def main() -> None:
         title="CompleteAutomate",
         favicon="🤖",
         storage_secret="completeautomate-secret-key",  # Required for app.storage.user
+        reload=False,
     )
 
 
