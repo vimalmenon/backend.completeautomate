@@ -101,6 +101,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Offline Feature
     - [ ] Need a database for Mocked API when Offline
+    - [ ] Store the response received from API (in JSON Format)
     - [ ] Mock data from Agents (Positive and Negative)
     - [ ] All data needs to be mocked
   - [ ] Improve on prompt Improver
