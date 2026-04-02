@@ -40,10 +40,6 @@ def root():
             ).props("dense")
             ui.switch("Dark").bind_value(dark).props("dense")
 
-    # Progress bar for page loading
-    progress = ui.linear_progress(value=0).classes("w-full")
-    progress.visible = False
-
     # Main content area with smooth transitions
     with ui.element("div").classes("w-full transition-all duration-300"):
         ui.sub_pages(
