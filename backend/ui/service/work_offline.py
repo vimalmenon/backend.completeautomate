@@ -5,7 +5,7 @@ from nicegui import app
 from backend.config.env import env
 from backend.config.session import set_offline_mode
 from backend.manager import DataManager
-from backend.ui.common.component_common import render_notify
+from backend.ui.common.common_component import render_notify
 
 
 def toggle_offline_mode(is_offline: bool):

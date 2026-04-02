@@ -77,7 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Bugs
-    - [x] 2 Jobs for videos got created running the app
+    - [x] 2 Jobs for videos got created while running `poetry run app`
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
