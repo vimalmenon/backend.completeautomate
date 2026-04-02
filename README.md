@@ -94,7 +94,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
-      - [ ] Clean up Agent Message
+      - [x] Clean up Agent Message
     - [ ] Add Twitter Post Suggestion
   - [ ] Improve Job
     - [ ] Run Jobs in parallel
