@@ -19,7 +19,6 @@ from backend.manager import (
     JobManager,
     PlatformManager,
     YouTubeChannelManager,
-    YouTubeVideoManager,
 )
 
 logger = logging.getLogger(__name__)
@@ -148,9 +147,11 @@ class YouTubeChannelVideoCheckerJob(BaseGenerator):
         videos = self.youtube_api.list_all_videos(self.task_data.platform.channel_id)
         for video in videos:
             platform_data = self.__get_platform_data(video["id"])
-            video_from_db = YouTubeVideoManager(platform_data.ref_id).get_video()
-            if not video_from_db:
-                platform_ref_id = self.__create_platform_data(video["id"])
+            platform = PlatformManager().get_platform_by_ref_id(
+                ref_id=platform_data.ref_id
+            )
+            if not platform:
+                platform_ref_id = self.__create_platform_data(platform_data)
 
                 cls_data = YouTubeVideoTaskData(ref_id=platform_ref_id)
                 job_manager = JobManager()
@@ -171,11 +172,5 @@ class YouTubeChannelVideoCheckerJob(BaseGenerator):
             ),
         )
 
-    def __create_platform_data(self, video_id: str) -> str:
-        data = self.__get_platform_data(video_id)
-        logger.info(
-            "Saving platform data for video id: %s to database with ref_id: %s",
-            video_id,
-            self.task_data.ref_id,
-        )
+    def __create_platform_data(self, data: PlatformDBData) -> str:
         return PlatformManager().save_data(data)
