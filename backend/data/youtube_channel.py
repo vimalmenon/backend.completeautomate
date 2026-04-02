@@ -92,6 +92,11 @@ class YouTubeChannelDBData:
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
+        # TODO Remove get
+        playlist = [
+            YouTubeChannelPlaylist.to_cls(playlist)
+            for playlist in data.get("playlist", [])
+        ]
         return cls(
             ref_id=data["ref_id"],
             title=data["title"],
@@ -105,7 +110,7 @@ class YouTubeChannelDBData:
             made_for_kids=data.get("made_for_kids", False),
             stats=[YouTubeChannelStatsDBData.to_cls(stat) for stat in data["stats"]],
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
-            playlist=[],
+            playlist=playlist,
         )
 
     @classmethod

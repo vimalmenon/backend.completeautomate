@@ -88,8 +88,10 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Add `user_message` to the prompt
       - [ ] Metadata suggestion to be provided with `user_message`
       - [ ] Summarize to have some essence `user_message`
-    - [ ] Get all playlist
-    - [ ] Add playlist to videos
+    - [ ] Playlist
+      - [ ] Get all playlist
+      - [ ] Add playlist to Channel
+      - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
       - [ ] Clean up Agent Message
