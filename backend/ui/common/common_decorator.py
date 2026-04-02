@@ -12,3 +12,7 @@ def ui_dialog_box(on_save, render_item):
             ui.button("Save", icon="save", on_click=on_save).props("color=primary")
 
     dialog.open()
+
+
+def ui_render_common_container(render_item):
+    render_item()
