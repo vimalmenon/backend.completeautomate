@@ -34,6 +34,7 @@ tabulate = "^0.10.0"
 langsmith = "^0.7.20"
 pillow = "^11.2.1"
 fastapi = {extras = ["standard"], version = "^0.135.3"}
+pyhumps = "^3.8.0"
 
 [tool.poetry.scripts]
 app = "main:main"
