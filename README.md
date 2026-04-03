@@ -77,7 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Bugs
-    - [ ] Clean up not Working
+    - [x] Clean up not Working
   - [ ] API
     - [ ] Add Url to get jobs
     - [ ] Add Url for prompts
