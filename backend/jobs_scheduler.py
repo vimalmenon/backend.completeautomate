@@ -1,7 +1,10 @@
 import logging
 from uuid import UUID
 
+from datatime import datetime
+
 from backend.data import JobData
+from backend.enum import JobsStatusEnum
 from backend.jobs import (
     NoJob,
     PromptSuggesterJob,
@@ -54,12 +57,15 @@ class JobScheduler:
             job_response = PromptSuggesterJob(job=job).execute()
         else:
             job_response = NoJob(job=job).execute()
+        if job_response.status == JobsStatusEnum.COMPLETE:
+            job.completed_at = datetime.now()
         self.job_manager.update_job_data(
             job_id=job.id,
             status=job_response.status,
             failed_count=job_response.failed_count,
             task_data=job_response.task_data,
             error_msg=job_response.error_msg,
+            completed_at=job.completed_at,
             # job_response.pending_on
         )
 

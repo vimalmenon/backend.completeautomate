@@ -73,11 +73,18 @@ class JobManager:
         failed_count: int,
         task_data: dict | None = None,
         error_msg: str | None = None,
+        completed_at: datetime | None = None,
     ) -> None:
         values: dict[str, Any] = {
             "status": status.value,
             "failed_count": failed_count,
         }
+        if task_data:
+            values["task_data"] = task_data
+        if error_msg:
+            values["error_msg"] = error_msg
+        if completed_at:
+            values["completed_at"] = completed_at.isoformat()
         if task_data:
             values["task_data"] = task_data
         if error_msg:
