@@ -77,11 +77,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] Bugs
-    - [ ] Clean UP not Working
+    - [ ] Clean up not Working
   - [ ] API
     - [ ] Add Url to get jobs
     - [ ] Add Url for prompts
     - [ ] Add Url for Channel and Videos
+    - [ ] Add humps for response
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
