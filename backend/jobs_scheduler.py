@@ -1,7 +1,7 @@
 import logging
 from uuid import UUID
 
-from datatime import datetime
+from datetime import datetime
 
 from backend.data import JobData
 from backend.enum import JobsStatusEnum
