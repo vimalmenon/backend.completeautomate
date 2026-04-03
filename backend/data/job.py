@@ -15,7 +15,7 @@ class JobData:
     description: str
     created_at: datetime
     failed_count: int = 0
-    pending_on: list[Self] = field(default_factory=list)
+    pending_on: list[UUID] = field(default_factory=list)
     completed_at: datetime | None = None
     error_msg: str | None = None
 
@@ -28,7 +28,7 @@ class JobData:
             "description": self.description,
             "created_at": self.created_at.isoformat(),
             "failed_count": self.failed_count,
-            "pending_on": [job.to_json() for job in self.pending_on],
+            "pending_on": [str(job) for job in self.pending_on],
             "completed_at": (
                 self.completed_at.isoformat() if self.completed_at else None
             ),
@@ -45,7 +45,7 @@ class JobData:
             description=data["description"],
             created_at=datetime.fromisoformat(data["created_at"]),
             failed_count=data.get("failed_count", 0),
-            pending_on=[cls.to_cls(job) for job in data.get("pending_on", [])],
+            pending_on=[UUID(job) for job in data.get("pending_on", [])],
             completed_at=(
                 datetime.fromisoformat(data["completed_at"])
                 if data.get("completed_at")
@@ -61,4 +61,4 @@ class JobDataResponse:
     failed_count: int = 0
     task_data: dict | None = None
     error_msg: str | None = None
-    pending_on: list[JobData] = field(default_factory=list)
+    pending_on: list[UUID] = field(default_factory=list)

@@ -74,6 +74,7 @@ class JobManager:
         task_data: dict | None = None,
         error_msg: str | None = None,
         completed_at: datetime | None = None,
+        pending_on: list[UUID] | None = None,
     ) -> None:
         values: dict[str, Any] = {
             "status": status.value,
@@ -89,7 +90,8 @@ class JobManager:
             values["task_data"] = task_data
         if error_msg:
             values["error_msg"] = error_msg
-
+        if pending_on:
+            values["pending_on"] = [str(job) for job in pending_on]
         JobDB().update_data(
             job_id=job_id,
             values=values,

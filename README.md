@@ -88,7 +88,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
-    - [ ] `pending_on` on `JobData` should be string or class (Need to think)
+    - [x] `pending_on` on `JobData` should be string or class
+      - [x] make pending on as as string as status might change
     - [ ] `user_message` added to `YouTubeVideo`
       - [ ] Add `user_message` on all the AI Request expect thumbnail
       - [ ] Add `user_message` to the prompt

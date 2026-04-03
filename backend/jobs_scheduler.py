@@ -65,7 +65,7 @@ class JobScheduler:
             task_data=job_response.task_data,
             error_msg=job_response.error_msg,
             completed_at=job.completed_at,
-            # job_response.pending_on
+            pending_on=job_response.pending_on,
         )
 
         logger.info(
