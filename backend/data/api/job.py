@@ -2,19 +2,13 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-import humps
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
 
+from backend.data.api.base_mode import BaseModelWithConfig
 from backend.enum import JobsStatusEnum, JobTypeEnum
 
 
-class JobData(BaseModel):
-    model_config = ConfigDict(
-        alias_generator=humps.camelize,
-        populate_by_name=True,
-        serialize_by_alias=True,
-        use_enum_values=True,
-    )
+class JobData(BaseModelWithConfig):
 
     id: UUID
     status: JobsStatusEnum
