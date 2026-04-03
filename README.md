@@ -83,6 +83,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Add Url for prompts
     - [ ] Add Url for Channel and Videos
     - [ ] Add humps for response
+    - [ ] Set up Auth
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
@@ -99,7 +100,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
-      - [x] Clean up Agent Message
     - [ ] Add Twitter Post Suggestion
   - [ ] Improve Job
     - [ ] Run Jobs in parallel
