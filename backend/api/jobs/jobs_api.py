@@ -1,7 +1,9 @@
 from fastapi import APIRouter
+
 from backend.manager.job_manager import JobManager
 
 router = APIRouter()
+
 
 @router.get("/jobs", tags=["jobs"])
 def list_jobs():
