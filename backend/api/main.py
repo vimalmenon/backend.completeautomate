@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.channel.channel_api import router as channel_router
 from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 
@@ -27,6 +28,10 @@ main.include_router(health_router, prefix=API_PREFIX)
 
 # --- Include jobs router ---
 main.include_router(jobs_router, prefix=API_PREFIX)
+
+
+# --- Include channel router ---
+main.include_router(channel_router, prefix=API_PREFIX)
 
 
 def run_dev() -> None:

@@ -76,20 +76,20 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [ ] Bugs
   - [ ] API
     - [ ] Add Url to get jobs
     - [ ] Add Url for prompts
     - [ ] Add Url for Channel and Videos
     - [ ] Add humps for response
     - [ ] Set up Auth
+  - [ ] Bugs
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] `user_message` added to `YouTubeVideo`
       - [ ] Add `user_message` on all the AI Request expect thumbnail
-      - [ ] Add `user_message` to the prompt
+      - [ ] Add `user_message` to required prompts
       - [ ] Metadata suggestion to be provided with `user_message`
       - [ ] Summarize to have some essence `user_message`
     - [ ] Playlist
