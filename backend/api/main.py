@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.api.channel.channel_api import router as channel_router
 from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
+from backend.config.env import env
 
 # Keep object name aligned with requested Uvicorn target backend.api.main:main
 main = FastAPI(title="CompleteAutomate API")
@@ -15,7 +16,7 @@ API_PREFIX = "/api/v1"
 main.add_middleware(
     CORSMiddleware,
     # Browsers send Origin without trailing slash, so keep canonical value.
-    allow_origins=["http://localhost:3000", "http://localhost:3000/"],
+    allow_origins=env.CORS_ALLOWED_ORGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -77,11 +77,13 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] API
-    - [ ] Add Url to get jobs
-    - [ ] Add Url for prompts
-    - [ ] Add Url for Channel and Videos
-    - [ ] Add humps for response
-    - [ ] Set up Auth
+    - [ ] Add URL to get jobs
+    - [ ] Add URL for prompts
+    - [ ] Add URL for Channel and Videos
+    - [ ] Add CORS in .env
+      - [ ] Need to check
+    - [x] Add humps for response
+    - [ ] Set up `Basic Auth`  
   - [ ] Bugs
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload

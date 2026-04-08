@@ -10,6 +10,10 @@ def _to_bool(value: str) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _to_list(value) -> list[str]:
+    return value.split(",") or []
+
+
 class Env:
     VERSION: str = os.environ["VERSION"]
     COMPANY_NAME: str = os.environ["COMPANY_NAME"]
@@ -29,6 +33,7 @@ class Env:
     YOUTUBE_API_KEY: str = os.environ["YOUTUBE_API_KEY"]
     YOUTUBE_CHANNEL_ID: str = os.environ["YOUTUBE_CHANNEL_ID"]
     OFFLINE: bool = _to_bool(os.environ.get("OFFLINE", "false"))
+    CORS_ALLOWED_ORGINS: list[str] = _to_list(os.environ["CORS_ALLOWED_ORGINS"])
 
 
 env = Env()
