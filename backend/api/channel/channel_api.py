@@ -18,3 +18,13 @@ def get_channel(ref_id: str) -> ChannelData:
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found")
     return ChannelData.model_validate(channel.to_json())
+
+
+@router.get("/channels/{ref_id}/videos", tags=["channels"])
+def get_videos(ref_id: str):
+    pass
+
+
+@router.get("/channels/{ref_id}/videos/{video_id}", tags=["channels"])
+def get_videos_by_id(ref_id: str, video_id: str):
+    pass
