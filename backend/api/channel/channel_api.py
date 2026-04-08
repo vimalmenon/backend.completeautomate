@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from backend.data.api.channel import ChannelData
+from backend.manager import YouTubeVideoManager
 from backend.manager.youtube_channel_manager import YouTubeChannelManager
 
 router = APIRouter()
@@ -22,6 +23,7 @@ def get_channel(ref_id: str) -> ChannelData:
 
 @router.get("/channels/{ref_id}/videos", tags=["channels"])
 def get_videos(ref_id: str):
+    YouTubeVideoManager(ref_id=ref_id).get_videos_by_channel()
     pass
 
 
