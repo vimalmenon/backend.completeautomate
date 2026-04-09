@@ -17,7 +17,7 @@ API_PREFIX = "/api/v1"
 main.add_middleware(
     CORSMiddleware,
     # Browsers send Origin without trailing slash, so keep canonical value.
-    allow_origins=env.CORS_ALLOWED_ORGINS,
+    allow_origins=env.CORS_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

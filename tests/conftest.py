@@ -51,7 +51,7 @@ def pytest_configure(config: pytest.Config) -> None:
     os.environ["YOUTUBE_API_KEY"] = "test-youtube-key"
     os.environ["YOUTUBE_CHANNEL_ID"] = "test-channel-id"
 
-    os.environ["CORS_ALLOWED_ORGINS"] = "http://localhost:3000"
+    os.environ["CORS_ALLOWED_ORIGINS"] = "http://localhost:3000"
 
 
 @pytest.fixture(scope="session")

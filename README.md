@@ -80,7 +80,8 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [x] Add humps for response
     - [x] Add URL to get jobs
     - [x] Add URL for prompts
-    - [ ] Add URL for Channel and Videos
+    - [x] Add URL for Channel and Videos
+    - [ ] Ability to Work offline
     - [ ] Add CORS in .env
       - [ ] Need to check
     - [ ] Auth
@@ -89,7 +90,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Bugs
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
-  - [ ] Fix / improve YouTube
+  - [ ] Fix / Improve YouTube
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
     - [ ] `user_message` added to `YouTubeVideo`
       - [ ] Add `user_message` on all the AI Request expect thumbnail
