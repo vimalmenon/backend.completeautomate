@@ -12,9 +12,12 @@ def list_channels() -> list[ChannelData]:
     return [ChannelData.model_validate(channel.to_json()) for channel in channels]
 
 
-@router.get("/channels/{ref_id}", tags=["channels"], response_model=ChannelData)
-def get_channel(ref_id: str) -> ChannelData:
-    channel = YouTubeChannelManager(ref_id=ref_id).get_channel_details()
+@router.get("/channels/{channel_id}", tags=["channels"], response_model=ChannelData)
+def get_channel(channel_id: str) -> ChannelData:
+    platform = PlatformManager().get_platform_by_channel_id(channel_id=channel_id)
+    if not platform:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    channel = YouTubeChannelManager(ref_id=platform.ref_id).get_channel_details()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found")
     return ChannelData.model_validate(channel.to_json())
