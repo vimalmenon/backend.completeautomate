@@ -7,4 +7,4 @@ router = APIRouter()
 
 @router.get("/prompts", tags=["prompts"])
 async def list_prompts():
-    return PromptManager().delete_prompt()
+    return PromptManager().get_prompts()

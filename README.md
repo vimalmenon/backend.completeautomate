@@ -77,7 +77,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] API
-    - [ ] Add API for Prompts
+    - [x] Add API for Prompts
+    - [ ] Add response from data
     - [ ] Ability to work offline
     - [ ] Auth
       - [ ] Set up `Basic Auth`

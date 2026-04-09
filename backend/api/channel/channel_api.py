@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from backend.data.api.channel import ChannelData
+from backend.data.api.youtube_channel import ChannelData
 from backend.manager import PlatformManager, YouTubeChannelManager, YouTubeVideoManager
 
 router = APIRouter()

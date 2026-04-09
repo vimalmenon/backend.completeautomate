@@ -8,7 +8,7 @@ from backend.data.api.base_mode import BaseModelWithConfig
 from backend.enum import JobsStatusEnum, JobTypeEnum
 
 
-class JobData(BaseModelWithConfig):
+class JobResponse(BaseModelWithConfig):
 
     id: UUID
     status: JobsStatusEnum

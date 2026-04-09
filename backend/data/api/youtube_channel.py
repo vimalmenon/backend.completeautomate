@@ -10,6 +10,13 @@ class ChannelStats(BaseModelWithConfig):
     timestamp: datetime
 
 
+class Playlist(BaseModelWithConfig):
+    id: str
+    title: str
+    description: str
+    thumbnail: str
+
+
 class ChannelData(BaseModelWithConfig):
     ref_id: str
     title: str
@@ -23,3 +30,4 @@ class ChannelData(BaseModelWithConfig):
     privacy_status: str
     made_for_kids: bool
     stats: list[ChannelStats]
+    playlist: list[Playlist]
