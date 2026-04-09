@@ -49,4 +49,6 @@ async def get_videos_by_id(channel_id: str, video_id: str) -> YouTubeVideoRespon
     if not platform:
         raise HTTPException(status_code=404, detail="Channel not found")
     video = YouTubeVideoManager(ref_id=platform.ref_id).get_video()
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
     return YouTubeVideoResponse.model_validate(video.to_json())

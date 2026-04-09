@@ -18,6 +18,7 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     summarized_transcript: str | None = None
     user_message: str | None = None
     community_posts: list[str] = Field(default_factory=list)
+    twitter_posts: list[str] = Field(default_factory=list)
 
     # task_status: YouTubeVideoTaskEnum
     # stats: list[YouTubeVideoDBStats]
@@ -27,4 +28,3 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     # thumbnails_suggestions: list[YouTubeVideoThumbnailData] = field(
     #     default_factory=list
     # )
-    # twitter_posts: list[str] = field(default_factory=list)
