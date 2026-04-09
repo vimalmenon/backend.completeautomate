@@ -5,7 +5,7 @@ from pydantic import Field
 from backend.data.api.base_mode import BaseModelWithConfig
 
 
-class YouTubeVideo(BaseModelWithConfig):
+class YouTubeVideoResponse(BaseModelWithConfig):
     ref_id: str
     published_at: datetime
     last_updated_at: datetime
