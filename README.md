@@ -77,13 +77,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] API
-    - [x] Add humps for response
-    - [x] Add URL to get jobs
-    - [x] Add URL for prompts
-    - [x] Add URL for Channel and Videos
     - [ ] Ability to work offline
-    - [ ] Add CORS in .env
-      - [ ] Need to check
     - [ ] Auth
       - [ ] Set up `Basic Auth`
       - [ ] Set up AWS Cognito
