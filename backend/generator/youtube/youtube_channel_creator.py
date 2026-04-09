@@ -130,6 +130,7 @@ class YouTubeChannelCreatorJob(BaseGenerator):
             )
             self.channel_manager.add_channel(channel_from_api)
             return JobsStatusEnum.COMPLETE, None
+        # TODO Need to check why this is failing
         raise AppException("Channel DB already exists")
 
 
