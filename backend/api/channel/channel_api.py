@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from backend.data.api.channel import ChannelData
-from backend.manager import YouTubeVideoManager
-from backend.manager.youtube_channel_manager import YouTubeChannelManager
+from backend.manager import PlatformManager, YouTubeChannelManager, YouTubeVideoManager
 
 router = APIRouter()
 
@@ -21,12 +20,16 @@ def get_channel(ref_id: str) -> ChannelData:
     return ChannelData.model_validate(channel.to_json())
 
 
-@router.get("/channels/{ref_id}/videos", tags=["channels"])
-def get_videos(ref_id: str):
-    YouTubeVideoManager(ref_id=ref_id).get_videos_by_channel()
-    pass
+@router.get("/channels/{channel_id}/videos", tags=["channels"])
+def get_videos(channel_id: str):
+    return YouTubeVideoManager(ref_id="").get_videos_by_channel(channel_id=channel_id)
 
 
-@router.get("/channels/{ref_id}/videos/{video_id}", tags=["channels"])
-def get_videos_by_id(ref_id: str, video_id: str):
-    pass
+@router.get("/channels/{channel_id}/videos/{video_id}", tags=["channels"])
+def get_videos_by_id(channel_id: str, video_id: str):
+    platform = PlatformManager().get_platform_by_video_id(
+        channel_id=channel_id, video_id=video_id
+    )
+    if not platform:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    YouTubeVideoManager(ref_id=platform.ref_id).get_video()

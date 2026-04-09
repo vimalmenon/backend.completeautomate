@@ -50,12 +50,13 @@ class PlatformManager:
             logger.warning(f"Platform not found for channel_id {channel_id}: {e}")
             return None
 
-    def get_platform_by_video_id(self, channel_id: str, video_id: str) -> str | None:
+    def get_platform_by_video_id(
+        self, channel_id: str, video_id: str
+    ) -> PlatformDBData | None:
         logger.info(f"Retrieving platform for video_id: {video_id}")
         try:
             ref_id = f"{PlatformEnum.YouTubeVideo.value}#{channel_id}#{video_id}"
-            PlatformDB().get_data(ref_id)
-            return ref_id
+            return PlatformDB().get_data(ref_id)
         except Exception as e:
             logger.warning(f"Platform not found for video_id {video_id}: {e}")
             return None
