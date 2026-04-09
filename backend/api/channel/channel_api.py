@@ -7,13 +7,13 @@ router = APIRouter()
 
 
 @router.get("/channels", tags=["channels"], response_model=list[ChannelData])
-def list_channels() -> list[ChannelData]:
+async def list_channels() -> list[ChannelData]:
     channels = YouTubeChannelManager(ref_id="").get_channels()
     return [ChannelData.model_validate(channel.to_json()) for channel in channels]
 
 
 @router.get("/channels/{channel_id}", tags=["channels"], response_model=ChannelData)
-def get_channel(channel_id: str) -> ChannelData:
+async def get_channel(channel_id: str) -> ChannelData:
     platform = PlatformManager().get_platform_by_channel_id(channel_id=channel_id)
     if not platform:
         raise HTTPException(status_code=404, detail="Channel not found")
@@ -24,12 +24,12 @@ def get_channel(channel_id: str) -> ChannelData:
 
 
 @router.get("/channels/{channel_id}/videos", tags=["channels"])
-def get_videos(channel_id: str):
+async def get_videos(channel_id: str):
     return YouTubeVideoManager(ref_id="").get_videos_by_channel(channel_id=channel_id)
 
 
 @router.get("/channels/{channel_id}/videos/{video_id}", tags=["channels"])
-def get_videos_by_id(channel_id: str, video_id: str):
+async def get_videos_by_id(channel_id: str, video_id: str):
     platform = PlatformManager().get_platform_by_video_id(
         channel_id=channel_id, video_id=video_id
     )
