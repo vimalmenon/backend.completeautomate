@@ -34,11 +34,11 @@ class YouTubeStatsUpdater(BaseGenerator):
             channel_data = self.youtube_api.get_channel_info(
                 channel_id=channel.platform.channel_id
             )
+            playlist = self.youtube_api.list_all_playlists(
+                channel_id=channel.platform.channel_id
+            )
             channel_db = YouTubeChannelDBData.to_cls_from_response(
-                channel={
-                    **channel_data,
-                    "ref_id": channel.ref_id,
-                }
+                channel={**channel_data, "ref_id": channel.ref_id, "playlist": playlist}
             )
             YouTubeChannelManager(ref_id=channel.ref_id).update_channel(
                 value=channel_db.values_to_update(old_value=channel)

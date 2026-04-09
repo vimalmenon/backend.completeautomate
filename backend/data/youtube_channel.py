@@ -33,6 +33,16 @@ class YouTubeChannelPlaylist:
             thumbnail=data["thumbnail"],
         )
 
+    @classmethod
+    def to_cls_from_response(cls, playlist: dict) -> Self:
+        snippet = playlist["snippet"]
+        return cls(
+            id=playlist["id"],
+            title=snippet["title"],
+            description=snippet["description"],
+            thumbnail=snippet["thumbnails"]["default"]["url"],
+        )
+
 
 @dataclass
 class YouTubeChannelStatsDBData:
@@ -119,6 +129,10 @@ class YouTubeChannelDBData:
         branding = channel["brandingSettings"]
         status = channel["status"]
         stat = YouTubeChannelStatsDBData.to_cls_from_response(channel["statistics"])
+        playlist = [
+            YouTubeChannelPlaylist.to_cls_from_response(playlist)
+            for playlist in channel["playlist"]
+        ]
         return cls(
             ref_id=channel["ref_id"],
             title=snippet["title"],
@@ -132,6 +146,7 @@ class YouTubeChannelDBData:
             made_for_kids=status.get("madeForKids", False),
             stats=[stat],
             last_updated_at=datetime.now(),
+            playlist=playlist,
         )
 
     def to_json(self) -> dict:
