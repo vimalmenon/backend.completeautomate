@@ -17,7 +17,7 @@ class Playlist(BaseModelWithConfig):
     thumbnail: str
 
 
-class ChannelData(BaseModelWithConfig):
+class YouTubeChannelResponse(BaseModelWithConfig):
     ref_id: str
     title: str
     description: str
