@@ -11,6 +11,7 @@ from backend.data import (
     YouTubeVideoTaskData,
 )
 from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum
+from backend.exception.app_exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI
@@ -129,9 +130,7 @@ class YouTubeChannelCreatorJob(BaseGenerator):
             )
             self.channel_manager.add_channel(channel_from_api)
             return JobsStatusEnum.COMPLETE, None
-        # TODO Return this once and complete the job
-        # raise AppException("Channel DB already exists")
-        return JobsStatusEnum.COMPLETE, None
+        raise AppException("Channel DB already exists")
 
 
 class YouTubeChannelVideoCheckerJob(BaseGenerator):
