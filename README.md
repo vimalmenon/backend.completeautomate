@@ -84,8 +84,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Set up `Basic Auth`
       - [ ] Set up AWS Cognito
   - [ ] Bugs
-   - [x] Check why `YouTubeChannelCreatorJob` is failing
-   - [x] Run `poetry run app` once
    - [ ] Swagger doesn't work when offline
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
