@@ -8,6 +8,7 @@ class PromptTaskEnum(str, Enum):
     YouTubeVideoCommunityPost = "YouTubeVideoCommunityPost"
     # TODO need to implement
     YouTubeVideoTwitterPost = "YouTubeVideoTwitterPost"
+    YouTubeShortGenerator = "YouTubeShortGenerator"
 
 
 class PromptStatusEnum(str, Enum):
