@@ -58,7 +58,7 @@ pyfaker = "^0.1"
 faker = "^40.8.0"
 ruff = "^0.15.6"
 types-tabulate = "^0.10.0.20260308"
-tox = "^4.50.0"
+tox = "^4.52.1"
 
 [tool.black]
 line-length = 88
