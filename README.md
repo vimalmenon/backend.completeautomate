@@ -101,6 +101,9 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
+  - [ ] Text to Speech
+    - [ ] Create a Job for text to Speech
+    - [ ] Upload to S3
   - [ ] Improve Job
     - [ ] Run Jobs in parallel
     - [ ] Ability to run the agent tasks in parallel
