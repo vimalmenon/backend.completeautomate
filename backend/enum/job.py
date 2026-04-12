@@ -8,6 +8,7 @@ class JobTypeEnum(str, Enum):
     YouTubeVideo = "YouTubeVideo"
     PromptImprover = "PromptImprover"
     YouTubeStatsUpdater = "YouTubeStatsUpdater"
+    TextToSpeech = "TextToSpeech"
 
 
 # JOB DESCRIPTIONS :
@@ -17,6 +18,7 @@ class JobTypeEnum(str, Enum):
 
 # YouTubeVideo = Check for video and update in Database
 # YouTubeVideoStatsUpdater = Check the stats for the video and update in Database
+# TextToSpeech = Convert text to speech
 
 
 # YouTubeChannelVideoChecker will create YouTubeVideo & YouTubeVideoStatsUpdater
