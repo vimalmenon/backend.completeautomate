@@ -29,6 +29,8 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     status: YouTubeVideoStatusEnum = YouTubeVideoStatusEnum.Active
     metadata_suggestions: list[YouTubeVideoMetadataData] = Field(default_factory=list)
     thumbnail_prompt_suggestions: list[ImagePromptData] = Field(default_factory=list)
-    thumbnails_suggestions: list[YouTubeVideoThumbnailData] = Field(default_factory=list)
+    thumbnails_suggestions: list[YouTubeVideoThumbnailData] = Field(
+        default_factory=list
+    )
     community_posts: list[str] = Field(default_factory=list)
     twitter_posts: list[str] = Field(default_factory=list)
