@@ -5,7 +5,7 @@ from pydantic import Field
 from backend.data.api.base_mode import BaseModelWithConfig
 from backend.data.image import ImagePromptData
 from backend.data.youtube_video import (
-    YouTubeVideoDBStats,
+    YouTubeVideoDBStatsData,
     YouTubeVideoMetadataData,
     YouTubeVideoThumbnailData,
 )
@@ -22,7 +22,7 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     task_status: YouTubeVideoTaskEnum
     tags: list[str]
     language: str
-    stats: list[YouTubeVideoDBStats]
+    stats: list[YouTubeVideoDBStatsData]
     transcript: str | None = None
     summarized_transcript: str | None = None
     user_message: str | None = None

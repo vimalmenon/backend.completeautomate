@@ -10,7 +10,7 @@ NO_ITEMS_FOUND_ERROR = "No items found with in response"
 
 
 @dataclass
-class YouTubeChannelPlaylist:
+class YouTubeChannelPlaylistData:
     id: str
     title: str
     description: str
@@ -92,7 +92,7 @@ class YouTubeChannelDBData:
     privacy_status: str
     made_for_kids: bool
     stats: list[YouTubeChannelStatsDBData]
-    playlist: list[YouTubeChannelPlaylist] = field(default_factory=list)
+    playlist: list[YouTubeChannelPlaylistData] = field(default_factory=list)
 
     @cached_property
     def platform(self) -> PlatformDBData:
@@ -102,10 +102,8 @@ class YouTubeChannelDBData:
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        # TODO Remove get
         playlist = [
-            YouTubeChannelPlaylist.to_cls(playlist)
-            for playlist in data.get("playlist", [])
+            YouTubeChannelPlaylistData.to_cls(playlist) for playlist in data["playlist"]
         ]
         return cls(
             ref_id=data["ref_id"],
@@ -130,7 +128,7 @@ class YouTubeChannelDBData:
         status = channel["status"]
         stat = YouTubeChannelStatsDBData.to_cls_from_response(channel["statistics"])
         playlist = [
-            YouTubeChannelPlaylist.to_cls_from_response(playlist)
+            YouTubeChannelPlaylistData.to_cls_from_response(playlist)
             for playlist in channel["playlist"]
         ]
         return cls(

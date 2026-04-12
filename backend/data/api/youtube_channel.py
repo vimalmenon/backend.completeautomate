@@ -1,6 +1,10 @@
 from datetime import datetime
 
 from backend.data.api.base_mode import BaseModelWithConfig
+from backend.data.youtube_channel import (
+    YouTubeChannelPlaylistData,
+    YouTubeChannelStatsDBData,
+)
 
 
 class ChannelStatsResponse(BaseModelWithConfig):
@@ -29,5 +33,5 @@ class YouTubeChannelResponse(BaseModelWithConfig):
     banner_image_url: str
     privacy_status: str
     made_for_kids: bool
-    stats: list[ChannelStatsResponse]
-    playlist: list[PlaylistResponse]
+    stats: list[YouTubeChannelStatsDBData]
+    playlist: list[YouTubeChannelPlaylistData]

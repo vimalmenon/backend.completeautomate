@@ -10,7 +10,7 @@ from backend.enum import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
 
 
 @dataclass
-class YouTubeVideoDBStats:
+class YouTubeVideoDBStatsData:
     views: int
     likes: int
     comments: int
@@ -98,7 +98,7 @@ class YouTubeVideoDBData:
     task_status: YouTubeVideoTaskEnum
     tags: list[str]
     language: str
-    stats: list[YouTubeVideoDBStats]
+    stats: list[YouTubeVideoDBStatsData]
     transcript: str | None = None
     summarized_transcript: str | None = None
     user_message: str | None = None
@@ -119,7 +119,7 @@ class YouTubeVideoDBData:
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        stats = [YouTubeVideoDBStats.to_cls(stat) for stat in data["stats"]]
+        stats = [YouTubeVideoDBStatsData.to_cls(stat) for stat in data["stats"]]
         return cls(
             ref_id=data["ref_id"],
             published_at=datetime.fromisoformat(data["published_at"]),
@@ -153,7 +153,7 @@ class YouTubeVideoDBData:
 
     @classmethod
     def to_cls_from_response(cls, item: dict) -> Self:
-        stat = YouTubeVideoDBStats.to_cls_from_response(item)
+        stat = YouTubeVideoDBStatsData.to_cls_from_response(item)
         snippet = item["snippet"]
         return cls(
             ref_id=item["ref_id"],
