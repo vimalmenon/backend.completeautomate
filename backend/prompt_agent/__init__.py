@@ -10,10 +10,14 @@ from backend.prompt_agent.youtube_video_metadata.youtube_video_metadata_agent im
 from backend.prompt_agent.youtube_video_summarization.youtube_video_summarization_agent import (
     YouTubeVideoSummarizationAgent,
 )
+from backend.prompt_agent.youtube_video_twitter_post.youtube_video_twitter_post_agent import (
+    YouTubeVideoTwitterPostAgent,
+)
 
 __all__ = [
     "YouTubeVideoSummarizationAgent",
     "YouTubeVideoMetadataAgent",
     "YouTubeVideoCommunityPostAgent",
     "YouTubeThumbnailImageGenerationPromptAgent",
+    "YouTubeVideoTwitterPostAgent",
 ]
