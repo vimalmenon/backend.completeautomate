@@ -1,2 +1,5 @@
+from backend.enum import PromptTaskEnum
+
+
 class YouTubeVideoTwitterPostAgent:
-    pass
+    task = PromptTaskEnum.YouTubeVideoTwitterPost
