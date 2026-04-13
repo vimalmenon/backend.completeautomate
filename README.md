@@ -84,11 +84,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Text to Speech
     - [ ] Create a Job for text to Speech
     - [ ] Upload to S3
-  - [x] NiceGUI
-    - [x] Remove UI
-    - [x] Remove NiceGUI Package
   - [ ] Bugs
-   - [ ] Swagger doesn't work when offline
+   - [x] Swagger doesn't work when offline
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
   - [ ] Fix / Improve YouTube
