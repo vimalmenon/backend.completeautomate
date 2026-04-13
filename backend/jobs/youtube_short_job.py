@@ -10,7 +10,7 @@ class YouTubeShortJob(BaseJob):
     def execute(self) -> JobDataResponse:
         try:
             if self.job.type == JobTypeEnum.YouTubeShortGenerator:
-                status, data = YouTubeShortGenerator().generate()
+                status, data = YouTubeShortGenerator(job=self.job).generate()
                 return JobDataResponse(status=status, task_data=data)
             return JobDataResponse(status=JobsStatusEnum.IN_PROGRESS)
         except Exception:

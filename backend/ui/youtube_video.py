@@ -935,11 +935,9 @@ async def youtube_video_page(
     with ui.row().classes("w-full items-center my-4") as loading_row:
         ui.spinner(size="lg", color="primary")
         ui.label("Loading video...")
-
-        video, tasks, video_job = await run.io_bound(
+        video, video_job = await run.io_bound(
             lambda: (
                 YouTubeVideoManager(ref_id=platform.ref_id).get_video(),
-                [],
                 _get_video_job(ref_id=platform.ref_id, flow_job_id=section),
             )
         )

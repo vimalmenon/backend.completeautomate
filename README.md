@@ -82,6 +82,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Auth
       - [ ] Set up `Basic Auth`
       - [ ] Set up AWS Cognito
+  - [ ] NiceGUI
+    - [ ] Remove UI
+    - [ ] Remove Package
   - [ ] Bugs
    - [ ] Swagger doesn't work when offline
   - [ ] Fix the Image Size for YouTube Thumbnail
