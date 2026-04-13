@@ -1,4 +1,4 @@
-from backend.manager import YouTubeChannelManager
+from backend.manager.youtube_channel_manager import YouTubeChannelManager
 
 
 def transform_data() -> bool:
