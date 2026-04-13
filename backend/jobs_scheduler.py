@@ -8,6 +8,7 @@ from backend.jobs import (
     NoJob,
     PromptSuggesterJob,
     YouTubeChannelJob,
+    YouTubeShortJob,
     YouTubeStatsUpdaterJob,
     YouTubeVideoJob,
 )
@@ -54,6 +55,8 @@ class JobScheduler:
             job_response = YouTubeStatsUpdaterJob(job=job).execute()
         elif job.type in PromptSuggesterJob.types:
             job_response = PromptSuggesterJob(job=job).execute()
+        elif job.type in YouTubeShortJob.types:
+            job_response = YouTubeShortJob(job=job).execute()
         else:
             job_response = NoJob(job=job).execute()
         if job_response.status == JobsStatusEnum.COMPLETE:
