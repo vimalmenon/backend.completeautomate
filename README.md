@@ -107,7 +107,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
-  - [ ] Improve Job
+  - [ ] Improve Jobs
     - [ ] Run Jobs in parallel
     - [ ] Ability to run the agent tasks in parallel
   - [ ] Offline Feature
@@ -116,6 +116,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Mock data from Agents (Positive and Negative)
     - [ ] All data needs to be mocked
   - [ ] Improve on prompt Improver
+    - [ ] Create prompt improver result
     - [ ] Move all prompts to Prompt Agent
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
