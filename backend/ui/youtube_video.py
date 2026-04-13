@@ -939,7 +939,7 @@ async def youtube_video_page(
         video, tasks, video_job = await run.io_bound(
             lambda: (
                 YouTubeVideoManager(ref_id=platform.ref_id).get_video(),
-                JobManager().get_job_by_ref_id(ref_id=platform.ref_id),
+                [],
                 _get_video_job(ref_id=platform.ref_id, flow_job_id=section),
             )
         )
