@@ -1,3 +1,6 @@
+from backend.prompt_agent.youtube_short_speech_generation_prompt.youtube_short_speech_generation_prompt_agent import (
+    YouTubeShortSpeechGenerationPromptAgent,
+)
 from backend.prompt_agent.youtube_thumbnail_image_generation_prompt.youtube_thumbnail_image_generation_prompt_agent import (
     YouTubeThumbnailImageGenerationPromptAgent,
 )
@@ -20,4 +23,5 @@ __all__ = [
     "YouTubeVideoCommunityPostAgent",
     "YouTubeThumbnailImageGenerationPromptAgent",
     "YouTubeVideoTwitterPostAgent",
+    "YouTubeShortSpeechGenerationPromptAgent",
 ]
