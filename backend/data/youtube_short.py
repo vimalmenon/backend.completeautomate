@@ -1,6 +1,28 @@
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Self
 
 
 @dataclass
-class YouTubeShort:
-    pass
+class YouTubeShortDBData:
+    ref_id: str
+    topic: str
+    transcript: str
+    published_at: datetime
+
+    def to_json(self) -> dict:
+        return {
+            "ref_id": self.ref_id,
+            "topic": self.topic,
+            "transcript": self.transcript,
+            "published_at": self.published_at.isoformat(),
+        }
+
+    @classmethod
+    def to_cls(cls, data) -> Self:
+        return cls(
+            ref_id=data["ref_id"],
+            topic=data["topic"],
+            transcript=data["transcript"],
+            published_at=datetime.fromisoformat(data["published_at"]),
+        )
