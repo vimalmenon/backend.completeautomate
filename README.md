@@ -85,9 +85,12 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Create a Job for text to Speech
     - [ ] Upload to S3
   - [ ] Bugs
-   - [x] Swagger doesn't work when offline
   - [ ] Fix the Image Size for YouTube Thumbnail
     - [ ] Check in next upload
+  - [ ] Need to streamline AI Generation
+    - [ ] Text Generation
+    - [ ] Image Generation
+    - [ ] Speech Generation
   - [ ] Fix / Improve YouTube
     - [ ] Add Twitter Post Suggestion
     - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
