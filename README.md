@@ -82,6 +82,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Auth
       - [ ] Set up `Basic Auth`
       - [ ] Set up AWS Cognito
+  - [ ] Text to Speech
+    - [ ] Create a Job for text to Speech
+    - [ ] Upload to S3
   - [ ] NiceGUI
     - [x] Remove UI
     - [ ] Remove NiceGUI Package
@@ -103,9 +106,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Get all videos in playlist
     - [ ] Others
       - [ ] Do caching on backed up DB Data
-  - [ ] Text to Speech
-    - [ ] Create a Job for text to Speech
-    - [ ] Upload to S3
   - [ ] Improve Job
     - [ ] Run Jobs in parallel
     - [ ] Ability to run the agent tasks in parallel
@@ -115,6 +115,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Mock data from Agents (Positive and Negative)
     - [ ] All data needs to be mocked
   - [ ] Improve on prompt Improver
+    - [ ] Move all prompts to Prompt Agent
     - [ ] Need to pass data To `Prompt Improver` to test and evaluate
     - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
     - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
