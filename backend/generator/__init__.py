@@ -3,6 +3,7 @@ from backend.generator.youtube import (
     YouTubeChannelCreatorJob,
     YouTubeChannelOnboardingJob,
     YouTubeChannelVideoCheckerJob,
+    YouTubeShortGenerator,
     YouTubeStatsUpdater,
     YouTubeVideoGenerator,
 )
@@ -14,4 +15,5 @@ __all__ = [
     "YouTubeVideoGenerator",
     "YouTubeStatsUpdater",
     "PromptReviewer",
+    "YouTubeShortGenerator",
 ]
