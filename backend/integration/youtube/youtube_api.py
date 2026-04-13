@@ -2,7 +2,7 @@ import os
 import tempfile
 from logging import getLogger
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 from PIL import Image
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -137,8 +137,8 @@ class YouTubeAPI:
     def _load_optimized_base_image(self, source_path: Path) -> Image.Image:
         with Image.open(source_path) as image:
             if image.mode in {"RGBA", "P"}:
-                return cast(Image.Image, image.convert("RGB"))
-            return cast(Image.Image, image.copy())
+                return image.convert("RGB")
+            return image.copy()
 
     def _create_temp_jpeg_path(self) -> Path:
         temp_file = tempfile.NamedTemporaryFile(
