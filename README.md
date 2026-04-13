@@ -132,7 +132,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
 - [ ] GUI Enhancements (Top priority)
-  - [ ] Disable GUI refresh
+  - [x] Disable GUI refresh
   - [ ] Improve the status of Video Page
   - [ ] Show the generated `Community Post` in UI Page
   - [ ] View `Job` detail based on the Job

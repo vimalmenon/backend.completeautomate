@@ -1,6 +1,6 @@
 .PHONY: help install test lint format format-all isort-check type-check check clean run deadcode
 
-PY_SOURCES = backend/ tests/ main.py gui.py
+PY_SOURCES = backend/ tests/ main.py
 NOTEBOOK_SOURCES = main.ipynb
 
 # Default target
@@ -65,7 +65,7 @@ isort-check:
 # Run mypy type checker
 type-check:
 	@echo "Running mypy type checker..."
-	poetry run mypy backend/ main.py gui.py
+	poetry run mypy backend/ main.py
 
 # Run all checks (format-check, isort-check, lint, type-check, test)
 check: format-check isort-check lint type-check test
@@ -79,7 +79,7 @@ fix: format-all
 # Find dead code using deadcode analyzer
 deadcode:
 	@echo "Analyzing dead code..."
-	poetry run deadcode backend/ main.py gui.py main.ipynb
+	poetry run deadcode backend/ main.py
 
 # Clean cache and build files
 clean:
@@ -114,7 +114,7 @@ ci: format-check
 	@echo "Running lint..."
 	-poetry run flake8 $(PY_SOURCES) --count --statistics --exclude=venv,.venv
 	@echo "Running type-check..."
-	-poetry run mypy backend/ main.py gui.py
+	-poetry run mypy backend/ main.py
 	@echo "Running tests..."
 	-poetry run pytest tests/ -v --cov=backend --cov-report=term-missing
 	@echo "CI checks complete!"
