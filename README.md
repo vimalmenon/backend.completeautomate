@@ -77,7 +77,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
   - [ ] API
-    - [x] Add response from data
     - [ ] Ability to work offline
     - [ ] Auth
       - [ ] Set up `Basic Auth`
@@ -85,9 +84,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Text to Speech
     - [ ] Create a Job for text to Speech
     - [ ] Upload to S3
-  - [ ] NiceGUI
+  - [x] NiceGUI
     - [x] Remove UI
-    - [ ] Remove NiceGUI Package
+    - [x] Remove NiceGUI Package
   - [ ] Bugs
    - [ ] Swagger doesn't work when offline
   - [ ] Fix the Image Size for YouTube Thumbnail
@@ -132,22 +131,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Send the logs to some common place (AWS Logger)
     - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
   - [ ] Start multiple tasks in parallel
-- [x] GUI Enhancements (Top priority)
-  - [x] Disable GUI refresh
-  - [x] Improve the status of Video Page
-  - [x] Show the generated `Community Post` in UI Page
-  - [x] View `Job` detail based on the Job
-  - [x] Ability to perform all actions from GUI
-  - [x] Button when the values are not synced
-  - [x] Add field to update `user_message` for `YouTube Video`
-  - [x] Improve the UI for S3 Page
-    - [x] Tree on S3 to only show folder
-    - [x] Display item based on the click
-    - [x] Ability to upload image
-    - [x] View images from S3 and Local
-  - [x] Prompt Update
-    - [x] Update Prompt from UI
-    - [x] Run Prompt Improver
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
