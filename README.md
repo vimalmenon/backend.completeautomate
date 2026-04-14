@@ -12,7 +12,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - [Roadmap](#roadmap)
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
-	- [1) Install dependencies](#1-install-dependencies)
+  - [1) Install dependencies](#1-install-dependencies)
   - [2) Run the app](#2-run-the-app)
   - [3) Run the dashboard](#3-run-the-dashboard)
 - [YouTube OAuth Notes](#youtube-oauth-notes)
@@ -76,60 +76,61 @@ Use this checklist to track progress toward a **9/10** quality target.
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
-  - [ ] API
-    - [ ] Ability to work offline
-    - [ ] Auth
-      - [ ] Set up `Basic Auth`
-      - [ ] Set up AWS Cognito
-  - [ ] Text to Speech
-    - [ ] Create a Job for text to Speech
-    - [ ] Upload to S3
-  - [ ] Bugs
-  - [ ] Fix the Image Size for YouTube Thumbnail
-    - [ ] Check in next upload
-  - [ ] Need to streamline AI Generation
-    - [ ] Text Generation
-    - [ ] Image Generation
-    - [ ] Speech Generation
-  - [ ] Fix / Improve YouTube
-    - [ ] Add Twitter Post Suggestion
-    - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
-    - [ ] `user_message` added to `YouTubeVideo`
-      - [ ] Add `user_message` on all the AI Request expect thumbnail
-      - [ ] Add `user_message` to required prompts
-      - [ ] Metadata suggestion to be provided with `user_message`
-      - [ ] Summarize to have essence `user_message`
-    - [ ] Playlist
-      - [ ] Get all videos in playlist
-    - [ ] Others
-  - [ ] Improve Jobs
-    - [ ] Run Jobs in parallel
-    - [ ] Ability to run the agent tasks in parallel
-  - [ ] Offline Feature
-    - [ ] Need a database for Mocked API when Offline
-    - [ ] Store the response received from API (in JSON Format)
-    - [ ] Mock data from Agents (Positive and Negative)
-    - [ ] All data needs to be mocked
-  - [ ] Improve on prompt Improver
-    - [ ] Create prompt improver result
-    - [ ] Move all prompts to Prompt Agent
-    - [ ] Need to pass data To `Prompt Improver` to test and evaluate
-    - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
-    - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
-        - [ ] Cannot use one class / DB for both prompt and improver
-        - [ ] Create another table for `PromptResult`
-        - [ ] Create another table for `PromptData`
-    - [ ] Should be able to test the prompts generated
-    - [ ] Add one shot / few shot prompt for prompts
-    - [ ] Run PromptImprover in parallel
-  - [ ] Send Notification
-    - [ ] Send Signal
-    - [ ] Send Email
-    - [ ] Send WhatsApp message
-  - [ ] Loggers
-    - [ ] Send the logs to some common place (AWS Logger)
-    - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
-  - [ ] Start multiple tasks in parallel
+- [ ] API
+  - [ ] Ability to work offline
+  - [ ] Auth
+    - [ ] Set up `Basic Auth`
+    - [ ] Set up AWS Cognito
+- [ ] Text to Speech
+  - [ ] Create a AI services for text to Speech
+  - [ ] Check the voice generated extension (mp3 / mov)
+  - [ ] Upload to S3
+- [ ] Bugs
+- [ ] Fix the Image Size for YouTube Thumbnail
+  - [ ] Check in next upload
+- [ ] Need to streamline AI Generation
+  - [ ] Text Generation
+  - [ ] Image Generation
+  - [ ] Speech Generation
+- [ ] Fix / Improve YouTube
+  - [ ] Add Twitter Post Suggestion
+  - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
+  - [ ] `user_message` added to `YouTubeVideo`
+    - [ ] Add `user_message` on all the AI Request expect thumbnail
+    - [ ] Add `user_message` to required prompts
+    - [ ] Metadata suggestion to be provided with `user_message`
+    - [ ] Summarize to have essence `user_message`
+  - [ ] Playlist
+    - [ ] Get all videos in playlist
+  - [ ] Others
+- [ ] Improve Jobs
+  - [ ] Run Jobs in parallel
+  - [ ] Ability to run the agent tasks in parallel
+- [ ] Offline Feature
+  - [ ] Need a database for Mocked API when Offline
+  - [ ] Store the response received from API (in JSON Format)
+  - [ ] Mock data from Agents (Positive and Negative)
+  - [ ] All data needs to be mocked
+- [ ] Improve on prompt Improver
+  - [ ] Create prompt improver result
+  - [ ] Move all prompts to Prompt Agent
+  - [ ] Need to pass data To `Prompt Improver` to test and evaluate
+  - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
+  - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
+    - [ ] Cannot use one class / DB for both prompt and improver
+    - [ ] Create another table for `PromptResult`
+    - [ ] Create another table for `PromptData`
+  - [ ] Should be able to test the prompts generated
+  - [ ] Add one shot / few shot prompt for prompts
+  - [ ] Run PromptImprover in parallel
+- [ ] Send Notification
+  - [ ] Send Signal
+  - [ ] Send Email
+  - [ ] Send WhatsApp message
+- [ ] Loggers
+  - [ ] Send the logs to some common place (AWS Logger)
+  - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
+- [ ] Start multiple tasks in parallel
 - [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
   - [ ] YouTube topic suggester
   - [ ] Use Google trends
@@ -165,8 +166,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 A high-quality YouTube thumbnail in a 16:9 aspect ratio (1280x720). The theme is 'AI Foundations' with a sleek dark-mode tech aesthetic featuring neon purple and blue accents. The layout is divided into three clear visual sections: 1) A glowing neural network brain icon labeled 'AI', 2) A futuristic robot holding a digital toolbox labeled 'AGENT', and 3) A clean flowchart of connected nodes and lines labeled 'WORKFLOW'. In the top-left corner, place a high-contrast yellow badge with bold black text that says 'PART 1'. In the center or bottom, feature large, cinematic 3D white typography that says 'AI vs AGENT vs WORKFLOW'. Near the corner, add a small floating graphic of a digital coin or currency symbol with the text 'Tokens = '. Professional cinematic lighting, 8k resolution, clean and modern developer UI style.
 ```
 
-
-
 **Ideas / Low Priority:**
 
 - Local text-to-speech
@@ -189,7 +188,6 @@ A high-quality YouTube thumbnail in a 16:9 aspect ratio (1280x720). The theme is
 - Set Up N8N
 - Make a Webpage based on the post
 </details>
-
 
 ## YouTube Workflow Pipeline
 
@@ -228,6 +226,7 @@ Jobs and tasks flow from top to bottom. Channel-level jobs run continuously; vid
 ```
 
 **Key Points:**
+
 - Start by creating a `YouTubeChannelOnboarding` job from the Jobs dashboard
 - Channel-level jobs (`YouTubeChannel`, `YouTubeChannelVideoChecker`) run on a continuous schedule
 - The single `YouTubeVideo` job handles the full video pipeline via internal task stages
@@ -236,14 +235,14 @@ Jobs and tasks flow from top to bottom. Channel-level jobs run continuously; vid
 
 ## UI Routes
 
-Main                            /
-tasks                           /tasks
-YouTube Channels                /youtube
-Channel Id & YouTube Videos     /youtube/{channel_id}?tab={channel / videos} default to channel
-YouTube Video detail            /youtube/{channel_id}/{video_id}?section={metadata_review | thumbnail_review}
-S3 Storage                      /storage
-Prompt                          /prompts
-Prompt Detail                   /prompts/{prompt_id}
+Main /
+tasks /tasks
+YouTube Channels /youtube
+Channel Id & YouTube Videos /youtube/{channel_id}?tab={channel / videos} default to channel
+YouTube Video detail /youtube/{channel_id}/{video_id}?section={metadata_review | thumbnail_review}
+S3 Storage /storage
+Prompt /prompts
+Prompt Detail /prompts/{prompt_id}
 
 ## YouTube Video Page (Current UI)
 
@@ -276,7 +275,6 @@ YouTube rejects thumbnails larger than `2 MB` (`2097152` bytes). The backend now
   - If image is already within size limit, it uploads as-is
   - If oversized, it converts/compresses to JPEG and progressively resizes until under the limit
   - Upload uses the optimized temporary file and cleans it up after request
-
 
 ## Requirements
 
@@ -317,8 +315,8 @@ Run one-time transformation and exit:
 ```sh
 poetry run app --transform true
 ```
-Use `--transform true` for a one-time transformation run.
 
+Use `--transform true` for a one-time transformation run.
 
 ## Image Generation Models
 
@@ -333,8 +331,6 @@ Qwen image generation uses DashScope `MultiModalConversation` with:
 - Base URL: `https://dashscope-intl.aliyuncs.com/api/v1`
 - API key env var: `QWEN_API_KEY`
 - Default image size: `1328*1328`
-
-
 
 ### 3) Run the dashboard
 
@@ -556,6 +552,7 @@ backend.completeautomate/
 Key modules:
 
 **UI pages** (`backend/ui/`):
+
 - `main.py`: home dashboard page
 - `navigation.py`: shared navigation component
 - `tasks.py`: task list with dynamic payload forms (11 job types), task execution confirmation dialog, inline status updates, delete action, expandable payload JSON viewer
@@ -563,6 +560,7 @@ Key modules:
 - `prompt.py`: prompt list with detail-page navigation (`/prompt/{task_id}`) and edit support
 
 **Jobs** (`backend/jobs/`):
+
 - `base_job.py`: base job class
 - `image_generator_job.py`: image generation tasks
 - `image_prompt_job.py`: image prompt generation tasks
@@ -571,6 +569,7 @@ Key modules:
 - `no_job.py`: fallback for unmapped job types
 
 **Factories** (`backend/factory/`):
+
 - `common.py`: shared Faker-backed helpers (`fake_date()`, `fake_uuid()`, `fake_url()`)
 - `job_factory.py`: creates `YouTubeJobData` instances
 - `platform_factory.py`: creates `PlatformDBData` instances (channels and videos)
@@ -578,7 +577,8 @@ Key modules:
 - `agent_factory.py`: creates AI agent instances
 - `task_factory.py`: creates task objects
 
-**Managers** (`backend/manager/`)  - *Enhanced with comprehensive logging*:
+**Managers** (`backend/manager/`) - _Enhanced with comprehensive logging_:
+
 - `platform_manager.py`: platform operations with logging
 - `start_up_manager.py`: application startup logic with lifecycle logging
 - `task_manager.py`: task lifecycle management with operation tracking
@@ -588,7 +588,6 @@ Key modules:
 1. Create a branch from `develop`
 2. Run `make check`
 3. Open a PR to `develop`
-
 
 ### Links
 
