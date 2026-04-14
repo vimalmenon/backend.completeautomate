@@ -170,6 +170,9 @@ class YouTubeChannelDBData:
         updated_values["stats"] = [
             stat.to_json() for stat in self.stats + old_value.stats
         ]
+        updated_values["playlist"] = [
+            playlist.to_json() for playlist in self.playlist + old_value.playlist
+        ]
         updated_values["last_updated_at"] = datetime.now().isoformat()
         if self.title != old_value.title:
             updated_values["title"] = self.title
