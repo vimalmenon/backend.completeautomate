@@ -102,9 +102,9 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Playlist
       - [x] Add transform for channel
       - [x] Run transform once
-      - [ ] Get all playlist
-      - [ ] Need to check this
-      - [ ] Add playlist to `ChannelData`
+      - [x] Get all playlist
+      - [x] Need to check this
+      - [x] Add playlist to `ChannelData`
       - [ ] Get all videos in playlist
     - [ ] Others
       - [x] Do caching on backed up DB Data
