@@ -18,3 +18,7 @@ class AIImageModelEnum(str, Enum):
     Qwen = "Qwen"
     Grok = "Grok"
     OpenRouter = "OpenRouter"
+
+
+class AISpeechModelEnum(str, Enum):
+    Qwen = "Qwen"
