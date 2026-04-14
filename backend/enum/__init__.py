@@ -1,5 +1,10 @@
 from backend.enum.action import ActionEnum
-from backend.enum.ai import AICreativityLevelEnum, AIImageModelEnum, AIModelEnum
+from backend.enum.ai import (
+    AICreativityLevelEnum,
+    AIImageModelEnum,
+    AIModelEnum,
+    AISpeechModelEnum,
+)
 from backend.enum.db_keys import DbKeysEnum
 from backend.enum.image import ImageTypeEnum
 from backend.enum.job import JobsStatusEnum, JobTypeEnum
@@ -25,4 +30,5 @@ __all__ = [
     "YouTubeVideoStatusEnum",
     "ActionEnum",
     "PromptStatusEnum",
+    "AISpeechModelEnum",
 ]
