@@ -8,6 +8,7 @@ from backend.enum import AICreativityLevelEnum
 
 class ModelEnum(Enum):
     DEEPSEEK_CHAT = "deepseek-chat"
+    DEEPSEEK_REASONER = "deepseek-reasoner"
 
 
 class DeepseekAI:
