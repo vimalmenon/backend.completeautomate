@@ -101,7 +101,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Summarize to have some essence `user_message`
     - [ ] Playlist
       - [x] Add transform for channel
-      - [ ] Run transform once
+      - [x] Run transform once
       - [ ] Get all playlist
       - [ ] Need to check this
       - [ ] Add playlist to `ChannelData`
