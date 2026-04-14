@@ -107,7 +107,6 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [x] Add playlist to `ChannelData`
       - [ ] Get all videos in playlist
     - [ ] Others
-      - [x] Do caching on backed up DB Data
   - [ ] Improve Jobs
     - [ ] Run Jobs in parallel
     - [ ] Ability to run the agent tasks in parallel
