@@ -98,7 +98,7 @@ Use this checklist to track progress toward a **9/10** quality target.
       - [ ] Add `user_message` on all the AI Request expect thumbnail
       - [ ] Add `user_message` to required prompts
       - [ ] Metadata suggestion to be provided with `user_message`
-      - [ ] Summarize to have some essence `user_message`
+      - [ ] Summarize to have essence `user_message`
     - [ ] Playlist
       - [ ] Get all videos in playlist
     - [ ] Others

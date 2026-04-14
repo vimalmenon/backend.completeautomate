@@ -4,6 +4,7 @@ from backend.ai.image_generation import (
     OpenRouterImageGeneration,
     QwenImageGeneration,
 )
+from backend.ai.speech_generation import QwenSpeechGenerator
 
 __all__ = [
     "DeepseekAI",
@@ -13,4 +14,5 @@ __all__ = [
     "GrokImageGeneration",
     "QwenImageGeneration",
     "OpenRouterImageGeneration",
+    "QwenSpeechGenerator",
 ]
