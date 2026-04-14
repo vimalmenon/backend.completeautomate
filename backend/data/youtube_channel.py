@@ -103,8 +103,7 @@ class YouTubeChannelDBData:
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         playlist = [
-            YouTubeChannelPlaylistData.to_cls(playlist)
-            for playlist in data["playlist"]
+            YouTubeChannelPlaylistData.to_cls(playlist) for playlist in data["playlist"]
         ]
         return cls(
             ref_id=data["ref_id"],
