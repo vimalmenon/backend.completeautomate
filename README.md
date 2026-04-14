@@ -118,6 +118,7 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
         - [ ] Cannot use one class / DB for both prompt and improver
         - [ ] Create another table for `PromptResult`
+        - [ ] Create another table for `PromptData`
     - [ ] Should be able to test the prompts generated
     - [ ] Add one shot / few shot prompt for prompts
     - [ ] Run PromptImprover in parallel
