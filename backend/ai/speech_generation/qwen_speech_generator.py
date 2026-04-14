@@ -1,2 +1,4 @@
 class QwenSpeechGenerator:
-    pass
+
+    def generate_speech(self):
+        pass
