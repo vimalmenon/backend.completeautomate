@@ -78,6 +78,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] API
   - [ ] Ability to work offline
+  - [ ] Fix Offline Session
   - [ ] Auth
     - [ ] Set up `Basic Auth`
     - [ ] Set up AWS Cognito
