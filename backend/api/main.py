@@ -9,14 +9,12 @@ from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 from backend.api.prompts.prompts_api import router as prompts_router
 from backend.config.env import env
-from backend.manager.data_manager import DataManager
+from backend.manager import DataManager
 
 
 def initialize_api_data() -> None:
-    data_manager = DataManager()
-    data_manager.start_up_script()
     if env.OFFLINE:
-        data_manager.download()
+        DataManager().upload()
 
 
 @asynccontextmanager
