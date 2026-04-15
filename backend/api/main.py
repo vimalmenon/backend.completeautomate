@@ -24,6 +24,7 @@ async def lifespan(_: FastAPI):
     initialize_api_data()
     yield
 
+
 # Keep object name aligned with requested Uvicorn target backend.api.main:main
 main = FastAPI(title="CompleteAutomate API", lifespan=lifespan)
 
