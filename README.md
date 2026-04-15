@@ -88,7 +88,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Bugs
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Check in next upload
-- [ ] Need to streamline AI Generation
+- [ ] Streamline AI Generation
   - [ ] Text Generation
   - [ ] Image Generation
   - [ ] Speech Generation

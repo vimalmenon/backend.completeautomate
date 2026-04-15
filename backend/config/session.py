@@ -8,7 +8,7 @@ _moto_mock = None
 _offline_bootstrapped = False
 
 
-def _ensure_offline_aws() -> None:
+def ensure_offline_aws() -> None:
     global _moto_mock
     global _offline_bootstrapped
 
@@ -65,7 +65,7 @@ def set_offline_mode(is_offline: bool) -> None:
     env.OFFLINE = is_offline
 
     if is_offline:
-        _ensure_offline_aws()
+        ensure_offline_aws()
         return
 
     if _moto_mock is not None:
@@ -76,7 +76,7 @@ def set_offline_mode(is_offline: bool) -> None:
 
 def get_aws_session():
     if env.OFFLINE:
-        _ensure_offline_aws()
+        ensure_offline_aws()
         return boto3.Session(
             aws_access_key_id="testing",
             aws_secret_access_key="testing",

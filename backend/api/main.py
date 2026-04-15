@@ -7,6 +7,7 @@ from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 from backend.api.prompts.prompts_api import router as prompts_router
 from backend.config.env import env
+from backend.manager import OfflineManager
 
 # Keep object name aligned with requested Uvicorn target backend.api.main:main
 main = FastAPI(title="CompleteAutomate API")
@@ -41,6 +42,7 @@ main.include_router(prompts_router, prefix=API_PREFIX)
 
 
 def run_dev() -> None:
+    OfflineManager().start()
     uvicorn.run(
         "backend.api.main:main",
         host="127.0.0.1",
