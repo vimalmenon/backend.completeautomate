@@ -103,8 +103,6 @@ strict_equality = true
 module = [
   "jinja2",
   "jinja2.*",
-  "nicegui",
-  "nicegui.*",
   "pydantic",
   "pydantic.*",
   "youtube_transcript_api",
