@@ -77,18 +77,17 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] API
-  - [x] Ability to work offline
-  - [x] Fix Offline Session
   - [ ] Auth
     - [ ] Set up `Basic Auth`
     - [ ] Set up AWS Cognito
 - [ ] Text to Speech
   - [ ] Create a AI services for text to Speech
   - [ ] Check the voice generated extension (mp3 / mov)
+  - [ ] Add API for Resemilbe AI for TTS
   - [ ] Upload to S3
 - [ ] Bugs
 - [ ] Fix
-  - [ ] `DataManager` need to fix this class
+  - [ ] `DataManager` refactor needed
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Check in next upload
 - [ ] Streamline AI Generation

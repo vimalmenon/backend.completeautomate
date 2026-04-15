@@ -1,0 +1,2 @@
+class ResembleSpeechGenerator:
+    pass
