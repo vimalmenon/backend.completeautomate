@@ -601,4 +601,6 @@ https://docs.langchain.com/oss/python/integrations/chat
 https://platform.deepseek.com/usage
 https://smith.langchain.com/o/aa8cfe1a-75c1-4fff-bf0c-187edfa443ee/projects
 https://console.groq.com/dashboard/usage
+https://common-buy-intl.alibabacloud.com/coding-plan?accounttraceid=06b40b9cb7924958ad831f64029fd8a5zrqj
+https://github.com/settings/copilot/features
 ```
