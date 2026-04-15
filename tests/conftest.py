@@ -6,6 +6,7 @@ from unittest.mock import MagicMock
 
 import boto3
 import pytest
+from botocore.exceptions import ClientError
 from moto import mock_aws
 
 from backend.enum import DbKeysEnum
@@ -85,18 +86,32 @@ def dynamodb_table(aws_credentials: None):
     """Create a shared mock DynamoDB table for tests"""
     with mock_aws():
         dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
-        table = dynamodb.create_table(
-            TableName="test-table",
-            KeySchema=[
-                {"AttributeName": DbKeysEnum.Primary.value, "KeyType": "HASH"},
-                {"AttributeName": DbKeysEnum.Secondary.value, "KeyType": "RANGE"},
-            ],
-            AttributeDefinitions=[
-                {"AttributeName": DbKeysEnum.Primary.value, "AttributeType": "S"},
-                {"AttributeName": DbKeysEnum.Secondary.value, "AttributeType": "S"},
-            ],
-            BillingMode="PAY_PER_REQUEST",
-        )
+        try:
+            table = dynamodb.create_table(
+                TableName="test-table",
+                KeySchema=[
+                    {"AttributeName": DbKeysEnum.Primary.value, "KeyType": "HASH"},
+                    {
+                        "AttributeName": DbKeysEnum.Secondary.value,
+                        "KeyType": "RANGE",
+                    },
+                ],
+                AttributeDefinitions=[
+                    {
+                        "AttributeName": DbKeysEnum.Primary.value,
+                        "AttributeType": "S",
+                    },
+                    {
+                        "AttributeName": DbKeysEnum.Secondary.value,
+                        "AttributeType": "S",
+                    },
+                ],
+                BillingMode="PAY_PER_REQUEST",
+            )
+        except ClientError as error:
+            if error.response.get("Error", {}).get("Code") != "ResourceInUseException":
+                raise
+            table = dynamodb.Table("test-table")
         yield table
 
 
