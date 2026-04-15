@@ -3,12 +3,12 @@ from typing import Any
 from botocore.exceptions import ClientError
 
 from backend.config.env import env
-from backend.config.session import get_aws_session
+from backend.config.session import AWSSession
 
 
 class DbManager:
     def __init__(self):
-        session = get_aws_session()
+        session = AWSSession.get_static_session()
         self.dynamodb = session.resource("dynamodb", region_name=env.AWS_REGION)
         self.table = self.dynamodb.Table(env.AWS_TABLE)
 

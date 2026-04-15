@@ -88,3 +88,26 @@ def get_aws_session():
         aws_secret_access_key=env.AWS_SECRET,
         region_name=env.AWS_REGION,
     )
+
+
+class AWSSession:
+    offline = env.OFFLINE
+    session = None
+
+    @staticmethod
+    def get_static_session():
+        if env.OFFLINE:
+            if not AWSSession.session:
+                ensure_offline_aws()
+                AWSSession.session = boto3.Session(
+                    aws_access_key_id="testing",
+                    aws_secret_access_key="testing",
+                    region_name=env.AWS_REGION,
+                )
+                return AWSSession.session
+            return AWSSession.session
+        return boto3.Session(
+            aws_access_key_id=env.AWS_CLIENT_ID,
+            aws_secret_access_key=env.AWS_SECRET,
+            region_name=env.AWS_REGION,
+        )
