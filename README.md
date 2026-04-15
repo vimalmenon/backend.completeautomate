@@ -87,6 +87,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Check the voice generated extension (mp3 / mov)
   - [ ] Upload to S3
 - [ ] Bugs
+- [ ] Fix
+  - [ ] `DataManager` need to fix this class
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Check in next upload
 - [ ] Streamline AI Generation
