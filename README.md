@@ -105,7 +105,6 @@ Use this checklist to track progress toward a **9/10** quality target.
     - [ ] Summarize to have essence `user_message`
   - [ ] Playlist
     - [ ] Get all videos in playlist
-  - [ ] Others
 - [ ] Improve Jobs
   - [ ] Run Jobs in parallel
   - [ ] Ability to run the agent tasks in parallel
