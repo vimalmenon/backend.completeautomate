@@ -77,8 +77,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
 - [ ] API
-  - [ ] Ability to work offline
-  - [ ] Fix Offline Session
+  - [x] Ability to work offline
+  - [x] Fix Offline Session
   - [ ] Auth
     - [ ] Set up `Basic Auth`
     - [ ] Set up AWS Cognito
