@@ -5,7 +5,7 @@ from typing import Any, Union
 from botocore.exceptions import ClientError
 
 from backend.config.env import env
-from backend.config.session import get_aws_session
+from backend.config.session import AWSSession
 from backend.data.s3 import S3Data
 from backend.exception.app_exception import AppException
 from backend.helper.folder_helper.folder_helper import FolderHelper
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class S3Storage:
     def __init__(self):
-        session = get_aws_session()
+        session = AWSSession.get_static_session()
         self.s3_client = session.client("s3", region_name=env.AWS_REGION)
         self.bucket_name = env.AWS_S3_BUCKET
         self.folder_helper = FolderHelper()

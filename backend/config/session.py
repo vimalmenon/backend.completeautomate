@@ -74,22 +74,6 @@ def set_offline_mode(is_offline: bool) -> None:
     _offline_bootstrapped = False
 
 
-def get_aws_session():
-    if env.OFFLINE:
-        ensure_offline_aws()
-        return boto3.Session(
-            aws_access_key_id="testing",
-            aws_secret_access_key="testing",
-            region_name=env.AWS_REGION,
-        )
-
-    return boto3.Session(
-        aws_access_key_id=env.AWS_CLIENT_ID,
-        aws_secret_access_key=env.AWS_SECRET,
-        region_name=env.AWS_REGION,
-    )
-
-
 class AWSSession:
     offline = env.OFFLINE
     session = None
