@@ -83,11 +83,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Text to Speech
   - [ ] Create a AI services for text to Speech
   - [ ] Check the voice generated extension (mp3 / mov)
-  - [ ] Add API for Resemilbe AI for TTS
+  - [ ] Add API for Resemble AI for TTS
   - [ ] Upload to S3
 - [ ] Bugs
 - [ ] Fix
   - [ ] `DataManager` refactor needed
+  - [ ] YouTube Video and Channel Stats data more than 5 months should be changed to months
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Check in next upload
 - [ ] Streamline AI Generation

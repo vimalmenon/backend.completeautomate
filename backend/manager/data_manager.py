@@ -22,13 +22,14 @@ from backend.manager.youtube_video_manager import YouTubeVideoManager
 
 @dataclass
 class DbData:
-    sb_data: S3Data
+    s3_data: S3Data
     get_data: Callable
     upload_data: Callable
+    convert_json_to_cls: Callable
 
 
 youtube_videos_data = DbData(
-    sb_data=S3Data(
+    s3_data=S3Data(
         name="youtube_videos_data.pickle",
         content_type=S3Data.detect_content_type_from_name(
             name="youtube_videos_data.pickle"
@@ -40,10 +41,13 @@ youtube_videos_data = DbData(
     upload_data=lambda data: YouTubeVideoManager(ref_id=data["ref_id"]).save_data(
         data=YouTubeVideoDBData.to_cls(data)
     ),
+    convert_json_to_cls=lambda youtube_videos: [
+        video.to_json() for video in youtube_videos
+    ],
 )
 
 youtube_channels_data = DbData(
-    sb_data=S3Data(
+    s3_data=S3Data(
         name="youtube_channels_data.pickle",
         content_type=S3Data.detect_content_type_from_name(
             name="youtube_channels_data.pickle"
@@ -53,10 +57,13 @@ youtube_channels_data = DbData(
     upload_data=lambda data: YouTubeChannelManager(ref_id="").add_channel(
         data=YouTubeChannelDBData.to_cls(data)
     ),
+    convert_json_to_cls=lambda youtube_channels: [
+        channel.to_json() for channel in youtube_channels
+    ],
 )
 
 prompt_data = DbData(
-    sb_data=S3Data(
+    s3_data=S3Data(
         name="prompt_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
     ),
@@ -64,20 +71,22 @@ prompt_data = DbData(
     upload_data=lambda prompt: PromptManager().add_prompt(
         data=PromptDBData.to_cls(prompt)
     ),
+    convert_json_to_cls=lambda prompts: [prompt.to_json() for prompt in prompts],
 )
 
 
 jobs_data = DbData(
-    sb_data=S3Data(
+    s3_data=S3Data(
         name="jobs_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
     ),
     get_data=lambda: JobManager().get_all_jobs(),
     upload_data=lambda job: JobManager().save_job(job_data=JobData.to_cls(job)),
+    convert_json_to_cls=lambda jobs: [job.to_json() for job in jobs],
 )
 
 platform_data = DbData(
-    sb_data=S3Data(
+    s3_data=S3Data(
         name="platform_data.pickle",
         content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
     ),
@@ -85,6 +94,9 @@ platform_data = DbData(
     upload_data=lambda platform: PlatformManager().save_data(
         platform=PlatformDBData.to_cls(platform)
     ),
+    convert_json_to_cls=lambda platforms: [
+        platform.to_json() for platform in platforms
+    ],
 )
 
 db_data = [
@@ -141,10 +153,24 @@ class DataManager:
         self.__upload_offline_jobs()
         self.__upload_to_s3()
 
+    def upload_improved(self) -> None:
+        for db in db_data:
+            values = FolderHelper().unpack_pickle_data(path=db.s3_data.downloaded_path)
+            for value in values:
+                db.upload_data(value)
+        self.__upload_to_s3()
+
     def download(self) -> None:
         self.__download_for_s3()
         if env.OFFLINE:
             self.__upload_downloaded_db_data()
+
+    def download_improved(self) -> None:
+        for db in db_data:
+            data = db.get_data()
+            self.__create_and_upload_pickle_file(
+                s3_data=db.s3_data, data=db.convert_json_to_cls(data)
+            )
 
     def download_data_and_upload_to_s3(self) -> None:
         self.__download_platform_and_upload_to_s3()
