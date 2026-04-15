@@ -10,6 +10,7 @@ from backend.data import (
     YouTubeChannelDBData,
     YouTubeVideoDBData,
 )
+from backend.exception.app_exception import AppException
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.job_manager import JobManager
@@ -141,8 +142,9 @@ class DataManager:
         self.__upload_to_s3()
 
     def download(self) -> None:
-        self.download_data_and_upload_to_s3()
         self.__download_for_s3()
+        if env.OFFLINE:
+            self.__upload_downloaded_db_data()
 
     def download_data_and_upload_to_s3(self) -> None:
         self.__download_platform_and_upload_to_s3()
@@ -158,7 +160,23 @@ class DataManager:
     def start_up_script(self) -> None:
         for data in [s3_db_data["client_secret_data"], s3_db_data["token_data"]]:
             if not FolderHelper().check_if_file_exists(data.downloaded_path):
-                S3Storage().download_data(data)
+                try:
+                    S3Storage().download_data(data)
+                except AppException:
+                    if not env.OFFLINE:
+                        raise
+
+    def __upload_downloaded_db_data(self) -> None:
+        upload_operations = [
+            (s3_db_data["platform_data"], self.__upload_platform),
+            (s3_db_data["prompt_data"], self.__upload_the_prompt),
+            (s3_db_data["youtube_channels_data"], self.__upload_youtube_channel),
+            (s3_db_data["youtube_videos_data"], self.__upload_youtube_videos),
+            (s3_db_data["jobs_data"], self.__upload_offline_jobs),
+        ]
+        for s3_data, upload_operation in upload_operations:
+            if FolderHelper().check_if_file_exists(s3_data.downloaded_path):
+                upload_operation()
 
     def __get_db_data(self) -> list[S3Data]:
         return [value for _, value in s3_db_data.items()]
@@ -206,7 +224,11 @@ class DataManager:
     def __download_for_s3(self):
         s3_values = self.__get_s3_values()
         for value in s3_values:
-            S3Storage().download_data(value)
+            try:
+                S3Storage().download_data(value)
+            except AppException:
+                if not env.OFFLINE:
+                    raise
 
     def __get_s3_values(self) -> list[S3Data]:
         db_data = self.__get_db_data()

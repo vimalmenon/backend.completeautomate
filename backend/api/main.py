@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,9 +9,23 @@ from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 from backend.api.prompts.prompts_api import router as prompts_router
 from backend.config.env import env
+from backend.manager.data_manager import DataManager
+
+
+def initialize_api_data() -> None:
+    data_manager = DataManager()
+    data_manager.start_up_script()
+    if env.OFFLINE:
+        data_manager.download()
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    initialize_api_data()
+    yield
 
 # Keep object name aligned with requested Uvicorn target backend.api.main:main
-main = FastAPI(title="CompleteAutomate API")
+main = FastAPI(title="CompleteAutomate API", lifespan=lifespan)
 
 # Shared API extension for every route.
 API_PREFIX = "/api/v1"
