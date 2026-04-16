@@ -87,12 +87,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Upload to S3 [3]
 - [ ] Bugs
 - [ ] Fix
-  - [ ] `DataManager` refactor needed [2]
+  - [x] `DataManager` refactor needed [2]
+  - [ ] Need to test it
   - [ ] YouTube Video and Channel Stats data more than 5 months should be changed to months [3]
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] Check in next upload [1]
-- [ ] Streamline AI Generation [6]
-  - [ ] Text Generation
+- [ ] Streamline AI Generation [8]
+  - [ ] Text Generation 
   - [ ] Image Generation
   - [ ] Speech Generation
 - [ ] Fix / Improve YouTube 
