@@ -40,6 +40,7 @@ def pytest_configure(config: pytest.Config) -> None:
     os.environ["ANTHROPIC_API_KEY"] = "test-anthropic-key"
     os.environ["OPEN_ROUTE_API_KEY"] = "test-openrouter-key"
     os.environ["PPLX_API_KEY"] = "test-perplexity-key"
+    os.environ["RESEMBLE_API_KEY"] = "test-resemble-key"
 
     # LangSmith Configuration
     os.environ["LANGSMITH_API_KEY"] = "test-langsmith-key"
