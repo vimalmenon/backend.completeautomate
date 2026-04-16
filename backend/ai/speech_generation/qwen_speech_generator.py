@@ -23,12 +23,12 @@ class _SpeechCollectionCallback(QwenTtsRealtimeCallback):
         self.completed = threading.Event()
         self.error_message: str | None = None
 
-    def on_close(self, close_status_code, close_msg) -> None:  # type: ignore[override]
+    def on_close(self, close_status_code, close_msg) -> None:
         if close_status_code not in (None, 1000) and self.error_message is None:
             self.error_message = f"WebSocket closed: {close_status_code} {close_msg}"
         self.completed.set()
 
-    def on_event(self, message: dict[str, Any]) -> None:  # type: ignore[override]
+    def on_event(self, message: dict[str, Any]) -> None:
         event_type = message.get("type")
         if event_type == "response.audio.delta":
             delta = message.get("delta")
