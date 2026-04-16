@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.channel.channel_api import router as channel_router
+from backend.api.data.data_api import router as data_router
 from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 from backend.api.prompts.prompts_api import router as prompts_router
@@ -53,6 +54,10 @@ main.include_router(channel_router, prefix=API_PREFIX)
 
 # --- Include prompts router ---
 main.include_router(prompts_router, prefix=API_PREFIX)
+
+
+# --- Include data router ---
+main.include_router(data_router, prefix=API_PREFIX)
 
 
 def run_dev() -> None:
