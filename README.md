@@ -78,30 +78,30 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] API
   - [ ] Auth
-    - [ ] Set up `Basic Auth` [3]
-    - [ ] Set up AWS Cognito  [6]
+    - [ ] [3] Set up `Basic Auth`
+    - [ ] [6] Set up AWS Cognito
 - [ ] Text to Speech
-  - [ ] Create a AI services for text to Speech [3]
-  - [ ] Check the voice generated extension (mp3 / mov) [1]
-  - [ ] Add API for Resemble AI for TTS [4]
-  - [ ] Upload to S3 [3]
+  - [ ] [3] Create a AI services for text to Speech
+  - [ ] [1] Check the voice generated extension (mp3 / mov)
+  - [ ] [4] Add API for Resemble AI for TTS
+  - [ ] [3] Upload to S3
 - [ ] Bugs
 - [ ] Fix
-  - [x] `DataManager` refactor needed [2]
-  - [ ] Need to test it
-  - [ ] YouTube Video and Channel Stats data more than 5 months should be changed to months [3]
+  - [x] [2] `DataManager` refactor needed
+  - [ ] [1] Need to test it
+  - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
 - [ ] Fix the Image Size for YouTube Thumbnail
-  - [ ] Check in next upload [1]
-- [ ] Streamline AI Generation [8]
-  - [ ] Text Generation 
+  - [ ] [1] Check in next upload
+- [ ] [8] Streamline AI Generation
+  - [ ] Text Generation
   - [ ] Image Generation
   - [ ] Speech Generation
-- [ ] Fix / Improve YouTube 
+- [ ] Fix / Improve YouTube
   - [ ] Add Twitter Post Suggestion [5]
   - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name [1]
   - [ ] `user_message` added to `YouTubeVideo` [3]
     - [ ] Add `user_message` on all the AI Request expect thumbnail [3]
-    - [ ] Add `user_message` to required prompts 
+    - [ ] Add `user_message` to required prompts
     - [ ] Metadata suggestion to be provided with `user_message`
     - [ ] Summarize to have essence `user_message`
   - [ ] Playlist
@@ -143,11 +143,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Generate the required images for presenting
   - [ ] Create a pointers required
   - [ ] Pointer for video to create
-- [ ] Build an Mobile APP
-  - [ ] Basic Auth
-  - [ ] Basic pages
-  - [ ] Show all features
-  - [ ] Update workflow
 - [ ] Twitter Integrate
   - [ ] Create Tweet for YouTube Post
   - [ ] Post tweets
