@@ -97,18 +97,18 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Image Generation
   - [ ] Speech Generation
 - [ ] Fix / Improve YouTube
-  - [ ] Add Twitter Post Suggestion [5]
-  - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name [1]
-  - [ ] `user_message` added to `YouTubeVideo` [3]
-    - [ ] Add `user_message` on all the AI Request expect thumbnail [3]
+  - [ ] [5] Add Twitter Post Suggestion 
+  - [ ] [1] Rename `YouTubeStatsUpdaterTaskData` to better name 
+  - [ ] [3] `user_message` added to `YouTubeVideo` 
+    - [ ] [3] Add `user_message` on all the AI Request expect thumbnail
     - [ ] Add `user_message` to required prompts
     - [ ] Metadata suggestion to be provided with `user_message`
     - [ ] Summarize to have essence `user_message`
   - [ ] Playlist
-    - [ ] Get all videos in playlist
+    - [ ] [4] Get all videos in playlist
 - [ ] Improve Jobs
-  - [ ] Run Jobs in parallel [5]
-  - [ ] Ability to run the agent tasks in parallel [5]
+  - [ ] [5] Run Jobs in parallel
+  - [ ] [5] Ability to run the agent tasks in parallel
 - [ ] Offline Feature
   - [ ] Need a database for Mocked API when Offline [4]
   - [ ] Store the response received from API (in JSON Format) [4]
@@ -143,16 +143,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Generate the required images for presenting
   - [ ] Create a pointers required
   - [ ] Pointer for video to create
-- [ ] Twitter Integrate
-  - [ ] Create Tweet for YouTube Post
-  - [ ] Post tweets
-- [ ] Agent to evaluate result
-  - [ ] Add AI review step for generated answers
-  - [ ] Agent to review tasks (only once)
-- [ ] Code improvement
-  - [ ] Remove Deadcode
-- [ ] Set Up GitHub Cron Job
-  - [ ] Set up Env and Variable
+- [ ] Twitter Integrate [8]
 - [ ] Test Coverage
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze

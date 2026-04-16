@@ -97,7 +97,7 @@ class PromptDBData:
 
 
 @dataclass
-class PromptResult:
+class PromptResultData:
     task: PromptTaskEnum
     version: UUID
     result: str
@@ -112,3 +112,12 @@ class PromptResult:
     @classmethod
     def to_cls(cls, data):
         return cls(task=data["task"], version=data["version"], result=data["result"])
+
+
+@dataclass
+class PromptImproverDBData:
+    task: PromptTaskEnum
+    data: list[dict]
+
+    def to_json(self) -> dict:
+        return {"task": self.task.value, "data": self.data}
