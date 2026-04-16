@@ -110,8 +110,12 @@ class PromptResultData:
         }
 
     @classmethod
-    def to_cls(cls, data):
-        return cls(task=data["task"], version=data["version"], result=data["result"])
+    def to_cls(cls, data: dict) -> Self:
+        return cls(
+            task=PromptTaskEnum(data["task"]),
+            version=data["version"],
+            result=data["result"],
+        )
 
 
 @dataclass
@@ -121,3 +125,7 @@ class PromptImproverDBData:
 
     def to_json(self) -> dict:
         return {"task": self.task.value, "data": self.data}
+
+    @classmethod
+    def to_cls(cls, data):
+        return cls(task=PromptTaskEnum(data["task"]), data=data["data"])
