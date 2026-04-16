@@ -107,31 +107,7 @@ db_data = [
     platform_data,
 ]
 
-s3_db_data: dict[str, S3Data] = {
-    "youtube_videos_data": S3Data(
-        name="youtube_videos_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(
-            name="youtube_videos_data.pickle"
-        ),
-    ),
-    "youtube_channels_data": S3Data(
-        name="youtube_channels_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(
-            name="youtube_channels_data.pickle"
-        ),
-    ),
-    "prompt_data": S3Data(
-        name="prompt_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(name="prompt_data.pickle"),
-    ),
-    "jobs_data": S3Data(
-        name="jobs_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(name="jobs_data.pickle"),
-    ),
-    "platform_data": S3Data(
-        name="platform_data.pickle",
-        content_type=S3Data.detect_content_type_from_name(name="platform_data.pickle"),
-    ),
+s3_file_data: dict[str, S3Data] = {
     "client_secret_data": S3Data(
         name="client_secret.json",
         content_type=S3Data.detect_content_type_from_name(name="client_secret.json"),
@@ -152,27 +128,20 @@ class DataManager:
                 db.upload_data(value)
         self.__upload_to_s3()
 
-    def download(self) -> None:
+    def download_to_local(self) -> None:
         for db in db_data:
             data = db.get_data()
-            self.__create_and_upload_pickle_file(
+            self.__download_and_upload_pickle_file_to_s3(
                 s3_data=db.s3_data, data=db.convert_json_to_cls(data)
             )
         self.__download_for_s3()
 
-    def download_data_and_upload_to_s3(self) -> None:
-        self.__download_platform_and_upload_to_s3()
-        self.__download_prompts_and_upload_to_s3()
-        self.__download_youtube_channels_and_upload_to_s3()
-        self.__download_youtube_videos_and_upload_to_s3()
-        self.__download_jobs_and_upload_to_s3()
-
     def restore_db_from_s3(self) -> None:
-        self.download()
+        self.download_to_local()
         self.upload()
 
     def start_up_script(self) -> None:
-        for data in [s3_db_data["client_secret_data"], s3_db_data["token_data"]]:
+        for data in [s3_file_data["client_secret_data"], s3_file_data["token_data"]]:
             if not FolderHelper().check_if_file_exists(data.downloaded_path):
                 try:
                     S3Storage().download_data(data)
@@ -180,8 +149,8 @@ class DataManager:
                     if not env.OFFLINE:
                         raise
 
-    def __get_db_data(self) -> list[S3Data]:
-        return [value for _, value in s3_db_data.items()]
+    def __get_files_data(self) -> list[S3Data]:
+        return [value for _, value in s3_file_data.items()]
 
     def __upload_to_s3(self):
         s3_values = self.__get_s3_values()
@@ -200,7 +169,7 @@ class DataManager:
                     raise
 
     def __get_s3_values(self) -> list[S3Data]:
-        db_data = self.__get_db_data()
+        files_data = self.__get_files_data()
         return [
             S3Data.to_cls_from_path(
                 "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-curious-2.jpg"
@@ -211,43 +180,9 @@ class DataManager:
             S3Data.to_cls_from_path(
                 "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
             ),
-        ] + db_data
+        ] + files_data
 
-    def __download_prompts_and_upload_to_s3(self) -> None:
-        prompts = PromptManager().get_prompts()
-        prompts_data = [prompt.to_json() for prompt in prompts]
-        s3_data = s3_db_data["prompt_data"]
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=prompts_data)
-
-    def __download_youtube_channels_and_upload_to_s3(self):
-        youtube_channels = YouTubeChannelManager(ref_id="").get_channels()
-        youtube_channels_data = [channel.to_json() for channel in youtube_channels]
-        s3_data = s3_db_data["youtube_channels_data"]
-        self.__create_and_upload_pickle_file(
-            s3_data=s3_data, data=youtube_channels_data
-        )
-
-    def __download_platform_and_upload_to_s3(self) -> None:
-        s3_data = s3_db_data["platform_data"]
-        platforms = PlatformManager().get_all_platforms()
-        platforms_data = [platform.to_json() for platform in platforms]
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=platforms_data)
-
-    def __download_youtube_videos_and_upload_to_s3(self):
-        youtube_videos = YouTubeVideoManager(ref_id="").get_videos_by_channel(
-            channel_id=env.YOUTUBE_CHANNEL_ID
-        )
-        youtube_videos_data = [video.to_json() for video in youtube_videos]
-        s3_data = s3_db_data["youtube_videos_data"]
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=youtube_videos_data)
-
-    def __download_jobs_and_upload_to_s3(self):
-        jobs = JobManager().get_all_jobs()
-        job_data = [job.to_json() for job in jobs]
-        s3_data = s3_db_data["jobs_data"]
-        self.__create_and_upload_pickle_file(s3_data=s3_data, data=job_data)
-
-    def __create_and_upload_pickle_file(self, s3_data: S3Data, data: Any):
+    def __download_and_upload_pickle_file_to_s3(self, s3_data: S3Data, data: Any):
         pickle_data = FolderHelper().create_pickle_data(data=data)
         S3Storage().upload_data(s3_data=s3_data, data=pickle_data)
         FolderHelper().create_pickle_file(s3_data.downloaded_path, data=data)
@@ -259,7 +194,7 @@ class FileSync:
         for (
             key,
             value,
-        ) in s3_db_data.items():
+        ) in s3_file_data.items():
             if value.downloaded_path:
                 return False
             print(value)
