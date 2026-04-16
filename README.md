@@ -78,44 +78,44 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - [ ] API
   - [ ] Auth
-    - [ ] Set up `Basic Auth`
-    - [ ] Set up AWS Cognito
+    - [ ] Set up `Basic Auth` [3]
+    - [ ] Set up AWS Cognito  [6]
 - [ ] Text to Speech
-  - [ ] Create a AI services for text to Speech
-  - [ ] Check the voice generated extension (mp3 / mov)
-  - [ ] Add API for Resemble AI for TTS
-  - [ ] Upload to S3
+  - [ ] Create a AI services for text to Speech [3]
+  - [ ] Check the voice generated extension (mp3 / mov) [1]
+  - [ ] Add API for Resemble AI for TTS [4]
+  - [ ] Upload to S3 [3]
 - [ ] Bugs
 - [ ] Fix
-  - [ ] `DataManager` refactor needed
-  - [ ] YouTube Video and Channel Stats data more than 5 months should be changed to months
+  - [ ] `DataManager` refactor needed [2]
+  - [ ] YouTube Video and Channel Stats data more than 5 months should be changed to months [3]
 - [ ] Fix the Image Size for YouTube Thumbnail
-  - [ ] Check in next upload
-- [ ] Streamline AI Generation
+  - [ ] Check in next upload [1]
+- [ ] Streamline AI Generation [6]
   - [ ] Text Generation
   - [ ] Image Generation
   - [ ] Speech Generation
-- [ ] Fix / Improve YouTube
-  - [ ] Add Twitter Post Suggestion
-  - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name
-  - [ ] `user_message` added to `YouTubeVideo`
-    - [ ] Add `user_message` on all the AI Request expect thumbnail
-    - [ ] Add `user_message` to required prompts
+- [ ] Fix / Improve YouTube 
+  - [ ] Add Twitter Post Suggestion [5]
+  - [ ] Rename `YouTubeStatsUpdaterTaskData` to better name [1]
+  - [ ] `user_message` added to `YouTubeVideo` [3]
+    - [ ] Add `user_message` on all the AI Request expect thumbnail [3]
+    - [ ] Add `user_message` to required prompts 
     - [ ] Metadata suggestion to be provided with `user_message`
     - [ ] Summarize to have essence `user_message`
   - [ ] Playlist
     - [ ] Get all videos in playlist
 - [ ] Improve Jobs
-  - [ ] Run Jobs in parallel
-  - [ ] Ability to run the agent tasks in parallel
+  - [ ] Run Jobs in parallel [5]
+  - [ ] Ability to run the agent tasks in parallel [5]
 - [ ] Offline Feature
-  - [ ] Need a database for Mocked API when Offline
-  - [ ] Store the response received from API (in JSON Format)
-  - [ ] Mock data from Agents (Positive and Negative)
-  - [ ] All data needs to be mocked
+  - [ ] Need a database for Mocked API when Offline [4]
+  - [ ] Store the response received from API (in JSON Format) [4]
+  - [ ] Mock data from Agents (Positive and Negative) [4]
+  - [ ] All data needs to be mocked [4]
 - [ ] Improve on prompt Improver
-  - [ ] Create prompt improver result
-  - [ ] Move all prompts to Prompt Agent
+  - [ ] Create prompt improver result [4]
+  - [ ] Move all prompts to Prompt Agent [4]
   - [ ] Need to pass data To `Prompt Improver` to test and evaluate
   - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
   - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
@@ -126,9 +126,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add one shot / few shot prompt for prompts
   - [ ] Run PromptImprover in parallel
 - [ ] Send Notification
-  - [ ] Send Signal
-  - [ ] Send Email
-  - [ ] Send WhatsApp message
+  - [ ] Send Signal [6]
+  - [ ] Send Email [6]
+  - [ ] Send WhatsApp message [6]
 - [ ] Loggers
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
