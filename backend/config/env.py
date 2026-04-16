@@ -30,6 +30,7 @@ class Env:
     OPENAI_API_KEY: SecretStr = SecretStr(os.environ["OPENAI_API_KEY"])
     QWEN_API_KEY: SecretStr = SecretStr(os.environ["QWEN_API_KEY"])
     DEEPSEEK_API_KEY: SecretStr = SecretStr(os.environ["DEEPSEEK_API_KEY"])
+    RESEMBLE_API_KEY: SecretStr = SecretStr(os.environ["RESEMBLE_API_KEY"])
     YOUTUBE_API_KEY: str = os.environ["YOUTUBE_API_KEY"]
     YOUTUBE_CHANNEL_ID: str = os.environ["YOUTUBE_CHANNEL_ID"]
     OFFLINE: bool = _to_bool(os.environ.get("OFFLINE", "false"))
