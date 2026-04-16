@@ -145,24 +145,12 @@ s3_db_data: dict[str, S3Data] = {
 
 class DataManager:
 
-    def upload_old(self) -> None:
-        self.__upload_platform()
-        self.__upload_the_prompt()
-        self.__upload_youtube_channel()
-        self.__upload_youtube_videos()
-        self.__upload_offline_jobs()
-        self.__upload_to_s3()
-
     def upload(self) -> None:
         for db in db_data:
             values = FolderHelper().unpack_pickle_data(path=db.s3_data.downloaded_path)
             for value in values:
                 db.upload_data(value)
         self.__upload_to_s3()
-
-    def download_old(self) -> None:
-        self.__download_for_s3()
-        self.__upload_downloaded_db_data()
 
     def download(self) -> None:
         for db in db_data:
@@ -192,53 +180,8 @@ class DataManager:
                     if not env.OFFLINE:
                         raise
 
-    def __upload_downloaded_db_data(self) -> None:
-        upload_operations = [
-            (s3_db_data["platform_data"], self.__upload_platform),
-            (s3_db_data["prompt_data"], self.__upload_the_prompt),
-            (s3_db_data["youtube_channels_data"], self.__upload_youtube_channel),
-            (s3_db_data["youtube_videos_data"], self.__upload_youtube_videos),
-            (s3_db_data["jobs_data"], self.__upload_offline_jobs),
-        ]
-        for s3_data, upload_operation in upload_operations:
-            if FolderHelper().check_if_file_exists(s3_data.downloaded_path):
-                upload_operation()
-
     def __get_db_data(self) -> list[S3Data]:
         return [value for _, value in s3_db_data.items()]
-
-    def __upload_the_prompt(self) -> None:
-        s3_data = s3_db_data["prompt_data"]
-        prompts = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        for prompt in prompts:
-            PromptManager().add_prompt(data=PromptDBData.to_cls(prompt))
-
-    def __upload_youtube_channel(self) -> None:
-        s3_data = s3_db_data["youtube_channels_data"]
-        channels = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        for channel in channels:
-            YouTubeChannelManager(ref_id="").add_channel(
-                data=YouTubeChannelDBData.to_cls(channel)
-            )
-
-    def __upload_platform(self) -> None:
-        s3_data = s3_db_data["platform_data"]
-        platforms = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        for platform in platforms:
-            PlatformManager().save_data(PlatformDBData.to_cls(platform))
-
-    def __upload_youtube_videos(self) -> None:
-        s3_data = s3_db_data["youtube_videos_data"]
-        videos = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        for video in videos:
-            data = YouTubeVideoDBData.to_cls(video)
-            YouTubeVideoManager(ref_id=data.ref_id).save_data(data=data)
-
-    def __upload_offline_jobs(self) -> None:
-        s3_data = s3_db_data["jobs_data"]
-        jobs = FolderHelper().unpack_pickle_data(path=s3_data.downloaded_path)
-        for job in jobs:
-            JobManager().save_job(JobData.to_cls(job))
 
     def __upload_to_s3(self):
         s3_values = self.__get_s3_values()
