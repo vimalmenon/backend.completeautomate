@@ -97,9 +97,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Image Generation
   - [ ] Speech Generation
 - [ ] Fix / Improve YouTube
-  - [ ] [5] Add Twitter Post Suggestion 
-  - [ ] [1] Rename `YouTubeStatsUpdaterTaskData` to better name 
-  - [ ] [3] `user_message` added to `YouTubeVideo` 
+  - [ ] [5] Add Twitter Post Suggestion
+  - [ ] [1] Rename `YouTubeStatsUpdaterTaskData` to better name
+  - [ ] [3] `user_message` added to `YouTubeVideo`
     - [ ] [3] Add `user_message` on all the AI Request expect thumbnail
     - [ ] [2] Add `user_message` to required prompts
     - [ ] Metadata suggestion to be provided with `user_message`
@@ -110,13 +110,13 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] [5] Run Jobs in parallel
   - [ ] [5] Ability to run the agent tasks in parallel
 - [ ] Offline Feature
-  - [ ] Need a database for Mocked API when Offline [4]
-  - [ ] Store the response received from API (in JSON Format) [4]
-  - [ ] Mock data from Agents (Positive and Negative) [4]
-  - [ ] All data needs to be mocked [4]
+  - [ ] [4] Need a database for Mocked API when Offline [4]
+  - [ ] [4] Store the response received from API (in JSON Format)
+  - [ ] [4] Mock data from Agents (Positive and Negative)
+  - [ ] [4] All data needs to be mocked
 - [ ] Improve on prompt Improver
-  - [ ] Create prompt improver result [4]
-  - [ ] Move all prompts to Prompt Agent [4]
+  - [ ] [4] Create prompt improver result
+  - [ ] [4] Move all prompts to Prompt Agent
   - [ ] Need to pass data To `Prompt Improver` to test and evaluate
   - [ ] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
   - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
