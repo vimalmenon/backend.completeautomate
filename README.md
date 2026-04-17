@@ -88,8 +88,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Bugs
 - [ ] Fix
   - [x] [2] `DataManager` refactor needed
-  - [ ] [2] Upload to S3 and Create local should be different
-  - [ ] [1] Need to test it
+  - [x] [2] Upload to S3 and Create local should be different
+  - [x] [1] Need to test it
   - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] [1] Check in next upload
