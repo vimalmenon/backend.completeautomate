@@ -87,9 +87,6 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] [3] Upload to S3
 - [ ] Bugs
 - [ ] Fix
-  - [x] [2] `DataManager` refactor needed
-  - [x] [2] Upload to S3 and Create local should be different
-  - [x] [1] Need to test it
   - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
 - [ ] Fix the Image Size for YouTube Thumbnail
   - [ ] [1] Check in next upload
@@ -128,9 +125,9 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Add one shot / few shot prompt for prompts
   - [ ] Run PromptImprover in parallel
 - [ ] Send Notification
-  - [ ] Send Signal [6]
-  - [ ] Send Email [6]
-  - [ ] Send WhatsApp message [6]
+  - [ ] [6] Send Signal
+  - [ ] [6] Send Email
+  - [ ] [6] Send WhatsApp message
 - [ ] Loggers
   - [ ] Send the logs to some common place (AWS Logger)
   - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
@@ -144,7 +141,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ] Generate the required images for presenting
   - [ ] Create a pointers required
   - [ ] Pointer for video to create
-- [ ] Twitter Integrate [8]
+- [ ] [8] Twitter Integrate
 - [ ] Test Coverage
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
