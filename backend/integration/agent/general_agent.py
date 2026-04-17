@@ -1,4 +1,5 @@
 import logging
+from typing import cast
 
 from langchain.agents import create_agent
 from langchain.messages import AIMessage, HumanMessage, SystemMessage
@@ -59,7 +60,10 @@ class GeneralAgent:
     def generate(self) -> bytes:
         if isinstance(self.agent, AgentImageService):
             image_model = self.agent.get_model()
-            return image_model.generate(prompt=self.agent.prompt)
+            image_bytes = cast(bytes, image_model.generate(prompt=self.agent.prompt))
+            if not isinstance(image_bytes, bytes):
+                raise AppException("Image generator must return bytes")
+            return image_bytes
         raise AppException("Not a image valid instance")
 
     def reinvoke(self, message: str):

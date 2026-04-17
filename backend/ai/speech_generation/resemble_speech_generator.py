@@ -1,7 +1,7 @@
 import base64
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.request import Request, urlopen
 
 from resemble import Resemble
@@ -93,7 +93,7 @@ class ResembleSpeechGenerator:
         if audio_url:
             request = Request(audio_url, headers={"User-Agent": "completeautomate/1.0"})
             with urlopen(request, timeout=30) as result:
-                return result.read()
+                return cast(bytes, result.read())
 
         raise AppException("No audio data found in Resemble response.")
 
