@@ -1,5 +1,5 @@
-from base64 import b64encode
 import os
+from base64 import b64encode
 from unittest.mock import MagicMock, patch
 
 import pytest

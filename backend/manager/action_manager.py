@@ -18,8 +18,8 @@ class ActionManager:
     def execute(self) -> None:
         if self.action == ActionEnum.transform:
             transform_data()
-        elif self.action == ActionEnum.restore_db:
-            DataManager().restore_db_from_s3()
+        elif self.action == ActionEnum.restore_from_s3:
+            DataManager().restore_from_s3()
         elif self.action == ActionEnum.download_to_local:
             DataManager().download_to_local()
         elif self.action == ActionEnum.restore_from_local:

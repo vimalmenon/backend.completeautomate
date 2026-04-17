@@ -116,6 +116,15 @@ s3_file_data: dict[str, S3Data] = {
         name="token.pickle",
         content_type=S3Data.detect_content_type_from_name(name="token.pickle"),
     ),
+    "image_1": S3Data.to_cls_from_path(
+        "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-curious-2.jpg"
+    ),
+    "image_2": S3Data.to_cls_from_path(
+        "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-excited-3.jpg"
+    ),
+    "image_3": S3Data.to_cls_from_path(
+        "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
+    ),
 }
 
 
@@ -136,7 +145,7 @@ class DataManager:
             )
         self.__download_for_s3()
 
-    def restore_db_from_s3(self) -> None:
+    def restore_from_s3(self) -> None:
         self.download_to_local()
         self.upload()
 
@@ -148,9 +157,6 @@ class DataManager:
                 except AppException:
                     if not env.OFFLINE:
                         raise
-
-    def __get_files_data(self) -> list[S3Data]:
-        return [value for _, value in s3_file_data.items()]
 
     def __upload_to_s3(self):
         s3_values = self.__get_s3_values()
@@ -169,18 +175,7 @@ class DataManager:
                     raise
 
     def __get_s3_values(self) -> list[S3Data]:
-        files_data = self.__get_files_data()
-        return [
-            S3Data.to_cls_from_path(
-                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-curious-2.jpg"
-            ),
-            S3Data.to_cls_from_path(
-                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-excited-3.jpg"
-            ),
-            S3Data.to_cls_from_path(
-                "images/YouTubeVideo#UCJyldWqfi4eNRIsQW2zhbFA#Vw_ilJWdzK8/ai-automation-guide-surprise-1.jpg"
-            ),
-        ] + files_data
+        return [value for _, value in s3_file_data.items()]
 
     def __download_and_upload_pickle_file_to_s3(self, s3_data: S3Data, data: Any):
         pickle_data = FolderHelper().create_pickle_data(data=data)

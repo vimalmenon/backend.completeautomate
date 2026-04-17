@@ -9,7 +9,6 @@ from resemble import Resemble
 from backend.config.env import env
 from backend.exception.app_exception import AppException
 
-
 RESEMBLE_PROJECT_ID_ENV_VARS = (
     "RESEMBLE_PROJECT_UUID",
     "RESEMBLE_PROJECT_ID",
@@ -78,7 +77,9 @@ class ResembleSpeechGenerator:
 
         success = response.get("success")
         if success is False:
-            message = response.get("message") or response.get("error") or "Unknown error"
+            message = (
+                response.get("message") or response.get("error") or "Unknown error"
+            )
             raise AppException(f"Resemble speech request failed: {message}")
 
         audio_content = response.get("audio_content")
