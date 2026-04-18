@@ -18,16 +18,21 @@ RESEMBLE_VOICE_ID_ENV_VARS = (
     "RESEMBLE_VOICE_ID",
     "RESEMBLE_TTS_ID",
 )
+DEFAULT_OUTPUT_FORMAT = "wav"
+DEFAULT_SAMPLE_RATE = 48000
+DEFAULT_PRECISION = "PCM_16"
 
 
 class ResembleSpeechGenerator:
+    """Resemble direct synthesis via the documented create_direct quickstart flow."""
+
     def __init__(
         self,
         project_uuid: str | None = None,
         voice_uuid: str | None = None,
-        output_format: str = "wav",
-        sample_rate: int = 22050,
-        precision: str | None = None,
+        output_format: str = DEFAULT_OUTPUT_FORMAT,
+        sample_rate: int = DEFAULT_SAMPLE_RATE,
+        precision: str | None = DEFAULT_PRECISION,
         title: str | None = None,
     ) -> None:
         self.api_key = str(env.RESEMBLE_API_KEY.get_secret_value())
@@ -46,9 +51,13 @@ class ResembleSpeechGenerator:
         if not text or not text.strip():
             raise AppException("Text is required for speech generation")
         if not self.project_uuid:
-            raise AppException("Resemble project UUID is required")
+            raise AppException(
+                "Resemble project UUID is required. Set RESEMBLE_PROJECT_UUID or pass project_uuid."
+            )
         if not self.voice_uuid:
-            raise AppException("Resemble voice UUID is required")
+            raise AppException(
+                "Resemble voice UUID is required. Set RESEMBLE_VOICE_UUID or pass voice_uuid."
+            )
 
         try:
             response = Resemble.v2.clips.create_direct(

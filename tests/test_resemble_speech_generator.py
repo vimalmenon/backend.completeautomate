@@ -36,9 +36,9 @@ class TestResembleSpeechGenerator:
             voice_uuid="voice-123",
             data="hello world",
             title=None,
-            precision=None,
+            precision="PCM_16",
             output_format="wav",
-            sample_rate=22050,
+            sample_rate=48000,
         )
 
     def test_generate_speech_raises_for_blank_text(self) -> None:
