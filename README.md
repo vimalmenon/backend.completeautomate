@@ -3,7 +3,7 @@
 ![CI](https://github.com/vimalmenon/backend.completeautomate/workflows/CI/badge.svg)
 ![Project Rating](https://img.shields.io/badge/Project%20Rating-8.0%2F10-yellow)
 
-Python backend for multi-agent automation workflows, with task scheduling, YouTube automation, image generation, and a NiceGUI dashboard.
+Python backend for multi-agent automation workflows, with task scheduling, YouTube automation, and image generation.
 
 ## Table of Contents
 
@@ -31,7 +31,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - Multi-provider AI support (OpenAI, DeepSeek, Perplexity, OpenRouter, xAI Grok, Qwen)
 - End-to-end YouTube workflow automation: channel/video sync, analysis, metadata, and thumbnails
 - Image generation and prompt pipelines (FLUX, Grok, Qwen)
-- NiceGUI dashboard for tasks, videos, channels, prompts, and operations
 - AWS persistence with DynamoDB + S3, plus offline mode via Moto mocks
 - Strong developer ergonomics: logging, typed models, cache invalidation, and unit/integration tests
 
@@ -43,7 +42,7 @@ Current internal score: **8.0/10**
 
 - Modular architecture with clear separation across AI, data, database, jobs, integrations, and UI
 - Solid developer workflow with Make targets, pytest markers, linting, and type checking
-- Functional NiceGUI dashboards with active task/video/prompt operations and ongoing UX improvements
+- Functional dashboards with active task/video/prompt operations and ongoing UX improvements
 - Strong observability and reliability patterns: manager-layer logging, lazy imports, and cache invalidation
 - Typed codebase with mypy validation and Plotly-powered YouTube analytics visualization
 
@@ -442,7 +441,7 @@ Tip: seed Faker in tests when deterministic values are needed.
 - `backend/database/`: DynamoDB access layer
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
 - `backend/data/`: Pydantic/domain data models with cache invalidation support for platform data
-- `backend/ui/` + `gui.py`: NiceGUI pages and app entry
+
 
 ## Response Formats
 
@@ -513,20 +512,13 @@ backend.completeautomate/
 │   │   └── no_job.py
 │   ├── manager/                      # Manager classes for platform, startup, and task operations
 │   ├── output/                       # Generated output assets (json/images/pickle)
+│   ├── prompt_agent/                 # Prompt agent logic
 │   ├── services/                     # Shared services (e.g., agent service)
-│   ├── team/                         # Team role implementations used in workflows
-│   ├── ui/                           # NiceGUI pages and navigation
-│   │   ├── main.py
-│   │   ├── navigation.py
-│   │   ├── tasks.py
-│   │   ├── video.py
-│   │   └── prompt.py
 │   └── task_scheduler_services.py    # Main scheduler/orchestration service
 ├── tests/                            # Unit + integration tests
 │   └── database/
 ├── logs/                             # Runtime logs (app/error logs)
 ├── .github/                          # GitHub Actions CI/CD workflows
-├── gui.py                            # NiceGUI app entrypoint
 ├── main.py                           # Scheduler CLI entrypoint
 ├── main.ipynb                        # Notebook playground for manual flows
 ├── pyproject.toml                    # Poetry deps + tooling config
@@ -537,14 +529,6 @@ backend.completeautomate/
 ```
 
 Key modules:
-
-**UI pages** (`backend/ui/`):
-
-- `main.py`: home dashboard page
-- `navigation.py`: shared navigation component
-- `tasks.py`: task list with dynamic payload forms (11 job types), task execution confirmation dialog, inline status updates, delete action, expandable payload JSON viewer
-- `video.py`: video list with detail-page navigation, channel detail page (`/channel/{channel_id}`), inline editing for video details/transcript/summary, video/channel Plotly stats dialogs, and ImagePromptDB-backed thumbnail workflow actions
-- `prompt.py`: prompt list with detail-page navigation (`/prompt/{task_id}`) and edit support
 
 **Jobs** (`backend/jobs/`):
 
