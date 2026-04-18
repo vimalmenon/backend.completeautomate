@@ -430,15 +430,16 @@ Tip: seed Faker in tests when deterministic values are needed.
 
 ## Architecture Overview
 
-- `backend/task_scheduler_services.py`: scheduler loop and job routing
-- `backend/jobs/`: job handlers (image, prompt, youtube, etc.)
+- `backend/jobs_scheduler.py`: scheduler loop and job routing
+- `backend/jobs/`: job handlers (youtube channel/video/short, stats updater, prompt suggester)
 - Fallback behavior: if a task's `job_type` has no mapped handler, scheduler uses `NoJob`, logs an error, and marks the task as `FAILED` while incrementing `failed_count`
-- `backend/generator/`: workflow generators and domain logic
-- `backend/services/agent_service.py`: model/prompt orchestration
-- `backend/manager/`: manager layer with comprehensive logging for platform, startup, and task operations
+- `backend/api/`: FastAPI route handlers for jobs, prompts, channels, and data
+- `backend/generator/`: workflow generators and domain logic (YouTube channel, video, short, stats)
+- `backend/prompt_agent/`: prompt agents for AI generation (metadata, summarization, community posts, thumbnails)
+- `backend/manager/`: manager layer with logging for all domain operations
 - `backend/factory/common.py`: shared Faker-backed helpers for generating mock values
 - `backend/ai/`: provider adapters
-- `backend/database/`: DynamoDB access layer
+- `backend/database/`: DynamoDB access layer (includes mocked DB for offline mode)
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
 - `backend/data/`: Pydantic/domain data models with cache invalidation support for platform data
 
@@ -479,22 +480,40 @@ Example payload:
 backend.completeautomate/
 ├── backend/
 │   ├── ai/                           # LLM provider wrappers (OpenAI, Groq, DeepSeek, Perplexity, OpenRouter, Qwen)
+│   ├── api/                          # FastAPI route handlers
+│   │   ├── main.py
+│   │   ├── channel_api.py
+│   │   ├── data_api.py
+│   │   ├── health_api.py
+│   │   ├── jobs_api.py
+│   │   └── prompts_api.py
 │   ├── config/                       # env loading, logging setup, session config
-│   ├── data/                         # Core data models (Task, Prompt, YouTube, Image, S3, Platform, Team, Message)
+│   ├── data/                         # Core data models (Task, Prompt, YouTube, Image, S3, Platform, Message)
 │   ├── database/                     # DynamoDB access layer and DB-specific repositories
 │   │   ├── agent/
 │   │   ├── image/
+│   │   ├── job/
+│   │   ├── mocked/
 │   │   ├── platform/
 │   │   ├── prompt/
 │   │   ├── task/
-│   │   ├── youtube/
-│   │   └── dynamo_database.py
-│   ├── enum/                         # Enums for job/status/team/db keys/prompt types/platforms/images
+│   │   └── youtube/
+│   ├── enum/                         # Enums for job/status/db keys/prompt types/platforms/images
 │   ├── exception/                    # Custom app exception types
-│   ├── factory/                      # Factory classes for agent and task creation
-│   ├── generator/                    # Domain generators (image/youtube/analysis/summarize/metadata)
+│   ├── factory/                      # Factory helpers for test data and domain objects
+│   │   ├── common.py
+│   │   ├── job_factory.py
+│   │   ├── platform_factory.py
+│   │   ├── youtube_channel_factory.py
+│   │   ├── youtube_video_factory.py
+│   │   └── youtube_api_factory.py
+│   ├── generator/                    # Domain generators (youtube/analysis/summarize/metadata)
 │   │   ├── response_format/
-│   │   └── youtube_*.py
+│   │   ├── base_generator.py
+│   │   ├── youtube_channel_creator.py
+│   │   ├── youtube_short_generator.py
+│   │   ├── youtube_stats_updater.py
+│   │   └── youtube_video_generator.py
 │   ├── helper/                       # Startup + utility helpers
 │   │   ├── folder_helper/
 │   │   └── start_up/
@@ -506,21 +525,37 @@ backend.completeautomate/
 │   │   └── youtube/
 │   ├── jobs/                         # Job executors mapped from task job type
 │   │   ├── base_job.py
-│   │   ├── image_generator_job.py
-│   │   ├── image_prompt_job.py
-│   │   ├── youtube_job.py
+│   │   ├── youtube_channel_job.py
+│   │   ├── youtube_video_job.py
+│   │   ├── youtube_short_job.py
+│   │   ├── youtube_stats_updater_job.py
+│   │   ├── prompt_suggester_job.py
 │   │   └── no_job.py
-│   ├── manager/                      # Manager classes for platform, startup, and task operations
+│   ├── manager/                      # Manager layer with logging for all domain operations
+│   │   ├── action_manager.py
+│   │   ├── data_manager.py
+│   │   ├── job_manager.py
+│   │   ├── platform_manager.py
+│   │   ├── prompt_manager.py
+│   │   ├── start_up_manager.py
+│   │   ├── transform.py
+│   │   ├── youtube_channel_manager.py
+│   │   └── youtube_video_manager.py
 │   ├── output/                       # Generated output assets (json/images/pickle)
-│   ├── prompt_agent/                 # Prompt agent logic
+│   ├── prompt_agent/                 # Prompt agents for AI generation tasks
+│   │   ├── youtube_short_speech_generation_prompt_agent.py
+│   │   ├── youtube_thumbnail_image_generation_prompt_agent.py
+│   │   ├── youtube_video_community_post_agent.py
+│   │   ├── youtube_video_metadata_agent.py
+│   │   ├── youtube_video_summarization_agent.py
+│   │   └── youtube_video_twitter_post_agent.py
 │   ├── services/                     # Shared services (e.g., agent service)
-│   └── task_scheduler_services.py    # Main scheduler/orchestration service
+│   └── jobs_scheduler.py             # Main scheduler/orchestration service
 ├── tests/                            # Unit + integration tests
 │   └── database/
 ├── logs/                             # Runtime logs (app/error logs)
 ├── .github/                          # GitHub Actions CI/CD workflows
 ├── main.py                           # Scheduler CLI entrypoint
-├── main.ipynb                        # Notebook playground for manual flows
 ├── pyproject.toml                    # Poetry deps + tooling config
 ├── poetry.lock                       # Poetry lock file
 ├── pytest.ini                        # Pytest config + markers
@@ -530,29 +565,54 @@ backend.completeautomate/
 
 Key modules:
 
+**API** (`backend/api/`):
+
+- `main.py`: FastAPI app setup and router registration
+- `channel_api.py`: YouTube channel endpoints
+- `data_api.py`: data access endpoints
+- `health_api.py`: health check endpoint
+- `jobs_api.py`: job management endpoints
+- `prompts_api.py`: prompt endpoints
+
 **Jobs** (`backend/jobs/`):
 
 - `base_job.py`: base job class
-- `image_generator_job.py`: image generation tasks
-- `image_prompt_job.py`: image prompt generation tasks
-- `youtube_job.py`: YouTube-related task execution
+- `youtube_channel_job.py`: YouTube channel sync tasks
+- `youtube_video_job.py`: YouTube video pipeline tasks
+- `youtube_short_job.py`: YouTube Shorts tasks
+- `youtube_stats_updater_job.py`: stats update tasks
 - `prompt_suggester_job.py`: prompt suggestion tasks
 - `no_job.py`: fallback for unmapped job types
+
+**Prompt Agents** (`backend/prompt_agent/`):
+
+- `youtube_video_metadata_agent.py`: metadata suggestion prompts
+- `youtube_video_summarization_agent.py`: transcript summarization prompts
+- `youtube_video_community_post_agent.py`: community post prompts
+- `youtube_video_twitter_post_agent.py`: Twitter post prompts
+- `youtube_short_speech_generation_prompt_agent.py`: short speech generation prompts
+- `youtube_thumbnail_image_generation_prompt_agent.py`: thumbnail image generation prompts
 
 **Factories** (`backend/factory/`):
 
 - `common.py`: shared Faker-backed helpers (`fake_date()`, `fake_uuid()`, `fake_url()`)
 - `job_factory.py`: creates `YouTubeJobData` instances
-- `platform_factory.py`: creates `PlatformDBData` instances (channels and videos)
-- `image_generator_factory.py`: creates image generation mock data
-- `agent_factory.py`: creates AI agent instances
-- `task_factory.py`: creates task objects
+- `platform_factory.py`: creates `PlatformDBData` instances
+- `youtube_channel_factory.py`: creates YouTube channel mock data
+- `youtube_video_factory.py`: creates YouTube video mock data
+- `youtube_api_factory.py`: creates YouTube API response mock data
 
-**Managers** (`backend/manager/`) - _Enhanced with comprehensive logging_:
+**Managers** (`backend/manager/`):
 
+- `action_manager.py`: action execution management
+- `data_manager.py`: data access and transformation
+- `job_manager.py`: job lifecycle management
 - `platform_manager.py`: platform operations with logging
+- `prompt_manager.py`: prompt data management
 - `start_up_manager.py`: application startup logic with lifecycle logging
-- `task_manager.py`: task lifecycle management with operation tracking
+- `transform.py`: data transformation utilities
+- `youtube_channel_manager.py`: YouTube channel operations
+- `youtube_video_manager.py`: YouTube video operations
 
 ## Contributing
 
