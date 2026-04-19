@@ -3,7 +3,7 @@ from backend.database.dynamo_database import DbManager
 from backend.database.job.job_database import JobDB
 from backend.database.mocked.mocked_database import MockedDB
 from backend.database.platform.platform_database import PlatformDB
-from backend.database.prompt import PromptDataDB, PromptDB, PromptResultDB
+from backend.database.prompt import PromptDB, PromptResultDB
 from backend.database.youtube import (
     YouTubeChannelDB,
     YouTubeVideoDB,
@@ -18,6 +18,5 @@ __all__ = [
     "PlatformDB",
     "JobDB",
     "MockedDB",
-    "PromptDataDB",
     "PromptResultDB",
 ]

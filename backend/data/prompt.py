@@ -116,4 +116,3 @@ class PromptResultData:
             version=data["version"],
             result=data["result"],
         )
-
