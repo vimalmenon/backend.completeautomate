@@ -90,6 +90,9 @@ class YouTubeVideoThumbnailData:
 @dataclass
 class YouTubeVideoDBData:
     ref_id: str
+    # TODO add Channel id & video id
+    # id: str
+    # channel_id: str
     published_at: datetime
     last_updated_at: datetime
     title: str

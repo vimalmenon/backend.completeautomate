@@ -81,6 +81,8 @@ class YouTubeChannelStatsDBData:
 @dataclass
 class YouTubeChannelDBData:
     ref_id: str
+    # TODO add Channel id
+    # id: str
     title: str
     description: str
     custom_url: str

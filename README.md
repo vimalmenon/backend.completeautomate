@@ -73,8 +73,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - NEXT
   - [ ][2] Set up Text To Speech (TTS)
-  
-
+  - [ ][1] Add id to channel and video ID
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
@@ -446,7 +445,6 @@ Tip: seed Faker in tests when deterministic values are needed.
 - `backend/database/`: DynamoDB access layer (includes mocked DB for offline mode)
 - `backend/integration/`: external services (YouTube, S3, image generation, TTS)
 - `backend/data/`: Pydantic/domain data models with cache invalidation support for platform data
-
 
 ## Response Formats
 
