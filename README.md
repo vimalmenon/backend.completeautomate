@@ -62,7 +62,6 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add page-level error states for missing env/config with actionable guidance
 - [ ] Add UI smoke tests for core flows (create/update/delete task, expand details, load prompt/video pages)
 - [ ] Add CI job for GUI smoke test execution
-- [ ] Reduce complex UI functions further and standardize helper naming across pages
 
 ### Milestone Guidance
 
@@ -71,6 +70,11 @@ Use this checklist to track progress toward a **9/10** quality target.
 - **9/10 target:** GUI smoke tests integrated in CI and stable over multiple iterations
 
 ## Roadmap
+
+- NEXT
+  - [ ][2] Set up Text to Speech 
+  
+
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>

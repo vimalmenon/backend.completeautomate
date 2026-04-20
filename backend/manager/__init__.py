@@ -1,5 +1,6 @@
 from backend.manager.action_manager import ActionManager
 from backend.manager.data_manager import DataManager, FileSync
+from backend.manager.health_manager import HealthManager
 from backend.manager.job_manager import JobManager
 from backend.manager.platform_manager import PlatformManager
 from backend.manager.prompt_manager import PromptManager
@@ -17,4 +18,5 @@ __all__ = [
     "DataManager",
     "FileSync",
     "ActionManager",
+    "HealthManager",
 ]
