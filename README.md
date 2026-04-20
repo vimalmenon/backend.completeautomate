@@ -73,7 +73,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - NEXT
   - [ ][2] Set up Text To Speech (TTS)
-  - [ ][1] Add id to channel and video ID
+  - [ ][1] Add id to channel and video
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
