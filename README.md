@@ -72,7 +72,7 @@ Use this checklist to track progress toward a **9/10** quality target.
 ## Roadmap
 
 - NEXT
-  - [ ][2] Set up Text to Speech 
+  - [ ][2] Set up Text To Speech (TTS)
   
 
 
