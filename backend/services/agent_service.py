@@ -76,4 +76,3 @@ class AgentService:
         if not self.prompt_data:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
         return self.__render_template(self.prompt_data.prompt)
-

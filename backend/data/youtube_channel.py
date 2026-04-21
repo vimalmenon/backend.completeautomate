@@ -81,8 +81,7 @@ class YouTubeChannelStatsDBData:
 @dataclass
 class YouTubeChannelDBData:
     ref_id: str
-    # TODO add Channel id
-    # id: str
+    channel_id: str
     title: str
     description: str
     custom_url: str
@@ -121,6 +120,8 @@ class YouTubeChannelDBData:
             stats=[YouTubeChannelStatsDBData.to_cls(stat) for stat in data["stats"]],
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
             playlist=playlist,
+            # TODO Remove get and use bracket
+            channel_id=data.get("channel_id"),
         )
 
     @classmethod
@@ -165,6 +166,7 @@ class YouTubeChannelDBData:
             "stats": [stat.to_json() for stat in self.stats],
             "last_updated_at": self.last_updated_at.isoformat(),
             "playlist": playlist,
+            "channel_id": self.channel_id,
         }
 
     def values_to_update(self, old_value: Self) -> dict[str, Any]:
