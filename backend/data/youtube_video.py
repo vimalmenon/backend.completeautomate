@@ -170,6 +170,8 @@ class YouTubeVideoDBData:
             last_updated_at=datetime.now(),
             stats=[stat],
             task_status=YouTubeVideoTaskEnum(item["task_status"]),
+            video_id=item["video_id"],
+            channel_id=item["channel_id"],
         )
 
     def to_json(self) -> dict:

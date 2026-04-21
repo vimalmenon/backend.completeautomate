@@ -15,4 +15,6 @@ def youtube_video_factory(**kwargs) -> YouTubeVideoDBData:
         task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
         language=faker.name(),
         stats=[],
+        channel_id=faker.text(),
+        video_id=faker.text(),
     )

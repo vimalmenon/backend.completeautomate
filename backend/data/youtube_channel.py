@@ -148,6 +148,7 @@ class YouTubeChannelDBData:
             stats=[stat],
             last_updated_at=datetime.now(),
             playlist=playlist,
+            channel_id=channel["channel_id"],
         )
 
     def to_json(self) -> dict:

@@ -73,6 +73,9 @@ class YouTubeVideoDB:
 class YouTubeVideoUnmanagedDB:
     TABLE = "CA#YOUTUBE_VIDEO"
 
+    def __init__(self):
+        self.db_manager = DbManager()
+
     def get_all_videos_from_db(self) -> list[YouTubeVideoDBData]:
         results = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE)
