@@ -77,6 +77,3 @@ class AgentService:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
         return self.__render_template(self.prompt_data.prompt)
 
-
-class AgentTTSService:
-    pass
