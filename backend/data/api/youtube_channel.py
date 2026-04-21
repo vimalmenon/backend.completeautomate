@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from backend.data.api.base_mode import BaseModelWithConfig
+from backend.data.api.base_model import BaseModelWithConfig
 from backend.data.youtube_channel import (
     YouTubeChannelPlaylistData,
     YouTubeChannelStatsDBData,

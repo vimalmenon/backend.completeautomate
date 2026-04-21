@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from backend.data.api.base_mode import BaseModelWithConfig
+from backend.data.api.base_model import BaseModelWithConfig
 from backend.enum import JobsStatusEnum, JobTypeEnum
 
 

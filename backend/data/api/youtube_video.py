@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import Field
 
-from backend.data.api.base_mode import BaseModelWithConfig
+from backend.data.api.base_model import BaseModelWithConfig
 from backend.data.image import ImagePromptData
 from backend.data.youtube_video import (
     YouTubeVideoDBStatsData,
