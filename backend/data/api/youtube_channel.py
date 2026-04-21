@@ -25,6 +25,7 @@ class YouTubeChannelResponse(BaseModelWithConfig):
     ref_id: str
     title: str
     description: str
+    channel_id: str
     custom_url: str
     published_at: datetime
     last_updated_at: datetime

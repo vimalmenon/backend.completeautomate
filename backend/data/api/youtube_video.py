@@ -19,6 +19,8 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     title: str
     description: str
     thumbnail: str
+    video_id: str
+    channel_id: str
     task_status: YouTubeVideoTaskEnum
     tags: list[str]
     language: str

@@ -6,7 +6,9 @@ from backend.database.platform.platform_database import PlatformDB
 from backend.database.prompt import PromptDB, PromptResultDB
 from backend.database.youtube import (
     YouTubeChannelDB,
+    YouTubeChannelUnmanagedDB,
     YouTubeVideoDB,
+    YouTubeVideoUnmanagedDB,
 )
 
 __all__ = [
@@ -19,4 +21,6 @@ __all__ = [
     "JobDB",
     "MockedDB",
     "PromptResultDB",
+    "YouTubeChannelUnmanagedDB",
+    "YouTubeVideoUnmanagedDB",
 ]
