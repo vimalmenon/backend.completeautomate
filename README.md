@@ -73,9 +73,8 @@ Use this checklist to track progress toward a **9/10** quality target.
 
 - NEXT
   - [ ][2] Set up Text To Speech (TTS)
-  - [x][1] Add id to channel and video
-  - [x][1] Transform channel data to use channel_id
-  - [x][1] Transform video data to use channel_id and video_id
+  - [ ][3] Set up email
+  - [ ][5] Refactor Prompt
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
