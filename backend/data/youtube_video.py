@@ -134,8 +134,8 @@ class YouTubeVideoDBData:
             transcript=data.get("transcript"),
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
-            video_id=data.get("video_id"),
-            channel_id=data.get("channel_id"),
+            video_id=data["video_id"],
+            channel_id=data["channel_id"],
             user_message=data.get("user_message"),
             stats=stats,
             metadata_suggestions=[

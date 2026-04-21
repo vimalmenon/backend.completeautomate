@@ -120,8 +120,7 @@ class YouTubeChannelDBData:
             stats=[YouTubeChannelStatsDBData.to_cls(stat) for stat in data["stats"]],
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
             playlist=playlist,
-            # TODO Remove get and use bracket
-            channel_id=data.get("channel_id"),
+            channel_id=data["channel_id"],
         )
 
     @classmethod
