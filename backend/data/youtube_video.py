@@ -90,9 +90,8 @@ class YouTubeVideoThumbnailData:
 @dataclass
 class YouTubeVideoDBData:
     ref_id: str
-    # TODO add Channel id & video id
-    # id: str
-    # channel_id: str
+    video_id: str
+    channel_id: str
     published_at: datetime
     last_updated_at: datetime
     title: str
@@ -135,8 +134,10 @@ class YouTubeVideoDBData:
             transcript=data.get("transcript"),
             summarized_transcript=data.get("summarized_transcript"),
             last_updated_at=datetime.fromisoformat(data["last_updated_at"]),
-            stats=stats,
+            video_id=data.get("video_id"),
+            channel_id=data.get("channel_id"),
             user_message=data.get("user_message"),
+            stats=stats,
             metadata_suggestions=[
                 YouTubeVideoMetadataData.to_cls(suggestion)
                 for suggestion in data.get("metadata_suggestions", [])
@@ -186,6 +187,8 @@ class YouTubeVideoDBData:
             "transcript": self.transcript,
             "summarized_transcript": self.summarized_transcript,
             "user_message": self.user_message,
+            "channel_id": self.channel_id,
+            "video_id": self.video_id,
             "metadata_suggestions": [
                 suggestion.to_json() for suggestion in self.metadata_suggestions
             ],

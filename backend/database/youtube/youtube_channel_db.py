@@ -68,3 +68,16 @@ class YouTubeChannelDB:
             },
             values=values,
         )
+
+
+class YouTubeChannelUnmanagedDB:
+    TABLE = "CA#YOUTUBE_CHANNEL"
+
+    def __init__(self):
+        self.db_manager = DbManager()
+
+    def get_channels(self) -> list[YouTubeChannelDBData]:
+        results = self.db_manager.query_items(
+            Key(DbKeysEnum.Primary.value).eq(self.TABLE)
+        )
+        return [YouTubeChannelDBData.to_cls(result) for result in results]
