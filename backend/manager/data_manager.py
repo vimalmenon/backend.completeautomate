@@ -186,11 +186,14 @@ class DataManager:
 class FileSync:
 
     def check(self) -> bool:
-        for (
-            key,
-            value,
-        ) in s3_file_data.items():
-            if value.downloaded_path:
+        folder_helper = FolderHelper()
+        for value in db_data:
+            if not folder_helper.check_if_file_exists(value.s3_data.downloaded_path):
                 return False
-            print(value)
+
+            local_data = folder_helper.unpack_pickle_data(value.s3_data.downloaded_path)
+            current_data = value.convert_json_to_cls(value.get_data())
+
+            if local_data != current_data:
+                return False
         return True

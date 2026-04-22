@@ -2,7 +2,7 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from backend.exception import AppException
-from backend.manager.data_manager import DataManager, env
+from backend.manager.data_manager import DataManager, FileSync, env
 
 
 def test_restore_from_s3_runs_download_then_upload() -> None:
@@ -74,3 +74,62 @@ def test_download_for_s3_ignores_missing_s3_objects_when_offline() -> None:
         DataManager()._DataManager__download_for_s3()
 
     mock_download.assert_called_once()
+
+
+def test_file_sync_check_returns_true_when_local_matches_db_snapshot() -> None:
+    fake_db = SimpleNamespace(
+        s3_data=SimpleNamespace(downloaded_path="/tmp/fake-snapshot.pickle"),
+        get_data=lambda: ["db-record"],
+        convert_json_to_cls=lambda data: [f"normalized:{data[0]}"],
+    )
+
+    with (
+        patch("backend.manager.data_manager.db_data", [fake_db]),
+        patch(
+            "backend.manager.data_manager.FolderHelper.check_if_file_exists",
+            return_value=True,
+        ),
+        patch(
+            "backend.manager.data_manager.FolderHelper.unpack_pickle_data",
+            return_value=["normalized:db-record"],
+        ),
+    ):
+        assert FileSync().check() is True
+
+
+def test_file_sync_check_returns_false_when_local_file_missing() -> None:
+    fake_db = SimpleNamespace(
+        s3_data=SimpleNamespace(downloaded_path="/tmp/missing-snapshot.pickle"),
+        get_data=lambda: ["db-record"],
+        convert_json_to_cls=lambda data: data,
+    )
+
+    with (
+        patch("backend.manager.data_manager.db_data", [fake_db]),
+        patch(
+            "backend.manager.data_manager.FolderHelper.check_if_file_exists",
+            return_value=False,
+        ),
+    ):
+        assert FileSync().check() is False
+
+
+def test_file_sync_check_returns_false_when_local_differs_from_db_snapshot() -> None:
+    fake_db = SimpleNamespace(
+        s3_data=SimpleNamespace(downloaded_path="/tmp/fake-snapshot.pickle"),
+        get_data=lambda: ["db-record"],
+        convert_json_to_cls=lambda data: [f"normalized:{data[0]}"],
+    )
+
+    with (
+        patch("backend.manager.data_manager.db_data", [fake_db]),
+        patch(
+            "backend.manager.data_manager.FolderHelper.check_if_file_exists",
+            return_value=True,
+        ),
+        patch(
+            "backend.manager.data_manager.FolderHelper.unpack_pickle_data",
+            return_value=["normalized:other-record"],
+        ),
+    ):
+        assert FileSync().check() is False
