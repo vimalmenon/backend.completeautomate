@@ -36,3 +36,12 @@ class YouTubeVideoResponse(BaseModelWithConfig):
     )
     community_posts: list[str] = Field(default_factory=list)
     twitter_posts: list[str] = Field(default_factory=list)
+
+
+class YouTubeVideoUpdateRequest(BaseModelWithConfig):
+    title: str
+    description: str
+    tags: list[str]
+    user_message: str | None = None
+    task_status: YouTubeVideoTaskEnum
+    status: YouTubeVideoStatusEnum
