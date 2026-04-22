@@ -6,7 +6,10 @@ from backend.data.api.prompt import (
     PromptVersionUpdateRequest,
 )
 from backend.data.api.youtube_channel import YouTubeChannelResponse
-from backend.data.api.youtube_video import YouTubeVideoResponse, YouTubeVideoUpdateRequest
+from backend.data.api.youtube_video import (
+    YouTubeVideoResponse,
+    YouTubeVideoUpdateRequest,
+)
 
 __all__ = [
     "JobResponse",

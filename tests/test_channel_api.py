@@ -30,8 +30,12 @@ def test_update_video_by_id_updates_supported_fields() -> None:
     video.user_message = "Old user message"
 
     with (
-        patch("backend.api.channel.channel_api.PlatformManager") as mock_platform_manager_cls,
-        patch("backend.api.channel.channel_api.YouTubeVideoManager") as mock_video_manager_cls,
+        patch(
+            "backend.api.channel.channel_api.PlatformManager"
+        ) as mock_platform_manager_cls,
+        patch(
+            "backend.api.channel.channel_api.YouTubeVideoManager"
+        ) as mock_video_manager_cls,
     ):
         mock_platform_manager = mock_platform_manager_cls.return_value
         mock_platform_manager.get_platform_by_video_id.return_value = type(
@@ -72,7 +76,9 @@ def test_update_video_by_id_updates_supported_fields() -> None:
 
 @pytest.mark.unit
 def test_update_video_by_id_raises_when_platform_missing() -> None:
-    with patch("backend.api.channel.channel_api.PlatformManager") as mock_platform_manager_cls:
+    with patch(
+        "backend.api.channel.channel_api.PlatformManager"
+    ) as mock_platform_manager_cls:
         mock_platform_manager = mock_platform_manager_cls.return_value
         mock_platform_manager.get_platform_by_video_id.return_value = None
 
