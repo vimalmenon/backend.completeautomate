@@ -1,19 +1,12 @@
 from backend.data import YouTubeShortDBData
 from backend.enum import PromptTaskEnum
-from backend.exception import AppException
-from backend.manager import PromptManager
+from backend.prompt_agent.base_agent import BaseAgent
 
 
-class YouTubeShortSpeechGenerationPromptAgent:
-    type = PromptTaskEnum.YouTubeShortSpeechGenerationPrompt
-
-    def __init__(self):
-        self.db_manager = PromptManager()
+class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
+    task = PromptTaskEnum.YouTubeShortSpeechGenerationPrompt
 
     def generate(self, video_short: YouTubeShortDBData):
-        prompt = self.db_manager.get_prompt_by_task(self.type)
-        if not prompt:
-            raise AppException(f"No prompt found with type {self.type}")
+        self.get_prompt()
 
-    def improve(self):
-        self.db_manager.get_prompt_by_task(self.type)
+    def improve(self): ...
