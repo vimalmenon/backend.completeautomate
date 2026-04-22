@@ -48,7 +48,6 @@ Current internal score: **8.0/10**
 
 ### Improvement areas
 
-- UI page logic has grown and can be further componentize
 - Some runtime configuration is still tightly coupled to environment setup
 - Need stronger end-to-end GUI flow validation for confidence in regressions
 
@@ -60,18 +59,12 @@ Use this checklist to track progress toward a **9/10** quality target.
 - [ ] Add explicit confirmation dialog before task deletion
 - [ ] Add sorting controls in Tasks table (not just static ordering)
 - [ ] Add page-level error states for missing env/config with actionable guidance
-- [ ] Add UI smoke tests for core flows (create/update/delete task, expand details, load prompt/video pages)
-- [ ] Add CI job for GUI smoke test execution
 
-### Milestone Guidance
-
-- **8/10 target:** reusable table helpers + safer delete UX + better env error feedback
-- **8.5/10 target:** payload templates/validation + task sorting controls
-- **9/10 target:** GUI smoke tests integrated in CI and stable over multiple iterations
 
 ## Roadmap
 
 - NEXT
+  - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
   - [ ][3] Set up email
   - [ ][5] Refactor Prompt
