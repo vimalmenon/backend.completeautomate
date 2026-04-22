@@ -71,6 +71,33 @@ class PromptDBData:
         self.versions.append(data)
         return self
 
+    def with_updated_prompt_version(
+        self,
+        *,
+        prompt: str,
+        system_message: str,
+        description: str,
+        ai: AIModelEnum,
+        created_at: datetime,
+        version: UUID,
+        comment: str | None = None,
+    ) -> Self:
+        self.description = description
+        self.comment = comment
+        self.last_updated = created_at
+        self.version = version
+        self.versions.append(
+            PromptVersionDBData(
+                prompt=prompt,
+                system_message=system_message,
+                version=version,
+                ai=ai,
+                created_at=created_at,
+            )
+        )
+        self.__post_init__()
+        return self
+
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(

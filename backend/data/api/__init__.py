@@ -1,5 +1,10 @@
 from backend.data.api.job import JobResponse
-from backend.data.api.prompt import PromptRequest
+from backend.data.api.prompt import (
+    PromptRequest,
+    PromptUpdateRequest,
+    PromptUpdateResult,
+    PromptVersionUpdateRequest,
+)
 from backend.data.api.youtube_channel import YouTubeChannelResponse
 from backend.data.api.youtube_video import YouTubeVideoResponse
 
@@ -8,4 +13,7 @@ __all__ = [
     "YouTubeChannelResponse",
     "YouTubeVideoResponse",
     "PromptRequest",
+    "PromptUpdateRequest",
+    "PromptUpdateResult",
+    "PromptVersionUpdateRequest",
 ]
