@@ -7,7 +7,7 @@ import pytest
 from backend.ai.speech_generation.resemble_speech_generator import (
     ResembleSpeechGenerator,
 )
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 @pytest.mark.unit

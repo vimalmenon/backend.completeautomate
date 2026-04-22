@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.manager.data_manager import DataManager, env
 
 

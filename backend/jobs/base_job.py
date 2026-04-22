@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from backend.data import JobData, JobDataResponse
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 class BaseJob(ABC):

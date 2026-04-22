@@ -11,7 +11,7 @@ from backend.ai import (
 )
 from backend.database import PromptDB
 from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 class AgentImageService:

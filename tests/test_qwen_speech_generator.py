@@ -6,7 +6,7 @@ from backend.ai.speech_generation import QwenSpeechGenerator
 from backend.ai.speech_generation.qwen_speech_generator import (
     _SpeechCollectionCallback,
 )
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 @pytest.mark.unit

@@ -7,7 +7,7 @@ import pytest
 
 from backend.data.prompt import PromptDBData
 from backend.enum import AIModelEnum, PromptTaskEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.services.agent_service import AgentService
 
 

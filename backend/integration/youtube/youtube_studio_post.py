@@ -3,7 +3,7 @@ from logging import getLogger
 from pathlib import Path
 from typing import Any
 
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 logger = getLogger(__name__)
 

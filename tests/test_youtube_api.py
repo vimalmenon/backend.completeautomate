@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.integration.youtube.youtube_api import YouTubeAPI
 
 

@@ -8,7 +8,7 @@ from langchain.messages import AIMessage, HumanMessage, SystemMessage
 
 from backend.data import MessageDBData
 from backend.enum import TeamEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.integration import GeneralAgent
 from backend.services.agent_service import AgentService
 

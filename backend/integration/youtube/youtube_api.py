@@ -7,7 +7,7 @@ from typing import Any
 from PIL import Image
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.integration.youtube.youtube_auth import YouTubeAuth
 from backend.integration.youtube.youtube_studio_post import (
     create_community_post_via_studio,

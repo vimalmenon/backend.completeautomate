@@ -4,7 +4,7 @@ import pytest
 
 from backend.data.s3 import S3Data
 from backend.enum.s3 import S3ContentTypeEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.integration.storage.s3_storage import S3Storage
 
 

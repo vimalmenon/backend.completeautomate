@@ -10,7 +10,7 @@ from backend.data import (
     YouTubeChannelDBData,
     YouTubeVideoDBData,
 )
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.helper import FolderHelper
 from backend.integration import S3Storage
 from backend.manager.job_manager import JobManager
