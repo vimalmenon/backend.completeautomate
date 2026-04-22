@@ -6,7 +6,7 @@ from typing import Any, cast
 from openai import OpenAI
 
 from backend.config.env import env
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 class ImageModelList(Enum):

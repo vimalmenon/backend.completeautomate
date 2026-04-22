@@ -11,7 +11,7 @@ from backend.data import (
     YouTubeVideoTaskData,
 )
 from backend.enum import JobsStatusEnum, JobTypeEnum, PlatformEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.integration.youtube.youtube_api import YouTubeAPI

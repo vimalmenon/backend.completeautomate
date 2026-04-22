@@ -18,7 +18,7 @@ from backend.enum import (
     PromptTaskEnum,
     YouTubeVideoTaskEnum,
 )
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import (
     ImagePromptsListRequest,

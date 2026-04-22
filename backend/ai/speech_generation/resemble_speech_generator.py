@@ -7,7 +7,7 @@ from urllib.request import Request, urlopen
 from resemble import Resemble
 
 from backend.config.env import env
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 RESEMBLE_PROJECT_ID_ENV_VARS = (
     "RESEMBLE_PROJECT_UUID",

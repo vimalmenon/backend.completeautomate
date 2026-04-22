@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Self, Union
 
 from backend.enum import PlatformEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 @dataclass

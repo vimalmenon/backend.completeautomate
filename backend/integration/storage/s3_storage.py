@@ -7,7 +7,7 @@ from botocore.exceptions import ClientError
 from backend.config.env import env
 from backend.config.session import AWSSession
 from backend.data.s3 import S3Data
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.helper.folder_helper.folder_helper import FolderHelper
 
 logger = logging.getLogger(__name__)

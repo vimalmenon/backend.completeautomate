@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from backend.config.env import env
 from backend.data import MessageDBData
 from backend.database import AgentMessageDB
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 from backend.services.agent_service import AgentImageService, AgentService
 
 logger = logging.getLogger(__name__)

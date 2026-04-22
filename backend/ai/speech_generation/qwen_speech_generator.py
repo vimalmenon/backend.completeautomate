@@ -11,7 +11,7 @@ from dashscope.audio.qwen_tts_realtime import (
 )
 
 from backend.config.env import env
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 QWEN_HTTP_API_URL = "https://dashscope-intl.aliyuncs.com/api/v1"
 QWEN_WEBSOCKET_API_URL = "wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime"

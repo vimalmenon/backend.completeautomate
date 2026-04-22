@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from backend.data import JobData
 from backend.enum import JobsStatusEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 class BaseGenerator(ABC):

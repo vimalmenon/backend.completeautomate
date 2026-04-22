@@ -8,7 +8,7 @@ from backend.data import (
 )
 from backend.database.dynamo_database import DbManager
 from backend.enum import DbKeysEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 class PlatformDB:

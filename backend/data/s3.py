@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Self
 
 from backend.enum.s3 import S3ContentTypeEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 @dataclass

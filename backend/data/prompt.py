@@ -4,7 +4,7 @@ from typing import Any, Self
 from uuid import UUID
 
 from backend.enum import AIModelEnum, PromptTaskEnum
-from backend.exception.app_exception import AppException
+from backend.exception import AppException
 
 
 @dataclass
