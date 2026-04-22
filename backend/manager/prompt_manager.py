@@ -5,6 +5,9 @@ from backend.enum import PromptTaskEnum
 
 class PromptManager:
 
+    def get_prompt_by_task(self, task: PromptTaskEnum) -> PromptDBData | None:
+        return PromptDB().get_prompt_by_task(task)
+
     def get_prompts(self) -> list[PromptDBData]:
         return PromptDB().get_all_prompts()
 
