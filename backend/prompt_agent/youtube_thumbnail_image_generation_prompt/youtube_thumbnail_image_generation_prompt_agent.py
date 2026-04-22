@@ -1,6 +1,6 @@
 from backend.data import YouTubeVideoDBData
 from backend.enum import PromptTaskEnum
-from backend.prompt_agent.base_agent import BaseAgent
+from backend.prompt_agent.agent.base_agent import BaseAgent
 
 
 class YouTubeThumbnailImageGenerationPromptAgent(BaseAgent):
