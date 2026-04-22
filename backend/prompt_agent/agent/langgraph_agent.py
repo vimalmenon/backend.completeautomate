@@ -45,6 +45,8 @@ class LangGraphAgent:
     def _execute(self, state: LangGraphAgentState) -> LangGraphAgentState:
         try:
             result = self.runner(state)
+        except NotImplementedError:
+            raise
         except Exception as error:
             return {
                 "error": str(error),
