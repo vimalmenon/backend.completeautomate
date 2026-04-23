@@ -24,5 +24,5 @@ async def get_job(job_id: UUID) -> JobResponse:
 
 @router.put("/jobs/{job_id}", tags=["jobs"])
 async def execute_job(job_id: UUID):
-    JobSchedulerManager().execute(job_id)
-    return {"status": "ok"}
+    result = JobSchedulerManager().execute(job_id)
+    return {"status": result}
