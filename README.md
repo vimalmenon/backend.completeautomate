@@ -67,6 +67,8 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
   - [ ][3] Set up email
+    - [ ] support@completeautomate.com
+    - [ ] info@completeautomate.com
   - [ ][5] Refactor Prompt
 
 <details>
