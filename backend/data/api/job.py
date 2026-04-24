@@ -20,3 +20,13 @@ class JobResponse(BaseModelWithConfig):
     pending_on: list[UUID] = Field(default_factory=list)
     completed_at: datetime | None = None
     error_msg: str | None = None
+
+
+class JobUpdateRequest(BaseModelWithConfig):
+    status: JobsStatusEnum | None = None
+    description: str | None = None
+    task_data: dict[str, Any] | None = None
+    failed_count: int | None = None
+    pending_on: list[UUID] | None = None
+    completed_at: datetime | None = None
+    error_msg: str | None = None
