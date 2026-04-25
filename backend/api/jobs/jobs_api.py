@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
@@ -8,9 +9,9 @@ from backend.manager import JobManager, JobSchedulerManager
 router = APIRouter()
 
 
-def _build_update_values(request: JobUpdateRequest) -> dict:
+def _build_update_values(request: JobUpdateRequest) -> dict[str, Any]:
     """Build update values dict from request, filtering out None values."""
-    values: dict = {}
+    values: dict[str, Any] = {}
     if request.status is not None:
         values["status"] = request.status.value
     if request.description is not None:
@@ -60,6 +61,6 @@ async def update_job(job_id: UUID, request: JobUpdateRequest) -> JobResponse:
 
 
 @router.put("/jobs/{job_id}", tags=["jobs"])
-async def execute_job(job_id: UUID):
-    result = JobSchedulerManager().execute(job_id)
+async def execute_job(job_id: UUID) -> dict[str, Any]:
+    result = JobSchedulerManager().execute()
     return {"status": result}

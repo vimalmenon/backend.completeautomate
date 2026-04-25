@@ -8,5 +8,5 @@ class HealthManager:
     def __check_db(self) -> dict[str, str]:
         return {"db_write": "ok", "db_read": "ok"}
 
-    def __check_s3(self):
+    def __check_s3(self) -> dict[str, str]:
         return {"write_s3": "ok", "read_s3": "ok"}

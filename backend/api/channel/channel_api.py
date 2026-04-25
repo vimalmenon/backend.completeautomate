@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
@@ -13,7 +14,9 @@ from backend.manager import PlatformManager, YouTubeChannelManager, YouTubeVideo
 router = APIRouter()
 CHANNEL_NOT_FOUND_DETAIL = "Channel not found"
 VIDEO_NOT_FOUND_DETAIL = "Video not found"
-NOT_FOUND_RESPONSES = {404: {"description": "Resource not found"}}
+NOT_FOUND_RESPONSES: dict[int | str, dict[str, Any]] = {
+    404: {"description": "Resource not found"}
+}
 
 
 @router.get("/channels", tags=["channels"])

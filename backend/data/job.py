@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Self
+from typing import Any, Self
 from uuid import UUID
 
 from backend.enum import JobsStatusEnum, JobTypeEnum
@@ -19,7 +19,7 @@ class JobData:
     completed_at: datetime | None = None
     error_msg: str | None = None
 
-    def to_json(self) -> dict:
+    def to_json(self) -> dict[str, Any]:
         return {
             "id": str(self.id),
             "status": self.status.value,
@@ -36,7 +36,7 @@ class JobData:
         }
 
     @classmethod
-    def to_cls(cls, data: dict) -> Self:
+    def to_cls(cls, data: dict[str, Any]) -> Self:
         return cls(
             id=UUID(data["id"]),
             status=JobsStatusEnum(data["status"]),

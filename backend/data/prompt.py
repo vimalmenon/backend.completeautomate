@@ -129,7 +129,7 @@ class PromptResultData:
     version: UUID
     result: str
 
-    def to_json(self) -> dict:
+    def to_json(self) -> dict[str, str]:
         return {
             "task": self.task.value,
             "version": str(self.version),
@@ -137,7 +137,7 @@ class PromptResultData:
         }
 
     @classmethod
-    def to_cls(cls, data: dict) -> Self:
+    def to_cls(cls, data: dict[str, Any]) -> Self:
         return cls(
             task=PromptTaskEnum(data["task"]),
             version=data["version"],

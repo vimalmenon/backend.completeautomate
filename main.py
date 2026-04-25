@@ -7,7 +7,7 @@ from backend.jobs_scheduler import JobScheduler
 logger = logging.getLogger(__name__)
 
 
-def main():
+def main() -> None:
     # Initialize logging
     setup_logging(log_dir="logs")
 

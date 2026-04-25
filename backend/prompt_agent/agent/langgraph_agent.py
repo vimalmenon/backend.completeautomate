@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Any, TypedDict
+from typing import Any, cast, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
@@ -55,7 +55,9 @@ class LangGraphAgent:
             }
 
         if isinstance(result, dict):
-            next_state = dict(result)
+            next_state: LangGraphAgentState = {
+                **cast(LangGraphAgentState, result),
+            }
         else:
             next_state = {"output": result}
 
@@ -64,7 +66,7 @@ class LangGraphAgent:
         return next_state
 
     def invoke(self, state: LangGraphAgentState) -> LangGraphAgentState:
-        return self.graph.invoke(state)
+        return cast(LangGraphAgentState, self.graph.invoke(state))
 
     def run(self, state: LangGraphAgentState) -> Any:
         raise NotImplementedError("LangGraphAgent.run must be implemented")

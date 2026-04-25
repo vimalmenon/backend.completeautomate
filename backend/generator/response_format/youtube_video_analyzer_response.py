@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic import BaseModel, Field
 
 
@@ -11,12 +9,12 @@ class YouTubeVideoAnalyzerResponse(BaseModel):
     description: str = Field(
         description="A clear video description summarizing the main points, audience value, and context"
     )
-    tags: List[str] = Field(
+    tags: list[str] = Field(
         description="Relevant searchable keywords and phrases for discoverability, based on the video's topic"
     )
 
 
 class YouTubeVideoAnalyzerListResponse(BaseModel):
-    details: List[YouTubeVideoAnalyzerResponse] = Field(
+    details: list[YouTubeVideoAnalyzerResponse] = Field(
         description="A list of analyzed video outputs, each containing an improved title, description, and tags"
     )

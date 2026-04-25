@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter
 
 from backend.manager import DataManager, FileSync
@@ -11,17 +13,17 @@ async def get_data() -> dict[str, str]:
 
 
 @router.post("/data/download_to_local", tags=["data"])
-async def download_to_local():
+async def download_to_local() -> dict[str, str]:
     DataManager().download_to_local()
     return {"status": "ok"}
 
 
 @router.post("/data/upload_to_s3", tags=["data"])
-async def upload_to_s3():
+async def upload_to_s3() -> None:
     pass
 
 
 @router.get("/data/file_synced", tags=["data"])
-async def file_synced() -> dict:
+async def file_synced() -> dict[str, Any]:
     is_synced = FileSync().check()
     return {"synced": is_synced}

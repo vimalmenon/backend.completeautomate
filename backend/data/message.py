@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Self
+from typing import Any, Self
 
 
 @dataclass
@@ -9,7 +9,7 @@ class MessageDBData:
     messages: list[dict] = field(default_factory=list)
     updated_at: datetime = field(default_factory=datetime.now)
 
-    def to_json(self) -> dict:
+    def to_json(self) -> dict[str, Any]:
         return {
             "task_id": self.task_id,
             "messages": self.messages,
@@ -17,7 +17,7 @@ class MessageDBData:
         }
 
     @classmethod
-    def to_cls(cls, data: dict) -> Self:
+    def to_cls(cls, data: dict[str, Any]) -> Self:
         return cls(
             task_id=data.get("task_id", ""),
             messages=data.get("messages", []),

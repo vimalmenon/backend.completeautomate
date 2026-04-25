@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self
+from typing import Any, Self
 
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.exception import AppException
@@ -30,7 +30,7 @@ class S3Data:
         detected_content_type = self.detect_content_type_from_name(self.name)
         self.content_type = detected_content_type
 
-    def to_json(self) -> dict:
+    def to_json(self) -> dict[str, str | None]:
         return {
             "name": self.name,
             "content_type": self.content_type.value,
@@ -53,7 +53,7 @@ class S3Data:
         )
 
     @classmethod
-    def to_cls(cls, data: dict) -> Self:
+    def to_cls(cls, data: dict[str, Any]) -> Self:
         return cls(
             name=data["name"],
             content_type=S3ContentTypeEnum(data["content_type"]),
