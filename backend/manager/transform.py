@@ -6,18 +6,15 @@ from backend.enum import AIModelEnum, PromptTaskEnum
 
 def transform_data() -> bool:
     version_id = uuid4()
-    
+
     version = PromptVersionDBData(
-        prompt="",
-        system_message ="",
-        version=version_id,
-        ai=AIModelEnum.Deepseek
+        prompt="", system_message="", version=version_id, ai=AIModelEnum.Deepseek
     )
     PromptDBData(
         task=PromptTaskEnum.YouTubeShortSpeechGenerationPrompt,
-        description="",        
+        description="",
         versions=[version],
         version=version_id,
-        prompt_data=[]
+        prompt_data=[],
     )
     return False
