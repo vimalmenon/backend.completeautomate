@@ -24,10 +24,9 @@ class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
     def __init__(self):
         super().__init__()
         self.llm = DeepseekAI(model=ModelEnum.DEEPSEEK_REASONER).get_model()
+        self.prompt = self.get_prompt()
 
-    def generate(self, video_short: YouTubeShortDBData):
-
-        self.get_prompt()
+    def generate(self, video_short: YouTubeShortDBData): ...
 
     def improve(self): ...
 
