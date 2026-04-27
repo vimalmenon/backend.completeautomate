@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from langgraph.graph import StateGraph
 
@@ -10,10 +10,12 @@ from backend.prompt_agent.agent.base_agent import BaseAgent
 
 @dataclass
 class GraphState:
-    message: list[dict]
+    video: YouTubeShortDBData
     comment: str
-    iterate: int
-    error: str
+    error: str | None
+    iterate: int = 0
+    agent_message: list[dict] = field(default_factory=list)
+    reflect_message: list[dict] = field(default_factory=list)
 
 
 class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
@@ -35,8 +37,12 @@ class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
 
     def __format_output(self): ...
 
-    def generate_node(self): ...
+    def __create_prompt(self, state: GraphState): ...
 
-    def __generate_state(self) -> GraphState:
+    def generate_node(self):
+        self.__generate_state()
+
+    def __generate_state(self):
         builder = StateGraph(GraphState)
+        builder.add_node("create_prompt", self.__create_prompt)
         return builder
