@@ -16,7 +16,7 @@ class PromptManager:
     def get_prompts(self) -> list[PromptDBData]:
         return PromptDB().get_all_prompts()
 
-    def add_prompt(self, data: PromptUpdateResult) -> PromptDBData:
+    def add_prompt(self, data: PromptDBData) -> PromptDBData:
         task = PromptTaskEnum(data.task)
         existing_prompt = self.get_prompt_by_task(task=task)
         if existing_prompt is not None:
