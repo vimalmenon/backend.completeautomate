@@ -27,6 +27,7 @@ class TestAgentService:
         version = PromptVersionDBData(
             prompt="Create 3 titles for {{ topic }} in {{ language }}.",
             system_message="You are a {{ role }} assistant.",
+            reflect_message="You need to improve on this",
             version=version_id,
             ai=AIModelEnum.Grok,
         )
@@ -60,6 +61,7 @@ class TestAgentService:
             prompt="Create a title about {{ topic }}",
             system_message="You are a content expert",
             version=version_id,
+            reflect_message="You need to improve on this",
             ai=AIModelEnum.Grok,
         )
         mock_prompt_db.return_value.get_prompt_by_task.return_value = PromptDBData(
