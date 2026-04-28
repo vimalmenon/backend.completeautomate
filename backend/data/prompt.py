@@ -12,6 +12,7 @@ class PromptVersionDBData:
     prompt: str
     system_message: str
     version: UUID
+    reflect_message: str
     ai: AIModelEnum
     created_at: datetime = datetime.now()
 
@@ -20,15 +21,18 @@ class PromptVersionDBData:
             "prompt": self.prompt,
             "system_message": self.system_message,
             "version": str(self.version),
+            "reflect_message": self.reflect_message,
             "ai": self.ai.value,
             "created_at": self.created_at.isoformat(),
         }
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
+        # TODO Remove get once done
         return cls(
             prompt=data["prompt"],
             system_message=data["system_message"],
+            reflect_message=data.get("reflect_message"),
             version=UUID(data["version"]),
             ai=AIModelEnum(data["ai"]),
             created_at=datetime.fromisoformat(data["created_at"]),

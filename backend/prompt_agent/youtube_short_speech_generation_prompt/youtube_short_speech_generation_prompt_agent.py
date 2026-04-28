@@ -11,7 +11,7 @@ from backend.prompt_agent.agent.base_agent import BaseAgent
 @dataclass
 class GraphState:
     video: YouTubeShortDBData
-    comment: str
+    comment: str | None
     error: str | None
     iterate: int = 0
     agent_message: list[dict] = field(default_factory=list)
@@ -26,7 +26,13 @@ class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
         self.llm = DeepseekAI(model=ModelEnum.DEEPSEEK_REASONER).get_model()
         self.prompt = self.get_prompt()
 
-    def generate(self, video_short: YouTubeShortDBData): ...
+    def generate(self, video_short: YouTubeShortDBData):
+        graph = self.__generate_state()
+        graph.invoke(
+            GraphState(
+                video=video_short,
+            )
+        )
 
     def improve(self): ...
 
