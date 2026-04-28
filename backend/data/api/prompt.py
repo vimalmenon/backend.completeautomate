@@ -30,6 +30,13 @@ class PromptUpdateRequest(BaseModelWithConfig):
     current_version: PromptVersionUpdateRequest
 
 
+class PromptCreateRequest(BaseModelWithConfig):
+    task: PromptTaskEnum
+    description: str
+    comment: str | None = None
+    current_version: PromptVersionUpdateRequest
+
+
 class PromptUpdateResult(BaseModelWithConfig):
     task: PromptTaskEnum
     description: str

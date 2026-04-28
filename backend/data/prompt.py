@@ -94,6 +94,7 @@ class PromptDBData:
             PromptVersionDBData(
                 prompt=prompt,
                 system_message=system_message,
+                reflect_message="",
                 version=version,
                 ai=ai,
                 created_at=created_at,
