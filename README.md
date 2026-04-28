@@ -44,6 +44,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
     - [ ] support@completeautomate.com
     - [ ] info@completeautomate.com
   - [ ][8] Refactor Prompt
+  - [ ][3] Sort videos by published date
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
