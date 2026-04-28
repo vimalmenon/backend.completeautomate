@@ -34,33 +34,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - AWS persistence with DynamoDB + S3, plus offline mode via Moto mocks
 - Strong developer ergonomics: logging, typed models, cache invalidation, and unit/integration tests
 
-## Project Health
-
-Current internal score: **8.0/10**
-
-### What is working well
-
-- Modular architecture with clear separation across AI, data, database, jobs, integrations, and UI
-- Solid developer workflow with Make targets, pytest markers, linting, and type checking
-- Functional dashboards with active task/video/prompt operations and ongoing UX improvements
-- Strong observability and reliability patterns: manager-layer logging, lazy imports, and cache invalidation
-- Typed codebase with mypy validation and Plotly-powered YouTube analytics visualization
-
-### Improvement areas
-
-- Some runtime configuration is still tightly coupled to environment setup
-- Need stronger end-to-end GUI flow validation for confidence in regressions
-
-### Gradual Improvement Tracker
-
-Use this checklist to track progress toward a **9/10** quality target.
-
-- [ ] Extract shared reusable table utilities/components for `tasks.py`, `video.py`, and `prompt.py`
-- [ ] Add explicit confirmation dialog before task deletion
-- [ ] Add sorting controls in Tasks table (not just static ordering)
-- [ ] Add page-level error states for missing env/config with actionable guidance
-
-
 ## Roadmap
 
 - NEXT
@@ -69,7 +42,7 @@ Use this checklist to track progress toward a **9/10** quality target.
   - [ ][3] Set up email
     - [ ] support@completeautomate.com
     - [ ] info@completeautomate.com
-  - [ ][5] Refactor Prompt
+  - [ ][8] Refactor Prompt
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>

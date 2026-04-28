@@ -32,7 +32,7 @@ class PromptVersionDBData:
         return cls(
             prompt=data["prompt"],
             system_message=data["system_message"],
-            reflect_message=data.get("reflect_message"),
+            reflect_message=data.get("reflect_message", ""),
             version=UUID(data["version"]),
             ai=AIModelEnum(data["ai"]),
             created_at=datetime.fromisoformat(data["created_at"]),
