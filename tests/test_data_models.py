@@ -187,6 +187,7 @@ class TestPromptDBDataCopy:
             system_message="test system message",
             version=version_id,
             ai=AIModelEnum.Grok,
+            reflect_message="test",
         )
         original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
@@ -221,6 +222,7 @@ class TestPromptDBDataCopy:
             system_message="test system message",
             version=version_id,
             ai=AIModelEnum.Deepseek,
+            reflect_message="this is test message",
         )
         original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
