@@ -11,8 +11,8 @@ from backend.prompt_agent.agent.base_agent import BaseAgent
 @dataclass
 class GraphState:
     video: YouTubeShortDBData
-    comment: str | None
-    error: str | None
+    comment: str | None = None
+    error: str | None = None
     iterate: int = 0
     agent_message: list[dict] = field(default_factory=list)
     reflect_message: list[dict] = field(default_factory=list)
