@@ -40,6 +40,19 @@ class PromptVersionDBData:
 
 
 @dataclass
+class PromptResultDBData:
+    response: str
+    score: int | None
+
+    def to_json(self) -> dict:
+        return {"response": self.response, "score": self.response}
+
+    @classmethod
+    def to_cls(cls, data: dict) -> Self:
+        return cls(response=data["response"], score=data.get("score"))
+
+
+@dataclass
 class PromptDBData:
     task: PromptTaskEnum
     description: str
@@ -48,6 +61,7 @@ class PromptDBData:
     comment: str | None = None
     last_updated: datetime = datetime.now()
     prompt_data: list[dict] = field(default_factory=list)
+    response_data: list[PromptResultDBData] = field(default_factory=list)
 
     def __post_init__(self):
         selected_prompts = [

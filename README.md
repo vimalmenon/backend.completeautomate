@@ -37,6 +37,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
+  - [ ][3] Sort videos by published date
   - [ ][1] Set up feature branch 
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
@@ -44,7 +45,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
     - [ ] support@completeautomate.com
     - [ ] info@completeautomate.com
   - [ ][8] Refactor Prompt
-  - [ ][3] Sort videos by published date
 
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
@@ -61,8 +61,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - [ ] Bugs
 - [ ] Fix
   - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
-- [ ] Fix the Image Size for YouTube Thumbnail
-  - [ ] [1] Check in next upload
 - [ ] [8] Streamline AI Generation
   - [ ] Text Generation
   - [ ] Image Generation
@@ -81,7 +79,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
   - [ ] [5] Run Jobs in parallel
   - [ ] [5] Ability to run the agent tasks in parallel
 - [ ] Offline Feature
-  - [ ] [4] Need a database for Mocked API when Offline [4]
+  - [ ] [4] Need a database for Mocked API when Offline
   - [ ] [4] Store the response received from API (in JSON Format)
   - [ ] [4] Mock data from Agents (Positive and Negative)
   - [ ] [4] All data needs to be mocked
