@@ -9,23 +9,52 @@ from backend.api.channel.channel_api import update_video_by_id
 from backend.data import YouTubeVideoDBData
 from backend.data.api import YouTubeVideoUpdateRequest
 from backend.enum import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
-from backend.factory.youtube_video_factory import youtube_video_factory
 from backend.manager.youtube_video_manager import YouTubeVideoManager
 
 
 @pytest.mark.unit
 def test_get_videos_by_channel_sorts_by_published_date_desc() -> None:
-    newest = youtube_video_factory(
+    newest = YouTubeVideoDBData(
+        ref_id="ref-newest",
+        channel_id="channel-1",
+        video_id="video-newest",
         published_at=datetime.now() + timedelta(days=1),
-        channel_id="channel-1",
+        last_updated_at=datetime.now(),
+        title="Newest",
+        description="Newest description",
+        thumbnail="https://example.com/newest.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
     )
-    oldest = youtube_video_factory(
+    oldest = YouTubeVideoDBData(
+        ref_id="ref-oldest",
+        channel_id="channel-1",
+        video_id="video-oldest",
         published_at=datetime.now() - timedelta(days=1),
-        channel_id="channel-1",
+        last_updated_at=datetime.now(),
+        title="Oldest",
+        description="Oldest description",
+        thumbnail="https://example.com/oldest.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
     )
-    middle = youtube_video_factory(
-        published_at=datetime.now(),
+    middle = YouTubeVideoDBData(
+        ref_id="ref-middle",
         channel_id="channel-1",
+        video_id="video-middle",
+        published_at=datetime.now(),
+        last_updated_at=datetime.now(),
+        title="Middle",
+        description="Middle description",
+        thumbnail="https://example.com/middle.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
     )
 
     with patch(
