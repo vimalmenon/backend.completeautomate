@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -9,6 +9,40 @@ from backend.api.channel.channel_api import update_video_by_id
 from backend.data import YouTubeVideoDBData
 from backend.data.api import YouTubeVideoUpdateRequest
 from backend.enum import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
+from backend.factory.youtube_video_factory import youtube_video_factory
+from backend.manager.youtube_video_manager import YouTubeVideoManager
+
+
+@pytest.mark.unit
+def test_get_videos_by_channel_sorts_by_published_date_desc() -> None:
+    newest = youtube_video_factory(
+        published_at=datetime.now() + timedelta(days=1),
+        channel_id="channel-1",
+    )
+    oldest = youtube_video_factory(
+        published_at=datetime.now() - timedelta(days=1),
+        channel_id="channel-1",
+    )
+    middle = youtube_video_factory(
+        published_at=datetime.now(),
+        channel_id="channel-1",
+    )
+
+    with patch(
+        "backend.manager.youtube_video_manager.YouTubeVideoDB"
+    ) as mock_video_db_cls:
+        mock_video_db = mock_video_db_cls.return_value
+        mock_video_db.fetch_videos_by_channel.return_value = [middle, oldest, newest]
+
+        videos = YouTubeVideoManager(ref_id="ref-1").get_videos_by_channel(
+            channel_id="channel-1"
+        )
+
+    assert [video.published_at for video in videos] == [
+        newest.published_at,
+        middle.published_at,
+        oldest.published_at,
+    ]
 
 
 @pytest.mark.unit

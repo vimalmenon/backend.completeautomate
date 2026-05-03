@@ -21,7 +21,8 @@ class YouTubeVideoManager:
 
     def get_videos_by_channel(self, channel_id: str) -> list[YouTubeVideoDBData]:
         channel_value = f"{PlatformEnum.YouTubeVideo.value}#{channel_id}"
-        return self.video_db.fetch_videos_by_channel(channel_value)
+        videos = self.video_db.fetch_videos_by_channel(channel_value)
+        return sorted(videos, key=lambda video: video.published_at, reverse=True)
 
     def get_all_videos(self) -> list[YouTubeVideoDBData]:
         return self.video_db.get_all_videos_from_db()
