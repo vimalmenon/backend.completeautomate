@@ -37,7 +37,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
-  - [ ][3] Sort videos by published date
+  - [x][3] Sort videos by published date
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
   - [ ][3] Set up email
