@@ -3,6 +3,7 @@ from backend.enum.ai import (
     AICreativityLevelEnum,
     AIImageModelEnum,
     AIModelEnum,
+    AIVideoModelEnum,
     AISpeechModelEnum,
 )
 from backend.enum.db_keys import DbKeysEnum
@@ -27,6 +28,7 @@ __all__ = [
     "JobsStatusEnum",
     "JobTypeEnum",
     "AIImageModelEnum",
+    "AIVideoModelEnum",
     "YouTubeVideoStatusEnum",
     "ActionEnum",
     "PromptStatusEnum",

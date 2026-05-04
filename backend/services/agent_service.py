@@ -13,6 +13,8 @@ from backend.database import PromptDB
 from backend.enum import AIImageModelEnum, AIModelEnum, PromptTaskEnum
 from backend.exception import AppException
 
+UNSUPPORTED_AI_MODEL_ERROR = "Unsupported AI model"
+
 
 class AgentImageService:
     def __init__(self, prompt: str, image_ai: AIImageModelEnum = AIImageModelEnum.Qwen):
@@ -29,7 +31,7 @@ class AgentImageService:
         if self.image_ai == AIImageModelEnum.OpenRouter:
             return OpenRouterImageGeneration()
         else:
-            raise AppException("Unsupported AI model")
+            raise AppException(UNSUPPORTED_AI_MODEL_ERROR)
 
     def get_prompt(self) -> str:
         return self.prompt
@@ -65,7 +67,7 @@ class AgentService:
         elif self.prompt_data.ai == AIModelEnum.Qwen:
             return QwenAI().get_model()
         else:
-            raise AppException("Unsupported AI model")
+            raise AppException(UNSUPPORTED_AI_MODEL_ERROR)
 
     def get_system_message(self) -> str:
         if not self.prompt_data:

@@ -20,5 +20,9 @@ class AIImageModelEnum(str, Enum):
     OpenRouter = "OpenRouter"
 
 
+class AIVideoModelEnum(str, Enum):
+    Manus = "Manus"
+
+
 class AISpeechModelEnum(str, Enum):
     Qwen = "Qwen"

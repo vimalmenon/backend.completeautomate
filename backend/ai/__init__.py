@@ -11,6 +11,7 @@ __all__ = [
     "GrokImageGeneration",
     "QwenImageGeneration",
     "OpenRouterImageGeneration",
+    "ManusVideoGenerator",
     "QwenSpeechGenerator",
 ]
 
@@ -31,6 +32,10 @@ _EXPORTS = {
     "OpenRouterImageGeneration": (
         "backend.ai.image_generation.open_router_image_generation",
         "OpenRouterImageGeneration",
+    ),
+    "ManusVideoGenerator": (
+        "backend.ai.video_generation.manus_video_generator",
+        "ManusVideoGenerator",
     ),
     "QwenSpeechGenerator": (
         "backend.ai.speech_generation.qwen_speech_generator",
