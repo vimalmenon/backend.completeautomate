@@ -38,7 +38,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 
 - NEXT
   - [x][3] Sort videos by published date
-  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete"]
+  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete"] and created_date
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
   - [ ][3] Set up email
