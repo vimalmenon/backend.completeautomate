@@ -3,8 +3,8 @@ from backend.enum.ai import (
     AICreativityLevelEnum,
     AIImageModelEnum,
     AIModelEnum,
-    AIVideoModelEnum,
     AISpeechModelEnum,
+    AIVideoModelEnum,
 )
 from backend.enum.db_keys import DbKeysEnum
 from backend.enum.image import ImageTypeEnum
