@@ -37,12 +37,11 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
-  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete"] and created_date
+  - [ ][3] Set up email
+    - [ ] hello@completeautomate.com
+  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
-  - [ ][3] Set up email
-    - [ ] support@completeautomate.com
-    - [ ] info@completeautomate.com
   - [ ][8] Refactor Prompt
 
 <details>
