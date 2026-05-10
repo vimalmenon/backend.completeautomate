@@ -34,7 +34,8 @@ class YouTubeShortSpeechGenerationPromptAgent(BaseAgent):
             )
         )
 
-    def improve(self): ...
+    def improve(self):
+        print("this is improvement")
 
     def __generate(self): ...
 
