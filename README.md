@@ -39,7 +39,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 - NEXT
   - [x][3] Set up email
     - [x] hello@completeautomate.com
-  - [ ][3] Send Email via Script
+  - [x][3] Send Email via Script
   - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)
