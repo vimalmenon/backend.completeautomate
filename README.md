@@ -37,6 +37,7 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
+  - [x][2] Fix the error while running the job
   - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][6] Set Up LangGraph
   - [ ][2] Set up Text To Speech (TTS)

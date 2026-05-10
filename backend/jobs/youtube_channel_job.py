@@ -62,4 +62,8 @@ class YouTubeChannelJob(BaseJob):
                 status.value,
                 self.job.failed_count,
             )
-            return JobDataResponse(status=status, failed_count=self.job.failed_count)
+            return JobDataResponse(
+                status=status,
+                failed_count=self.job.failed_count,
+                error_msg=f"YouTube channel job {self.job.id} failed; retry_status={status.value} failed_count={self.job.failed_count}",
+            )
