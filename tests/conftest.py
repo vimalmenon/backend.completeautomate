@@ -28,6 +28,8 @@ def pytest_configure(config: pytest.Config) -> None:
     os.environ["AWS_S3_BUCKET"] = "test-bucket"
     os.environ["OFFLINE"] = "False"
     os.environ["QWEN_API_KEY"] = "test-qwen-key"
+    os.environ["SMTP_USERNAME"] = "test-smtp-username"
+    os.environ["SMTP_PASSWORD"] = "test-smtp-password"
 
     # Application Configuration
     os.environ["COMPANY_NAME"] = "Complete Automate"

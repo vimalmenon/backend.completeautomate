@@ -23,6 +23,8 @@ class Env:
     AWS_SECRET_MANAGER: str = os.environ["AWS_SECRET_MANAGER"]
     AWS_TABLE: str = os.environ["AWS_TABLE"]
     AWS_S3_BUCKET: str = os.environ["AWS_S3_BUCKET"]
+    SMTP_USERNAME: str = os.environ["SMTP_USERNAME"]
+    SMTP_PASSWORD: SecretStr = SecretStr(os.environ["SMTP_PASSWORD"])
     AWS_OUTPUT = "output"
     GROK_API_KEY: SecretStr = SecretStr(os.environ["GROK_API_KEY"])
     PPLX_API_KEY: SecretStr = SecretStr(os.environ["PPLX_API_KEY"])

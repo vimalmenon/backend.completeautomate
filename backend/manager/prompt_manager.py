@@ -16,7 +16,7 @@ class PromptManager:
     def get_prompts(self) -> list[PromptDBData]:
         return PromptDB().get_all_prompts()
 
-    def add_prompt(self, data: PromptDBData) -> PromptDBData:
+    def add_prompt(self, data: PromptDBData | PromptUpdateResult) -> PromptDBData:
         task = PromptTaskEnum(data.task)
         existing_prompt = self.get_prompt_by_task(task=task)
         if existing_prompt is not None:
@@ -24,17 +24,20 @@ class PromptManager:
 
         version_id = data.version or uuid4()
         created_at = datetime.now()
+        prompt_value = data.prompt
+        system_message_value = data.system_message
+        ai_value = AIModelEnum(data.ai)
         prompt = PromptDBData(
             task=task,
             description=data.description,
             version=version_id,
             versions=[
                 PromptVersionDBData(
-                    prompt=data.prompt,
-                    system_message=data.system_message,
+                    prompt=prompt_value,
+                    system_message=system_message_value,
                     reflect_message="",
                     version=version_id,
-                    ai=AIModelEnum(data.ai),
+                    ai=ai_value,
                     created_at=created_at,
                 )
             ],
