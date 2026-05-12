@@ -37,7 +37,6 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
-  - [x][2] Set Up LangGraph
   - [ ][4] Set Up LangGraph for YouTubeShorts Videos
   - [ ][4] Set up State in LangGraph 
   - [ ][2] Set up Text To Speech (TTS)
