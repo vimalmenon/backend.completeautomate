@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -9,6 +9,69 @@ from backend.api.channel.channel_api import update_video_by_id
 from backend.data import YouTubeVideoDBData
 from backend.data.api import YouTubeVideoUpdateRequest
 from backend.enum import YouTubeVideoStatusEnum, YouTubeVideoTaskEnum
+from backend.manager.youtube_video_manager import YouTubeVideoManager
+
+
+@pytest.mark.unit
+def test_get_videos_by_channel_sorts_by_published_date_desc() -> None:
+    newest = YouTubeVideoDBData(
+        ref_id="ref-newest",
+        channel_id="channel-1",
+        video_id="video-newest",
+        published_at=datetime.now() + timedelta(days=1),
+        last_updated_at=datetime.now(),
+        title="Newest",
+        description="Newest description",
+        thumbnail="https://example.com/newest.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
+    )
+    oldest = YouTubeVideoDBData(
+        ref_id="ref-oldest",
+        channel_id="channel-1",
+        video_id="video-oldest",
+        published_at=datetime.now() - timedelta(days=1),
+        last_updated_at=datetime.now(),
+        title="Oldest",
+        description="Oldest description",
+        thumbnail="https://example.com/oldest.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
+    )
+    middle = YouTubeVideoDBData(
+        ref_id="ref-middle",
+        channel_id="channel-1",
+        video_id="video-middle",
+        published_at=datetime.now(),
+        last_updated_at=datetime.now(),
+        title="Middle",
+        description="Middle description",
+        thumbnail="https://example.com/middle.jpg",
+        tags=[],
+        task_status=YouTubeVideoTaskEnum.YouTubeVideoStart,
+        language="en",
+        stats=[],
+    )
+
+    with patch(
+        "backend.manager.youtube_video_manager.YouTubeVideoDB"
+    ) as mock_video_db_cls:
+        mock_video_db = mock_video_db_cls.return_value
+        mock_video_db.fetch_videos_by_channel.return_value = [middle, oldest, newest]
+
+        videos = YouTubeVideoManager(ref_id="ref-1").get_videos_by_channel(
+            channel_id="channel-1"
+        )
+
+    assert [video.published_at for video in videos] == [
+        newest.published_at,
+        middle.published_at,
+        oldest.published_at,
+    ]
 
 
 @pytest.mark.unit

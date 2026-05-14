@@ -1,5 +1,4 @@
 import base64
-import os
 from pathlib import Path
 from typing import Any, cast
 from urllib.request import Request, urlopen
@@ -9,15 +8,10 @@ from resemble import Resemble
 from backend.config.env import env
 from backend.exception import AppException
 
-RESEMBLE_PROJECT_ID_ENV_VARS = (
-    "RESEMBLE_PROJECT_UUID",
-    "RESEMBLE_PROJECT_ID",
-)
-RESEMBLE_VOICE_ID_ENV_VARS = (
-    "RESEMBLE_VOICE_UUID",
-    "RESEMBLE_VOICE_ID",
-    "RESEMBLE_TTS_ID",
-)
+RESEMBLE_PROJECT_ID_ENV_VARS = "34a0c33f"
+
+RESEMBLE_VOICE_ID_ENV_VARS = "4e972f71"
+
 DEFAULT_OUTPUT_FORMAT = "wav"
 DEFAULT_SAMPLE_RATE = 48000
 DEFAULT_PRECISION = "PCM_16"
@@ -28,18 +22,14 @@ class ResembleSpeechGenerator:
 
     def __init__(
         self,
-        project_uuid: str | None = None,
-        voice_uuid: str | None = None,
         output_format: str = DEFAULT_OUTPUT_FORMAT,
         sample_rate: int = DEFAULT_SAMPLE_RATE,
         precision: str | None = DEFAULT_PRECISION,
         title: str | None = None,
     ) -> None:
         self.api_key = str(env.RESEMBLE_API_KEY.get_secret_value())
-        self.project_uuid = project_uuid or self._get_env_value(
-            RESEMBLE_PROJECT_ID_ENV_VARS
-        )
-        self.voice_uuid = voice_uuid or self._get_env_value(RESEMBLE_VOICE_ID_ENV_VARS)
+        self.project_uuid = RESEMBLE_PROJECT_ID_ENV_VARS
+        self.voice_uuid = RESEMBLE_VOICE_ID_ENV_VARS
         self.output_format = output_format
         self.sample_rate = sample_rate
         self.precision = precision
@@ -121,11 +111,4 @@ class ResembleSpeechGenerator:
             if isinstance(value, str) and value:
                 return value
 
-        return None
-
-    def _get_env_value(self, names: tuple[str, ...]) -> str | None:
-        for name in names:
-            value = os.environ.get(name)
-            if value:
-                return value
         return None

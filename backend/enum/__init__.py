@@ -4,6 +4,7 @@ from backend.enum.ai import (
     AIImageModelEnum,
     AIModelEnum,
     AISpeechModelEnum,
+    AIVideoModelEnum,
 )
 from backend.enum.db_keys import DbKeysEnum
 from backend.enum.image import ImageTypeEnum
@@ -27,6 +28,7 @@ __all__ = [
     "JobsStatusEnum",
     "JobTypeEnum",
     "AIImageModelEnum",
+    "AIVideoModelEnum",
     "YouTubeVideoStatusEnum",
     "ActionEnum",
     "PromptStatusEnum",

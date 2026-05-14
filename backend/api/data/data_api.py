@@ -19,9 +19,9 @@ async def download_to_local() -> dict[str, str]:
 
 
 @router.post("/data/upload_to_s3", tags=["data"])
-async def upload_to_s3() -> None:
+async def upload_to_s3() -> dict[str, str]:
     # TODO Need to implement this
-    pass
+    return {"status": "ok"}
 
 
 @router.get("/data/file_synced", tags=["data"])

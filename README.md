@@ -37,13 +37,10 @@ Python backend for multi-agent automation workflows, with task scheduling, YouTu
 ## Roadmap
 
 - NEXT
-  - [ ][3] Sort videos by published date
-  - [ ][1] Set up feature branch 
-  - [ ][6] Set Up LangGraph
+  - [ ][4] Set Up LangGraph for YouTubeShorts Videos
+  - [ ][4] Set up State in LangGraph 
   - [ ][2] Set up Text To Speech (TTS)
-  - [ ][3] Set up email
-    - [ ] support@completeautomate.com
-    - [ ] info@completeautomate.com
+  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][8] Refactor Prompt
 
 <details>
@@ -257,6 +254,25 @@ poetry install
 
 ```sh
 poetry run app
+```
+
+## Manus Video Scaffold
+
+The backend includes a scaffolded Manus video provider for avatar or animation workflows.
+Current status:
+
+- `ManusVideoGenerator` defines the backend contract for video generation.
+- The transport layer is still a placeholder adapter until Manus SDK or HTTP details are wired.
+- The example script writes a scaffold artifact so the flow can be exercised end to end.
+
+Expected environment variables:
+
+- `MANUS_API_KEY`
+
+Run the example:
+
+```sh
+poetry run python example/manus_video_example.py
 ```
 
 Run a single task by ID (one-time execution):
