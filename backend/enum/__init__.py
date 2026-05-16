@@ -8,7 +8,7 @@ from backend.enum.ai import (
 )
 from backend.enum.db_keys import DbKeysEnum
 from backend.enum.image import ImageTypeEnum
-from backend.enum.job import JobsStatusEnum, JobTypeEnum
+from backend.enum.job import JobsStatusEnum, JobTypeEnum, STATUS_PRIORITY
 from backend.enum.platform import PlatformEnum
 from backend.enum.prompt import PromptStatusEnum, PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
@@ -33,4 +33,5 @@ __all__ = [
     "ActionEnum",
     "PromptStatusEnum",
     "AISpeechModelEnum",
+    "STATUS_PRIORITY",
 ]
