@@ -11,19 +11,6 @@ class JobTypeEnum(str, Enum):
     YouTubeShortGenerator = "YouTubeShortGenerator"
 
 
-# JOB DESCRIPTIONS :
-# YouTubeChannel = Check for channel and create in Database and also updated the stats for the channel
-
-# YouTubeChannelVideoChecker = Check for new videos in the channel and create a Job for each new video
-
-# YouTubeVideo = Check for video and update in Database
-# YouTubeVideoStatsUpdater = Check the stats for the video and update in Database
-# TextToSpeech = Convert text to speech
-
-
-# YouTubeChannelVideoChecker will create YouTubeVideo & YouTubeVideoStatsUpdater
-
-
 class JobsStatusEnum(str, Enum):
     NEW = "NEW"
     IN_PROGRESS = "IN_PROGRESS"
@@ -32,3 +19,20 @@ class JobsStatusEnum(str, Enum):
     REVIEW = "REVIEW"
     FAILED = "FAILED"
     CLEAN_UP = "CLEAN_UP"
+
+
+# JOB DESCRIPTIONS :
+# YouTubeChannel = Check for channel and create in Database and also updated the stats for the channel
+# YouTubeChannelVideoChecker = Check for new videos in the channel and create a Job for each new video
+# YouTubeVideo = Check for video and update in Database
+# YouTubeVideoStatsUpdater = Check the stats for the video and update in Database
+# TextToSpeech = Convert text to speech
+# YouTubeChannelVideoChecker will create YouTubeVideo & YouTubeVideoStatsUpdater
+
+
+STATUS_PRIORITY = {
+    JobsStatusEnum.IN_PROGRESS: 1,
+    JobsStatusEnum.REVIEW: 2,
+    JobsStatusEnum.COMPLETE: 3,
+    JobsStatusEnum.FAILED: 4,
+}

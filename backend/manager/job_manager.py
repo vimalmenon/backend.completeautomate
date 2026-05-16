@@ -6,7 +6,7 @@ from backend.data import (
     JobData,
 )
 from backend.database import JobDB
-from backend.enum import JobsStatusEnum, JobTypeEnum
+from backend.enum import JobsStatusEnum, JobTypeEnum, STATUS_PRIORITY
 
 
 class JobManager:
@@ -24,28 +24,30 @@ class JobManager:
         return JobDB().get_job_by_id(job_id=str(job_id))
 
     def get_all_jobs(self) -> list[JobData]:
-        return JobDB().get_all_jobs()
+        return self._sort_jobs(JobDB().get_all_jobs())
 
     def get_all_active_jobs(self) -> list[JobData]:
-        return JobDB().get_all_active_jobs()
+        return self._sort_jobs(JobDB().get_all_active_jobs())
 
     def get_all_offline_jobs(self) -> list[JobData]:
-        return JobDB().get_jobs_by_statuses(
-            statuses=[
-                JobsStatusEnum.IN_PROGRESS,
-                JobsStatusEnum.FAILED,
-                JobsStatusEnum.REVIEW,
-            ]
+        return self._sort_jobs(
+            JobDB().get_jobs_by_statuses(
+                statuses=[
+                    JobsStatusEnum.IN_PROGRESS,
+                    JobsStatusEnum.FAILED,
+                    JobsStatusEnum.REVIEW,
+                ]
+            )
         )
 
     def get_all_completed_job(self) -> list[JobData]:
-        return JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE)
+        return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE))
 
     def get_in_review_job(self) -> list[JobData]:
-        return JobDB().get_jobs_by_status(status=JobsStatusEnum.REVIEW)
+        return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.REVIEW))
 
     def get_all_cleanup_job(self) -> list[JobData]:
-        return JobDB().get_jobs_by_status(status=JobsStatusEnum.CLEAN_UP)
+        return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.CLEAN_UP))
 
     def create_job(
         self,
@@ -109,3 +111,13 @@ class JobManager:
 
     def update_job_values(self, job_id: UUID, job_dict: dict):
         JobDB().update_data(job_id, values=job_dict)
+
+    @staticmethod
+    def _sort_jobs(jobs: list[JobData]) -> list[JobData]:
+        return sorted(
+            jobs,
+            key=lambda job: (
+                STATUS_PRIORITY.get(job.status, float("inf")),
+                job.created_at,
+            ),
+        )
