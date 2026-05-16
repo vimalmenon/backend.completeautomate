@@ -41,13 +41,15 @@ class JobManager:
         )
 
     def get_all_completed_job(self) -> list[JobData]:
-        return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE))
+        completed_jobs = JobDB().get_jobs_by_status(status=JobsStatusEnum.COMPLETE)
+        return self._sort_jobs(completed_jobs)
 
     def get_in_review_job(self) -> list[JobData]:
         return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.REVIEW))
 
     def get_all_cleanup_job(self) -> list[JobData]:
-        return self._sort_jobs(JobDB().get_jobs_by_status(status=JobsStatusEnum.CLEAN_UP))
+        cleanup_jobs = JobDB().get_jobs_by_status(status=JobsStatusEnum.CLEAN_UP)
+        return self._sort_jobs(cleanup_jobs)
 
     def create_job(
         self,
