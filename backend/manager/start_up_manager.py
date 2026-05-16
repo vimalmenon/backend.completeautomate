@@ -47,6 +47,6 @@ class StartUpManager:
 
     def __show_active_jobs(self):
         jobs = self.job_manager.get_all_active_jobs()
-        data = [[job.id, job.type, job.status] for job in jobs]
-        headers = ["ID", "Type", "Status"]
+        data = [[job.id, job.type, job.status, job.created_at] for job in jobs]
+        headers = ["ID", "Type", "Status", "Created At"]
         print(tabulate(data, headers=headers, tablefmt="grid"))

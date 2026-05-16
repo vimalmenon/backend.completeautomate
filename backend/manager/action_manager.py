@@ -29,6 +29,6 @@ class ActionManager:
 
     def show_all_jobs(self):
         jobs = JobManager().get_all_jobs()
-        data = [[job.id, job.type, job.status] for job in jobs]
-        headers = ["ID", "Type", "Status"]
+        data = [[job.id, job.type, job.status, job.created_at] for job in jobs]
+        headers = ["ID", "Type", "Status", "Created At"]
         print(tabulate(data, headers=headers, tablefmt="grid"))

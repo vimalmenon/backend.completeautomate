@@ -58,7 +58,11 @@ class JobDB:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
             filter_expression=Attr("status").is_in(
-                [JobsStatusEnum.IN_PROGRESS.value, JobsStatusEnum.FAILED.value]
+                [
+                    JobsStatusEnum.IN_PROGRESS.value,
+                    JobsStatusEnum.FAILED.value,
+                    JobsStatusEnum.REVIEW.value,
+                ]
             ),
         )
         return [JobData.to_cls(item) for item in items]
