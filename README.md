@@ -24,7 +24,7 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [ ][4] Set Up LangGraph for YouTubeShorts Videos
   - [ ][4] Set up State in LangGraph
   - [ ][2] Set up Text To Speech (TTS)
-  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
+  - [x][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][8] Refactor Prompt
 
 <details>
@@ -65,16 +65,48 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [ ] [4] Mock data from Agents (Positive and Negative)
   - [ ] [4] All data needs to be mocked
 - [ ] [20] Improve on prompt
-  - [ ] [4] Create prompt improver result
-  - [ ] [4] Move all prompts to Prompt Agent
-  - [ ] [4] Need to pass data To `Prompt Improver` to test and evaluate
-  - [ ] [5] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
-  - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
-    - [ ] Cannot use one class / DB for both prompt and improver
-    - [ ] Create another table for `PromptResult`
-  - [ ] Should be able to test the prompts generated
-  - [ ] Add one shot / few shot prompt for prompts
-  - [ ] Run PromptImprover in parallel
+
+  **Phase 1: Foundation — PromptResult Table**
+  - [ ] [1] Create DynamoDB table for prompt results (`PromptResult`)
+  - [ ] [1] Wire `PromptResultDBData` model to `PromptResultDatabase` CRUD
+  - [ ] [1] Add API endpoints for prompt results (list, get, update)
+  - [ ] [2] Add prompt result display to the dashboard
+
+  **Phase 2: Prompt Agent Migration**
+  - [ ] [2] Audit all generators — find hardcoded prompts still outside the Prompt Agent system
+  - [ ] [2] Move `YouTubeVideoSummarization` prompt fully into Prompt Agent
+  - [ ] [2] Move `YouTubeVideoMetadata` prompt fully into Prompt Agent
+  - [ ] [2] Move `YouTubeVideoCommunityPost` prompt fully into Prompt Agent
+  - [ ] [2] Move `YouTubeThumbnailImageGenerationPrompt` prompt fully into Prompt Agent
+  - [ ] [3] Move `YouTubeShortSpeechGenerationPrompt` prompt fully into Prompt Agent
+  - [ ] [3] Move `YouTubeVideoTwitterPost` prompt fully into Prompt Agent
+  - [ ] [3] Remove fallback/legacy prompt paths from generators
+
+  **Phase 3: PromptImprover Loop**
+  - [ ] [2] Build PromptImprover pipeline in `prompt_reviewer.py`:
+    - Load all prompts from DB
+    - For each prompt, run AI evaluation against `prompt_data`
+    - Score the prompt quality (relevance, clarity, structure)
+    - Generate improved version with reflection
+    - Save both result and new version
+  - [ ] [3] Pass real `prompt_data` to PromptImprover (minimum 2 data sets per prompt)
+  - [ ] [3] Store evaluation results to `PromptResult` table
+  - [ ] [3] Add prompt version comparison view in dashboard
+
+  **Phase 4: Few-Shot & Testing**
+  - [ ] [3] Add `examples` field to `PromptVersionDBData` model
+  - [ ] [4] Build few-shot example management (add/remove/list)
+  - [ ] [4] Add few-shot injection into AgentService template rendering
+  - [ ] [4] Create prompt generation tests
+    - [ ] Render each prompt template with mock data
+    - [ ] Validate output schema matches expected response format
+    - [ ] Test with edge cases (empty transcript, missing fields)
+  - [ ] [4] Build prompt version rollback mechanism
+
+  **Phase 5: Parallel Execution**
+  - [ ] [4] Run PromptImprover evaluation in parallel across all prompts
+  - [ ] [5] Run PromptImprover for each prompt_data entry in parallel
+  - [ ] [5] Add progress tracking for parallel runs
 - [ ] Send Notification
   - [ ] [6] Send Signal
   - [ ] [6] Send Email
