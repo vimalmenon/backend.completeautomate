@@ -18,6 +18,113 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
 
 ---
 
+## Roadmap
+
+- NEXT
+  - [ ][4] Set Up LangGraph for YouTubeShorts Videos
+  - [ ][4] Set up State in LangGraph
+  - [ ][2] Set up Text To Speech (TTS)
+  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
+  - [ ][8] Refactor Prompt
+
+<details>
+<summary><strong>TODO Items</strong> (click to expand)</summary>
+
+- [ ] API
+  - [ ] Auth
+    - [ ] [3] Set up `Basic Auth`
+    - [ ] [6] Set up AWS Cognito
+- [ ] Text to Speech
+  - [ ] [3] Create a AI services for text to Speech
+  - [ ] [1] Check the voice generated extension (mp3 / mov)
+  - [ ] [4] Add API for Resemble AI for TTS
+  - [ ] [3] Upload to S3
+- [ ] Bugs
+- [ ] Fix
+  - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
+- [ ] [8] Streamline AI Generation
+  - [ ] Text Generation
+  - [ ] Image Generation
+  - [ ] Speech Generation
+- [ ] Fix / Improve YouTube
+  - [ ] [5] Add Twitter Post Suggestion
+  - [ ] [1] Rename `YouTubeStatsUpdaterTaskData` to better name
+  - [ ] [3] `user_message` added to `YouTubeVideo`
+    - [ ] [3] Add `user_message` on all the AI Request expect thumbnail
+    - [ ] [2] Add `user_message` to required prompts
+    - [ ] [5] Metadata suggestion to be provided with `user_message`
+    - [ ] [4] Summarize to have essence `user_message`
+  - [ ] Playlist
+    - [ ] [4] Get all videos in playlist
+- [ ] Improve Jobs
+  - [ ] [5] Run Jobs in parallel
+  - [ ] [5] Ability to run the agent tasks in parallel
+- [ ] Offline Feature
+  - [ ] [4] Need a database for Mocked API when Offline
+  - [ ] [4] Store the response received from API (in JSON Format)
+  - [ ] [4] Mock data from Agents (Positive and Negative)
+  - [ ] [4] All data needs to be mocked
+- [ ] [20] Improve on prompt
+  - [ ] [4] Create prompt improver result
+  - [ ] [4] Move all prompts to Prompt Agent
+  - [ ] [4] Need to pass data To `Prompt Improver` to test and evaluate
+  - [ ] [5] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
+  - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
+    - [ ] Cannot use one class / DB for both prompt and improver
+    - [ ] Create another table for `PromptResult`
+  - [ ] Should be able to test the prompts generated
+  - [ ] Add one shot / few shot prompt for prompts
+  - [ ] Run PromptImprover in parallel
+- [ ] Send Notification
+  - [ ] [6] Send Signal
+  - [ ] [6] Send Email
+  - [ ] [6] Send WhatsApp message
+- [ ] Loggers
+  - [ ] Send the logs to some common place (AWS Logger)
+  - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
+- [ ] Start multiple tasks in parallel
+- [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
+  - [ ] YouTube topic suggester
+  - [ ] Use Google trends
+  - [ ] API to search the `Trends`
+  - [ ] Find next week topic
+- [ ] Create a pointer for YouTube Video
+  - [ ] Generate the required images for presenting
+  - [ ] Create a pointers required
+  - [ ] Pointer for video to create
+- [ ] [8] Twitter Integrate
+- [ ] Test Coverage
+  - [ ] Mock Integration with YouTube API
+  - [ ] Test all the flows from Generator to Updater, Analyze
+  - [ ] Test Data for DB integration
+- [ ] Email
+  - [ ] [3] Set up Email with CompleteAutomate (support@completeautomate.com)
+
+**Ideas / Low Priority:**
+
+- Local text-to-speech
+- Dockerfile + DockerHub CD
+- App / API Integration
+  - Instagram
+  - Twitter
+  - Reddit
+  - TikTok
+  - LinkedIn
+  - Email
+  - Signal
+  - WhatsApp
+- YouTube comments analysis
+- Remove teams as it looks of no use
+- Create Videos
+- Scrape websites for contacts and potential client
+- Tailor made email with video for potential client
+- Adopt GIT branching strategies
+- Set Up N8N
+- Make a Webpage based on the post
+</details>
+
+---
+
 ## Architecture
 
 ```
@@ -672,113 +779,6 @@ Some operations need OAuth. The app looks for:
 - `backend/output/pickle/token.pickle` — Cached OAuth token
 
 These are synced from S3 on startup. If no token exists, the app launches the OAuth flow on the first authenticated YouTube request.
-
----
-
-## Roadmap
-
-- NEXT
-  - [ ][4] Set Up LangGraph for YouTubeShorts Videos
-  - [ ][4] Set up State in LangGraph
-  - [ ][2] Set up Text To Speech (TTS)
-  - [ ][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
-  - [ ][8] Refactor Prompt
-
-<details>
-<summary><strong>TODO Items</strong> (click to expand)</summary>
-
-- [ ] API
-  - [ ] Auth
-    - [ ] [3] Set up `Basic Auth`
-    - [ ] [6] Set up AWS Cognito
-- [ ] Text to Speech
-  - [ ] [3] Create a AI services for text to Speech
-  - [ ] [1] Check the voice generated extension (mp3 / mov)
-  - [ ] [4] Add API for Resemble AI for TTS
-  - [ ] [3] Upload to S3
-- [ ] Bugs
-- [ ] Fix
-  - [ ] [3] YouTube Video and Channel Stats data more than 5 months should be changed to months
-- [ ] [8] Streamline AI Generation
-  - [ ] Text Generation
-  - [ ] Image Generation
-  - [ ] Speech Generation
-- [ ] Fix / Improve YouTube
-  - [ ] [5] Add Twitter Post Suggestion
-  - [ ] [1] Rename `YouTubeStatsUpdaterTaskData` to better name
-  - [ ] [3] `user_message` added to `YouTubeVideo`
-    - [ ] [3] Add `user_message` on all the AI Request expect thumbnail
-    - [ ] [2] Add `user_message` to required prompts
-    - [ ] [5] Metadata suggestion to be provided with `user_message`
-    - [ ] [4] Summarize to have essence `user_message`
-  - [ ] Playlist
-    - [ ] [4] Get all videos in playlist
-- [ ] Improve Jobs
-  - [ ] [5] Run Jobs in parallel
-  - [ ] [5] Ability to run the agent tasks in parallel
-- [ ] Offline Feature
-  - [ ] [4] Need a database for Mocked API when Offline
-  - [ ] [4] Store the response received from API (in JSON Format)
-  - [ ] [4] Mock data from Agents (Positive and Negative)
-  - [ ] [4] All data needs to be mocked
-- [ ] [20] Improve on prompt
-  - [ ] [4] Create prompt improver result
-  - [ ] [4] Move all prompts to Prompt Agent
-  - [ ] [4] Need to pass data To `Prompt Improver` to test and evaluate
-  - [ ] [5] Pass real data to `prompt_data` to PromptImprover (minimum 2 data to be given)
-  - [ ] Can We use one cls for PromptImprover and Prompt? (Not possible)
-    - [ ] Cannot use one class / DB for both prompt and improver
-    - [ ] Create another table for `PromptResult`
-  - [ ] Should be able to test the prompts generated
-  - [ ] Add one shot / few shot prompt for prompts
-  - [ ] Run PromptImprover in parallel
-- [ ] Send Notification
-  - [ ] [6] Send Signal
-  - [ ] [6] Send Email
-  - [ ] [6] Send WhatsApp message
-- [ ] Loggers
-  - [ ] Send the logs to some common place (AWS Logger)
-  - [ ] Improve the logger (Show proper details) - Added to managers (platform, startup, task)
-- [ ] Start multiple tasks in parallel
-- [ ] Find trending topic in a niche (YouTube, Google, other Social Media)
-  - [ ] YouTube topic suggester
-  - [ ] Use Google trends
-  - [ ] API to search the `Trends`
-  - [ ] Find next week topic
-- [ ] Create a pointer for YouTube Video
-  - [ ] Generate the required images for presenting
-  - [ ] Create a pointers required
-  - [ ] Pointer for video to create
-- [ ] [8] Twitter Integrate
-- [ ] Test Coverage
-  - [ ] Mock Integration with YouTube API
-  - [ ] Test all the flows from Generator to Updater, Analyze
-  - [ ] Test Data for DB integration
-- [ ] Email
-  - [ ] [3] Set up Email with CompleteAutomate (support@completeautomate.com)
-
-**Ideas / Low Priority:**
-
-- Local text-to-speech
-- Dockerfile + DockerHub CD
-- App / API Integration
-  - Instagram
-  - Twitter
-  - Reddit
-  - TikTok
-  - LinkedIn
-  - Email
-  - Signal
-  - WhatsApp
-- YouTube comments analysis
-- Remove teams as it looks of no use
-- Create Videos
-- Scrape websites for contacts and potential client
-- Tailor made email with video for potential client
-- Adopt GIT branching strategies
-- Set Up N8N
-- Make a Webpage based on the post
-</details>
 
 ---
 
