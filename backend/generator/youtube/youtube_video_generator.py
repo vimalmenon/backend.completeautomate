@@ -112,7 +112,9 @@ class YouTubeVideoGenerator(BaseGenerator):
 
     def __create_video_db(self) -> tuple[JobsStatusEnum, dict]:
         if self.video_from_db:
-            raise AppException("Video already exists in DB")
+            logger.warning("Video %s already exists in DB — skipping", self.video_id)
+            self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoComplete
+            return JobsStatusEnum.COMPLETE, self.task_data.to_json()
 
         logger.info("Fetching YouTube video details for video %s", self.video_id)
         youtube_response = self.youtube_api.fetch_video_details(video_id=self.video_id)
