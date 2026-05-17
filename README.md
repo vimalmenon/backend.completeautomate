@@ -28,6 +28,34 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [x][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][8] Refactor Prompt
 
+---
+
+## Suggested Next Steps
+
+Priority-ordered suggestions for improving the project.
+
+### 🥇 Quick Wins (< 1h each)
+
+- **[2] TTS Node in LangGraph Pipeline** — The YouTube Shorts generator produces a speech script but has no audio generation step. Add a `generate_audio` node that calls the existing Resemble AI / TTS providers, following the same pattern as the existing speech generator nodes.
+- **[2] Phase 2 Audit: Hardcoded Prompts** — Scan all generators for prompts written directly in Python code (bypassing the Prompt Agent system). Move any found prompts into versioned `PromptDBData` entries so they benefit from evaluations, few-shot examples, and the dashboard.
+- **[4] Prompt Generation Tests** — Expand the Phase 4 test suite: render each prompt template with mock data, validate the output schema matches expected response format, test edge cases (empty transcript, missing fields).
+
+### 🥈 High Value — Moderate Effort
+
+- **[4] Version Rollback** — Add `POST /api/v1/prompts/{task}/rollback/{version_id}` endpoint that copies a historical prompt version into the active slot. Uses existing `PromptManager.update_prompt` — ~1h.
+- **[5] Twitter Post in YouTube Pipeline** — `YouTubeVideoTwitterPostAgent` and prompt task already exist. Create a `YouTubeVideoTwitterPost` job type + generator and wire it into the video pipeline after community post generation.
+- **[4-5] Parallel Execution (Phase 5)** — Run PromptImprover evaluation across all prompts in parallel. The LangGraph and task infrastructure already supports this pattern; wire up concurrent evaluation workers.
+
+### 🥉 Feature Expansions
+
+- **[3] Basic Auth** — Add HTTP Basic Auth to the FastAPI app for development/staging protection.
+- **[6] AWS Cognito** — Full authentication with user pools, JWTs, and role-based access control.
+- **[4-6] YouTube Topic Suggester** — Find trending topics for shorts/videos using YouTube data + Google Trends. Could feed into the Shorts LangGraph as a new generation pipeline.
+- **[4] Playlist Support** — Fetch all videos in a YouTube playlist and process them as a batch.
+- **[6] Notification System** — Send Signal, Email (SMTP already configured), or WhatsApp when generation pipelines complete.
+
+---
+
 <details>
 <summary><strong>TODO Items</strong> (click to expand)</summary>
 
