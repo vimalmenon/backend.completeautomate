@@ -25,7 +25,7 @@ class PromptResultDB:
     def get_results_by_task(
         self, prompt_task: PromptTaskEnum
     ) -> list[PromptResultDBData]:
-        items = self.db_manager.query_items(
+        items: list[dict] = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
         )
         return [
