@@ -125,7 +125,11 @@ module = [
     "resemble.*",
   "google_auth_oauthlib.*",
   "googleapiclient.*",
-  "google.auth.*"
+  "google.auth.*",
+  "starlette.*",
+  "starlette.templating.*",
+  "fastapi.templating",
+  "fastapi.templating.*"
 ]
 ignore_missing_imports = true
 

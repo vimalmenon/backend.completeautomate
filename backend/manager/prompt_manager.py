@@ -141,8 +141,10 @@ class PromptManager:
         if not prompt:
             raise AppException(f"Prompt not found for task {task.value}")
         if index < 0 or index >= len(prompt.examples):
-            raise AppException(f"Example index {index} out of range (0-{len(prompt.examples) - 1})")
-        examples = prompt.examples[:index] + prompt.examples[index + 1:]
+            raise AppException(
+                f"Example index {index} out of range (0-{len(prompt.examples) - 1})"
+            )
+        examples = prompt.examples[:index] + prompt.examples[index + 1 :]
         PromptDB().update_prompt(
             prompt_task=task,
             values={"examples": examples},
