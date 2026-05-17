@@ -9,6 +9,7 @@ from backend.enum import AIModelEnum, PromptTaskEnum
 @dataclass
 class PromptDBData:
     """Main prompt definition — only the ACTIVE version stored inline."""
+
     task: PromptTaskEnum
     description: str
     active_version: UUID
@@ -47,6 +48,7 @@ class PromptDBData:
 @dataclass
 class PromptVersionDBData:
     """One item per version — full history, separate from the active prompt."""
+
     task: PromptTaskEnum
     version: UUID
     prompt: str
@@ -82,6 +84,7 @@ class PromptVersionDBData:
 @dataclass
 class PromptResultDBData:
     """One item per evaluation run."""
+
     task: PromptTaskEnum
     result_id: UUID
     version: UUID

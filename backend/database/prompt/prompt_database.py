@@ -85,7 +85,9 @@ class PromptVersionDB:
             return PromptVersionDBData.to_cls(item)
         return None
 
-    def get_version_history(self, prompt_task: PromptTaskEnum) -> list[PromptVersionDBData]:
+    def get_version_history(
+        self, prompt_task: PromptTaskEnum
+    ) -> list[PromptVersionDBData]:
         items = self.db_manager.query_items(
             Key(DbKeysEnum.Primary.value).eq(self.TABLE),
             filter_expression=None,

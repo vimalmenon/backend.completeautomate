@@ -95,9 +95,7 @@ class PromptManager:
             comment=data.comment,
             last_updated=created_at,
         )
-        PromptDB().update_prompt(
-            prompt_task=task, values=updated_prompt.to_json()
-        )
+        PromptDB().update_prompt(prompt_task=task, values=updated_prompt.to_json())
         return updated_prompt
 
     def delete_prompt(self, prompt_task: PromptTaskEnum) -> None:

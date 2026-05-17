@@ -47,9 +47,7 @@ class PromptResultDB:
             return PromptResultDBData.to_cls(item)
         return None
 
-    def delete_result(
-        self, prompt_task: PromptTaskEnum, result_id: UUID
-    ) -> None:
+    def delete_result(self, prompt_task: PromptTaskEnum, result_id: UUID) -> None:
         self.db_manager.remove_item(
             {
                 DbKeysEnum.Primary.value: self.TABLE,
