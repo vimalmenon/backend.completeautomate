@@ -1,3 +1,4 @@
+"""Unit tests for Prompt Manager"""
 from unittest.mock import patch
 from uuid import uuid4
 
@@ -37,9 +38,9 @@ def test_add_prompt_persists_first_version() -> None:
     assert result.prompt == "New prompt"
     assert result.system_message == "New system message"
     assert result.ai == AIModelEnum.Grok
-    assert len(result.versions) == 1
     assert saved_prompt.task == PromptTaskEnum.YouTubeVideoSummarization
-    assert len(saved_prompt.versions) == 1
+    assert saved_prompt.description == "New description"
+    assert saved_prompt.prompt == "New prompt"
 
 
 @pytest.mark.unit
@@ -48,16 +49,10 @@ def test_add_prompt_raises_when_task_exists() -> None:
     existing_prompt = PromptDBData(
         task=PromptTaskEnum.YouTubeVideoSummarization,
         description="Existing description",
-        version=existing_version,
-        versions=[
-            PromptVersionDBData(
-                prompt="Existing prompt",
-                system_message="Existing system message",
-                reflect_message="",
-                version=existing_version,
-                ai=AIModelEnum.Deepseek,
-            )
-        ],
+        active_version=existing_version,
+        prompt="Existing prompt",
+        system_message="Existing system message",
+        ai=AIModelEnum.Deepseek,
     )
 
     with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
@@ -84,16 +79,10 @@ def test_update_prompt_creates_new_active_version() -> None:
     original_prompt = PromptDBData(
         task=PromptTaskEnum.YouTubeVideoSummarization,
         description="Original description",
-        version=version_id,
-        versions=[
-            PromptVersionDBData(
-                prompt="Original prompt",
-                system_message="Original system message",
-                reflect_message="",
-                version=version_id,
-                ai=AIModelEnum.Deepseek,
-            )
-        ],
+        active_version=version_id,
+        prompt="Original prompt",
+        system_message="Original system message",
+        ai=AIModelEnum.Deepseek,
         comment="Original comment",
     )
     update_version_id = uuid4()
@@ -118,17 +107,15 @@ def test_update_prompt_creates_new_active_version() -> None:
     mock_prompt_db.update_prompt.assert_called_once()
     persisted_values = mock_prompt_db.update_prompt.call_args.kwargs["values"]
 
-    assert result.version == update_version_id
+    assert result.active_version == update_version_id
     assert result.description == "Updated description"
     assert result.comment == "Updated comment"
     assert result.prompt == "Updated prompt"
     assert result.system_message == "Updated system message"
     assert result.ai == AIModelEnum.Grok
-    assert len(result.versions) == 2
-    assert persisted_values["version"] == str(update_version_id)
+    assert persisted_values["active_version"] == str(update_version_id)
     assert persisted_values["description"] == "Updated description"
     assert persisted_values["comment"] == "Updated comment"
-    assert len(persisted_values["versions"]) == 2
 
 
 @pytest.mark.unit
