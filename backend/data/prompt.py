@@ -19,6 +19,7 @@ class PromptDBData:
     comment: str | None = None
     last_updated: datetime = datetime.now()
     prompt_data: list[dict] = field(default_factory=list)
+    examples: list[dict] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -31,6 +32,7 @@ class PromptDBData:
             "comment": self.comment,
             "last_updated": self.last_updated.isoformat(),
             "prompt_data": self.prompt_data,
+            "examples": self.examples,
         }
 
     @classmethod
@@ -45,6 +47,7 @@ class PromptDBData:
             comment=data.get("comment"),
             last_updated=datetime.fromisoformat(data["last_updated"]),
             prompt_data=data.get("prompt_data", []),
+            examples=data.get("examples", []),
         )
 
 
@@ -59,6 +62,7 @@ class PromptVersionDBData:
     reflect_message: str
     ai: AIModelEnum
     created_at: datetime = datetime.now()
+    examples: list[dict] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -69,6 +73,7 @@ class PromptVersionDBData:
             "reflect_message": self.reflect_message,
             "ai": self.ai.value,
             "created_at": self.created_at.isoformat(),
+            "examples": self.examples,
         }
 
     @classmethod
@@ -81,6 +86,7 @@ class PromptVersionDBData:
             reflect_message=data.get("reflect_message", ""),
             ai=AIModelEnum(data["ai"]),
             created_at=datetime.fromisoformat(data["created_at"]),
+            examples=data.get("examples", []),
         )
 
 

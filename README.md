@@ -94,10 +94,10 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [x] Add prompt version comparison view in dashboard
 
   **Phase 4: Few-Shot & Testing**
-  - [ ] [3] Add `examples` field to `PromptVersionDBData` model
-  - [ ] [4] Build few-shot example management (add/remove/list)
-  - [ ] [4] Add few-shot injection into AgentService template rendering
-  - [ ] [4] Create prompt generation tests
+  - [x] [3] Add `examples` field to `PromptVersionDBData` model
+  - [x] [4] Build few-shot example management (add/remove/list)
+  - [x] [4] Add few-shot injection into AgentService template rendering
+  - [x] [4] Create prompt generation tests
     - [ ] Render each prompt template with mock data
     - [ ] Validate output schema matches expected response format
     - [ ] Test with edge cases (empty transcript, missing fields)

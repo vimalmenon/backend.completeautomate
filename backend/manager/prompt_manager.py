@@ -27,6 +27,7 @@ class PromptManager:
                 reflect_message="",
                 ai=data.ai,
                 created_at=data.last_updated,
+                examples=data.examples,
             )
             PromptVersionDB().save_version(data=version)
             return data
@@ -38,6 +39,7 @@ class PromptManager:
 
         version_id = data.version or uuid4()
         created_at = datetime.now()
+        examples = data.examples or []
 
         prompt = PromptDBData(
             task=task,
@@ -48,6 +50,7 @@ class PromptManager:
             ai=AIModelEnum(data.ai),
             comment=data.comment,
             last_updated=created_at,
+            examples=examples,
         )
 
         version = PromptVersionDBData(
@@ -58,6 +61,7 @@ class PromptManager:
             reflect_message="",
             ai=AIModelEnum(data.ai),
             created_at=created_at,
+            examples=examples,
         )
 
         PromptDB().save_prompt(data=prompt)
@@ -73,6 +77,7 @@ class PromptManager:
 
         version_id = data.version or uuid4()
         created_at = datetime.now()
+        examples = data.examples or existing.examples
 
         version = PromptVersionDBData(
             task=task,
@@ -82,6 +87,7 @@ class PromptManager:
             reflect_message="",
             ai=AIModelEnum(data.ai),
             created_at=created_at,
+            examples=examples,
         )
         PromptVersionDB().save_version(data=version)
 
@@ -94,6 +100,7 @@ class PromptManager:
             ai=AIModelEnum(data.ai),
             comment=data.comment,
             last_updated=created_at,
+            examples=examples,
         )
         PromptDB().update_prompt(prompt_task=task, values=updated_prompt.to_json())
         return updated_prompt
@@ -109,3 +116,54 @@ class PromptManager:
 
     def get_results(self, task: PromptTaskEnum) -> list[PromptResultDBData]:
         return PromptResultDB().get_results_by_task(task)
+
+    # ── Example Management ──
+
+    def get_examples(self, task: PromptTaskEnum) -> list[dict]:
+        prompt = self.get_prompt_by_task(task)
+        if not prompt:
+            raise AppException(f"Prompt not found for task {task.value}")
+        return prompt.examples
+
+    def add_example(self, task: PromptTaskEnum, example: dict) -> list[dict]:
+        prompt = self.get_prompt_by_task(task)
+        if not prompt:
+            raise AppException(f"Prompt not found for task {task.value}")
+        examples = prompt.examples + [example]
+        PromptDB().update_prompt(
+            prompt_task=task,
+            values={"examples": examples},
+        )
+        return examples
+
+    def remove_example(self, task: PromptTaskEnum, index: int) -> list[dict]:
+        prompt = self.get_prompt_by_task(task)
+        if not prompt:
+            raise AppException(f"Prompt not found for task {task.value}")
+        if index < 0 or index >= len(prompt.examples):
+            raise AppException(f"Example index {index} out of range (0-{len(prompt.examples) - 1})")
+        examples = prompt.examples[:index] + prompt.examples[index + 1:]
+        PromptDB().update_prompt(
+            prompt_task=task,
+            values={"examples": examples},
+        )
+        return examples
+
+    def clear_examples(self, task: PromptTaskEnum) -> None:
+        prompt = self.get_prompt_by_task(task)
+        if not prompt:
+            raise AppException(f"Prompt not found for task {task.value}")
+        PromptDB().update_prompt(
+            prompt_task=task,
+            values={"examples": []},
+        )
+
+    def set_examples(self, task: PromptTaskEnum, examples: list[dict]) -> list[dict]:
+        prompt = self.get_prompt_by_task(task)
+        if not prompt:
+            raise AppException(f"Prompt not found for task {task.value}")
+        PromptDB().update_prompt(
+            prompt_task=task,
+            values={"examples": examples},
+        )
+        return examples

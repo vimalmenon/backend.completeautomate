@@ -68,3 +68,47 @@ async def list_versions(task: PromptTaskEnum):
 async def list_results(task: PromptTaskEnum):
     results = PromptManager().get_results(task)
     return [r.to_json() for r in results]
+
+
+# ── Example (Few-Shot) Management ──
+
+
+@router.get("/prompts/{task}/examples", tags=["prompts"])
+async def list_examples(task: PromptTaskEnum):
+    try:
+        return PromptManager().get_examples(task)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/prompts/{task}/examples", tags=["prompts"])
+async def add_example(task: PromptTaskEnum, example: dict):
+    try:
+        return PromptManager().add_example(task, example)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.delete("/prompts/{task}/examples/{index}", tags=["prompts"])
+async def remove_example(task: PromptTaskEnum, index: int):
+    try:
+        return PromptManager().remove_example(task, index)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.delete("/prompts/{task}/examples", tags=["prompts"])
+async def clear_examples(task: PromptTaskEnum):
+    try:
+        PromptManager().clear_examples(task)
+        return {"message": "All examples cleared"}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.put("/prompts/{task}/examples", tags=["prompts"])
+async def set_examples(task: PromptTaskEnum, examples: list[dict]):
+    try:
+        return PromptManager().set_examples(task, examples)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))

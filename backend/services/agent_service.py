@@ -55,6 +55,31 @@ class AgentService:
         except TemplateError as e:
             raise AppException(f"Error rendering prompt template: {e}") from e
 
+    def __inject_examples(self, rendered: str) -> str:
+        if not self.prompt_data or not self.prompt_data.examples:
+            return rendered
+
+        formatted = []
+        for i, ex in enumerate(self.prompt_data.examples):
+            lines = []
+            if "input" in ex:
+                input_val = ex["input"]
+                if isinstance(input_val, dict):
+                    input_str = ", ".join(f"{k}={v}" for k, v in input_val.items())
+                else:
+                    input_str = str(input_val)
+                lines.append(f"Example {i + 1} Input: {input_str}")
+            if "output" in ex:
+                lines.append(f"Example {i + 1} Output: {ex['output']}")
+            if lines:
+                formatted.append("\n".join(lines))
+
+        if not formatted:
+            return rendered
+
+        examples_block = "\n\n---\nFew-shot Examples:\n" + "\n\n".join(formatted)
+        return rendered + examples_block
+
     def get_model(self):
         if not self.prompt_data:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
@@ -72,9 +97,11 @@ class AgentService:
     def get_system_message(self) -> str:
         if not self.prompt_data:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
-        return self.__render_template(self.prompt_data.system_message)
+        rendered = self.__render_template(self.prompt_data.system_message)
+        return self.__inject_examples(rendered)
 
     def get_prompt(self) -> str:
         if not self.prompt_data:
             raise AppException(self.PROMPT_DATA_NOT_FOUND_ERROR)
-        return self.__render_template(self.prompt_data.prompt)
+        rendered = self.__render_template(self.prompt_data.prompt)
+        return self.__inject_examples(rendered)

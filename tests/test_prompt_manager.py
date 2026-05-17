@@ -137,3 +137,194 @@ def test_update_prompt_raises_when_task_missing() -> None:
             )
 
     mock_prompt_db.update_prompt.assert_not_called()
+
+
+# ── Example (Few-Shot) Management Tests ──
+
+
+@pytest.mark.unit
+def test_get_examples_returns_empty_list() -> None:
+    version_id = uuid4()
+    prompt = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt template",
+        system_message="Test system message",
+        ai=AIModelEnum.Deepseek,
+    )
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = prompt
+
+        examples = PromptManager().get_examples(PromptTaskEnum.YouTubeVideoSummarization)
+
+    assert examples == []
+
+
+@pytest.mark.unit
+def test_add_example_appends_to_list() -> None:
+    version_id = uuid4()
+    initial = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt template",
+        system_message="Test system message",
+        ai=AIModelEnum.Deepseek,
+        examples=[{"input": "Hello", "output": "Hi there"}],
+    )
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = initial
+
+        result = PromptManager().add_example(
+            PromptTaskEnum.YouTubeVideoSummarization,
+            {"input": "Bye", "output": "Goodbye"},
+        )
+
+    assert result == [
+        {"input": "Hello", "output": "Hi there"},
+        {"input": "Bye", "output": "Goodbye"},
+    ]
+    mock_prompt_db.update_prompt.assert_called_once()
+    saved_examples = mock_prompt_db.update_prompt.call_args.kwargs["values"]["examples"]
+    assert len(saved_examples) == 2
+    assert saved_examples[1]["input"] == "Bye"
+
+
+@pytest.mark.unit
+def test_remove_example_by_index() -> None:
+    version_id = uuid4()
+    initial = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt template",
+        system_message="Test system message",
+        ai=AIModelEnum.Deepseek,
+        examples=[
+            {"input": "A", "output": "1"},
+            {"input": "B", "output": "2"},
+            {"input": "C", "output": "3"},
+        ],
+    )
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = initial
+
+        result = PromptManager().remove_example(
+            PromptTaskEnum.YouTubeVideoSummarization, 1
+        )
+
+    assert result == [
+        {"input": "A", "output": "1"},
+        {"input": "C", "output": "3"},
+    ]
+
+
+@pytest.mark.unit
+def test_remove_example_raises_for_invalid_index() -> None:
+    version_id = uuid4()
+    initial = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt",
+        system_message="Test system",
+        ai=AIModelEnum.Deepseek,
+        examples=[{"input": "A", "output": "1"}],
+    )
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = initial
+
+        with pytest.raises(AppException, match="Example index 5 out of range"):
+            PromptManager().remove_example(
+                PromptTaskEnum.YouTubeVideoSummarization, 5
+            )
+
+
+@pytest.mark.unit
+def test_clear_examples_empties_list() -> None:
+    version_id = uuid4()
+    initial = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt",
+        system_message="Test system",
+        ai=AIModelEnum.Deepseek,
+        examples=[{"input": "A", "output": "1"}],
+    )
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = initial
+
+        PromptManager().clear_examples(PromptTaskEnum.YouTubeVideoSummarization)
+
+    mock_prompt_db.update_prompt.assert_called_once()
+    assert mock_prompt_db.update_prompt.call_args.kwargs["values"]["examples"] == []
+
+
+@pytest.mark.unit
+def test_set_examples_replaces_entire_list() -> None:
+    version_id = uuid4()
+    initial = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_id,
+        prompt="Test prompt",
+        system_message="Test system",
+        ai=AIModelEnum.Deepseek,
+        examples=[{"input": "Old", "output": "1"}],
+    )
+
+    new_examples = [
+        {"input": "New1", "output": "A"},
+        {"input": "New2", "output": "B"},
+    ]
+
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = initial
+
+        result = PromptManager().set_examples(
+            PromptTaskEnum.YouTubeVideoSummarization, new_examples
+        )
+
+    assert result == new_examples
+    mock_prompt_db.update_prompt.assert_called_once()
+    stored = mock_prompt_db.update_prompt.call_args.kwargs["values"]["examples"]
+    assert stored == new_examples
+
+
+@pytest.mark.unit
+def test_add_prompt_carries_examples_to_version() -> None:
+    with patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls:
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = None
+
+        with patch("backend.manager.prompt_manager.PromptVersionDB") as mock_ver_cls:
+            mock_ver_db = mock_ver_cls.return_value
+
+            PromptManager().add_prompt(
+                data=PromptUpdateResult(
+                    task=PromptTaskEnum.YouTubeVideoSummarization,
+                    description="Few-shot prompt",
+                    prompt="Template {{ var }}",
+                    system_message="System msg",
+                    ai=AIModelEnum.Grok,
+                    examples=[{"input": "X", "output": "Y"}],
+                )
+            )
+
+    _, kwargs = mock_ver_db.save_version.call_args
+    saved_version = kwargs["data"]
+    assert saved_version.examples == [{"input": "X", "output": "Y"}]
+    assert saved_version.prompt == "Template {{ var }}"

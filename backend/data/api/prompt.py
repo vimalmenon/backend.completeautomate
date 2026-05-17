@@ -56,3 +56,4 @@ class PromptUpdateResult(BaseModelWithConfig):
     system_message: str
     ai: AIModelEnum
     version: UUID = Field(default_factory=uuid4)
+    examples: list[dict] = Field(default_factory=list)
