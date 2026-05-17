@@ -78,9 +78,9 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [x] Move `YouTubeVideoSummarization` prompt fully into Prompt Agent
   - [x] Move `YouTubeVideoCommunityPost` prompt fully into Prompt Agent
   - [x] Move `YouTubeThumbnailImageGenerationPrompt` prompt fully into Prompt Agent
-  - [ ] [3] Move `YouTubeShortSpeechGenerationPrompt` prompt fully into Prompt Agent
-  - [ ] [3] Move `YouTubeVideoTwitterPost` prompt fully into Prompt Agent
-  - [ ] [3] Remove fallback/legacy prompt paths from generators
+  - [x] Move `YouTubeShortSpeechGenerationPrompt` prompt fully into Prompt Agent
+  - [x] Move `YouTubeVideoTwitterPost` prompt fully into Prompt Agent
+  - [x] Remove fallback/legacy prompt paths from generators
 
   **Phase 3: PromptImprover Loop**
   - [x] Build PromptImprover pipeline in `prompt_reviewer.py`:
