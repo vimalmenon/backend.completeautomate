@@ -32,11 +32,9 @@ class LangGraphAgent:
         self,
         runner: Callable[[LangGraphAgentState], Any] | None = None,
         checkpointer: Any = None,
-        store: Any = None,
     ) -> None:
         self.runner = runner or self.run
         self.checkpointer = checkpointer
-        self.store = store
         self.graph = self._build_graph()
 
     def _build_graph(self):
@@ -48,7 +46,6 @@ class LangGraphAgent:
         builder.add_edge("execute", END)
         return builder.compile(
             checkpointer=self.checkpointer,
-            store=self.store,
         )
 
     def _initialize_state(self, state: LangGraphAgentState) -> LangGraphAgentState:
