@@ -208,9 +208,8 @@ REFLECTION:
     @staticmethod
     def __extract_section(text: str, section_name: str) -> str | None:
         import re
-        pattern = re.compile(
-            rf"{section_name}:\s*(.*?)(?=\n[A-Z_]+:|\Z)", re.DOTALL
-        )
+
+        pattern = re.compile(rf"{section_name}:\s*(.*?)(?=\n[A-Z_]+:|\Z)", re.DOTALL)
         match = pattern.search(text)
         if match:
             return match.group(1).strip()
