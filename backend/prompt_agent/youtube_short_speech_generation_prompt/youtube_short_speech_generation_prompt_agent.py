@@ -39,7 +39,7 @@ class YouTubeShortSpeechGenerationPromptAgent:
 
     def generate_with_graph(self, video_short: YouTubeShortDBData) -> str | None:
         graph = self._build_graph()
-        state = graph.invoke(
+        state: dict = graph.invoke(
             GraphState(
                 video=video_short,
             )
