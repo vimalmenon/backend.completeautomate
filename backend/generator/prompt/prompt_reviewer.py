@@ -83,15 +83,6 @@ class PromptReviewer(BaseGenerator):
         result = agent.invoke()
         ai_response = result["messages"][-1].content
 
-        evaluator_service = AgentService(
-            prompt_task=prompt.task,
-            task_id=f"{self.job.id}_score_{uuid4()}",
-            data={
-                "prompt": prompt.prompt,
-                "response": ai_response,
-                "test_data": test_data,
-            },
-        )
         score = self.__score_response(
             prompt=prompt.prompt,
             response=ai_response,
@@ -194,6 +185,7 @@ REFLECTION:
                         prompt=new_prompt,
                         system_message=new_system_message,
                         ai=prompt.ai,
+                        comment=reflect_message,
                     ),
                 )
                 logger.info(
