@@ -4,7 +4,6 @@ from typing import Any
 
 from backend.config.env import env
 from backend.data import (
-    ImagePromptData,
     JobData,
     S3Data,
     YouTubeThumbnailImageGenerationPromptData,
@@ -14,20 +13,17 @@ from backend.data import (
 )
 from backend.enum import (
     JobsStatusEnum,
-    PromptTaskEnum,
     YouTubeVideoTaskEnum,
 )
 from backend.exception import AppException
 from backend.generator.base_generator import BaseGenerator
 from backend.generator.response_format import (
-    ImagePromptsListRequest,
     YouTubeVideoAnalyzerListResponse,
-    YouTubeVideoCommunityPostsResponse,
 )
 from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.manager import JobManager, YouTubeVideoManager
-from backend.services.agent_service import AgentImageService, AgentService
+from backend.services.agent_service import AgentImageService
 
 logger = logging.getLogger(__name__)
 
@@ -155,23 +151,20 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.youtube_manager.update_summarized_transcript(
                 summarized_transcript=summarize,
             )
+            return
         raise AppException("Transcript not found")
 
     def __summarize_transcript(self, text_transcript: str, user_message: str) -> Any:
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoSummarization,
-            task_id=f"{str(self.job.id)}_summarize",
+        from backend.prompt_agent import YouTubeVideoSummarizationAgent
+
+        agent = YouTubeVideoSummarizationAgent(
+            job_id=self.job.id,
             data={"transcript": text_transcript, "user_message": user_message},
         )
-        agent = GeneralAgent(
-            service,
-        )
-        result = agent.invoke()
-
-        # # TODO Need to get it reviewed one more time
-        # result = agent.reinvoke(message="Go trough the result one more time")
-
-        return result["messages"][-1].content
+        try:
+            return agent.generate()
+        finally:
+            agent.clean_up()
 
     def __create_metadata_suggestions(
         self, video_from_db: YouTubeVideoDBData
@@ -207,44 +200,31 @@ class YouTubeVideoGenerator(BaseGenerator):
         self, video_from_db: YouTubeVideoDBData
     ) -> None:
         logger.info("Generating thumbnail prompt suggestions for job %s", self.job.id)
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
-            task_id=f"{str(self.job.id)}_thumbnail",
+        from backend.prompt_agent import YouTubeThumbnailImageGenerationPromptAgent
+
+        agent = YouTubeThumbnailImageGenerationPromptAgent(
+            job_id=self.job.id,
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_from_db.title,
                 description=video_from_db.description,
                 video_summary=video_from_db.summarized_transcript or "",
             ).to_json(),
         )
-        agent = GeneralAgent(
-            service,
-            response_format=ImagePromptsListRequest,
-        )
-        result = agent.invoke()
-
-        # result = agent.reinvoke(message="Go trough the result one more time")
-
-        structured_response: ImagePromptsListRequest = result.get(
-            "structured_response", []
-        )
-        prompt_response = [
-            ImagePromptData(
-                name=data.name,
-                description=data.description,
-                prompt=data.prompt,
-                negative_prompt=data.negative_prompt,
+        try:
+            structured_response = agent.generate()
+            prompt_response = YouTubeThumbnailImageGenerationPromptAgent.get_prompts(
+                structured_response
             )
-            for data in structured_response.image_prompts
-        ]
-        self.youtube_manager.update_thumbnail_prompt_suggestions(
-            thumbnail_prompt_suggestions=prompt_response
-        )
-        logger.info(
-            "Stored %s thumbnail prompt suggestions for job %s",
-            len(prompt_response),
-            self.job.id,
-        )
-        agent.clean_up_messages()
+            self.youtube_manager.update_thumbnail_prompt_suggestions(
+                thumbnail_prompt_suggestions=prompt_response
+            )
+            logger.info(
+                "Stored %s thumbnail prompt suggestions for job %s",
+                len(prompt_response),
+                self.job.id,
+            )
+        finally:
+            agent.clean_up()
 
     def __generate_thumbnails(
         self, video_from_db: YouTubeVideoDBData
@@ -310,28 +290,22 @@ class YouTubeVideoGenerator(BaseGenerator):
         raise AppException("More than one thumbnail was selected")
 
     def __create_community_post(self, video_from_db: YouTubeVideoDBData) -> None:
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoCommunityPost,
-            task_id=f"{str(self.job.id)}_community_post",
+        from backend.prompt_agent import YouTubeVideoCommunityPostAgent
+
+        agent = YouTubeVideoCommunityPostAgent(
+            job_id=self.job.id,
             data=YouTubeThumbnailImageGenerationPromptData(
                 title=video_from_db.title,
                 description=video_from_db.description,
                 video_summary=video_from_db.summarized_transcript or "",
             ).to_json(),
         )
-        agent = GeneralAgent(
-            service,
-            response_format=YouTubeVideoCommunityPostsResponse,
-        )
-        result = agent.invoke()
-
-        structured_response: YouTubeVideoCommunityPostsResponse = result.get(
-            "structured_response", []
-        )
-        self.youtube_manager.update_community_posts(
-            community_posts=structured_response.posts
-        )
-        agent.clean_up_messages()
+        try:
+            structured_response = agent.generate()
+            posts = YouTubeVideoCommunityPostAgent.get_posts(structured_response)
+            self.youtube_manager.update_community_posts(community_posts=posts)
+        finally:
+            agent.clean_up()
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.youtube_manager.update_task_status(
