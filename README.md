@@ -809,8 +809,17 @@ poetry run tox -e pytest
 | GET | `/api/v1/channel/{channel_id}/videos` | List videos for channel |
 | **Prompts** | | |
 | GET | `/api/v1/prompts` | List all prompts |
-| GET | `/api/v1/prompts/{prompt_id}` | Get prompt details |
-| PUT | `/api/v1/prompts/{prompt_id}` | Update prompt |
+| GET, PUT | `/api/v1/prompts/{task}` | Get / update prompt by task |
+| POST | `/api/v1/prompts` | Create a new prompt |
+| GET | `/api/v1/prompts/{task}/versions` | List version history |
+| GET | `/api/v1/prompts/{task}/results` | List evaluation results |
+| GET | `/api/v1/prompts/{task}/examples` | List few-shot examples |
+| POST | `/api/v1/prompts/{task}/examples` | Add a few-shot example |
+| PUT | `/api/v1/prompts/{task}/examples` | Replace all few-shot examples |
+| DELETE | `/api/v1/prompts/{task}/examples` | Clear all examples |
+| DELETE | `/api/v1/prompts/{task}/examples/{index}` | Remove example by index |
+| **Dashboard** | | |
+| GET | `/api/v1/dashboard/prompts` | HTML prompt results dashboard with versions & comparison |
 | **Data** | | |
 | GET | `/api/v1/data` | List data items |
 | GET | `/api/v1/data/{data_id}` | Get data details |
