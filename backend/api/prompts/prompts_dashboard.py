@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 
+from backend.enum import PromptTaskEnum
 from backend.manager import PromptManager
 
 router = APIRouter()
@@ -23,6 +24,16 @@ def _prompt_to_row(prompt, pm: PromptManager) -> dict:
 def _prompt_details(prompt, pm: PromptManager) -> dict:
     results = pm.get_results(prompt.task)
     results_sorted = sorted(results, key=lambda x: x.created_at, reverse=True)
+    versions = pm.get_version_history(prompt.task)
+    versions_sorted = sorted(versions, key=lambda x: x.created_at, reverse=True)
+
+    # Aggregate scores per version
+    version_scores = {str(v.version): [] for v in versions_sorted}
+    for r in results:
+        vid = str(r.version)
+        if vid in version_scores and r.score is not None:
+            version_scores[vid].append(r.score)
+
     return {
         "description": prompt.description,
         "active_version": str(prompt.active_version),
@@ -37,6 +48,7 @@ def _prompt_details(prompt, pm: PromptManager) -> dict:
         "results": [
             {
                 "result_id": str(r.result_id),
+                "version": str(r.version),
                 "score": r.score,
                 "response": r.response,
                 "prompt_data_snapshot": r.prompt_data_snapshot,
@@ -47,6 +59,29 @@ def _prompt_details(prompt, pm: PromptManager) -> dict:
                 ),
             }
             for r in results_sorted
+        ],
+        "versions": [
+            {
+                "version_id": str(v.version),
+                "prompt": v.prompt,
+                "system_message": v.system_message,
+                "reflect_message": v.reflect_message,
+                "ai": v.ai.value if hasattr(v.ai, "value") else str(v.ai),
+                "is_active": str(v.version) == str(prompt.active_version),
+                "created_at": (
+                    v.created_at.isoformat()
+                    if hasattr(v.created_at, "isoformat")
+                    else str(v.created_at)
+                ),
+                "eval_count": len(version_scores.get(str(v.version), [])),
+                "avg_score": (
+                    round(sum(version_scores[str(v.version)]) / len(version_scores[str(v.version)]))
+                    if version_scores.get(str(v.version))
+                    else None
+                ),
+                "best_score": max(version_scores[str(v.version)]) if version_scores.get(str(v.version)) else None,
+            }
+            for v in versions_sorted
         ],
     }
 

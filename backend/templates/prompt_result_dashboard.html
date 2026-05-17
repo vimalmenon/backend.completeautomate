@@ -9,6 +9,7 @@
             --bg: #0f1117;
             --surface: #1a1d28;
             --surface2: #232738;
+            --surface3: #2a2f45;
             --border: #2e3348;
             --text: #e4e6f0;
             --text-dim: #8b8fa3;
@@ -17,6 +18,7 @@
             --red: #ef4444;
             --blue: #3b82f6;
             --accent: #6366f1;
+            --accent-dim: rgba(99,102,241,0.15);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -117,6 +119,33 @@
             display: inline-block;
         }
         .back-link:hover { text-decoration: underline; }
+
+        /* Tabs */
+        .detail-tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0;
+        }
+        .detail-tab {
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .detail-tab:hover { color: var(--text); }
+        .detail-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .detail-tab-content { display: none; }
+        .detail-tab-content.active { display: block; }
+
         .detail-section { margin-bottom: 1.5rem; }
         .detail-section h3 {
             font-size: 0.9rem;
@@ -173,9 +202,7 @@
             font-size: 0.8rem;
             color: var(--text-dim);
         }
-        .response-preview.expanded {
-            max-height: none;
-        }
+        .response-preview.expanded { max-height: none; }
         .expand-btn {
             color: var(--blue);
             cursor: pointer;
@@ -203,9 +230,129 @@
             background: var(--surface2);
             border: 1px solid var(--border);
         }
+        .pill-active {
+            background: rgba(99,102,241,0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Version selector */
+        .compare-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        .compare-selector select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            min-width: 200px;
+            cursor: pointer;
+        }
+        .compare-selector select:focus { outline: none; border-color: var(--accent); }
+
+        /* Side-by-side comparison */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .compare-col {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .compare-col-header {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .compare-col-header .label { font-weight: 600; color: var(--text); font-size: 0.85rem; }
+        .compare-col pre {
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-size: 0.78rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        .compare-col .meta-line {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-bottom: 0.3rem;
+        }
+
+        /* Diff highlights */
+        .diff-add { background: rgba(34,197,94,0.15); }
+        .diff-remove { background: rgba(239,68,68,0.15); }
+
+        /* Version timeline cards */
+        .version-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .version-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .version-card:hover { border-color: var(--accent); }
+        .version-card.active { border-color: var(--accent); }
+        .version-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .version-card .version-id {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .version-card .version-date {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+        .version-card .reflect-text {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.35rem;
+            font-style: italic;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .version-card .reflect-text.expanded { max-height: none; }
+        .version-card .eval-summary {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
         @media (max-width: 640px) {
             body { padding: 1rem; }
             .prompts-grid { grid-template-columns: 1fr; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .compare-selector { flex-direction: column; }
         }
     </style>
 </head>
@@ -214,7 +361,7 @@
         <div class="header">
             <div>
                 <h1>🪄 Prompt Results Dashboard</h1>
-                <div class="subtitle">Evaluation scores and improvement tracking</div>
+                <div class="subtitle">Evaluation scores, version history, and improvement tracking</div>
             </div>
         </div>
 
@@ -285,33 +432,65 @@
         function showDetail(task) {
             const data = allData[task];
             if (!data) return;
-
             const main = document.getElementById('dashboard');
-            const detail = document.createElement('div');
-            detail.id = 'detail-view';
-            detail.className = 'detail-view open';
-            detail.innerHTML = buildDetailHtml(task, data);
-            main.innerHTML = '';
-            main.appendChild(detail);
+            main.innerHTML = buildDetailHtml(task, data);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function showOverview() {
-            location.reload();
+        function showOverview() { location.reload(); }
+
+        function switchTab(task, data, tabName) {
+            document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.detail-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.detail-tab[data-tab="${tabName}"]`)?.classList.add('active');
+            document.getElementById(`tab-${tabName}`)?.classList.add('active');
         }
 
         function buildDetailHtml(task, data) {
             let html = `<a class="back-link" onclick="showOverview()">← Back to overview</a>`;
-            html += `<div class="detail-section"><h3>Prompt Details</h3>`;
+
+            // Tab navigation
+            const hasVersions = data.versions && data.versions.length > 0;
+            html += `<div class="detail-tabs">
+                <div class="detail-tab active" data-tab="details" onclick="switchTab('${escapeHtml(task)}', null, 'details')">📋 Details & Results</div>
+                ${hasVersions ? `<div class="detail-tab" data-tab="versions" onclick="switchTab('${escapeHtml(task)}', null, 'versions')">📜 Versions (${data.versions.length})</div>` : ''}
+                ${hasVersions && data.versions.length >= 2 ? `<div class="detail-tab" data-tab="compare" onclick="switchTab('${escapeHtml(task)}', null, 'compare'); initCompare('${escapeHtml(task)}')">🔍 Compare</div>` : ''}
+            </div>`;
+
+            // Tab 1: Details & Results
+            html += `<div id="tab-details" class="detail-tab-content active">`;
+            html += buildDetailsTab(task, data);
+            html += `</div>`;
+
+            // Tab 2: Versions
+            if (hasVersions) {
+                html += `<div id="tab-versions" class="detail-tab-content">`;
+                html += buildVersionsTab(task, data);
+                html += `</div>`;
+            }
+
+            // Tab 3: Compare
+            if (hasVersions && data.versions.length >= 2) {
+                html += `<div id="tab-compare" class="detail-tab-content">`;
+                html += buildCompareTab(task, data);
+                html += `</div>`;
+            }
+
+            return html;
+        }
+
+        // ── Tab: Details & Results ──
+        function buildDetailsTab(task, data) {
+            let html = `<div class="detail-section"><h3>Prompt Details</h3>`;
             html += `<div class="info-row"><span class="label">Task</span><span>${escapeHtml(task)}</span></div>`;
             html += `<div class="info-row"><span class="label">Description</span><span>${escapeHtml(data.description || '—')}</span></div>`;
-            html += `<div class="info-row"><span class="label">Active Version</span><span class="pill">${data.active_version?.substring(0,8) || '—'}</span></div>`;
+            html += `<div class="info-row"><span class="label">Active Version</span><span class="pill pill-active">${data.active_version?.substring(0,8) || '—'}</span></div>`;
             html += `<div class="info-row"><span class="label">AI Model</span><span>${escapeHtml(data.ai || '—')}</span></div>`;
             html += `<div class="info-row"><span class="label">Last Updated</span><span>${escapeHtml(data.last_updated || '—')}</span></div>`;
-            html += `<h4 style="margin: 1rem 0 0.5rem; font-size: 0.85rem; color: var(--text-dim);">Prompt</h4>`;
+            html += `<h4 style="margin:1rem 0 0.5rem;font-size:0.85rem;color:var(--text-dim);">Prompt</h4>`;
             html += `<pre>${escapeHtml(data.prompt || '')}</pre>`;
             if (data.system_message) {
-                html += `<h4 style="margin: 1rem 0 0.5rem; font-size: 0.85rem; color: var(--text-dim);">System Message</h4>`;
+                html += `<h4 style="margin:1rem 0 0.5rem;font-size:0.85rem;color:var(--text-dim);">System Message</h4>`;
                 html += `<pre>${escapeHtml(data.system_message)}</pre>`;
             }
             html += `</div>`;
@@ -319,25 +498,25 @@
             const results = data.results || [];
             html += `<div class="detail-section"><h3>Evaluation Results (${results.length})</h3>`;
             if (results.length === 0) {
-                html += `<p style="color: var(--text-dim); font-size: 0.85rem;">No evaluation results yet. Run the PromptReviewer job to generate results.</p>`;
+                html += `<p style="color:var(--text-dim);font-size:0.85rem;">No evaluation results yet. Run the PromptReviewer job to generate results.</p>`;
             } else {
-                html += `<table class="results-table">
-                    <thead><tr>
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Response</th>
-                        <th>Test Data</th>
-                    </tr></thead><tbody>`;
+                html += `<table class="results-table"><thead><tr>
+                    <th>Date</th><th>Score</th><th>Version</th><th>Response</th><th>Test Data</th>
+                </tr></thead><tbody>`;
                 for (const r of results) {
-                    const scoreClass = r.score >= 80 ? 'score-high' : r.score >= 60 ? 'score-mid' : 'score-low';
+                    const sc = r.score;
+                    const sClass = sc >= 80 ? 'score-high' : sc >= 60 ? 'score-mid' : 'score-low';
+                    const rid = r.result_id?.substring(0,8);
+                    const vid = r.version?.substring(0,8);
                     html += `<tr>
-                        <td style="white-space: nowrap; font-size: 0.75rem; color: var(--text-dim);">${escapeHtml(r.created_at?.substring(0, 10) || '')}</td>
-                        <td><span class="score-badge ${scoreClass}">${r.score ?? '—'}</span></td>
+                        <td style="white-space:nowrap;font-size:0.75rem;color:var(--text-dim);">${escapeHtml(r.created_at?.substring(0,10) || '')}</td>
+                        <td><span class="score-badge ${sClass}">${sc ?? '—'}</span></td>
+                        <td><span class="pill">${vid || '—'}</span></td>
                         <td>
-                            <div class="response-preview" id="resp-${r.result_id?.substring(0,8)}">${escapeHtml(r.response?.substring(0, 200) || '')}</div>
-                            ${(r.response && r.response.length > 200) ? `<a class="expand-btn" onclick="toggleExpand('resp-${r.result_id?.substring(0,8)}', this)">Show more</a>` : ''}
+                            <div class="response-preview" id="resp-${rid}">${escapeHtml(r.response?.substring(0,200) || '')}</div>
+                            ${(r.response && r.response.length > 200) ? `<a class="expand-btn" onclick="toggleExpand('resp-${rid}',this)">Show more</a>` : ''}
                         </td>
-                        <td><div class="data-cell" title="${escapeHtml(JSON.stringify(r.prompt_data_snapshot || {}))}">${escapeHtml(JSON.stringify(r.prompt_data_snapshot || {}).substring(0, 100))}</div></td>
+                        <td><div class="data-cell" title="${escapeHtml(JSON.stringify(r.prompt_data_snapshot||{}))}">${escapeHtml(JSON.stringify(r.prompt_data_snapshot||{}).substring(0,100))}</div></td>
                     </tr>`;
                 }
                 html += `</tbody></table>`;
@@ -353,22 +532,225 @@
                     const mid = scores.filter(s => s >= 60 && s < 80).length;
                     const low = scores.filter(s => s < 60).length;
                     html += `<div class="detail-section"><h3>Score Distribution</h3>`;
-                    html += `<div style="display: flex; gap: 1.5rem; align-items: center;">`;
-                    html += `<div style="font-size: 2.5rem; font-weight: 700;">${avg}</div>`;
-                    html += `<div style="flex: 1; display: flex; gap: 0.25rem; height: 1.5rem; border-radius: 8px; overflow: hidden;">`;
-                    if (high > 0) html += `<div style="flex: ${high}; background: var(--green);" title="${high} high (≥80)"></div>`;
-                    if (mid > 0) html += `<div style="flex: ${mid}; background: var(--yellow);" title="${mid} medium (60-79)"></div>`;
-                    if (low > 0) html += `<div style="flex: ${low}; background: var(--red);" title="${low} low (<60)"></div>`;
+                    html += `<div style="display:flex;gap:1.5rem;align-items:center;">`;
+                    html += `<div style="font-size:2.5rem;font-weight:700;">${avg}</div>`;
+                    html += `<div style="flex:1;display:flex;gap:0.25rem;height:1.5rem;border-radius:8px;overflow:hidden;">`;
+                    if (high > 0) html += `<div style="flex:${high};background:var(--green);" title="${high} high (≥80)"></div>`;
+                    if (mid > 0) html += `<div style="flex:${mid};background:var(--yellow);" title="${mid} medium (60-79)"></div>`;
+                    if (low > 0) html += `<div style="flex:${low};background:var(--red);" title="${low} low (<60)"></div>`;
                     html += `</div></div>`;
-                    html += `<div style="display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-dim);">`;
+                    html += `<div style="display:flex;gap:1rem;margin-top:0.5rem;font-size:0.75rem;color:var(--text-dim);">`;
                     html += `<span>🟢 ${high} high</span><span>🟡 ${mid} medium</span><span>🔴 ${low} low</span>`;
                     html += `</div></div>`;
                 }
             }
-
             return html;
         }
 
+        // ── Tab: Versions Timeline ──
+        function buildVersionsTab(task, data) {
+            const versions = data.versions || [];
+            if (versions.length === 0) {
+                return `<p style="color:var(--text-dim);font-size:0.85rem;">No version history available.</p>`;
+            }
+            let html = `<div class="detail-section"><h3>Version History (${versions.length})</h3>`;
+            html += `<div class="version-cards">`;
+            for (const v of versions) {
+                const sc = v.avg_score;
+                const sClass = sc >= 80 ? 'score-high' : sc >= 60 ? 'score-mid' : 'score-low';
+                const isActive = v.is_active;
+                html += `<div class="version-card${isActive ? ' active' : ''}" onclick="showVersionDetail('${escapeHtml(task)}','${v.version_id}')">`;
+                html += `<div class="version-card-header">`;
+                html += `<span class="version-id">${v.version_id.substring(0,8)}${isActive ? ' <span class="pill pill-active">ACTIVE</span>' : ''}</span>`;
+                html += `<span class="version-date">${escapeHtml(v.created_at?.substring(0,10) || '')}</span>`;
+                html += `</div>`;
+
+                // Eval summary
+                html += `<div class="eval-summary">`;
+                if (v.eval_count > 0) {
+                    html += `<span class="score-badge ${sClass}">${sc} avg</span>`;
+                    html += `<span class="count-badge">Best: ${v.best_score}</span>`;
+                } else {
+                    html += `<span class="score-badge score-none">No evals</span>`;
+                }
+                html += `<span class="count-badge">${escapeHtml(v.ai)}</span>`;
+                html += `</div>`;
+
+                // Reflection
+                if (v.reflect_message) {
+                    html += `<div class="reflect-text" id="refl-${v.version_id.substring(0,8)}">💡 ${escapeHtml(v.reflect_message)}</div>`;
+                    if (v.reflect_message.length > 120) {
+                        html += ` <a class="expand-btn" onclick="toggleExpand('refl-${v.version_id.substring(0,8)}',this)">Show more</a>`;
+                    }
+                }
+                html += `</div>`;
+            }
+            html += `</div></div>`;
+            return html;
+        }
+
+        function showVersionDetail(task, versionId) {
+            const data = allData[task];
+            if (!data) return;
+            const v = data.versions.find(x => x.version_id === versionId);
+            if (!v) return;
+
+            // Switch to details tab and scroll to the version info
+            switchTab(task, data, 'details');
+
+            // We'll just highlight the version in the eval table by filtering to this version
+            // Actually, let me build a small inline popup
+            alert(`Version: ${v.version_id.substring(0,8)}\nAI: ${v.ai}\nDate: ${v.created_at.substring(0,10)}\nScore: ${v.avg_score ?? 'N/A'} avg / ${v.best_score ?? 'N/A'} best\n\n${v.reflect_message || 'No reflection notes.'}`);
+        }
+
+        // ── Tab: Compare ──
+        function buildCompareTab(task, data) {
+            const versions = data.versions || [];
+            const vOpts = versions.map((v,i) =>
+                `<option value="${i}">${v.version_id.substring(0,8)} — ${v.created_at?.substring(0,10) || ''}${v.is_active ? ' (ACTIVE)' : ''}${v.avg_score != null ? ` [${v.avg_score}]` : ''}</option>`
+            ).join('');
+            const sel1 = versions.length > 0 ? 0 : -1;
+            const sel2 = versions.length > 1 ? 1 : -1;
+            let html = `<div class="detail-section"><h3>Version Comparison</h3>`;
+            html += `<p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:1rem;">Select two versions to compare side-by-side. The diff highlights lines that changed between versions.</p>`;
+            html += `<div class="compare-selector">
+                <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.3rem;">Version A</div>
+                <select id="cmp-a" onchange="renderCompare('${escapeHtml(task)}')">${vOpts}</select></div>
+                <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.3rem;">Version B</div>
+                <select id="cmp-b" onchange="renderCompare('${escapeHtml(task)}')">${vOpts}</select></div>
+            </div>`;
+            html += `<div id="cmp-results"></div></div>`;
+            // Auto-render after a tick
+            setTimeout(() => renderCompare(task), 50);
+            return html;
+        }
+
+        function initCompare(task) {
+            // runs automatically via the onchange + setTimeout
+        }
+
+        function renderCompare(task) {
+            const data = allData[task];
+            if (!data) return;
+            const versions = data.versions || [];
+            const aIdx = parseInt(document.getElementById('cmp-a').value);
+            const bIdx = parseInt(document.getElementById('cmp-b').value);
+            if (aIdx === bIdx) {
+                document.getElementById('cmp-results').innerHTML = `<p style="color:var(--text-dim);font-size:0.85rem;">Select two different versions to compare.</p>`;
+                return;
+            }
+            const vA = versions[aIdx];
+            const vB = versions[bIdx];
+            if (!vA || !vB) return;
+
+            // Diff the prompt text
+            const diffHtml = computeDiff(vA.prompt || '', vB.prompt || '');
+
+            let html = `<div class="compare-grid">`;
+
+            // Column A
+            html += `<div class="compare-col">
+                <div class="compare-col-header">
+                    <span class="label">${vA.version_id.substring(0,8)}${vA.is_active ? ' ⭐ ACTIVE' : ''}</span>
+                    <span>${escapeHtml(vA.created_at?.substring(0,10) || '')}</span>
+                </div>
+                <div class="meta-line">🤖 ${escapeHtml(vA.ai)}</div>
+                <div class="meta-line">📊 Score: ${vA.avg_score ?? '—'} avg / ${vA.best_score ?? '—'} best (${vA.eval_count} evals)</div>
+                <h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">Prompt</h4>
+                <pre>${escapeHtml(vA.prompt || '')}</pre>
+                ${vA.system_message ? `<h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">System Message</h4><pre>${escapeHtml(vA.system_message)}</pre>` : ''}
+                ${vA.reflect_message ? `<h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">Reflection</h4><div style="font-size:0.8rem;font-style:italic;color:var(--text-dim);">${escapeHtml(vA.reflect_message)}</div>` : ''}
+            </div>`;
+
+            // Column B
+            html += `<div class="compare-col">
+                <div class="compare-col-header">
+                    <span class="label">${vB.version_id.substring(0,8)}${vB.is_active ? ' ⭐ ACTIVE' : ''}</span>
+                    <span>${escapeHtml(vB.created_at?.substring(0,10) || '')}</span>
+                </div>
+                <div class="meta-line">🤖 ${escapeHtml(vB.ai)}</div>
+                <div class="meta-line">📊 Score: ${vB.avg_score ?? '—'} avg / ${vB.best_score ?? '—'} best (${vB.eval_count} evals)</div>
+                <h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">Prompt</h4>
+                <pre>${escapeHtml(vB.prompt || '')}</pre>
+                ${vB.system_message ? `<h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">System Message</h4><pre>${escapeHtml(vB.system_message)}</pre>` : ''}
+                ${vB.reflect_message ? `<h4 style="margin:0.75rem 0 0.4rem;font-size:0.8rem;color:var(--text-dim);">Reflection</h4><div style="font-size:0.8rem;font-style:italic;color:var(--text-dim);">${escapeHtml(vB.reflect_message)}</div>` : ''}
+            </div>`;
+
+            html += `</div>`;
+
+            // Diff summary
+            html += `<div class="detail-section" style="margin-top:1.5rem;"><h3>Changes</h3>`;
+            html += diffHtml;
+            html += `</div>`;
+
+            document.getElementById('cmp-results').innerHTML = html;
+        }
+
+        // Simple line-by-line diff
+        function computeDiff(textA, textB) {
+            const linesA = textA.split('\n');
+            const linesB = textB.split('\n');
+            // Simple LCS diff
+            const lcs = longestCommonSubsequence(linesA, linesB);
+            let html = '<div style="font-family:monospace;font-size:0.78rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;">';
+
+            let iA = 0, iB = 0;
+            for (const common of lcs) {
+                // Removed lines (in A but not in common)
+                while (iA < linesA.length && linesA[iA] !== common) {
+                    html += `<div style="padding:0.15rem 0.75rem;background:rgba(239,68,68,0.08);color:#fca5a5;">− ${escapeHtml(linesA[iA])}</div>`;
+                    iA++;
+                }
+                // Added lines (in B but not in common)
+                while (iB < linesB.length && linesB[iB] !== common) {
+                    html += `<div style="padding:0.15rem 0.75rem;background:rgba(34,197,94,0.08);color:#86efac;">+ ${escapeHtml(linesB[iB])}</div>`;
+                    iB++;
+                }
+                // Common line
+                html += `<div style="padding:0.15rem 0.75rem;color:var(--text-dim);">  ${escapeHtml(common)}</div>`;
+                iA++;
+                iB++;
+            }
+            // Remaining removed
+            while (iA < linesA.length) {
+                html += `<div style="padding:0.15rem 0.75rem;background:rgba(239,68,68,0.08);color:#fca5a5;">− ${escapeHtml(linesA[iA])}</div>`;
+                iA++;
+            }
+            // Remaining added
+            while (iB < linesB.length) {
+                html += `<div style="padding:0.15rem 0.75rem;background:rgba(34,197,94,0.08);color:#86efac;">+ ${escapeHtml(linesB[iB])}</div>`;
+                iB++;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function longestCommonSubsequence(a, b) {
+            const m = a.length, n = b.length;
+            const dp = Array.from({length: m+1}, () => Array(n+1).fill(0));
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    if (a[i-1] === b[j-1]) dp[i][j] = dp[i-1][j-1] + 1;
+                    else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+            // Backtrack
+            const res = [];
+            let i = m, j = n;
+            while (i > 0 && j > 0) {
+                if (a[i-1] === b[j-1]) {
+                    res.unshift(a[i-1]);
+                    i--; j--;
+                } else if (dp[i-1][j] > dp[i][j-1]) {
+                    i--;
+                } else {
+                    j--;
+                }
+            }
+            return res;
+        }
+
+        // ── Utilities ──
         function toggleExpand(id, btn) {
             const el = document.getElementById(id);
             if (el) {
@@ -379,7 +761,7 @@
 
         function escapeHtml(str) {
             if (!str) return '';
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
     </script>
     {% endif %}

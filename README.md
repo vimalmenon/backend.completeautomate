@@ -91,7 +91,7 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
     - Save both result and new version
   - [x] Pass real `prompt_data` to PromptImprover (via managed list on PromptDBData)
   - [x] Store evaluation results to `PromptResult` table
-  - [ ] Add prompt version comparison view in dashboard
+  - [x] Add prompt version comparison view in dashboard
 
   **Phase 4: Few-Shot & Testing**
   - [ ] [3] Add `examples` field to `PromptVersionDBData` model
