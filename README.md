@@ -170,14 +170,12 @@ Priority-ordered suggestions for improving the project.
   - TikTok
   - LinkedIn
   - Email
-  - Signal
+  - Telegram
   - WhatsApp
 - YouTube comments analysis
-- Remove teams as it looks of no use
 - Create Videos
 - Scrape websites for contacts and potential client
 - Tailor made email with video for potential client
-- Adopt GIT branching strategies
 - Set Up N8N
 - Make a Webpage based on the post
 
