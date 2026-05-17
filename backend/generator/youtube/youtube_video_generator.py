@@ -27,7 +27,6 @@ from backend.generator.response_format import (
 from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.manager import JobManager, YouTubeVideoManager
-from backend.prompt_agent import YouTubeVideoMetadataAgent
 from backend.services.agent_service import AgentImageService, AgentService
 
 logger = logging.getLogger(__name__)
@@ -178,6 +177,8 @@ class YouTubeVideoGenerator(BaseGenerator):
         self, video_from_db: YouTubeVideoDBData
     ) -> tuple[JobsStatusEnum, dict]:
         logger.info("Generating metadata suggestions for job %s", self.job.id)
+        from backend.prompt_agent import YouTubeVideoMetadataAgent
+
         agent = YouTubeVideoMetadataAgent(
             job_id=self.job.id,
             data={
