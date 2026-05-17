@@ -75,9 +75,9 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   **Phase 2: Prompt Agent Migration**
   - [ ] [2] Audit all generators — find hardcoded prompts still outside the Prompt Agent system
   - [x] Move `YouTubeVideoMetadata` prompt fully into Prompt Agent
-  - [ ] Move `YouTubeVideoSummarization` prompt fully into Prompt Agent
-  - [ ] Move `YouTubeVideoCommunityPost` prompt fully into Prompt Agent
-  - [ ] Move `YouTubeThumbnailImageGenerationPrompt` prompt fully into Prompt Agent
+  - [x] Move `YouTubeVideoSummarization` prompt fully into Prompt Agent
+  - [x] Move `YouTubeVideoCommunityPost` prompt fully into Prompt Agent
+  - [x] Move `YouTubeThumbnailImageGenerationPrompt` prompt fully into Prompt Agent
   - [ ] [3] Move `YouTubeShortSpeechGenerationPrompt` prompt fully into Prompt Agent
   - [ ] [3] Move `YouTubeVideoTwitterPost` prompt fully into Prompt Agent
   - [ ] [3] Remove fallback/legacy prompt paths from generators
