@@ -16,6 +16,7 @@ class PromptRequest(BaseModelWithConfig):
     ai: str
     comment: str | None = None
     last_updated: datetime
+    prompt_data: list[dict] = Field(default_factory=list)
 
 
 class PromptVersionResponse(BaseModelWithConfig):

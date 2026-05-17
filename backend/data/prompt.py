@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Self
 from uuid import UUID
@@ -18,6 +18,7 @@ class PromptDBData:
     ai: AIModelEnum
     comment: str | None = None
     last_updated: datetime = datetime.now()
+    prompt_data: list[dict] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {
@@ -29,6 +30,7 @@ class PromptDBData:
             "ai": self.ai.value,
             "comment": self.comment,
             "last_updated": self.last_updated.isoformat(),
+            "prompt_data": self.prompt_data,
         }
 
     @classmethod
@@ -42,6 +44,7 @@ class PromptDBData:
             ai=AIModelEnum(data["ai"]),
             comment=data.get("comment"),
             last_updated=datetime.fromisoformat(data["last_updated"]),
+            prompt_data=data.get("prompt_data", []),
         )
 
 
