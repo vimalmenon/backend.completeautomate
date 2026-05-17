@@ -4,7 +4,6 @@ from typing import Any
 
 from backend.config.env import env
 from backend.data import (
-    ImagePromptData,
     JobData,
     S3Data,
     YouTubeThumbnailImageGenerationPromptData,
@@ -14,7 +13,6 @@ from backend.data import (
 )
 from backend.enum import (
     JobsStatusEnum,
-    PromptTaskEnum,
     YouTubeVideoTaskEnum,
 )
 from backend.exception import AppException
