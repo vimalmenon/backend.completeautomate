@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Self
+from typing import Self
 from uuid import UUID
 
 from backend.enum import AIModelEnum, PromptTaskEnum
