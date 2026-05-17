@@ -1,26 +1,66 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Self
 from uuid import UUID
 
 from backend.enum import AIModelEnum, PromptTaskEnum
-from backend.exception import AppException
+
+
+@dataclass
+class PromptDBData:
+    """Main prompt definition — only the ACTIVE version stored inline."""
+    task: PromptTaskEnum
+    description: str
+    active_version: UUID
+    prompt: str
+    system_message: str
+    ai: AIModelEnum
+    comment: str | None = None
+    last_updated: datetime = datetime.now()
+
+    def to_json(self) -> dict:
+        return {
+            "task": self.task.value,
+            "description": self.description,
+            "active_version": str(self.active_version),
+            "prompt": self.prompt,
+            "system_message": self.system_message,
+            "ai": self.ai.value,
+            "comment": self.comment,
+            "last_updated": self.last_updated.isoformat(),
+        }
+
+    @classmethod
+    def to_cls(cls, data: dict) -> Self:
+        return cls(
+            task=PromptTaskEnum(data["task"]),
+            description=data["description"],
+            active_version=UUID(data["active_version"]),
+            prompt=data["prompt"],
+            system_message=data["system_message"],
+            ai=AIModelEnum(data["ai"]),
+            comment=data.get("comment"),
+            last_updated=datetime.fromisoformat(data["last_updated"]),
+        )
 
 
 @dataclass
 class PromptVersionDBData:
+    """One item per version — full history, separate from the active prompt."""
+    task: PromptTaskEnum
+    version: UUID
     prompt: str
     system_message: str
-    version: UUID
     reflect_message: str
     ai: AIModelEnum
     created_at: datetime = datetime.now()
 
     def to_json(self) -> dict:
         return {
+            "task": self.task.value,
+            "version": str(self.version),
             "prompt": self.prompt,
             "system_message": self.system_message,
-            "version": str(self.version),
             "reflect_message": self.reflect_message,
             "ai": self.ai.value,
             "created_at": self.created_at.isoformat(),
@@ -28,12 +68,12 @@ class PromptVersionDBData:
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
-        # TODO Remove get once done
         return cls(
+            task=PromptTaskEnum(data["task"]),
+            version=UUID(data["version"]),
             prompt=data["prompt"],
             system_message=data["system_message"],
             reflect_message=data.get("reflect_message", ""),
-            version=UUID(data["version"]),
             ai=AIModelEnum(data["ai"]),
             created_at=datetime.fromisoformat(data["created_at"]),
         )
@@ -41,124 +81,34 @@ class PromptVersionDBData:
 
 @dataclass
 class PromptResultDBData:
+    """One item per evaluation run."""
+    task: PromptTaskEnum
+    result_id: UUID
+    version: UUID
     response: str
     score: int | None
-
-    def to_json(self) -> dict:
-        return {"response": self.response, "score": self.response}
-
-    @classmethod
-    def to_cls(cls, data: dict) -> Self:
-        return cls(response=data["response"], score=data.get("score"))
-
-
-@dataclass
-class PromptDBData:
-    task: PromptTaskEnum
-    description: str
-    versions: list[PromptVersionDBData]
-    version: UUID
-    comment: str | None = None
-    last_updated: datetime = datetime.now()
-    prompt_data: list[dict] = field(default_factory=list)
-    response_data: list[PromptResultDBData] = field(default_factory=list)
-
-    def __post_init__(self):
-        selected_prompts = [
-            version for version in self.versions if version.version == self.version
-        ]
-        if len(selected_prompts) == 1:
-            self.prompt = selected_prompts[0].prompt
-            self.system_message = selected_prompts[0].system_message
-            self.ai = selected_prompts[0].ai
-        else:
-            raise AppException("Cannot find prompt for this version")
+    prompt_data_snapshot: dict
+    created_at: datetime = datetime.now()
 
     def to_json(self) -> dict:
         return {
             "task": self.task.value,
+            "result_id": str(self.result_id),
             "version": str(self.version),
-            "description": self.description,
-            "versions": [version.to_json() for version in self.versions],
-            "comment": self.comment,
-            "last_updated": self.last_updated.isoformat(),
-            "prompt_data": self.prompt_data,
+            "response": self.response,
+            "score": self.score,
+            "prompt_data_snapshot": self.prompt_data_snapshot,
+            "created_at": self.created_at.isoformat(),
         }
-
-    def add_prompt_version(self, data: PromptVersionDBData) -> Self:
-        self.versions.append(data)
-        return self
-
-    def with_updated_prompt_version(
-        self,
-        *,
-        prompt: str,
-        system_message: str,
-        description: str,
-        ai: AIModelEnum,
-        created_at: datetime,
-        version: UUID,
-        comment: str | None = None,
-    ) -> Self:
-        self.description = description
-        self.comment = comment
-        self.last_updated = created_at
-        self.version = version
-        self.versions.append(
-            PromptVersionDBData(
-                prompt=prompt,
-                system_message=system_message,
-                reflect_message="",
-                version=version,
-                ai=ai,
-                created_at=created_at,
-            )
-        )
-        self.__post_init__()
-        return self
 
     @classmethod
     def to_cls(cls, data: dict) -> Self:
         return cls(
             task=PromptTaskEnum(data["task"]),
+            result_id=UUID(data["result_id"]),
             version=UUID(data["version"]),
-            last_updated=datetime.fromisoformat(data["last_updated"]),
-            versions=[
-                PromptVersionDBData.to_cls(version) for version in data["versions"]
-            ],
-            comment=data.get("comment"),
-            description=data["description"],
-            prompt_data=data.get("prompt_data", []),
-        )
-
-    def copy(self) -> Self:
-        """Create a shallow copy of this PromptDBData object."""
-        return replace(self)
-
-    def values_to_update(self, result: Self) -> dict[str, Any]:
-        updated_values: dict[str, Any] = {}
-        if self.ai != result.ai:
-            updated_values["ai"] = self.ai
-        return updated_values
-
-
-@dataclass
-class PromptResultData:
-    task: PromptTaskEnum
-    version: UUID
-    result: str
-
-    def to_json(self) -> dict[str, str]:
-        return {
-            "task": self.task.value,
-            "version": str(self.version),
-            "result": self.result,
-        }
-
-    @classmethod
-    def to_cls(cls, data: dict[str, Any]) -> Self:
-        return cls(
-            task=PromptTaskEnum(data["task"]),
-            version=data["version"],
-            result=data["result"],
+            response=data["response"],
+            score=data.get("score"),
+            prompt_data_snapshot=data.get("prompt_data_snapshot", {}),
+            created_at=datetime.fromisoformat(data["created_at"]),
         )
