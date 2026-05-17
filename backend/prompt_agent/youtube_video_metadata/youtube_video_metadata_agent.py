@@ -1,9 +1,10 @@
-from backend.data import YouTubeVideoMetadataData
-from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
-from backend.enum import PromptTaskEnum
-from backend.services.agent_service import AgentService
-from backend.integration import GeneralAgent
 from uuid import UUID
+
+from backend.data import YouTubeVideoMetadataData
+from backend.enum import PromptTaskEnum
+from backend.generator.response_format import YouTubeVideoAnalyzerListResponse
+from backend.integration import GeneralAgent
+from backend.services.agent_service import AgentService
 
 
 class YouTubeVideoMetadataAgent:

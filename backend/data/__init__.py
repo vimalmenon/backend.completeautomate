@@ -66,4 +66,5 @@ __all__ = [
     "YouTubeStatsUpdaterTaskData",
     "JobDataResponse",
     "YouTubeShortDBData",
+    "PromptResultDBData",
 ]

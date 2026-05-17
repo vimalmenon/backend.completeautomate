@@ -73,8 +73,8 @@ class PromptReviewer(BaseGenerator):
     def __evaluate_test_data(
         self, prompt: PromptDBData, test_data: dict
     ) -> PromptResultDBData | None:
-        from backend.services.agent_service import AgentService
         from backend.integration import GeneralAgent
+        from backend.services.agent_service import AgentService
 
         service = AgentService(
             prompt_task=prompt.task,

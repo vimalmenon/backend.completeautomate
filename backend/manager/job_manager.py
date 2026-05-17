@@ -6,7 +6,7 @@ from backend.data import (
     JobData,
 )
 from backend.database import JobDB
-from backend.enum import JobsStatusEnum, JobTypeEnum, STATUS_PRIORITY
+from backend.enum import STATUS_PRIORITY, JobsStatusEnum, JobTypeEnum
 
 
 class JobManager:

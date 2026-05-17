@@ -17,7 +17,7 @@ class PromptDBData:
     system_message: str
     ai: AIModelEnum
     comment: str | None = None
-    last_updated: datetime = datetime.now()
+    last_updated: datetime = field(default_factory=datetime.now)
     prompt_data: list[dict] = field(default_factory=list)
     examples: list[dict] = field(default_factory=list)
 
@@ -61,7 +61,7 @@ class PromptVersionDBData:
     system_message: str
     reflect_message: str
     ai: AIModelEnum
-    created_at: datetime = datetime.now()
+    created_at: datetime = field(default_factory=datetime.now)
     examples: list[dict] = field(default_factory=list)
 
     def to_json(self) -> dict:
@@ -100,7 +100,7 @@ class PromptResultDBData:
     response: str
     score: int | None
     prompt_data_snapshot: dict
-    created_at: datetime = datetime.now()
+    created_at: datetime = field(default_factory=datetime.now)
 
     def to_json(self) -> dict:
         return {

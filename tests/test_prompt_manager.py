@@ -1,10 +1,11 @@
 """Unit tests for Prompt Manager"""
+
 from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
 
-from backend.data import PromptDBData, PromptVersionDBData
+from backend.data import PromptDBData
 from backend.data.api import PromptUpdateResult
 from backend.enum import AIModelEnum
 from backend.enum.prompt import PromptTaskEnum
@@ -158,7 +159,9 @@ def test_get_examples_returns_empty_list() -> None:
         mock_prompt_db = mock_prompt_db_cls.return_value
         mock_prompt_db.get_prompt_by_task.return_value = prompt
 
-        examples = PromptManager().get_examples(PromptTaskEnum.YouTubeVideoSummarization)
+        examples = PromptManager().get_examples(
+            PromptTaskEnum.YouTubeVideoSummarization
+        )
 
     assert examples == []
 
@@ -244,9 +247,7 @@ def test_remove_example_raises_for_invalid_index() -> None:
         mock_prompt_db.get_prompt_by_task.return_value = initial
 
         with pytest.raises(AppException, match="Example index 5 out of range"):
-            PromptManager().remove_example(
-                PromptTaskEnum.YouTubeVideoSummarization, 5
-            )
+            PromptManager().remove_example(PromptTaskEnum.YouTubeVideoSummarization, 5)
 
 
 @pytest.mark.unit
