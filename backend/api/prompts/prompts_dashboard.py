@@ -109,28 +109,30 @@ async def prompt_results_dashboard(request: Request):
         ]
         avg_score = round(sum(all_scores) / len(all_scores)) if all_scores else 0
 
-        return templates.TemplateResponse(
-            "prompt_result_dashboard.html",
-            {
-                "request": request,
-                "prompts": prompts_data,
-                "details": details,
-                "result_count": total_results,
-                "evaluated_count": evaluated_count,
-                "avg_score": avg_score,
-                "error": None,
-            },
+        return HTMLResponse(
+            templates.get_template("prompt_result_dashboard.html").render(
+                {
+                    "request": request,
+                    "prompts": prompts_data,
+                    "details": details,
+                    "result_count": total_results,
+                    "evaluated_count": evaluated_count,
+                    "avg_score": avg_score,
+                    "error": None,
+                }
+            ),
         )
     except Exception as e:
-        return templates.TemplateResponse(
-            "prompt_result_dashboard.html",
-            {
-                "request": request,
-                "error": str(e),
-                "prompts": [],
-                "details": {},
-                "result_count": 0,
-                "evaluated_count": 0,
-                "avg_score": 0,
-            },
+        return HTMLResponse(
+            templates.get_template("prompt_result_dashboard.html").render(
+                {
+                    "request": request,
+                    "error": str(e),
+                    "prompts": [],
+                    "details": {},
+                    "result_count": 0,
+                    "evaluated_count": 0,
+                    "avg_score": 0,
+                }
+            ),
         )
