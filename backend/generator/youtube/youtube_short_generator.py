@@ -34,7 +34,7 @@ class YouTubeShortGenerator(BaseGenerator):
                     "status": result.get("status", "failed"),
                 }
 
-            output = result.get("output", {})
+            output = result.get("output") or {}
             logger.info(
                 "YouTube Short generation complete for job %s — "
                 "speech: %s chars, images: %s",

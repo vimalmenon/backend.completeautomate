@@ -27,7 +27,7 @@ def _prompt_details(prompt, pm: PromptManager) -> dict:
     versions_sorted = sorted(versions, key=lambda x: x.created_at, reverse=True)
 
     # Aggregate scores per version
-    version_scores = {str(v.version): [] for v in versions_sorted}
+    version_scores: dict[str, list[int]] = {str(v.version): [] for v in versions_sorted}
     for r in results:
         vid = str(r.version)
         if vid in version_scores and r.score is not None:
@@ -109,7 +109,7 @@ async def prompt_results_dashboard(request: Request):
         ]
         avg_score = round(sum(all_scores) / len(all_scores)) if all_scores else 0
 
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[arg-type]
             "prompt_result_dashboard.html",
             {
                 "request": request,
@@ -122,7 +122,7 @@ async def prompt_results_dashboard(request: Request):
             },
         )
     except Exception as e:
-        return templates.TemplateResponse(
+        return templates.TemplateResponse(  # type: ignore[arg-type]
             "prompt_result_dashboard.html",
             {
                 "request": request,

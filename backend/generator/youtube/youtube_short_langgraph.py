@@ -134,8 +134,8 @@ class YouTubeShortLangGraph:
     ) -> YouTubeShortGenerationState:
         """Generate the speech/voiceover script for the short."""
         try:
-            topic = state.get("topic", "")
-            transcript = state.get("transcript", "")
+            topic: str = state.get("topic", "") or ""
+            transcript: str = state.get("transcript", "") or ""
 
             agent = YouTubeShortSpeechGenerator(
                 job_id=self.job_id,
@@ -163,8 +163,8 @@ class YouTubeShortLangGraph:
     ) -> YouTubeShortGenerationState:
         """Generate image prompt descriptions for the short's visuals."""
         try:
-            topic = state.get("topic", "")
-            speech_script = state.get("speech_script", "")
+            topic: str = state.get("topic", "") or ""
+            speech_script: str = state.get("speech_script", "") or ""
 
             prompts = YouTubeShortImagePromptGenerator(
                 job_id=self.job_id,
@@ -253,7 +253,9 @@ class YouTubeShortImagePromptGenerator:
     """Generate image prompts for a YouTube Short's visuals."""
 
     def __init__(self, job_id: str, topic: str, speech_script: str):
-        self.job_id = job_id
+        from uuid import UUID
+
+        self.job_id = UUID(job_id[:36])
         self.topic = topic
         self.speech_script = speech_script
 
@@ -277,7 +279,7 @@ class YouTubeShortImagePromptGenerator:
                 structured_response
             )
             agent.clean_up()
-            return prompts
+            return [p.to_json() for p in prompts] if prompts else []
         except Exception:
             logger.exception("YouTubeShortImagePromptGenerator failed")
             return []
