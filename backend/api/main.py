@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.auth.dependencies import get_current_user
+from backend.api.auth.auth_api import router as auth_router
 from backend.api.channel.channel_api import router as channel_router
 from backend.api.data.data_api import router as data_router
 from backend.api.health.health_api import router as health_router
@@ -41,28 +43,52 @@ main.add_middleware(
 )
 
 
+# --- Include auth router (public) ---
+main.include_router(auth_router, prefix=API_PREFIX)
+
+
 # --- Include health router ---
 main.include_router(health_router, prefix=API_PREFIX)
 
 
-# --- Include jobs router ---
-main.include_router(jobs_router, prefix=API_PREFIX)
+# --- Include jobs router (protected) ---
+main.include_router(
+    jobs_router,
+    prefix=API_PREFIX,
+    dependencies=[Depends(get_current_user)],
+)
 
 
-# --- Include channel router ---
-main.include_router(channel_router, prefix=API_PREFIX)
+# --- Include channel router (protected) ---
+main.include_router(
+    channel_router,
+    prefix=API_PREFIX,
+    dependencies=[Depends(get_current_user)],
+)
 
 
-# --- Include prompts router ---
-main.include_router(prompts_router, prefix=API_PREFIX)
+# --- Include prompts router (protected) ---
+main.include_router(
+    prompts_router,
+    prefix=API_PREFIX,
+    dependencies=[Depends(get_current_user)],
+)
 
 
-# --- Include prompts dashboard router ---
-main.include_router(prompts_dashboard_router, prefix=API_PREFIX)
+# --- Include prompts dashboard router (protected) ---
+main.include_router(
+    prompts_dashboard_router,
+    prefix=API_PREFIX,
+    dependencies=[Depends(get_current_user)],
+)
 
 
-# --- Include data router ---
-main.include_router(data_router, prefix=API_PREFIX)
+# --- Include data router (protected) ---
+main.include_router(
+    data_router,
+    prefix=API_PREFIX,
+    dependencies=[Depends(get_current_user)],
+)
 
 
 def run_dev() -> None:
