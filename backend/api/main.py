@@ -9,6 +9,7 @@ from backend.api.data.data_api import router as data_router
 from backend.api.health.health_api import router as health_router
 from backend.api.jobs.jobs_api import router as jobs_router
 from backend.api.prompts.prompts_api import router as prompts_router
+from backend.api.prompts.prompts_dashboard import router as prompts_dashboard_router
 from backend.config.env import env
 from backend.manager import DataManager
 
@@ -54,6 +55,10 @@ main.include_router(channel_router, prefix=API_PREFIX)
 
 # --- Include prompts router ---
 main.include_router(prompts_router, prefix=API_PREFIX)
+
+
+# --- Include prompts dashboard router ---
+main.include_router(prompts_dashboard_router, prefix=API_PREFIX)
 
 
 # --- Include data router ---

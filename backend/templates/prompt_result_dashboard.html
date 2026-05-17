@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Results Dashboard - CompleteAutomate</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d28;
+            --surface2: #232738;
+            --border: #2e3348;
+            --text: #e4e6f0;
+            --text-dim: #8b8fa3;
+            --green: #22c55e;
+            --yellow: #eab308;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --accent: #6366f1;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 2rem;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .header .subtitle { color: var(--text-dim); font-size: 0.875rem; }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .summary-card .value { font-size: 2rem; font-weight: 700; }
+        .summary-card .label { color: var(--text-dim); font-size: 0.8rem; margin-top: 0.25rem; }
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1rem;
+        }
+        .prompt-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.1s;
+        }
+        .prompt-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .prompt-card .task {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+        .prompt-card .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .prompt-card .desc {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .score-high { background: rgba(34,197,94,0.15); color: var(--green); }
+        .score-mid { background: rgba(234,179,8,0.15); color: var(--yellow); }
+        .score-low { background: rgba(239,68,68,0.15); color: var(--red); }
+        .score-none { background: var(--surface2); color: var(--text-dim); }
+        .count-badge {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+        }
+        .detail-view {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .detail-view.open { display: block; }
+        .back-link {
+            color: var(--blue);
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .detail-section { margin-bottom: 1.5rem; }
+        .detail-section h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .detail-section pre {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .detail-section .info-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .detail-section .info-row .label { color: var(--text-dim); min-width: 100px; }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .results-table th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-dim);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .results-table td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .results-table tr:hover td { background: rgba(99,102,241,0.04); }
+        .response-preview {
+            max-height: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .response-preview.expanded {
+            max-height: none;
+        }
+        .expand-btn {
+            color: var(--blue);
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .data-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-dim);
+        }
+        .empty-state h2 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text); }
+        .pill {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .prompts-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <div class="header">
+            <div>
+                <h1>🪄 Prompt Results Dashboard</h1>
+                <div class="subtitle">Evaluation scores and improvement tracking</div>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="detail-view open">
+            <div class="empty-state">
+                <h2>⚠️ Error loading dashboard</h2>
+                <p>{{ error }}</p>
+            </div>
+        </div>
+        {% else %}
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="value">{{ prompts|length }}</div>
+                <div class="label">Total Prompts</div>
+            </div>
+            <div class="summary-card">
+                <div class="value">{{ evaluated_count }}</div>
+                <div class="label">With Evaluations</div>
+            </div>
+            <div class="summary-card">
+                <div class="value">{{ result_count }}</div>
+                <div class="label">Total Results</div>
+            </div>
+            <div class="summary-card">
+                <div class="value" style="color: var(--green)">{{ avg_score }}</div>
+                <div class="label">Avg Score</div>
+            </div>
+        </div>
+
+        {% if prompts %}
+        <div class="prompts-grid">
+            {% for prompt in prompts %}
+            <div class="prompt-card" onclick="showDetail('{{ prompt.task }}')">
+                <div class="task">{{ prompt.task }}</div>
+                <div class="meta">
+                    {% if prompt.latest_score is not none %}
+                        {% if prompt.latest_score >= 80 %}
+                        <span class="score-badge score-high">{{ prompt.latest_score }}</span>
+                        {% elif prompt.latest_score >= 60 %}
+                        <span class="score-badge score-mid">{{ prompt.latest_score }}</span>
+                        {% else %}
+                        <span class="score-badge score-low">{{ prompt.latest_score }}</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="score-badge score-none">—</span>
+                    {% endif %}
+                    <span class="count-badge">{{ prompt.result_count }} eval{{ 's' if prompt.result_count != 1 }}</span>
+                </div>
+                <div class="desc">{{ prompt.description }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h2>No prompts found</h2>
+            <p>Create a prompt to see evaluation results here.</p>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    {% if not error %}
+    <script>
+        const allData = {{ details | tojson }};
+
+        function showDetail(task) {
+            const data = allData[task];
+            if (!data) return;
+
+            const main = document.getElementById('dashboard');
+            const detail = document.createElement('div');
+            detail.id = 'detail-view';
+            detail.className = 'detail-view open';
+            detail.innerHTML = buildDetailHtml(task, data);
+            main.innerHTML = '';
+            main.appendChild(detail);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showOverview() {
+            location.reload();
+        }
+
+        function buildDetailHtml(task, data) {
+            let html = `<a class="back-link" onclick="showOverview()">← Back to overview</a>`;
+            html += `<div class="detail-section"><h3>Prompt Details</h3>`;
+            html += `<div class="info-row"><span class="label">Task</span><span>${escapeHtml(task)}</span></div>`;
+            html += `<div class="info-row"><span class="label">Description</span><span>${escapeHtml(data.description || '—')}</span></div>`;
+            html += `<div class="info-row"><span class="label">Active Version</span><span class="pill">${data.active_version?.substring(0,8) || '—'}</span></div>`;
+            html += `<div class="info-row"><span class="label">AI Model</span><span>${escapeHtml(data.ai || '—')}</span></div>`;
+            html += `<div class="info-row"><span class="label">Last Updated</span><span>${escapeHtml(data.last_updated || '—')}</span></div>`;
+            html += `<h4 style="margin: 1rem 0 0.5rem; font-size: 0.85rem; color: var(--text-dim);">Prompt</h4>`;
+            html += `<pre>${escapeHtml(data.prompt || '')}</pre>`;
+            if (data.system_message) {
+                html += `<h4 style="margin: 1rem 0 0.5rem; font-size: 0.85rem; color: var(--text-dim);">System Message</h4>`;
+                html += `<pre>${escapeHtml(data.system_message)}</pre>`;
+            }
+            html += `</div>`;
+
+            const results = data.results || [];
+            html += `<div class="detail-section"><h3>Evaluation Results (${results.length})</h3>`;
+            if (results.length === 0) {
+                html += `<p style="color: var(--text-dim); font-size: 0.85rem;">No evaluation results yet. Run the PromptReviewer job to generate results.</p>`;
+            } else {
+                html += `<table class="results-table">
+                    <thead><tr>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Response</th>
+                        <th>Test Data</th>
+                    </tr></thead><tbody>`;
+                for (const r of results) {
+                    const scoreClass = r.score >= 80 ? 'score-high' : r.score >= 60 ? 'score-mid' : 'score-low';
+                    html += `<tr>
+                        <td style="white-space: nowrap; font-size: 0.75rem; color: var(--text-dim);">${escapeHtml(r.created_at?.substring(0, 10) || '')}</td>
+                        <td><span class="score-badge ${scoreClass}">${r.score ?? '—'}</span></td>
+                        <td>
+                            <div class="response-preview" id="resp-${r.result_id?.substring(0,8)}">${escapeHtml(r.response?.substring(0, 200) || '')}</div>
+                            ${(r.response && r.response.length > 200) ? `<a class="expand-btn" onclick="toggleExpand('resp-${r.result_id?.substring(0,8)}', this)">Show more</a>` : ''}
+                        </td>
+                        <td><div class="data-cell" title="${escapeHtml(JSON.stringify(r.prompt_data_snapshot || {}))}">${escapeHtml(JSON.stringify(r.prompt_data_snapshot || {}).substring(0, 100))}</div></td>
+                    </tr>`;
+                }
+                html += `</tbody></table>`;
+            }
+            html += `</div>`;
+
+            // Score distribution
+            if (results.length > 0) {
+                const scores = results.map(r => r.score).filter(s => s !== null);
+                if (scores.length > 0) {
+                    const avg = Math.round(scores.reduce((a,b) => a+b, 0) / scores.length);
+                    const high = scores.filter(s => s >= 80).length;
+                    const mid = scores.filter(s => s >= 60 && s < 80).length;
+                    const low = scores.filter(s => s < 60).length;
+                    html += `<div class="detail-section"><h3>Score Distribution</h3>`;
+                    html += `<div style="display: flex; gap: 1.5rem; align-items: center;">`;
+                    html += `<div style="font-size: 2.5rem; font-weight: 700;">${avg}</div>`;
+                    html += `<div style="flex: 1; display: flex; gap: 0.25rem; height: 1.5rem; border-radius: 8px; overflow: hidden;">`;
+                    if (high > 0) html += `<div style="flex: ${high}; background: var(--green);" title="${high} high (≥80)"></div>`;
+                    if (mid > 0) html += `<div style="flex: ${mid}; background: var(--yellow);" title="${mid} medium (60-79)"></div>`;
+                    if (low > 0) html += `<div style="flex: ${low}; background: var(--red);" title="${low} low (<60)"></div>`;
+                    html += `</div></div>`;
+                    html += `<div style="display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-dim);">`;
+                    html += `<span>🟢 ${high} high</span><span>🟡 ${mid} medium</span><span>🔴 ${low} low</span>`;
+                    html += `</div></div>`;
+                }
+            }
+
+            return html;
+        }
+
+        function toggleExpand(id, btn) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.toggle('expanded');
+                btn.textContent = el.classList.contains('expanded') ? 'Show less' : 'Show more';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+    {% endif %}
+</body>
+</html>
