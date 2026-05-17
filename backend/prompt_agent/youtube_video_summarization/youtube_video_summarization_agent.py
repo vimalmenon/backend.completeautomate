@@ -18,7 +18,8 @@ class YouTubeVideoSummarizationAgent:
 
     def generate(self) -> str:
         result = self.agent.invoke()
-        return result["messages"][-1].content
+        content: str = result["messages"][-1].content
+        return content
 
     def clean_up(self) -> None:
         self.agent.clean_up_messages()
