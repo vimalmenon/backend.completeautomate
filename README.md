@@ -52,12 +52,11 @@ Priority-ordered suggestions for improving the project.
 ---
 
 - NEXT
-  - [x][4] Set Up LangGraph for YouTubeShorts Videos
-  - [ ][2] Set up Text To Speech (TTS)
-  - [ ][8] Refactor Prompt
+  - [x] [4] Set Up LangGraph for YouTubeShorts Videos
+  - [ ] [2] Set up Text To Speech (TTS)
+  - [ ] [8] Refactor Prompt
 
 - TODO Items
-
 - [ ] API
   - [ ] Auth
     - [ ] [3] Set up `Basic Auth`
