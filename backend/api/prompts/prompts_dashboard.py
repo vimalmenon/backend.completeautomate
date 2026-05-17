@@ -75,11 +75,18 @@ def _prompt_details(prompt, pm: PromptManager) -> dict:
                 ),
                 "eval_count": len(version_scores.get(str(v.version), [])),
                 "avg_score": (
-                    round(sum(version_scores[str(v.version)]) / len(version_scores[str(v.version)]))
+                    round(
+                        sum(version_scores[str(v.version)])
+                        / len(version_scores[str(v.version)])
+                    )
                     if version_scores.get(str(v.version))
                     else None
                 ),
-                "best_score": max(version_scores[str(v.version)]) if version_scores.get(str(v.version)) else None,
+                "best_score": (
+                    max(version_scores[str(v.version)])
+                    if version_scores.get(str(v.version))
+                    else None
+                ),
             }
             for v in versions_sorted
         ],
@@ -98,7 +105,9 @@ async def prompt_results_dashboard(request: Request):
 
         total_results = sum(p["result_count"] for p in prompts_data)
         evaluated_count = sum(1 for p in prompts_data if p["latest_score"] is not None)
-        all_scores = [p["latest_score"] for p in prompts_data if p["latest_score"] is not None]
+        all_scores = [
+            p["latest_score"] for p in prompts_data if p["latest_score"] is not None
+        ]
         avg_score = round(sum(all_scores) / len(all_scores)) if all_scores else 0
 
         return templates.TemplateResponse(

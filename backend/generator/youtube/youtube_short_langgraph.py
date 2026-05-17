@@ -3,6 +3,7 @@
 Orchestrates multi-step short video content generation using
 LangGraph state machine with optional DynamoDB persistence.
 """
+
 import logging
 from typing import Any, TypedDict, cast
 
@@ -24,6 +25,7 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     Tracks all data as it flows through the LangGraph nodes:
     fetch_input → generate_speech → generate_image_prompts → finalize
     """
+
     # Input from job
     input: dict[str, Any]
     # Resolved short data from DB or input
@@ -178,9 +180,7 @@ class YouTubeShortLangGraph:
                 "status": "image_prompts_generated",
             }
         except Exception as e:
-            logger.exception(
-                "Failed to generate image prompts for job %s", self.job_id
-            )
+            logger.exception("Failed to generate image prompts for job %s", self.job_id)
             return _error_state(f"Image prompt generation failed: {e}")
 
     # ── Node: Finalize ──
