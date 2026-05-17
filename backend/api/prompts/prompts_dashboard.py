@@ -109,7 +109,7 @@ async def prompt_results_dashboard(request: Request):
         ]
         avg_score = round(sum(all_scores) / len(all_scores)) if all_scores else 0
 
-        return templates.TemplateResponse(  # type: ignore[arg-type]
+        return templates.TemplateResponse(
             "prompt_result_dashboard.html",
             {
                 "request": request,
@@ -122,7 +122,7 @@ async def prompt_results_dashboard(request: Request):
             },
         )
     except Exception as e:
-        return templates.TemplateResponse(  # type: ignore[arg-type]
+        return templates.TemplateResponse(
             "prompt_result_dashboard.html",
             {
                 "request": request,
