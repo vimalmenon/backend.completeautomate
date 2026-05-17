@@ -9,7 +9,6 @@ from backend.data import (
     S3Data,
     YouTubeThumbnailImageGenerationPromptData,
     YouTubeVideoDBData,
-    YouTubeVideoMetadataData,
     YouTubeVideoTaskData,
     YouTubeVideoThumbnailData,
 )
