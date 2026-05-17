@@ -75,7 +75,6 @@ class PromptReviewer(BaseGenerator):
     ) -> PromptResultDBData | None:
         from backend.services.agent_service import AgentService
         from backend.integration import GeneralAgent
-        from backend.ai.text_generation.grok_ai import GrokAI
 
         service = AgentService(
             prompt_task=prompt.task,
@@ -136,8 +135,6 @@ Return ONLY a number between 0 and 100 representing the total score."""
     def __generate_improvement(
         self, prompt: PromptDBData, results: list[PromptResultDBData]
     ) -> None:
-        from backend.ai.text_generation.grok_ai import GrokAI
-
         eval_summary = "\n".join(
             f"Test data: {r.prompt_data_snapshot}\nScore: {r.score}\nResponse: {r.response[:200]}..."
             for r in results
