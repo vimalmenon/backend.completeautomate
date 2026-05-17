@@ -83,15 +83,15 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
   - [ ] [3] Remove fallback/legacy prompt paths from generators
 
   **Phase 3: PromptImprover Loop**
-  - [ ] [2] Build PromptImprover pipeline in `prompt_reviewer.py`:
+  - [x] Build PromptImprover pipeline in `prompt_reviewer.py`:
     - Load all prompts from DB
     - For each prompt, run AI evaluation against `prompt_data`
     - Score the prompt quality (relevance, clarity, structure)
     - Generate improved version with reflection
     - Save both result and new version
-  - [ ] [3] Pass real `prompt_data` to PromptImprover (minimum 2 data sets per prompt)
-  - [ ] [3] Store evaluation results to `PromptResult` table
-  - [ ] [3] Add prompt version comparison view in dashboard
+  - [x] Pass real `prompt_data` to PromptImprover (via managed list on PromptDBData)
+  - [x] Store evaluation results to `PromptResult` table
+  - [ ] Add prompt version comparison view in dashboard
 
   **Phase 4: Few-Shot & Testing**
   - [ ] [3] Add `examples` field to `PromptVersionDBData` model
