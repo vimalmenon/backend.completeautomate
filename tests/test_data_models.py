@@ -215,8 +215,9 @@ class TestPromptDBDataFields:
         assert data["system_message"] == "s"
         assert data["ai"] == "Grok"
         assert "versions" not in data
-        assert "prompt_data" not in data
         assert "response_data" not in data
+        assert "prompt_data" in data
+        assert data["prompt_data"] == []
 
     def test_prompt_db_data_to_cls(self) -> None:
         """Test round-trip to_json → to_cls."""
