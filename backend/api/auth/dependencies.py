@@ -48,7 +48,7 @@ async def _require_user(
 
     token = credentials.credentials
     try:
-        claims = verifier.verify(token)
+        claims = await verifier.verify(token)
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -85,6 +85,6 @@ async def optional_user(
     if credentials is None:
         return None
     try:
-        return verifier.verify(credentials.credentials)
+        return await verifier.verify(credentials.credentials)
     except ValueError:
         return None

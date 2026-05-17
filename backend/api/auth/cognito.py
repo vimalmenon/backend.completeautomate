@@ -10,14 +10,15 @@ from typing import Any
 
 import httpx
 from jose import jwk, jws
-from jose.exceptions import JWTError, JWSError
 from jose.constants import Algorithms
+from jose.exceptions import JWTError, JWSError
 
 from backend.config.env import env
 
 logger = getLogger(__name__)
 
 JWKS_CACHE_TTL_SECONDS = 3600  # 1 hour
+MAX_TOKEN_AGE_SECONDS = 3600  # 1 hour
 
 
 @dataclass
@@ -31,6 +32,7 @@ class CognitoClaims:
     cognito_groups: list[str] = field(default_factory=list)
     token_use: str = ""
     exp: int = 0
+    iat: int = 0
     iss: str = ""
     client_id: str | None = None
     raw: dict[str, Any] = field(default_factory=dict)
@@ -69,32 +71,33 @@ class CognitoJWTVerifier:
             f"{pool_id}/.well-known/jwks.json"
         )
 
-    def _fetch_jwks(self) -> dict[str, Any]:
+    async def _fetch_jwks(self) -> dict[str, Any]:
         """Fetch JWKS from Cognito, with simple TTL caching."""
         now = time.time()
         if (
             self._jwks_cache is not None
             and now - self._jwks_cached_at < JWKS_CACHE_TTL_SECONDS
         ):
-            return self._jwks_cache
+            return self._jwks_cache  # type: ignore[return-value]
 
         # When Cognito is not configured, return empty to avoid spamming errors
         if not env.COGNITO_USER_POOL_ID or not env.COGNITO_APP_CLIENT_ID:
             return {"keys": []}
 
         try:
-            resp = httpx.get(self._jwks_url, timeout=10)
-            resp.raise_for_status()
-            self._jwks_cache = resp.json()
-            self._jwks_cached_at = now
-            return self._jwks_cache
-        except httpx.RequestError as exc:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(self._jwks_url, timeout=10)
+                resp.raise_for_status()
+                self._jwks_cache = resp.json()
+                self._jwks_cached_at = now
+                return self._jwks_cache
+        except (httpx.RequestError, json.JSONDecodeError) as exc:
             logger.warning("Failed to fetch Cognito JWKS: %s", exc)
             return self._jwks_cache or {"keys": []}
 
-    def _get_public_key(self, kid: str) -> dict[str, Any] | None:
+    async def _get_public_key(self, kid: str) -> dict[str, Any] | None:
         """Look up the JWK whose ``kid`` matches the token header."""
-        jwks = self._fetch_jwks()
+        jwks = await self._fetch_jwks()
         for key in jwks.get("keys", []):
             if key.get("kid") == kid:
                 return key
@@ -103,7 +106,7 @@ class CognitoJWTVerifier:
     # ------------------------------------------------------------------
     # Token verification
     # ------------------------------------------------------------------
-    def verify(self, token: str) -> CognitoClaims:
+    async def verify(self, token: str) -> CognitoClaims:
         """Verify a Cognito JWT and return parsed claims.
 
         Raises ``ValueError`` (with a human-readable message) on any
@@ -123,10 +126,10 @@ class CognitoJWTVerifier:
             raise ValueError("Token header missing 'kid'")
 
         # ---- 2. Look up the matching public key ----
-        public_key = self._get_public_key(kid)
+        public_key = await self._get_public_key(kid)
         if public_key is None:
             raise ValueError(
-                "No matching public key found. "
+                f"No matching public key found for kid '{kid}'. "
                 "Verify COGNITO_USER_POOL_ID is correct."
             )
 
@@ -154,6 +157,14 @@ class CognitoJWTVerifier:
         if time.time() > exp:
             raise ValueError("Token has expired")
 
+        # Issued-at (replay protection)
+        iat = payload.get("iat", 0)
+        if iat and time.time() - iat > MAX_TOKEN_AGE_SECONDS:
+            raise ValueError(
+                f"Token issued at {iat} is too old "
+                f"(max age {MAX_TOKEN_AGE_SECONDS}s)"
+            )
+
         # Audience / client_id
         expected_client_id = env.COGNITO_APP_CLIENT_ID
         aud = payload.get("aud") or payload.get("client_id")
@@ -180,11 +191,11 @@ class CognitoJWTVerifier:
             sub=payload.get("sub", ""),
             email=payload.get("email"),
             email_verified=payload.get("email_verified"),
-            username=payload.get("cognito:username")
-            or payload.get("username"),
+            username=payload.get("cognito:username") or payload.get("username"),
             cognito_groups=cognito_groups,
             token_use=token_use,
             exp=exp,
+            iat=iat,
             iss=iss,
             client_id=aud,
             raw=payload,
