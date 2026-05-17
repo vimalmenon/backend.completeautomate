@@ -27,7 +27,9 @@ class YouTubeVideoMetadataAgent:
         )
 
     @staticmethod
-    def get_suggestions(structured_response: YouTubeVideoAnalyzerListResponse) -> list[YouTubeVideoMetadataData]:
+    def get_suggestions(
+        structured_response: YouTubeVideoAnalyzerListResponse,
+    ) -> list[YouTubeVideoMetadataData]:
         return [
             YouTubeVideoMetadataData(
                 title=d.title, description=d.description, tags=d.tags
