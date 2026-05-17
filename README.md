@@ -21,12 +21,7 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
 
 ## Roadmap
 
-- NEXT
-  - [x][4] Set Up LangGraph for YouTubeShorts Videos
-  - [x][4] Set up State in LangGraph
-  - [ ][2] Set up Text To Speech (TTS)
-  - [x][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
-  - [ ][8] Refactor Prompt
+
 
 ---
 
@@ -56,8 +51,12 @@ Priority-ordered suggestions for improving the project.
 
 ---
 
-<details>
-<summary><strong>TODO Items</strong> (click to expand)</summary>
+- NEXT
+  - [x][4] Set Up LangGraph for YouTubeShorts Videos
+  - [ ][2] Set up Text To Speech (TTS)
+  - [ ][8] Refactor Prompt
+
+- TODO Items
 
 - [ ] API
   - [ ] Auth
@@ -137,8 +136,7 @@ Priority-ordered suggestions for improving the project.
   - [ ] [5] Run PromptImprover for each prompt_data entry in parallel
   - [ ] [5] Add progress tracking for parallel runs
 - [ ] Send Notification
-  - [ ] [6] Send Signal
-  - [ ] [6] Send Email
+  - [ ] [6] Send Telegram
   - [ ] [6] Send WhatsApp message
 - [ ] Loggers
   - [ ] Send the logs to some common place (AWS Logger)
@@ -158,8 +156,8 @@ Priority-ordered suggestions for improving the project.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [ ] Email
-  - [ ] [3] Set up Email with CompleteAutomate (support@completeautomate.com)
+- [x] Email
+  - [x] [3] Set up Email with CompleteAutomate (hello@completeautomate.com)
 
 **Ideas / Low Priority:**
 
@@ -182,7 +180,6 @@ Priority-ordered suggestions for improving the project.
 - Adopt GIT branching strategies
 - Set Up N8N
 - Make a Webpage based on the post
-</details>
 
 ---
 
