@@ -11,7 +11,8 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
 - **Multi-agent job scheduler** with state-machine task progression and retry logic
 - **End-to-end YouTube workflow**: channel sync, video discovery, transcript analysis, metadata optimization, thumbnail generation, community posts
 - **Multi-provider AI**: 6 text, 3 image, 2 speech, 1 video provider via LangChain adapter pattern
-- **Prompt management system** with versioned prompts, per-task AI model assignment, Jinja2 template rendering
+- **Prompt management system** with versioned prompts, per-task AI model assignment, Jinja2 template rendering, few-shot examples, and evaluation dashboard
+- **LangGraph-powered generation** with DynamoDB state persistence for long-running pipelines (YouTube Shorts)
 - **Cloud-native persistence**: DynamoDB + S3, with full offline mode via Moto mocks
 - **FastAPI dashboard** with job management, YouTube channel/video views, prompt editing, and S3 browser
 - **Structured code quality**: Black, Ruff, isort, Mypy, Pytest, flake8, deadcode analyzer
@@ -629,6 +630,9 @@ Prompts are versioned and stored in DynamoDB. Each prompt has:
 - **Jinja2 templates** with `{{ variable }}` rendering
 - **Prompt data** for evaluation/testing
 - **Reflection message** for AI self-improvement
+- **Few-shot examples** — input/output pairs stored per version, injected into rendered prompts
+- **Evaluation dashboard** — HTML UI at `/api/v1/dashboard/prompts` showing scores, results, version comparison with line-level diff
+- **Example management API** — CRUD endpoints at `/api/v1/prompts/{task}/examples`
 
 Prompt tasks:
 
@@ -640,6 +644,44 @@ Prompt tasks:
 | `YouTubeVideoTwitterPost` | Draft tweet threads (TODO) |
 | `YouTubeThumbnailImageGenerationPrompt` | Generate image prompts for thumbnails |
 | `YouTubeShortSpeechGenerationPrompt` | Generate speech for YouTube Shorts |
+
+---
+
+## LangGraph Pipelines
+
+LangGraph state machines for multi-step generation with optional DynamoDB checkpointing for fault tolerance.
+
+### YouTube Short Generation
+
+```mermaid
+flowchart LR
+    START --> fetch_input
+    fetch_input -->|success| generate_speech
+    fetch_input -->|error| END_FAILED
+    generate_speech -->|success| generate_image_prompts
+    generate_speech -->|error| END_FAILED
+    generate_image_prompts -->|success| finalize
+    generate_image_prompts -->|error| END_FAILED
+    finalize --> END
+    END_FAILED[END - failed] --> END
+```
+
+**State** — `YouTubeShortGenerationState` TypedDict tracks topic, transcript, speech_script, image_prompts, status, and error through the pipeline.
+
+**Nodes:**
+- `fetch_input` — resolves topic and transcript from job input
+- `generate_speech` — generates voiceover script via `YouTubeShortSpeechGenerationPromptAgent`
+- `generate_image_prompts` — generates visual descriptions via `YouTubeThumbnailImageGenerationPromptAgent`
+- `finalize` — compiles output as `COMPLETE`
+
+**Persistence:**
+```python
+from backend.config.langgraph_session import get_checkpointer
+agent = YouTubeShortLangGraph(job_id=str(job.id), checkpointer=get_checkpointer())
+result = agent.invoke({"topic": "...", "transcript": "..."})
+```
+
+**Related files:** `backend/generator/youtube/youtube_short_langgraph.py`, `backend/generator/youtube/youtube_short_generator.py`, `backend/prompt_agent/agent/langgraph_agent.py`
 
 ---
 
