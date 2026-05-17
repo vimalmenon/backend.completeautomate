@@ -1,12 +1,15 @@
 import logging
 from uuid import uuid4
 
+from backend.ai.text_generation.grok_ai import GrokAI
 from backend.data import PromptDBData, PromptResultDBData
 from backend.enum import JobsStatusEnum
 from backend.generator.base_generator import BaseGenerator
 from backend.manager import PromptManager
 
 logger = logging.getLogger(__name__)
+
+_EVALUATION_LLM = GrokAI().get_model()
 
 
 class PromptReviewer(BaseGenerator):
@@ -72,7 +75,6 @@ class PromptReviewer(BaseGenerator):
     ) -> PromptResultDBData | None:
         from backend.services.agent_service import AgentService
         from backend.integration import GeneralAgent
-        from backend.ai.text_generation.grok_ai import GrokAI
 
         service = AgentService(
             prompt_task=prompt.task,
@@ -87,7 +89,6 @@ class PromptReviewer(BaseGenerator):
             prompt=prompt.prompt,
             response=ai_response,
             test_data=test_data,
-            grok_ai=GrokAI(),
         )
 
         agent.clean_up_messages()
@@ -105,7 +106,6 @@ class PromptReviewer(BaseGenerator):
         prompt: str,
         response: str,
         test_data: dict,
-        grok_ai,
     ) -> int:
         scoring_prompt = f"""You are a prompt evaluation expert. Score the following prompt's output on a scale of 0-100.
 
@@ -124,8 +124,7 @@ Score based on:
 Return ONLY a number between 0 and 100 representing the total score."""
 
         try:
-            llm = grok_ai.get_model()
-            score_result = llm.invoke(scoring_prompt)
+            score_result = _EVALUATION_LLM.invoke(scoring_prompt)
             score_text = score_result.content.strip()
             score = int("".join(c for c in score_text if c.isdigit()))
             return max(0, min(100, score))
@@ -136,8 +135,6 @@ Return ONLY a number between 0 and 100 representing the total score."""
     def __generate_improvement(
         self, prompt: PromptDBData, results: list[PromptResultDBData]
     ) -> None:
-        from backend.ai.text_generation.grok_ai import GrokAI
-
         eval_summary = "\n".join(
             f"Test data: {r.prompt_data_snapshot}\nScore: {r.score}\nResponse: {r.response[:200]}..."
             for r in results
@@ -164,8 +161,7 @@ REFLECTION:
 <brief explanation of what you changed and why>"""
 
         try:
-            llm = GrokAI().get_model()
-            improvement_result = llm.invoke(reflection_prompt)
+            improvement_result = _EVALUATION_LLM.invoke(reflection_prompt)
             improvement_text = improvement_result.content
 
             new_prompt = self.__extract_section(improvement_text, "NEW_PROMPT")
