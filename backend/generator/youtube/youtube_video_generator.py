@@ -28,6 +28,7 @@ from backend.generator.response_format import (
 from backend.integration import GeneralAgent, S3Storage, YouTubeAPI
 from backend.integration.youtube.mock_youtube_api import MockYouTubeAPI
 from backend.manager import JobManager, YouTubeVideoManager
+from backend.prompt_agent import YouTubeVideoMetadataAgent
 from backend.services.agent_service import AgentImageService, AgentService
 
 logger = logging.getLogger(__name__)
@@ -178,38 +179,23 @@ class YouTubeVideoGenerator(BaseGenerator):
         self, video_from_db: YouTubeVideoDBData
     ) -> tuple[JobsStatusEnum, dict]:
         logger.info("Generating metadata suggestions for job %s", self.job.id)
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoMetadata,
-            task_id=f"{str(self.job.id)}_metadata",
+        agent = YouTubeVideoMetadataAgent(
+            job_id=self.job.id,
             data={
                 "transcript": video_from_db.summarized_transcript,
                 "user_message": video_from_db.user_message,
             },
         )
-        agent = GeneralAgent(
-            service,
-            response_format=YouTubeVideoAnalyzerListResponse,
+        structured_response = agent.generate()
+        video_metadata_suggestions = YouTubeVideoMetadataAgent.get_suggestions(
+            structured_response
         )
-        result = agent.invoke()
-        # result = agent.reinvoke(message="Go trough the result one more time")
-
-        structured_response: YouTubeVideoAnalyzerListResponse = result.get(
-            "structured_response", YouTubeVideoAnalyzerListResponse(details=[])
-        )
-        video_metadata_suggestions = [
-            YouTubeVideoMetadataData(
-                title=data.title,
-                description=data.description,
-                tags=data.tags,
-            )
-            for data in structured_response.details
-        ]
         self.youtube_manager.update_metadata_suggestions(video_metadata_suggestions)
         self.youtube_manager.update_task_status(
             task_status=YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
         )
         self.task_data.task = YouTubeVideoTaskEnum.YouTubeVideoMetadataSelection
-        agent.clean_up_messages()
+        agent.clean_up()
         logger.info(
             "Stored %s metadata suggestions for job %s",
             len(video_metadata_suggestions),
