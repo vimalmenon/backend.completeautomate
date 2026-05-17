@@ -1,7 +1,5 @@
 from uuid import UUID
 
-from backend.data import YouTubeVideoDBData
-from backend.database import PromptDB
 from backend.enum import PromptTaskEnum
 from backend.integration import GeneralAgent
 from backend.services.agent_service import AgentService
@@ -10,25 +8,17 @@ from backend.services.agent_service import AgentService
 class YouTubeVideoSummarizationAgent:
     task = PromptTaskEnum.YouTubeVideoSummarization
 
-    def __init__(self, job_id: UUID, youtube_video: YouTubeVideoDBData):
-        self.prompt = PromptDB().get_prompt_by_task(prompt_task=self.task)
-        service = AgentService(
-            prompt_task=PromptTaskEnum.YouTubeVideoSummarization,
+    def __init__(self, job_id: UUID, data: dict):
+        self.service = AgentService(
+            prompt_task=self.task,
             task_id=f"{job_id}_summarize",
-            data={
-                "transcript": youtube_video.transcript,
-                "user_message": youtube_video.user_message,
-            },
+            data=data,
         )
-        self.agent = GeneralAgent(
-            service,
-        )
+        self.agent = GeneralAgent(self.service)
 
-    def generate(self):
-        # self.youtube_video.summary =
+    def generate(self) -> str:
+        result = self.agent.invoke()
+        return result["messages"][-1].content
 
-        self.agent.invoke()
-        return self.agent.invoke()
-
-    def review(self):
-        pass
+    def clean_up(self) -> None:
+        self.agent.clean_up_messages()
