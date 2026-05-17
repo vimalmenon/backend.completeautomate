@@ -21,8 +21,8 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
 ## Roadmap
 
 - NEXT
-  - [ ][4] Set Up LangGraph for YouTubeShorts Videos
-  - [ ][4] Set up State in LangGraph
+  - [x][4] Set Up LangGraph for YouTubeShorts Videos
+  - [x][4] Set up State in LangGraph
   - [ ][2] Set up Text To Speech (TTS)
   - [x][4] Sort the Job Status ["IN_Process", "Review", "Complete", "Failed"] and created_date
   - [ ][8] Refactor Prompt
