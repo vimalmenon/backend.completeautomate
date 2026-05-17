@@ -1,9 +1,9 @@
 from datetime import datetime
 from uuid import uuid4
 
-from backend.data import PromptDBData, PromptVersionDBData
+from backend.data import PromptDBData, PromptResultDBData, PromptVersionDBData
 from backend.data.api import PromptUpdateResult
-from backend.database import PromptDB
+from backend.database import PromptDB, PromptResultDB, PromptVersionDB
 from backend.enum import AIModelEnum, PromptTaskEnum
 from backend.exception import AppException
 
@@ -17,6 +17,20 @@ class PromptManager:
         return PromptDB().get_all_prompts()
 
     def add_prompt(self, data: PromptDBData | PromptUpdateResult) -> PromptDBData:
+        if isinstance(data, PromptDBData):
+            PromptDB().save_prompt(data)
+            version = PromptVersionDBData(
+                task=data.task,
+                version=data.active_version,
+                prompt=data.prompt,
+                system_message=data.system_message,
+                reflect_message="",
+                ai=data.ai,
+                created_at=data.last_updated,
+            )
+            PromptVersionDB().save_version(data=version)
+            return data
+
         task = PromptTaskEnum(data.task)
         existing_prompt = self.get_prompt_by_task(task=task)
         if existing_prompt is not None:
@@ -24,47 +38,74 @@ class PromptManager:
 
         version_id = data.version or uuid4()
         created_at = datetime.now()
-        prompt_value = data.prompt
-        system_message_value = data.system_message
-        ai_value = AIModelEnum(data.ai)
+
         prompt = PromptDBData(
             task=task,
             description=data.description,
-            version=version_id,
-            versions=[
-                PromptVersionDBData(
-                    prompt=prompt_value,
-                    system_message=system_message_value,
-                    reflect_message="",
-                    version=version_id,
-                    ai=ai_value,
-                    created_at=created_at,
-                )
-            ],
+            active_version=version_id,
+            prompt=data.prompt,
+            system_message=data.system_message,
+            ai=AIModelEnum(data.ai),
             comment=data.comment,
             last_updated=created_at,
         )
+
+        version = PromptVersionDBData(
+            task=task,
+            version=version_id,
+            prompt=data.prompt,
+            system_message=data.system_message,
+            reflect_message="",
+            ai=AIModelEnum(data.ai),
+            created_at=created_at,
+        )
+
         PromptDB().save_prompt(data=prompt)
+        PromptVersionDB().save_version(data=version)
         return prompt
 
     def update_prompt(
         self, task: PromptTaskEnum, data: PromptUpdateResult
     ) -> PromptDBData:
-        prompt = self.get_prompt_by_task(task=task)
-        if prompt is None:
+        existing = self.get_prompt_by_task(task=task)
+        if existing is None:
             raise AppException(f"Prompt not found for task {task.value}")
 
-        updated_prompt = prompt.with_updated_prompt_version(
+        version_id = data.version or uuid4()
+        created_at = datetime.now()
+
+        version = PromptVersionDBData(
+            task=task,
+            version=version_id,
             prompt=data.prompt,
             system_message=data.system_message,
-            description=data.description,
+            reflect_message="",
             ai=AIModelEnum(data.ai),
-            created_at=datetime.now(),
-            version=data.version,
+            created_at=created_at,
+        )
+        PromptVersionDB().save_version(data=version)
+
+        updated_prompt = PromptDBData(
+            task=task,
+            description=data.description,
+            active_version=version_id,
+            prompt=data.prompt,
+            system_message=data.system_message,
+            ai=AIModelEnum(data.ai),
             comment=data.comment,
+            last_updated=created_at,
         )
         PromptDB().update_prompt(prompt_task=task, values=updated_prompt.to_json())
         return updated_prompt
 
     def delete_prompt(self, prompt_task: PromptTaskEnum) -> None:
-        return PromptDB().delete_prompt(prompt_task=prompt_task)
+        PromptDB().delete_prompt(prompt_task=prompt_task)
+
+    def get_version_history(self, task: PromptTaskEnum) -> list[PromptVersionDBData]:
+        return PromptVersionDB().get_version_history(task)
+
+    def add_result(self, data: PromptResultDBData) -> None:
+        PromptResultDB().save_result(data)
+
+    def get_results(self, task: PromptTaskEnum) -> list[PromptResultDBData]:
+        return PromptResultDB().get_results_by_task(task)

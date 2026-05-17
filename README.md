@@ -67,10 +67,10 @@ Python backend for **Complete Automate** — a multi-agent AI automation platfor
 - [ ] [20] Improve on prompt
 
   **Phase 1: Foundation — PromptResult Table**
-  - [ ] [1] Create DynamoDB table for prompt results (`PromptResult`)
-  - [ ] [1] Wire `PromptResultDBData` model to `PromptResultDatabase` CRUD
-  - [ ] [1] Add API endpoints for prompt results (list, get, update)
-  - [ ] [2] Add prompt result display to the dashboard
+  - [x] Create DynamoDB table for prompt results (`PromptResult`)
+  - [x] Wire `PromptResultDBData` model to `PromptResultDatabase` CRUD
+  - [x] Add API endpoints for prompt results (list, get, update)
+  - [ ] Add prompt result display to the dashboard
 
   **Phase 2: Prompt Agent Migration**
   - [ ] [2] Audit all generators — find hardcoded prompts still outside the Prompt Agent system

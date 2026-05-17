@@ -11,6 +11,7 @@ from backend.data.platform import (
 )
 from backend.data.prompt import (
     PromptDBData,
+    PromptResultDBData,
     PromptVersionDBData,
 )
 from backend.data.s3 import S3Data

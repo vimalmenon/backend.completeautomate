@@ -4,18 +4,28 @@ from uuid import UUID, uuid4
 from pydantic import Field
 
 from backend.data.api.base_model import BaseModelWithConfig
-from backend.data.prompt import PromptVersionDBData
 from backend.enum import AIModelEnum, PromptTaskEnum
 
 
 class PromptRequest(BaseModelWithConfig):
     task: str
     description: str
-    version: UUID
-    last_updated: datetime
-    versions: list[PromptVersionDBData]
+    active_version: UUID
+    prompt: str
+    system_message: str
+    ai: str
     comment: str | None = None
-    prompt_data: list[dict] = Field(default_factory=list)
+    last_updated: datetime
+
+
+class PromptVersionResponse(BaseModelWithConfig):
+    task: str
+    version: UUID
+    prompt: str
+    system_message: str
+    reflect_message: str
+    ai: str
+    created_at: datetime
 
 
 class PromptVersionUpdateRequest(BaseModelWithConfig):

@@ -172,71 +172,68 @@ class TestImageJobDataNames:
 
 
 @pytest.mark.unit
-class TestPromptDBDataCopy:
-    """Ensure PromptDBData.copy() creates proper shallow copies."""
+class TestPromptDBDataFields:
+    """Ensure PromptDBData works with new inline structure."""
 
-    def test_prompt_db_data_copy(self) -> None:
-        """Test that copy creates a new instance with same values."""
+    def test_prompt_db_data_inline_fields(self) -> None:
+        """Test that PromptDBData stores prompt fields inline."""
         from uuid import uuid4
 
-        from backend.data.prompt import PromptVersionDBData
-
         version_id = uuid4()
-        version = PromptVersionDBData(
-            prompt="test prompt",
-            system_message="test system message",
-            version=version_id,
+        prompt = PromptDBData(
+            task=PromptTaskEnum.YouTubeVideoSummarization,
+            description="Test description",
+            active_version=version_id,
+            prompt="Test prompt",
+            system_message="Test system message",
             ai=AIModelEnum.Grok,
-            reflect_message="test",
-        )
-        original = PromptDBData(
-            task=PromptTaskEnum.YouTubeVideoSummarization,
-            description="",
-            versions=[version],
-            version=version_id,
+            comment="Test comment",
         )
 
-        # Create a copy
-        copied = original.copy()
+        assert prompt.prompt == "Test prompt"
+        assert prompt.system_message == "Test system message"
+        assert prompt.ai == AIModelEnum.Grok
+        assert prompt.active_version == version_id
+        assert prompt.task == PromptTaskEnum.YouTubeVideoSummarization
 
-        # Verify it's a different object
-        assert copied is not original
-
-        # Verify all values are the same
-        assert copied.prompt == original.prompt
-        assert copied.system_message == original.system_message
-        assert copied.task == original.task
-        assert copied.ai == original.ai
-        assert copied.versions == original.versions
-        assert copied.last_updated == original.last_updated
-
-    def test_prompt_db_data_copy_modification(self) -> None:
-        """Test that modifying copy doesn't affect original."""
+    def test_prompt_db_data_to_json(self) -> None:
+        """Test that to_json produces the right fields."""
         from uuid import uuid4
 
-        from backend.data.prompt import PromptVersionDBData
+        version_id = uuid4()
+        prompt = PromptDBData(
+            task=PromptTaskEnum.YouTubeVideoSummarization,
+            description="Test",
+            active_version=version_id,
+            prompt="p",
+            system_message="s",
+            ai=AIModelEnum.Grok,
+        )
+        data = prompt.to_json()
+        assert data["active_version"] == str(version_id)
+        assert data["prompt"] == "p"
+        assert data["system_message"] == "s"
+        assert data["ai"] == "Grok"
+        assert "versions" not in data
+        assert "prompt_data" not in data
+        assert "response_data" not in data
+
+    def test_prompt_db_data_to_cls(self) -> None:
+        """Test round-trip to_json → to_cls."""
+        from uuid import uuid4
 
         version_id = uuid4()
-        version = PromptVersionDBData(
-            prompt="test prompt",
-            system_message="test system message",
-            version=version_id,
-            ai=AIModelEnum.Deepseek,
-            reflect_message="this is test message",
-        )
         original = PromptDBData(
             task=PromptTaskEnum.YouTubeVideoSummarization,
-            description="",
-            versions=[version],
-            version=version_id,
+            description="Test",
+            active_version=version_id,
+            prompt="p",
+            system_message="s",
+            ai=AIModelEnum.Grok,
         )
-
-        # Create a copy
-        copied = original.copy()
-
-        # Modify the copy
-        copied.ai = AIModelEnum.Grok
-
-        # Verify original is unchanged
-        assert original.ai == AIModelEnum.Deepseek
-        assert copied.ai == AIModelEnum.Grok
+        data = original.to_json()
+        restored = PromptDBData.to_cls(data)
+        assert restored.active_version == original.active_version
+        assert restored.prompt == original.prompt
+        assert restored.system_message == original.system_message
+        assert restored.ai == original.ai
