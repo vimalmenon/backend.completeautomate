@@ -15,11 +15,28 @@ class LangGraphAgentState(TypedDict, total=False):
 
 
 class LangGraphAgent:
+    """Base LangGraph agent with optional DynamoDB persistence.
+
+    Usage:
+        agent = LangGraphAgent(runner=my_func)
+        result = agent.invoke({"input": "..."})
+
+    With persistence:
+        from backend.config.langgraph_session import get_checkpointer
+        agent = LangGraphAgent(runner=my_func, checkpointer=get_checkpointer())
+        result = agent.invoke({"input": "..."},
+                              config={"configurable": {"thread_id": "my-thread"}})
+    """
+
     def __init__(
         self,
         runner: Callable[[LangGraphAgentState], Any] | None = None,
+        checkpointer: Any = None,
+        store: Any = None,
     ) -> None:
         self.runner = runner or self.run
+        self.checkpointer = checkpointer
+        self.store = store
         self.graph = self._build_graph()
 
     def _build_graph(self):
@@ -29,7 +46,10 @@ class LangGraphAgent:
         builder.add_edge(START, "initialize")
         builder.add_edge("initialize", "execute")
         builder.add_edge("execute", END)
-        return builder.compile()
+        return builder.compile(
+            checkpointer=self.checkpointer,
+            store=self.store,
+        )
 
     def _initialize_state(self, state: LangGraphAgentState) -> LangGraphAgentState:
         return {
@@ -65,7 +85,13 @@ class LangGraphAgent:
         next_state.setdefault("status", "completed")
         return next_state
 
-    def invoke(self, state: LangGraphAgentState) -> LangGraphAgentState:
+    def invoke(
+        self,
+        state: LangGraphAgentState,
+        config: dict | None = None,
+    ) -> LangGraphAgentState:
+        if config and self.checkpointer:
+            return cast(LangGraphAgentState, self.graph.invoke(state, config))
         return cast(LangGraphAgentState, self.graph.invoke(state))
 
     def run(self, state: LangGraphAgentState) -> Any:

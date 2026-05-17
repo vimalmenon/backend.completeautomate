@@ -27,6 +27,8 @@ playwright = "^1.54.0"
 plotly = "^6.6.0"
 dashscope = "^1.24.6"
 langgraph = "^1.1.2"
+langgraph-checkpoint-dynamodb = "^0.1.0"
+langgraph-store-dynamodb = "^0.1.4"
 langchain = "^1.2.12"
 tabulate = "^0.10.0"
 fastapi = {extras = ["standard"], version = "^0.135.3"}
