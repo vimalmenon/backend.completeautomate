@@ -57,3 +57,18 @@ class PromptUpdateResult(BaseModelWithConfig):
     ai: AIModelEnum
     version: UUID = Field(default_factory=uuid4)
     examples: list[dict] = Field(default_factory=list)
+
+
+class PromptRollbackResponse(BaseModelWithConfig):
+    """Returned after a successful rollback — shows the restored prompt."""
+
+    task: str
+    version: UUID
+    description: str
+    prompt: str
+    system_message: str
+    ai: str
+    comment: str | None = None
+    last_updated: datetime
+    rolled_back_from: UUID
+    """The version that was active before the rollback."""

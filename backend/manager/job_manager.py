@@ -107,9 +107,11 @@ class JobManager:
             try:
                 NotificationService.notify_job_complete(
                     job_id=str(job_id),
-                    job_type=str(task_data.get("type", "unknown"))
-                    if task_data and isinstance(task_data, dict)
-                    else "unknown",
+                    job_type=(
+                        str(task_data.get("type", "unknown"))
+                        if task_data and isinstance(task_data, dict)
+                        else "unknown"
+                    ),
                     task_data=task_data if isinstance(task_data, dict) else None,
                     error_msg=error_msg if status == JobsStatusEnum.FAILED else None,
                 )

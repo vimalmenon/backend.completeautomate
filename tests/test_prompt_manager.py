@@ -7,6 +7,7 @@ import pytest
 
 from backend.data import PromptDBData
 from backend.data.api import PromptUpdateResult
+from backend.data.prompt import PromptVersionDBData
 from backend.enum import AIModelEnum
 from backend.enum.prompt import PromptTaskEnum
 from backend.exception import AppException
@@ -329,3 +330,115 @@ def test_add_prompt_carries_examples_to_version() -> None:
     saved_version = kwargs["data"]
     assert saved_version.examples == [{"input": "X", "output": "Y"}]
     assert saved_version.prompt == "Template {{ var }}"
+
+
+@pytest.mark.unit
+def test_rollback_prompt_restores_historical_version() -> None:
+    version_1 = uuid4()
+    version_2 = uuid4()
+    original = PromptDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        description="Test prompt",
+        active_version=version_2,
+        prompt="Prompt v2 — updated",
+        system_message="System v2",
+        ai=AIModelEnum.Grok,
+        comment="After update",
+        examples=[{"input": "Q", "output": "A"}],
+    )
+    historical = PromptVersionDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        version=version_1,
+        prompt="Prompt v1 — original",
+        system_message="System v1",
+        reflect_message="Initial version",
+        ai=AIModelEnum.Deepseek,
+        examples=[{"input": "Old", "output": "Legacy"}],
+    )
+
+    with (
+        patch(
+            "backend.manager.prompt_manager.PromptVersionDB"
+        ) as mock_ver_cls,
+        patch(
+            "backend.manager.prompt_manager.PromptDB"
+        ) as mock_prompt_db_cls,
+    ):
+        mock_ver_db = mock_ver_cls.return_value
+        mock_ver_db.get_version.return_value = historical
+
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = original
+
+        result = PromptManager().rollback_prompt(
+            task=PromptTaskEnum.YouTubeVideoSummarization,
+            version_id=version_1,
+        )
+
+    # Should restore v1 content
+    assert result.prompt == "Prompt v1 — original"
+    assert result.system_message == "System v1"
+    assert result.ai == AIModelEnum.Deepseek
+    assert result.examples == [{"input": "Old", "output": "Legacy"}]
+
+    # Should keep description and comment from current
+    assert result.description == "Test prompt"
+    assert result.comment == "After update"
+
+    # Should create a new version in the audit trail
+    mock_ver_db.save_version.assert_called_once()
+    saved_version = mock_ver_db.save_version.call_args.kwargs["data"]
+    assert "Rolled back from" in saved_version.reflect_message
+
+    # Should persist to DB
+    mock_prompt_db.update_prompt.assert_called_once()
+
+
+@pytest.mark.unit
+def test_rollback_prompt_raises_when_version_missing() -> None:
+    target = uuid4()
+
+    with patch(
+        "backend.manager.prompt_manager.PromptVersionDB"
+    ) as mock_ver_cls:
+        mock_ver_db = mock_ver_cls.return_value
+        mock_ver_db.get_version.return_value = None
+
+        with pytest.raises(AppException, match="Version"):
+            PromptManager().rollback_prompt(
+                task=PromptTaskEnum.YouTubeVideoSummarization,
+                version_id=target,
+            )
+
+
+@pytest.mark.unit
+def test_rollback_prompt_raises_when_prompt_missing() -> None:
+    version_id = uuid4()
+    historical = PromptVersionDBData(
+        task=PromptTaskEnum.YouTubeVideoSummarization,
+        version=version_id,
+        prompt="V1",
+        system_message="S1",
+        reflect_message="",
+        ai=AIModelEnum.Deepseek,
+    )
+
+    with (
+        patch(
+            "backend.manager.prompt_manager.PromptVersionDB"
+        ) as mock_ver_cls,
+        patch(
+            "backend.manager.prompt_manager.PromptDB"
+        ) as mock_prompt_db_cls,
+    ):
+        mock_ver_db = mock_ver_cls.return_value
+        mock_ver_db.get_version.return_value = historical
+
+        mock_prompt_db = mock_prompt_db_cls.return_value
+        mock_prompt_db.get_prompt_by_task.return_value = None
+
+        with pytest.raises(AppException, match="Prompt not found"):
+            PromptManager().rollback_prompt(
+                task=PromptTaskEnum.YouTubeVideoSummarization,
+                version_id=version_id,
+            )

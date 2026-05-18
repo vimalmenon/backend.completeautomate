@@ -9,6 +9,11 @@ class PromptTaskEnum(str, Enum):
     # TODO need to implement
     YouTubeVideoTwitterPost = "YouTubeVideoTwitterPost"
     YouTubeShortSpeechGenerationPrompt = "YouTubeShortSpeechGenerationPrompt"
+    # Blog post generation
+    BlogPostGenerationPrompt = "BlogPostGenerationPrompt"
+    # Meta-prompt tasks for the prompt review/evaluation system
+    PromptEvaluation = "PromptEvaluation"
+    PromptImprovement = "PromptImprovement"
 
 
 class PromptStatusEnum(str, Enum):

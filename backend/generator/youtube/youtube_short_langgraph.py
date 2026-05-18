@@ -200,7 +200,7 @@ class YouTubeShortLangGraph:
 
     # ── Node: Generate Video ──
 
-    def _generate_video(
+    def _generate_video(  # noqa: C901
         self, state: YouTubeShortGenerationState
     ) -> YouTubeShortGenerationState:
         """Render the YouTube Short video using Remotion and upload to S3."""
@@ -220,7 +220,9 @@ class YouTubeShortLangGraph:
             # Build the render config
             audio_url = ""
             if audio_file:
-                audio_url = audio_file.get("downloaded_path", "") or audio_file.get("s3_key", "")
+                audio_url = audio_file.get("downloaded_path", "") or audio_file.get(
+                    "s3_key", ""
+                )
 
             render_config = {
                 "props": {
