@@ -37,7 +37,7 @@ Priority-ordered suggestions for improving the project.
 
 ### 🥈 High Value — Moderate Effort
 
-- **[4] Version Rollback** — Add `POST /api/v1/prompts/{task}/rollback/{version_id}` endpoint that copies a historical prompt version into the active slot. Uses existing `PromptManager.update_prompt` — ~1h.
+- **[x] [4] Version Rollback** — `POST /api/v1/prompts/{task}/rollback/{version_id}` endpoint copies historical version into active slot with audit trail. 🔄
 - **[5] Twitter Post in YouTube Pipeline** — `YouTubeVideoTwitterPostAgent` and prompt task already exist. Create a `YouTubeVideoTwitterPost` job type + generator and wire it into the video pipeline after community post generation.
 - **[4-5] Parallel Execution (Phase 5)** — Run PromptImprover evaluation across all prompts in parallel. The LangGraph and task infrastructure already supports this pattern; wire up concurrent evaluation workers.
 
@@ -128,7 +128,7 @@ Priority-ordered suggestions for improving the project.
     - [ ] Render each prompt template with mock data
     - [ ] Validate output schema matches expected response format
     - [ ] Test with edge cases (empty transcript, missing fields)
-  - [ ] [4] Build prompt version rollback mechanism
+  - [x] [4] Build prompt version rollback mechanism
 
   **Phase 5: Parallel Execution**
   - [ ] [4] Run PromptImprover evaluation in parallel across all prompts
