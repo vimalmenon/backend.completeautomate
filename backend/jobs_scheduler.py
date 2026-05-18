@@ -5,6 +5,7 @@ from uuid import UUID
 from backend.data import JobData
 from backend.enum import JobsStatusEnum
 from backend.jobs import (
+    BlogJob,
     NoJob,
     PromptSuggesterJob,
     YouTubeChannelJob,
@@ -57,6 +58,8 @@ class JobScheduler:
             job_response = PromptSuggesterJob(job=job).execute()
         elif job.type in YouTubeShortJob.types:
             job_response = YouTubeShortJob(job=job).execute()
+        elif job.type in BlogJob.types:
+            job_response = BlogJob(job=job).execute()
         else:
             job_response = NoJob(job=job).execute()
         if job_response.status == JobsStatusEnum.COMPLETE:

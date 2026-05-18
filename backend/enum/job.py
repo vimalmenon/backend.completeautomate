@@ -9,6 +9,7 @@ class JobTypeEnum(str, Enum):
     PromptImprover = "PromptImprover"
     YouTubeStatsUpdater = "YouTubeStatsUpdater"
     YouTubeShortGenerator = "YouTubeShortGenerator"
+    BlogGeneration = "BlogGeneration"
 
 
 class JobsStatusEnum(str, Enum):

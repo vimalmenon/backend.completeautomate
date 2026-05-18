@@ -2,11 +2,25 @@ from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
+from pydantic import Field
 
 from backend.data.api import JobResponse, JobUpdateRequest
+from backend.data.api.base_model import BaseModelWithConfig
+from backend.enum import JobTypeEnum
 from backend.manager import JobManager, JobSchedulerManager
 
 router = APIRouter()
+
+
+class BlogJobCreateRequest(BaseModelWithConfig):
+    topic: str = Field(..., description="Blog topic")
+    audience: str = Field("General audience", description="Target audience")
+    tone: str = Field("professional", description="Writing tone")
+    word_count: str = Field("1000", description="Target word count")
+    keywords: str = Field("", description="Comma-separated SEO keywords")
+    outline: str = Field("", description="Optional blog outline")
+    extra_context: str = Field("", description="Additional context for the writer")
+    tags: str = Field("", description="Comma-separated tags")
 
 
 def _build_update_values(request: JobUpdateRequest) -> dict[str, Any]:
@@ -40,6 +54,19 @@ async def get_job(job_id: UUID) -> JobResponse:
     job = JobManager().get_job_by_id(job_id)
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
+    return JobResponse.model_validate(job.to_json())
+
+
+@router.post("/jobs/blog", tags=["jobs"], response_model=JobResponse)
+async def create_blog_job(request: BlogJobCreateRequest) -> JobResponse:
+    """Create a blog generation job."""
+    manager = JobManager()
+    job = manager.create_job(
+        type=JobTypeEnum.BlogGeneration,
+        task_data=request.model_dump(by_alias=False),
+        description=f"Generate blog post: {request.topic[:80]}",
+    )
+    manager.save_job(job)
     return JobResponse.model_validate(job.to_json())
 
 

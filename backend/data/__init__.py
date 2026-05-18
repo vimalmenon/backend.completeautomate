@@ -1,3 +1,4 @@
+from backend.data.blog import BlogPostData
 from backend.data.image import (
     ImagePromptData,
     ImagePromptJobData,
@@ -39,6 +40,7 @@ from backend.data.youtube_video import (
 )
 
 __all__ = [
+    "BlogPostData",
     "ImagePromptJobData",
     "S3Data",
     "ImagePromptData",

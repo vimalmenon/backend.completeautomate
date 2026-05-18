@@ -6,6 +6,7 @@ from tabulate import tabulate
 from backend.enum import JobsStatusEnum
 from backend.manager.data_manager import DataManager
 from backend.manager.job_manager import JobManager
+from backend.manager.prompt_manager import PromptManager
 
 logger = getLogger(__name__)
 
@@ -17,6 +18,7 @@ class StartUpManager:
     def start(self) -> None:
         logger.info("Starting startup manager flow")
         DataManager().start_up_script()
+        PromptManager().seed_default_prompts()
         logger.info("Startup manager flow completed")
 
     def end(self) -> None:
