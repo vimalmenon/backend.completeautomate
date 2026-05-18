@@ -43,7 +43,7 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     # Generated content
     speech_script: str | None
     # Generated audio
-    audio_file: str | None
+    audio_file: str | dict[str, Any] | None
     audio_format: str | None
     image_prompts: list[dict[str, str]] | None
     # Generated video
@@ -293,7 +293,7 @@ class YouTubeShortLangGraph:
                 len(audio_bytes),
             )
             return {
-                "audio_file": s3_data.s3_key,
+                "audio_file": s3_data.to_json(),
                 "audio_format": "mp3",
                 "status": "audio_generated",
             }
