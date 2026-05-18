@@ -21,7 +21,6 @@ from backend.integration.storage.s3_storage import S3Storage
 from backend.services.agent_service import AgentService
 from backend.ai.speech_generation.qwen_speech_generator import QwenSpeechGenerator
 from backend.data.s3 import S3Data
-from backend.enum.s3 import S3ContentTypeEnum
 from backend.integration.storage.s3_storage import S3Storage
 
 logger = logging.getLogger(__name__)
@@ -264,7 +263,12 @@ class YouTubeShortLangGraph:
                     "status": "audio_skipped",
                 }
 
-            tts = QwenSpeechGenerator(audio_format="mp3")
+            # Determine audio format from input, default to mp3
+            inp = state.get("input", {})
+            audio_format: str = inp.get("audio_format", "mp3")
+            audio_filename = f"speech.{audio_format}"
+
+            tts = QwenSpeechGenerator(audio_format=audio_format)
             audio_bytes = tts.generate_speech(speech_script)
             if not audio_bytes:
                 logger.warning("TTS returned empty audio for job %s", self.job_id)
@@ -275,8 +279,8 @@ class YouTubeShortLangGraph:
                 }
 
             s3_data = S3Data(
-                name="speech.mp3",
-                content_type=S3ContentTypeEnum.MP3,
+                name=audio_filename,
+                content_type=S3Data.detect_content_type_from_name(audio_filename),
                 key=f"youtube-shorts/{self.job_id}",
             )
             storage = S3Storage()
@@ -294,7 +298,7 @@ class YouTubeShortLangGraph:
             )
             return {
                 "audio_file": s3_data.to_json(),
-                "audio_format": "mp3",
+                "audio_format": audio_format,
                 "status": "audio_generated",
             }
         except Exception as e:

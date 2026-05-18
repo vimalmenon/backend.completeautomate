@@ -34,6 +34,22 @@ class S3Data:
             return S3ContentTypeEnum.WAV
         if extension == "mp4":
             return S3ContentTypeEnum.MP4
+        if extension == "ogg":
+            return S3ContentTypeEnum.OGG
+        if extension == "webm":
+            return S3ContentTypeEnum.WEBM
+        if extension == "m4a":
+            return S3ContentTypeEnum.M4A
+        if extension == "flac":
+            return S3ContentTypeEnum.FLAC
+        if extension == "aac":
+            return S3ContentTypeEnum.AAC
+        if extension == "opus":
+            return S3ContentTypeEnum.OPUS
+        if extension == "aiff":
+            return S3ContentTypeEnum.AIFF
+        if extension == "wma":
+            return S3ContentTypeEnum.WMA
         raise AppException(
             f"Unsupported file extension for content type detection: {name}"
         )
@@ -85,11 +101,17 @@ class S3Data:
             S3ContentTypeEnum.MP3,
             S3ContentTypeEnum.WAV,
             S3ContentTypeEnum.OGG,
+            S3ContentTypeEnum.M4A,
+            S3ContentTypeEnum.FLAC,
+            S3ContentTypeEnum.AAC,
+            S3ContentTypeEnum.OPUS,
+            S3ContentTypeEnum.AIFF,
+            S3ContentTypeEnum.WMA,
         }:
             if self.key:
                 return f"audio/{self.key}/{self.name}"
             return f"audio/{self.name}"
-        if self.content_type == S3ContentTypeEnum.MP4:
+        if self.content_type in {S3ContentTypeEnum.MP4, S3ContentTypeEnum.WEBM}:
             if self.key:
                 return f"videos/{self.key}/{self.name}"
             return f"videos/{self.name}"
@@ -120,20 +142,22 @@ class S3Data:
             S3ContentTypeEnum.MP3,
             S3ContentTypeEnum.WAV,
             S3ContentTypeEnum.OGG,
+            S3ContentTypeEnum.M4A,
+            S3ContentTypeEnum.FLAC,
+            S3ContentTypeEnum.AAC,
+            S3ContentTypeEnum.OPUS,
+            S3ContentTypeEnum.AIFF,
+            S3ContentTypeEnum.WMA,
         }:
             if self.key:
                 return f"backend/output/audio/{self.key}/{self.name}"
             return f"backend/output/audio/{self.name}"
-        if self.content_type == S3ContentTypeEnum.MP4:
+        if self.content_type in {S3ContentTypeEnum.MP4, S3ContentTypeEnum.WEBM}:
             if self.key:
-                return f"backend/output/json/{self.key}/{self.name}"
-            return f"backend/output/json/{self.name}"
+                return f"backend/output/video/{self.key}/{self.name}"
+            return f"backend/output/video/{self.name}"
         if self.content_type == S3ContentTypeEnum.PICKLE:
             if self.key:
                 return f"backend/output/pickle/{self.key}/{self.name}"
             return f"backend/output/pickle/{self.name}"
-        if self.content_type == S3ContentTypeEnum.MP4:
-            if self.key:
-                return f"backend/output/videos/{self.key}/{self.name}"
-            return f"backend/output/videos/{self.name}"
         raise AppException("Unsupported content type for S3 key generation")
