@@ -10,42 +10,6 @@ from backend.enum import PromptTaskEnum
 from backend.integration import GeneralAgent
 from backend.services.agent_service import AgentService
 
-_DEFAULT_SYSTEM_MESSAGE = """You are an expert blog writer. Generate well-structured, engaging blog posts that balance depth with readability."""
-
-_DEFAULT_PROMPT = """Write a blog post on the following topic.
-
-Topic: {{ topic }}
-Target Audience: {{ audience }}
-Tone: {{ tone }}
-Target Word Count: {{ word_count }}{% if keywords %}
-SEO Keywords: {{ keywords }}{% endif %}{% if outline %}
-Outline:
-{{ outline }}{% endif %}{% if extra_context %}
-Additional Context:
-{{ extra_context }}{% endif %}
-
-Your response must follow this structure:
-
-## Title
-<compelling blog title>
-
-## Meta Description
-<2-3 sentence SEO description>
-
-## Table of Contents
-<bullet list of main sections>
-
-## Content
-<full blog post with proper headings (##), subheadings (###), and paragraphs>
-
-Guidelines:
-- Use the specified tone throughout
-- Include the SEO keywords naturally
-- Break up text with headings every 2-3 paragraphs
-- Write for the specified target audience
-- Aim for the target word count
-- Include a strong call-to-action in the conclusion"""
-
 
 class BlogPostGenerationPromptAgent:
     task = PromptTaskEnum.BlogPostGenerationPrompt
@@ -65,11 +29,3 @@ class BlogPostGenerationPromptAgent:
 
     def clean_up(self) -> None:
         self.agent.clean_up_messages()
-
-    @staticmethod
-    def default_prompt() -> str:
-        return _DEFAULT_PROMPT
-
-    @staticmethod
-    def default_system_message() -> str:
-        return _DEFAULT_SYSTEM_MESSAGE

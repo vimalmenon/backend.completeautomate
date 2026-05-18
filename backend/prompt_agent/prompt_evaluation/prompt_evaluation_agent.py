@@ -10,22 +10,6 @@ from backend.enum import PromptTaskEnum
 from backend.integration import GeneralAgent
 from backend.services.agent_service import AgentService
 
-_DEFAULT_SYSTEM_MESSAGE = """You are a prompt evaluation expert. Score the following prompt's output on a scale of 0-100."""
-
-_DEFAULT_PROMPT = """Original Prompt: {{ prompt }}
-
-Input Data: {{ test_data }}
-
-AI Output: {{ response }}
-
-Score based on:
-- Relevance (0-25): Does the output match the expected format and context?
-- Completeness (0-25): Does it use all required variables and produce complete output?
-- Clarity (0-25): Is the language clear and unambiguous?
-- Structure (0-25): Is the output well-organized and easy to parse?
-
-Return ONLY a number between 0 and 100 representing the total score."""
-
 
 class PromptEvaluationAgent:
     task = PromptTaskEnum.PromptEvaluation
@@ -60,11 +44,3 @@ class PromptEvaluationAgent:
             score = int(match.group())
             return max(0, min(100, score))
         return 50
-
-    @staticmethod
-    def default_prompt() -> str:
-        return _DEFAULT_PROMPT
-
-    @staticmethod
-    def default_system_message() -> str:
-        return _DEFAULT_SYSTEM_MESSAGE

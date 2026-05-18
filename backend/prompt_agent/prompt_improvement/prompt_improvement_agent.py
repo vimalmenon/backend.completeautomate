@@ -10,26 +10,6 @@ from backend.enum import PromptTaskEnum
 from backend.integration import GeneralAgent
 from backend.services.agent_service import AgentService
 
-_DEFAULT_SYSTEM_MESSAGE = """You are a prompt engineering expert. Improve the following prompt based on evaluation results."""
-
-_DEFAULT_PROMPT = """Current Prompt: {{ prompt }}
-
-Current System Message: {{ system_message }}
-
-Evaluation Results:
-{{ eval_summary }}
-
-Generate an improved version that addresses weaknesses. Return your response in this exact format:
-
-NEW_PROMPT:
-<the improved prompt template>
-
-NEW_SYSTEM_MESSAGE:
-<the improved system message>
-
-REFLECTION:
-<brief explanation of what you changed and why>"""
-
 
 class PromptImprovementAgent:
     task = PromptTaskEnum.PromptImprovement
@@ -60,11 +40,3 @@ class PromptImprovementAgent:
         if match:
             return match.group(1).strip()
         return None
-
-    @staticmethod
-    def default_prompt() -> str:
-        return _DEFAULT_PROMPT
-
-    @staticmethod
-    def default_system_message() -> str:
-        return _DEFAULT_SYSTEM_MESSAGE

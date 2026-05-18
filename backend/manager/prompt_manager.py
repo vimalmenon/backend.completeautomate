@@ -262,6 +262,122 @@ class PromptManager:
                 ai=AIModelEnum.Grok,
             ),
             PromptDBData(
+                task=PromptTaskEnum.YouTubeVideoSummarization,
+                description="Summarize a YouTube video transcript with key insights",
+                active_version=uuid4(),
+                prompt=(
+                    "Summarize the following YouTube video transcript.\n\n"
+                    "Transcript:\n{{ transcript }}\n"
+                    "{% if user_message %}\n"
+                    "Additional Instructions: {{ user_message }}\n"
+                    "{% endif %}\n\n"
+                    "Your summary should:\n"
+                    "- Capture the main topic and key points\n"
+                    "- Be 3-5 paragraphs\n"
+                    "- Highlight any actionable takeaways\n"
+                    "- Keep a neutral, informative tone"
+                ),
+                system_message=(
+                    "You are a YouTube transcript analyst. "
+                    "Create clear, concise summaries that capture "
+                    "the essence of video content."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
+                task=PromptTaskEnum.YouTubeVideoMetadata,
+                description="Generate SEO metadata from a video transcript",
+                active_version=uuid4(),
+                prompt=(
+                    "Generate SEO metadata for a YouTube video based on "
+                    "its transcript.\n\n"
+                    "Transcript:\n{{ transcript }}\n"
+                    "{% if user_message %}\n"
+                    "Additional Context: {{ user_message }}\n"
+                    "{% endif %}\n\n"
+                    "Return your analysis in this format:\n\n"
+                    "**Title:** <SEO-optimized title, max 70 chars>\n\n"
+                    "**Description:** <2-3 paragraph description with keywords>\n\n"
+                    "**Tags:** <comma-separated tags, 5-10 tags>\n\n"
+                    "**Category:** <best YouTube category for this video>"
+                ),
+                system_message=(
+                    "You are a YouTube SEO expert. "
+                    "Generate optimized metadata that improves "
+                    "discoverability and click-through rates."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
+                task=PromptTaskEnum.YouTubeVideoCommunityPost,
+                description="Create an engaging YouTube community post from video content",
+                active_version=uuid4(),
+                prompt=(
+                    "Create 2-3 engaging YouTube Community posts for this video.\n\n"
+                    "Title: {{ title }}\n"
+                    "Description: {{ description }}\n"
+                    "Video Summary: {{ video_summary }}\n\n"
+                    "Each post should:\n"
+                    "- Be 2-4 sentences\n"
+                    "- Include a hook or question to drive engagement\n"
+                    "- Mention the video\n"
+                    "- Use emojis naturally\n"
+                    "- End with a call to action\n\n"
+                    "Separate each post with ---"
+                ),
+                system_message=(
+                    "You are a YouTube community manager. "
+                    "Write engaging posts that drive comments, likes, "
+                    "and viewer interaction."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
+                task=PromptTaskEnum.YouTubeThumbnailImageGenerationPrompt,
+                description="Generate image generation prompts for YouTube video thumbnails",
+                active_version=uuid4(),
+                prompt=(
+                    "Create image generation prompts for a YouTube thumbnail.\n\n"
+                    "Video Title: {{ title }}\n"
+                    "Description: {{ description }}\n"
+                    "Summary: {{ video_summary }}\n\n"
+                    "Generate 3 image prompts that would make compelling "
+                    "YouTube thumbnails. Each prompt should be detailed "
+                    "enough for an AI image generator.\n\n"
+                    "Return as a list with each prompt on a new line."
+                ),
+                system_message=(
+                    "You are a YouTube thumbnail designer. "
+                    "Create vivid, clickable image prompts "
+                    "that capture the video's essence."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
+                task=PromptTaskEnum.YouTubeShortSpeechGenerationPrompt,
+                description="Generate a speech script for a YouTube Short",
+                active_version=uuid4(),
+                prompt=(
+                    "Write a 45-60 second speech script for a YouTube Short.\n\n"
+                    "Topic: {{ topic }}\n"
+                    "Reference Content:\n{{ transcript }}\n\n"
+                    "Guidelines:\n"
+                    "- Fast-paced, engaging tone\n"
+                    "- Approximately 120-160 words\n"
+                    "- Start with a hook in the first 3 seconds\n"
+                    "- End with a call to action\n"
+                    "- Use conversational language\n"
+                    "- Include pauses [...] for natural flow\n"
+                    "- Write the script as plain text, one paragraph"
+                ),
+                system_message=(
+                    "You are a YouTube Shorts scriptwriter. "
+                    "Write fast-paced, engaging scripts optimized "
+                    "for vertical short-form video."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
                 task=PromptTaskEnum.PromptEvaluation,
                 description="Evaluate prompt output quality on a 0-100 scale",
                 active_version=uuid4(),
