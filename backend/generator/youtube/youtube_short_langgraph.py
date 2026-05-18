@@ -13,15 +13,13 @@ from typing import Any, TypedDict, cast
 
 from langgraph.graph import END, START, StateGraph
 
+from backend.ai.speech_generation.qwen_speech_generator import QwenSpeechGenerator
 from backend.data import S3Data
 from backend.enum import PromptTaskEnum
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.integration import GeneralAgent
 from backend.integration.storage.s3_storage import S3Storage
 from backend.services.agent_service import AgentService
-from backend.ai.speech_generation.qwen_speech_generator import QwenSpeechGenerator
-from backend.data.s3 import S3Data
-from backend.integration.storage.s3_storage import S3Storage
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +40,7 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     # Generated content
     speech_script: str | None
     # Generated audio
-    audio_file: str | dict[str, Any] | None
+    audio_file: dict[str, str | None] | None
     audio_format: str | None
     image_prompts: list[dict[str, str]] | None
     # Generated video
@@ -187,61 +185,6 @@ class YouTubeShortLangGraph:
         except Exception:
             logger.exception("Failed to generate speech for job %s", self.job_id)
             return _error_state("Speech generation failed unexpectedly")
-
-    # ── Node: Generate Audio (TTS) ──
-
-    def _generate_audio(
-        self, state: YouTubeShortGenerationState
-    ) -> YouTubeShortGenerationState:
-        """Convert the speech script to audio via TTS and upload to S3."""
-        try:
-            speech_script: str = state.get("speech_script", "") or ""
-            topic: str = state.get("topic", "") or ""
-
-            if not speech_script:
-                return _error_state("No speech script available for TTS generation")
-
-            # Generate audio using Resemble TTS
-            from backend.ai.speech_generation.resemble_speech_generator import (
-                ResembleSpeechGenerator,
-            )
-
-            tts = ResembleSpeechGenerator(
-                output_format="wav",
-                title=f"youtube-short-{self.job_id}",
-            )
-            audio_bytes = tts.generate_speech(speech_script)
-
-            # Upload to S3
-            audio_name = f"{self.job_id}.wav"
-            s3_key_prefix = f"youtube-shorts/{topic}" if topic else "youtube-shorts"
-            s3_data = S3Data(
-                name=audio_name,
-                content_type=S3ContentTypeEnum.WAV,
-                key=s3_key_prefix,
-            )
-
-            storage = S3Storage()
-            upload_success = storage.upload_data(s3_data, audio_bytes)
-
-            if not upload_success:
-                return _error_state("Failed to upload TTS audio to S3")
-
-            audio_file_dict = s3_data.to_json()
-
-            logger.info(
-                "TTS audio uploaded to S3 for job %s: s3_key=%s",
-                self.job_id,
-                s3_data.s3_key,
-            )
-
-            return {
-                "audio_file": audio_file_dict,
-                "status": "audio_generated",
-            }
-        except Exception:
-            logger.exception("Failed to generate TTS audio for job %s", self.job_id)
-            return _error_state("TTS audio generation failed unexpectedly")
 
     # ── Node: Generate Audio ──
 

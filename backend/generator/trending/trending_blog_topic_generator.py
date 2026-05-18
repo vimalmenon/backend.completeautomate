@@ -3,11 +3,11 @@
 import json
 import logging
 from dataclasses import dataclass
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from backend.generator.trending.trending_topic_fetcher import (
-    TrendingTopicFetcher,
     TrendingSource,
+    TrendingTopicFetcher,
 )
 from backend.prompt_agent import BlogTopicSuggestionAgent
 
@@ -79,7 +79,7 @@ class TrendingBlogTopicGenerator:
             agent.clean_up()
 
     @staticmethod
-    def _parse_suggestions(raw: str) -> list[dict]:
+    def _parse_suggestions(raw: str) -> list[dict]:  # noqa: C901
         """Parse structured JSON output or fall back to line-based parsing."""
         # Try JSON first
         try:

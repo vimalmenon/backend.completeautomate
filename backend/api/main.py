@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.auth.dependencies import get_current_user
 from backend.api.auth.auth_api import router as auth_router
+from backend.api.auth.dependencies import get_current_user
 from backend.api.auth.openapi import (
     get_swagger_ui_init_oauth,
     inject_security_scheme,

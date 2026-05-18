@@ -11,7 +11,7 @@ from typing import Any
 import httpx
 from jose import jwk, jws
 from jose.constants import Algorithms
-from jose.exceptions import JWTError, JWSError
+from jose.exceptions import JWSError, JWTError
 
 from backend.config.env import env
 
@@ -106,7 +106,7 @@ class CognitoJWTVerifier:
     # ------------------------------------------------------------------
     # Token verification
     # ------------------------------------------------------------------
-    async def verify(self, token: str) -> CognitoClaims:
+    async def verify(self, token: str) -> CognitoClaims:  # noqa: C901
         """Verify a Cognito JWT and return parsed claims.
 
         Raises ``ValueError`` (with a human-readable message) on any
