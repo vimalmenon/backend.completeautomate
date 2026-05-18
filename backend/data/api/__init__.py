@@ -1,8 +1,8 @@
 from backend.data.api.job import JobResponse, JobUpdateRequest
 from backend.data.api.prompt import (
     PromptCreateRequest,
-    PromptRollbackResponse,
     PromptRequest,
+    PromptRollbackResponse,
     PromptUpdateRequest,
     PromptUpdateResult,
     PromptVersionUpdateRequest,

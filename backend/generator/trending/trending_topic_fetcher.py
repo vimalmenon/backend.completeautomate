@@ -15,9 +15,7 @@ GOOGLE_NEWS_TECH_URL = (
     "CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB"
     "?hl=en-US&gl=US&ceid=US:en"
 )
-GOOGLE_NEWS_TOP_URL = (
-    "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"
-)
+GOOGLE_NEWS_TOP_URL = "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"
 
 
 @dataclass
@@ -65,7 +63,11 @@ class TrendingTopicFetcher:
                 link_el = item.find("link")
                 if title_el is not None and title_el.text:
                     title_text = title_el.text.strip()
-                    link = link_el.text.strip() if link_el is not None and link_el.text else None
+                    link = (
+                        link_el.text.strip()
+                        if link_el is not None and link_el.text
+                        else None
+                    )
                     results.append(
                         TrendingSource(
                             title=title_text,
@@ -82,9 +84,7 @@ class TrendingTopicFetcher:
         results: list[TrendingSource] = []
         kw = niche if niche else "AI technology"
         try:
-            self.pytrends.build_payload(
-                kw_list=[kw], timeframe="now 7-d", geo="US"
-            )
+            self.pytrends.build_payload(kw_list=[kw], timeframe="now 7-d", geo="US")
             df = self.pytrends.interest_over_time()
             if df is not None and not df.empty and kw in df.columns:
                 avg = df[kw].mean()

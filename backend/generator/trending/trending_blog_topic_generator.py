@@ -3,11 +3,12 @@
 import json
 import logging
 from dataclasses import dataclass
-from uuid import UUID, uuid4
+from typing import Any, cast
+from uuid import uuid4
 
 from backend.generator.trending.trending_topic_fetcher import (
-    TrendingTopicFetcher,
     TrendingSource,
+    TrendingTopicFetcher,
 )
 from backend.prompt_agent import BlogTopicSuggestionAgent
 
@@ -79,30 +80,37 @@ class TrendingBlogTopicGenerator:
             agent.clean_up()
 
     @staticmethod
-    def _parse_suggestions(raw: str) -> list[dict]:
+    def _parse_suggestions(raw: str) -> list[dict]:  # noqa: C901
         """Parse structured JSON output or fall back to line-based parsing."""
         # Try JSON first
         try:
             parsed = json.loads(raw)
             if isinstance(parsed, list):
-                return parsed
+                return cast(list[dict], parsed)
             if isinstance(parsed, dict) and "suggestions" in parsed:
-                return parsed["suggestions"]
+                return cast(list[dict], parsed["suggestions"])
         except (json.JSONDecodeError, TypeError):
             pass
 
         # Fallback: split by numbered entries
-        suggestions: list[dict] = []
+        suggestions: list[dict[str, Any]] = []
         current: dict[str, str | list[str]] = {}
         for line in raw.split("\n"):
             line = line.strip()
-            if line.startswith("##") or (line and line[0].isdigit() and ". " in line[:4]):
+            if line.startswith("##") or (
+                line and line[0].isdigit() and ". " in line[:4]
+            ):
                 if current.get("title"):
                     suggestions.append(current)
-                current = {"title": line.lstrip("0123456789.#. ").strip(), "keywords": []}
+                current = {
+                    "title": line.lstrip("0123456789.#. ").strip(),
+                    "keywords": [],
+                }
             elif line.lower().startswith("keywords"):
                 kw_text = line.split(":", 1)[-1].strip()
-                current["keywords"] = [k.strip() for k in kw_text.split(",") if k.strip()]
+                current["keywords"] = [
+                    k.strip() for k in kw_text.split(",") if k.strip()
+                ]
             elif line.lower().startswith("description"):
                 current["description"] = line.split(":", 1)[-1].strip()
             elif line.lower().startswith("audience"):

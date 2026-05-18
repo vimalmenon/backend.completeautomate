@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Self
+from typing import Any, ClassVar, Self
 
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.exception import AppException
@@ -11,25 +11,31 @@ class S3Data:
     content_type: S3ContentTypeEnum
     key: str | None = None
 
+    EXTENSION_MAP: ClassVar[dict[str, S3ContentTypeEnum]] = {
+        "png": S3ContentTypeEnum.PNG,
+        "jpg": S3ContentTypeEnum.JPEG,
+        "jpeg": S3ContentTypeEnum.JPEG,
+        "mp3": S3ContentTypeEnum.MP3,
+        "wav": S3ContentTypeEnum.WAV,
+        "ogg": S3ContentTypeEnum.OGG,
+        "json": S3ContentTypeEnum.JSON,
+        "pickle": S3ContentTypeEnum.PICKLE,
+        "mp4": S3ContentTypeEnum.MP4,
+        "webm": S3ContentTypeEnum.WEBM,
+        "m4a": S3ContentTypeEnum.M4A,
+        "flac": S3ContentTypeEnum.FLAC,
+        "aac": S3ContentTypeEnum.AAC,
+        "opus": S3ContentTypeEnum.OPUS,
+        "aiff": S3ContentTypeEnum.AIFF,
+        "wma": S3ContentTypeEnum.WMA,
+    }
+
     @staticmethod
     def detect_content_type_from_name(name: str) -> S3ContentTypeEnum:
         extension = name.rsplit(".", 1)[-1].lower() if "." in name else ""
-        if extension == "png":
-            return S3ContentTypeEnum.PNG
-        if extension in {"jpg", "jpeg"}:
-            return S3ContentTypeEnum.JPEG
-        if extension in {"mp3", "wav", "ogg"}:
-            if extension == "mp3":
-                return S3ContentTypeEnum.MP3
-            if extension == "wav":
-                return S3ContentTypeEnum.WAV
-            return S3ContentTypeEnum.OGG
-        if extension == "json":
-            return S3ContentTypeEnum.JSON
-        if extension == "pickle":
-            return S3ContentTypeEnum.PICKLE
-        if extension == "mp4":
-            return S3ContentTypeEnum.MP4
+        content_type = S3Data.EXTENSION_MAP.get(extension)
+        if content_type is not None:
+            return content_type
         raise AppException(
             f"Unsupported file extension for content type detection: {name}"
         )
@@ -81,10 +87,20 @@ class S3Data:
             S3ContentTypeEnum.MP3,
             S3ContentTypeEnum.WAV,
             S3ContentTypeEnum.OGG,
+            S3ContentTypeEnum.M4A,
+            S3ContentTypeEnum.FLAC,
+            S3ContentTypeEnum.AAC,
+            S3ContentTypeEnum.OPUS,
+            S3ContentTypeEnum.AIFF,
+            S3ContentTypeEnum.WMA,
         }:
             if self.key:
                 return f"audio/{self.key}/{self.name}"
             return f"audio/{self.name}"
+        if self.content_type in {S3ContentTypeEnum.MP4, S3ContentTypeEnum.WEBM}:
+            if self.key:
+                return f"videos/{self.key}/{self.name}"
+            return f"videos/{self.name}"
         if self.content_type == S3ContentTypeEnum.JSON:
             if self.key:
                 return f"json/{self.key}/{self.name}"
@@ -112,20 +128,22 @@ class S3Data:
             S3ContentTypeEnum.MP3,
             S3ContentTypeEnum.WAV,
             S3ContentTypeEnum.OGG,
+            S3ContentTypeEnum.M4A,
+            S3ContentTypeEnum.FLAC,
+            S3ContentTypeEnum.AAC,
+            S3ContentTypeEnum.OPUS,
+            S3ContentTypeEnum.AIFF,
+            S3ContentTypeEnum.WMA,
         }:
             if self.key:
                 return f"backend/output/audio/{self.key}/{self.name}"
             return f"backend/output/audio/{self.name}"
-        if self.content_type == S3ContentTypeEnum.JSON:
+        if self.content_type in {S3ContentTypeEnum.MP4, S3ContentTypeEnum.WEBM}:
             if self.key:
-                return f"backend/output/json/{self.key}/{self.name}"
-            return f"backend/output/json/{self.name}"
+                return f"backend/output/video/{self.key}/{self.name}"
+            return f"backend/output/video/{self.name}"
         if self.content_type == S3ContentTypeEnum.PICKLE:
             if self.key:
                 return f"backend/output/pickle/{self.key}/{self.name}"
             return f"backend/output/pickle/{self.name}"
-        if self.content_type == S3ContentTypeEnum.MP4:
-            if self.key:
-                return f"backend/output/videos/{self.key}/{self.name}"
-            return f"backend/output/videos/{self.name}"
         raise AppException("Unsupported content type for S3 key generation")

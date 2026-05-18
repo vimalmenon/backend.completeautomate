@@ -39,6 +39,13 @@ class Env:
     CORS_ALLOWED_ORIGINS: list[str] = _to_list(os.environ["CORS_ALLOWED_ORIGINS"])
     NOTIFICATION_EMAIL_TO: str = os.environ.get("NOTIFICATION_EMAIL_TO", "")
 
+    # --- Cognito Auth ---
+    COGNITO_USER_POOL_ID: str = os.environ.get("COGNITO_USER_POOL_ID", "")
+    COGNITO_APP_CLIENT_ID: str = os.environ.get("COGNITO_APP_CLIENT_ID", "")
+    COGNITO_REGION: str = os.environ.get("COGNITO_REGION", "us-east-1")
+    COGNITO_ADMIN_GROUP_NAME: str = os.environ.get("COGNITO_ADMIN_GROUP_NAME", "admin")
+    COGNITO_HOSTED_UI_DOMAIN: str = os.environ.get("COGNITO_HOSTED_UI_DOMAIN", "")
+
 
 env = Env()
 

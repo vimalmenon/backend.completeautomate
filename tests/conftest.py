@@ -57,6 +57,13 @@ def pytest_configure(config: pytest.Config) -> None:
 
     os.environ["CORS_ALLOWED_ORIGINS"] = "http://localhost:3000"
 
+    # Cognito Auth (disabled for tests — verify without real pool)
+    os.environ["COGNITO_USER_POOL_ID"] = ""
+    os.environ["COGNITO_APP_CLIENT_ID"] = ""
+    os.environ["COGNITO_REGION"] = "us-east-1"
+    os.environ["COGNITO_ADMIN_GROUP_NAME"] = "admin"
+    os.environ["COGNITO_HOSTED_UI_DOMAIN"] = ""
+
 
 @pytest.fixture(scope="session")
 def aws_credentials() -> None:
