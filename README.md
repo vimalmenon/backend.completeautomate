@@ -31,7 +31,7 @@ Priority-ordered suggestions for improving the project.
 
 ### 🥇 Quick Wins (< 1h each)
 
-- **[2] TTS Node in LangGraph Pipeline** — The YouTube Shorts generator produces a speech script but has no audio generation step. Add a `generate_audio` node that calls the existing Resemble AI / TTS providers, following the same pattern as the existing speech generator nodes.
+- **[x] [2] TTS Node in LangGraph Pipeline** — The YouTube Shorts generator produces a speech script but has no audio generation step. Add a `generate_audio` node that calls the existing Resemble AI / TTS providers, following the same pattern as the existing speech generator nodes.
 - **[x] [2] Phase 2 Audit: Hardcoded Prompts** — Scan complete: 0 hardcoded prompts found. 3 files cleaned of dead fallback constants. 5 YouTube prompt templates added to seed defaults. All 10 PromptTaskEnum now have DB seeds. ✅
 - **[x] [4] Prompt Generation Tests** — Generalized prompt template suites: 20 tests covering all 9 PromptTaskEnum tasks, optional variable handling, StrictUndefined edge cases, example injections, and seed template rendering. 🔄
 
