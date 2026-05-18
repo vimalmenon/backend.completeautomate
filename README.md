@@ -38,7 +38,7 @@ Priority-ordered suggestions for improving the project.
 ### 🥈 High Value — Moderate Effort
 
 - **[x] [4] Version Rollback** — `POST /api/v1/prompts/{task}/rollback/{version_id}` endpoint copies historical version into active slot with audit trail. 🔄
-- **[5] Twitter Post in YouTube Pipeline** — `YouTubeVideoTwitterPostAgent` and prompt task already exist. Create a `YouTubeVideoTwitterPost` job type + generator and wire it into the video pipeline after community post generation.
+- **[x] [5] Twitter Post in YouTube Pipeline** — `YouTubeVideoTwitterPostAgent` now wired into YouTube video pipeline after community post generation. Generates Twitter/X threads from video metadata. 🐦
 - **[4-5] Parallel Execution (Phase 5)** — Run PromptImprover evaluation across all prompts in parallel. The LangGraph and task infrastructure already supports this pattern; wire up concurrent evaluation workers.
 
 ### 🥉 Feature Expansions

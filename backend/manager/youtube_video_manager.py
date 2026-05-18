@@ -68,5 +68,8 @@ class YouTubeVideoManager:
     def update_community_posts(self, community_posts: list[str]) -> None:
         self.video_db.update_values({"community_posts": community_posts})
 
+    def update_twitter_posts(self, twitter_posts: list[str]) -> None:
+        self.video_db.update_values({"twitter_posts": twitter_posts})
+
     def update_task_status(self, task_status: YouTubeVideoTaskEnum) -> None:
         self.video_db.update_values({"task_status": task_status.value})

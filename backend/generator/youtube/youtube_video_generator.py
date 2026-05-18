@@ -308,6 +308,23 @@ class YouTubeVideoGenerator(BaseGenerator):
             self.youtube_manager.update_community_posts(community_posts=posts)
         finally:
             agent.clean_up()
+        # Generate Twitter/X posts after community posts
+        self.__create_twitter_post(video_from_db=video_from_db)
+
+    def __create_twitter_post(self, video_from_db: YouTubeVideoDBData) -> None:
+        from backend.generator.youtube.youtube_video_twitter_post_generator import (
+            YouTubeVideoTwitterPostGenerator,
+        )
+
+        generator = YouTubeVideoTwitterPostGenerator(
+            job_id=self.job.id,
+            title=video_from_db.title,
+            description=video_from_db.description,
+            video_summary=video_from_db.summarized_transcript or "",
+        )
+        posts = generator.generate()
+        if posts:
+            self.youtube_manager.update_twitter_posts(twitter_posts=posts)
 
     def __job_complete(self) -> tuple[JobsStatusEnum, dict]:
         self.youtube_manager.update_task_status(

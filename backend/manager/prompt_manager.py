@@ -283,6 +283,34 @@ class PromptManager:
                 ai=AIModelEnum.Grok,
             ),
             PromptDBData(
+                task=PromptTaskEnum.YouTubeVideoTwitterPost,
+                description=(
+                    "Generate Twitter/X thread from a YouTube video's "
+                    "title, description, and summary"
+                ),
+                active_version=uuid4(),
+                prompt=(
+                    "You are a social media strategist. Create an engaging "
+                    "Twitter/X thread (2-5 tweets) for this YouTube video.\n\n"
+                    "Title: {{ title }}\n"
+                    "Description: {{ description }}\n"
+                    "Video Summary: {{ video_summary }}\n\n"
+                    "Guidelines:\n"
+                    "- Open with a hook that grabs attention\n"
+                    "- Each tweet should be under 280 characters\n"
+                    "- Use line breaks and emojis naturally\n"
+                    "- Include a call-to-action (watch the video, comment, retweet)\n"
+                    "- Thread should feel like one cohesive story\n"
+                    "- End with a question or discussion starter\n\n"
+                    "Return each tweet separated by a blank line."
+                ),
+                system_message=(
+                    "You are a social media strategist. "
+                    "Write compelling Twitter/X threads that drive engagement."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
                 task=PromptTaskEnum.PromptImprovement,
                 description="Improve a prompt template based on evaluation results",
                 active_version=uuid4(),
