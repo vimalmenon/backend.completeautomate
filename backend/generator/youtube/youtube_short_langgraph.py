@@ -245,9 +245,7 @@ class YouTubeShortLangGraph:
                 "status": "audio_generated",
             }
         except Exception as e:
-            logger.exception(
-                "Failed to generate audio for job %s", self.job_id
-            )
+            logger.exception("Failed to generate audio for job %s", self.job_id)
             return _error_state(f"Audio generation failed: {e}")
 
     # ── Node: Generate Image Prompts ──

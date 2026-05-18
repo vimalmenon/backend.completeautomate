@@ -37,9 +37,7 @@ async def auth_status() -> dict:
     """Return whether Cognito auth is configured for this instance."""
     from backend.config.env import env
 
-    configured = bool(
-        env.COGNITO_USER_POOL_ID and env.COGNITO_APP_CLIENT_ID
-    )
+    configured = bool(env.COGNITO_USER_POOL_ID and env.COGNITO_APP_CLIENT_ID)
     return {
         "auth_configured": configured,
         "region": env.COGNITO_REGION if configured else None,

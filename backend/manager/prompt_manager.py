@@ -444,17 +444,17 @@ class PromptManager:
                     "- Timely (connected to current trends)\n"
                     "- Likely to perform well in search\n\n"
                     "Return a JSON array of objects with:\n"
-                    "  - \"title\": the blog post title\n"
-                    "  - \"keywords\": array of 3-5 SEO keywords\n"
-                    "  - \"description\": 1-2 sentence summary\n"
-                    "  - \"audience\": the target audience\n"
-                    "  - \"tone\": the writing tone\n\n"
+                    '  - "title": the blog post title\n'
+                    '  - "keywords": array of 3-5 SEO keywords\n'
+                    '  - "description": 1-2 sentence summary\n'
+                    '  - "audience": the target audience\n'
+                    '  - "tone": the writing tone\n\n'
                     "Example:\n"
-                    "[{\"title\": \"Why AI Agents Are the Next Big Thing\", "
-                    "\"keywords\": [\"AI agents\", \"autonomous AI\", \"agentic workflows\"], "
-                    "\"description\": \"A deep dive into how AI agents are transforming industries\", "
-                    "\"audience\": \"Developers and tech enthusiasts\", "
-                    "\"tone\": \"professional\"}]\n\n"
+                    '[{"title": "Why AI Agents Are the Next Big Thing", '
+                    '"keywords": ["AI agents", "autonomous AI", "agentic workflows"], '
+                    '"description": "A deep dive into how AI agents are transforming industries", '
+                    '"audience": "Developers and tech enthusiasts", '
+                    '"tone": "professional"}]\n\n'
                     "Respond with ONLY the JSON array, no extra text."
                 ),
                 system_message=(

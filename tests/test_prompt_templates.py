@@ -8,12 +8,11 @@ This test suite verifies that every prompt template in the system:
 """
 
 from unittest.mock import patch
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 
 from backend.data import PromptDBData
-from backend.data.prompt import PromptVersionDBData
 from backend.enum import AIModelEnum
 from backend.enum.prompt import PromptTaskEnum
 from backend.services.agent_service import AgentService
@@ -83,6 +82,7 @@ MOCK_IMPROVEMENT_TEMPLATE = (
 
 # ── Test data fixtures per task ────────────────────────────────────────
 
+
 @pytest.fixture
 def default_task_id() -> str:
     return "test-task-1234"
@@ -103,7 +103,10 @@ def video_summary_prompt() -> PromptDBData:
 
 @pytest.fixture
 def video_summary_data() -> dict:
-    return {"transcript": "A long video about AI agents", "user_message": "Keep it concise"}
+    return {
+        "transcript": "A long video about AI agents",
+        "user_message": "Keep it concise",
+    }
 
 
 @pytest.fixture
@@ -120,7 +123,10 @@ def metadata_prompt() -> PromptDBData:
 
 @pytest.fixture
 def metadata_data() -> dict:
-    return {"transcript": "Introduction to machine learning", "user_message": "Focus on beginners"}
+    return {
+        "transcript": "Introduction to machine learning",
+        "user_message": "Focus on beginners",
+    }
 
 
 @pytest.fixture
@@ -342,6 +348,7 @@ TASK_TEST_DATA: list[tuple[PromptTaskEnum, str, str]] = [
 
 # ── Helper ─────────────────────────────────────────────────────────────
 
+
 def _agent_service_with_mock_db(
     task: PromptTaskEnum,
     prompt_db_data: PromptDBData,
@@ -365,10 +372,7 @@ class TestPromptTemplateRendering:
 
     @pytest.mark.parametrize(
         "task, prompt_fixture_name, data_fixture_name",
-        [
-            pytest.param(t, p, d, id=t.value)
-            for t, p, d in TASK_TEST_DATA
-        ],
+        [pytest.param(t, p, d, id=t.value) for t, p, d in TASK_TEST_DATA],
     )
     def test_all_templates_render(
         self,
@@ -393,9 +397,9 @@ class TestPromptTemplateRendering:
         # Verify data variables are present in the rendered output
         for key, value in data.items():
             if isinstance(value, str) and len(value) > 10:
-                assert value in rendered_prompt or value in rendered_system, (
-                    f"Variable '{key}' value not found in rendered output"
-                )
+                assert (
+                    value in rendered_prompt or value in rendered_system
+                ), f"Variable '{key}' value not found in rendered output"
 
 
 @pytest.mark.unit
@@ -436,7 +440,12 @@ class TestOptionalVariables:
     def test_optional_variable_provided(self) -> None:
         """Providing optional variables should render them."""
         prompt = self._make_blog_prompt(include_optional=True)
-        data = {"topic": "AI", "audience": "Devs", "keywords": "LLM, RAG", "outline": ""}
+        data = {
+            "topic": "AI",
+            "audience": "Devs",
+            "keywords": "LLM, RAG",
+            "outline": "",
+        }
 
         service = _agent_service_with_mock_db(
             PromptTaskEnum.BlogPostGenerationPrompt, prompt, data
@@ -608,7 +617,6 @@ class TestEdgeCases:
 
     def test_seed_prompt_evaluation_renders(self) -> None:
         """Test the actual seed template for PromptEvaluation with realistic data."""
-        from backend.manager.prompt_manager import PromptManager
 
         # The seed prompts are created by PromptManager.seed_default_prompts()
         # but in tests we mock DB, so construct a PromptDBData matching the seed

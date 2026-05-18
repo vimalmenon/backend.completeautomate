@@ -57,7 +57,7 @@ def custom_openapi() -> dict:
     return main.openapi_schema
 
 
-main.openapi = custom_openapi  # type: ignore[assignment]
+main.openapi = custom_openapi  # type: ignore[method-assign]
 
 # Shared API extension for every route.
 API_PREFIX = "/api/v1"

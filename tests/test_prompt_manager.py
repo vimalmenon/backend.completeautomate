@@ -357,12 +357,8 @@ def test_rollback_prompt_restores_historical_version() -> None:
     )
 
     with (
-        patch(
-            "backend.manager.prompt_manager.PromptVersionDB"
-        ) as mock_ver_cls,
-        patch(
-            "backend.manager.prompt_manager.PromptDB"
-        ) as mock_prompt_db_cls,
+        patch("backend.manager.prompt_manager.PromptVersionDB") as mock_ver_cls,
+        patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls,
     ):
         mock_ver_db = mock_ver_cls.return_value
         mock_ver_db.get_version.return_value = historical
@@ -398,9 +394,7 @@ def test_rollback_prompt_restores_historical_version() -> None:
 def test_rollback_prompt_raises_when_version_missing() -> None:
     target = uuid4()
 
-    with patch(
-        "backend.manager.prompt_manager.PromptVersionDB"
-    ) as mock_ver_cls:
+    with patch("backend.manager.prompt_manager.PromptVersionDB") as mock_ver_cls:
         mock_ver_db = mock_ver_cls.return_value
         mock_ver_db.get_version.return_value = None
 
@@ -424,12 +418,8 @@ def test_rollback_prompt_raises_when_prompt_missing() -> None:
     )
 
     with (
-        patch(
-            "backend.manager.prompt_manager.PromptVersionDB"
-        ) as mock_ver_cls,
-        patch(
-            "backend.manager.prompt_manager.PromptDB"
-        ) as mock_prompt_db_cls,
+        patch("backend.manager.prompt_manager.PromptVersionDB") as mock_ver_cls,
+        patch("backend.manager.prompt_manager.PromptDB") as mock_prompt_db_cls,
     ):
         mock_ver_db = mock_ver_cls.return_value
         mock_ver_db.get_version.return_value = historical

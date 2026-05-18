@@ -6,7 +6,7 @@ import json
 import time
 from dataclasses import dataclass, field
 from logging import getLogger
-from typing import Any
+from typing import Any, cast
 
 import httpx
 from jose import jwk, jws
@@ -78,7 +78,7 @@ class CognitoJWTVerifier:
             self._jwks_cache is not None
             and now - self._jwks_cached_at < JWKS_CACHE_TTL_SECONDS
         ):
-            return self._jwks_cache  # type: ignore[return-value]
+            return self._jwks_cache
 
         # When Cognito is not configured, return empty to avoid spamming errors
         if not env.COGNITO_USER_POOL_ID or not env.COGNITO_APP_CLIENT_ID:
@@ -88,7 +88,7 @@ class CognitoJWTVerifier:
             async with httpx.AsyncClient() as client:
                 resp = await client.get(self._jwks_url, timeout=10)
                 resp.raise_for_status()
-                self._jwks_cache = resp.json()
+                self._jwks_cache = cast(dict[str, Any], resp.json())
                 self._jwks_cached_at = now
                 return self._jwks_cache
         except (httpx.RequestError, json.JSONDecodeError) as exc:
@@ -98,7 +98,7 @@ class CognitoJWTVerifier:
     async def _get_public_key(self, kid: str) -> dict[str, Any] | None:
         """Look up the JWK whose ``kid`` matches the token header."""
         jwks = await self._fetch_jwks()
-        for key in jwks.get("keys", []):
+        for key in cast(list[dict[str, Any]], jwks.get("keys", [])):
             if key.get("kid") == kid:
                 return key
         return None
@@ -137,9 +137,7 @@ class CognitoJWTVerifier:
 
         # ---- 3. Verify signature & decode payload ----
         try:
-            payload_raw = jws.verify(
-                token, key, algorithms=[Algorithms.RS256]
-            )
+            payload_raw = jws.verify(token, key, algorithms=[Algorithms.RS256])
             payload: dict[str, Any] = json.loads(payload_raw.decode("utf-8"))
         except (JWTError, JWSError) as exc:
             raise ValueError(f"Token signature verification failed: {exc}") from exc
@@ -148,8 +146,7 @@ class CognitoJWTVerifier:
         token_use = payload.get("token_use", "")
         if token_use not in ("id", "access"):
             raise ValueError(
-                f"Unexpected token_use '{token_use}'. "
-                "Expected 'id' or 'access'."
+                f"Unexpected token_use '{token_use}'. " "Expected 'id' or 'access'."
             )
 
         # Expiration

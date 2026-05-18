@@ -87,8 +87,6 @@ def inject_security_scheme(schema: dict[str, Any]) -> dict[str, Any]:
     if "CognitoOAuth2" not in schema["components"]["securitySchemes"]:
         schema["components"]["securitySchemes"]["CognitoOAuth2"] = scheme_definition
         schema.setdefault("security", [])
-        schema["security"].append(
-            {"CognitoOAuth2": ["openid", "email", "profile"]}
-        )
+        schema["security"].append({"CognitoOAuth2": ["openid", "email", "profile"]})
 
     return schema
