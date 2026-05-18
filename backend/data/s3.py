@@ -22,6 +22,8 @@ class S3Data:
             return S3ContentTypeEnum.JSON
         if extension == "pickle":
             return S3ContentTypeEnum.PICKLE
+        if extension == "mp4":
+            return S3ContentTypeEnum.MP4
         raise AppException(
             f"Unsupported file extension for content type detection: {name}"
         )
@@ -77,6 +79,10 @@ class S3Data:
             if self.key:
                 return f"data/{self.key}/{self.name}"
             return f"data/{self.name}"
+        if self.content_type == S3ContentTypeEnum.MP4:
+            if self.key:
+                return f"videos/{self.key}/{self.name}"
+            return f"videos/{self.name}"
         raise AppException("Unsupported content type for S3 key generation")
 
     @property
@@ -96,4 +102,8 @@ class S3Data:
             if self.key:
                 return f"backend/output/pickle/{self.key}/{self.name}"
             return f"backend/output/pickle/{self.name}"
+        if self.content_type == S3ContentTypeEnum.MP4:
+            if self.key:
+                return f"backend/output/videos/{self.key}/{self.name}"
+            return f"backend/output/videos/{self.name}"
         raise AppException("Unsupported content type for S3 key generation")

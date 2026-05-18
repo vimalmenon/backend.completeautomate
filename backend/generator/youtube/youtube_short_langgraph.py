@@ -4,13 +4,20 @@ Orchestrates multi-step short video content generation using
 LangGraph state machine with optional DynamoDB persistence.
 """
 
+import json
 import logging
+import os
+import subprocess
+import tempfile
 from typing import Any, TypedDict, cast
 
 from langgraph.graph import END, START, StateGraph
 
+from backend.data import S3Data
 from backend.enum import PromptTaskEnum
+from backend.enum.s3 import S3ContentTypeEnum
 from backend.integration import GeneralAgent
+from backend.integration.storage.s3_storage import S3Storage
 from backend.services.agent_service import AgentService
 
 logger = logging.getLogger(__name__)
@@ -20,7 +27,7 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     """State for the YouTube Short generation pipeline.
 
     Tracks all data as it flows through the LangGraph nodes:
-    fetch_input → generate_speech → generate_image_prompts → finalize
+    fetch_input → generate_speech → generate_image_prompts → generate_video → finalize
     """
 
     # Input from job
@@ -31,7 +38,10 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     transcript: str | None
     # Generated content
     speech_script: str | None
+    audio_file: dict[str, Any] | None
     image_prompts: list[dict[str, str]] | None
+    video_file: dict[str, Any] | None
+    rendered_video_s3_key: str | None
     # Execution tracking
     messages: list[dict[str, Any]]
     status: str
@@ -62,6 +72,7 @@ class YouTubeShortLangGraph:
         builder.add_node("fetch_input", self._fetch_input)
         builder.add_node("generate_speech", self._generate_speech)
         builder.add_node("generate_image_prompts", self._generate_image_prompts)
+        builder.add_node("generate_video", self._generate_video)
         builder.add_node("finalize", self._finalize)
 
         # Flow: START → fetch_input
@@ -81,9 +92,16 @@ class YouTubeShortLangGraph:
             {"continue": "generate_image_prompts", "end": END},
         )
 
-        # Conditional: generate_image_prompts → finalize or END
+        # Conditional: generate_image_prompts → generate_video or END
         builder.add_conditional_edges(
             "generate_image_prompts",
+            self._route_on_error,
+            {"continue": "generate_video", "end": END},
+        )
+
+        # Conditional: generate_video → finalize or END
+        builder.add_conditional_edges(
+            "generate_video",
             self._route_on_error,
             {"continue": "finalize", "end": END},
         )
@@ -180,6 +198,127 @@ class YouTubeShortLangGraph:
             logger.exception("Failed to generate image prompts for job %s", self.job_id)
             return _error_state(f"Image prompt generation failed: {e}")
 
+    # ── Node: Generate Video ──
+
+    def _generate_video(
+        self, state: YouTubeShortGenerationState
+    ) -> YouTubeShortGenerationState:
+        """Render the YouTube Short video using Remotion and upload to S3."""
+        try:
+            speech_script: str = state.get("speech_script", "") or ""
+            topic: str = state.get("topic", "") or ""
+            audio_file: dict[str, Any] | None = state.get("audio_file")
+
+            if not speech_script:
+                return _error_state("No speech script available for video rendering")
+
+            # Create a temp directory for the render config and output
+            tmpdir = tempfile.mkdtemp(prefix="youtube_short_render_")
+            output_filename = f"{self.job_id}.mp4"
+            output_path = os.path.join(tmpdir, output_filename)
+
+            # Build the render config
+            audio_url = ""
+            if audio_file:
+                audio_url = audio_file.get("downloaded_path", "") or audio_file.get("s3_key", "")
+
+            render_config = {
+                "props": {
+                    "speechScript": speech_script,
+                    "audioUrl": audio_url,
+                    "topic": topic,
+                },
+                "output": output_path,
+            }
+
+            config_path = os.path.join(tmpdir, "render_config.json")
+            with open(config_path, "w") as f:
+                json.dump(render_config, f)
+
+            logger.info(
+                "Rendering video for job %s via Remotion (topic=%s, words=%d)",
+                self.job_id,
+                topic,
+                len(speech_script.split()),
+            )
+
+            # Call the Remotion render script
+            render_script = "/home/hermes/video.completeautomate/render-shorts.mjs"
+            result = subprocess.run(
+                ["node", render_script, "--input", config_path],
+                capture_output=True,
+                text=True,
+                timeout=600,
+            )
+
+            if result.returncode != 0:
+                logger.error(
+                    "Remotion render failed for job %s:\nstdout: %s\nstderr: %s",
+                    self.job_id,
+                    result.stdout,
+                    result.stderr,
+                )
+                return _error_state(
+                    f"Video rendering failed: {result.stderr.strip() or 'Unknown error'}"
+                )
+
+            if not os.path.exists(output_path):
+                return _error_state(
+                    "Video rendering completed but output file not found"
+                )
+
+            logger.info(
+                "Video rendered successfully for job %s: %s",
+                self.job_id,
+                output_path,
+            )
+
+            # Upload to S3
+            s3_name = f"{self.job_id}.mp4"
+            s3_key_prefix = f"youtube-shorts/{topic}" if topic else "youtube-shorts"
+            s3_data = S3Data(
+                name=s3_name,
+                content_type=S3ContentTypeEnum.MP4,
+                key=s3_key_prefix,
+            )
+
+            storage = S3Storage()
+            with open(output_path, "rb") as f:
+                video_bytes = f.read()
+            upload_success = storage.upload_data(s3_data, video_bytes)
+
+            if not upload_success:
+                return _error_state("Failed to upload rendered video to S3")
+
+            video_file_dict = s3_data.to_json()
+
+            logger.info(
+                "Video uploaded to S3 for job %s: s3_key=%s",
+                self.job_id,
+                s3_data.s3_key,
+            )
+
+            # Clean up temp directory
+            try:
+                import shutil
+
+                shutil.rmtree(tmpdir)
+            except Exception:
+                pass
+
+            return {
+                "video_file": video_file_dict,
+                "rendered_video_s3_key": s3_data.s3_key,
+                "status": "video_generated",
+            }
+
+        except subprocess.TimeoutExpired:
+            logger.exception("Video rendering timed out for job %s", self.job_id)
+            return _error_state("Video rendering timed out after 600 seconds")
+        except Exception as e:
+            logger.exception("Failed to generate video for job %s", self.job_id)
+            return _error_state(f"Video generation failed: {e}")
+
     # ── Node: Finalize ──
 
     def _finalize(
@@ -191,6 +330,8 @@ class YouTubeShortLangGraph:
             "transcript": state.get("transcript"),
             "speech_script": state.get("speech_script"),
             "image_prompts": state.get("image_prompts"),
+            "audio_file": state.get("audio_file"),
+            "video_file": state.get("video_file"),
         }
         return {
             "output": output,

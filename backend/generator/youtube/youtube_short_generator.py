@@ -37,16 +37,20 @@ class YouTubeShortGenerator(BaseGenerator):
             output = result.get("output") or {}
             logger.info(
                 "YouTube Short generation complete for job %s — "
-                "speech: %s chars, images: %s",
+                "speech: %s chars, images: %s, audio: %s, video: %s",
                 self.job.id,
                 len(output.get("speech_script", "") or ""),
                 len(output.get("image_prompts", []) or []),
+                "yes" if output.get("audio_file") else "no",
+                "yes" if output.get("video_file") else "no",
             )
             return JobsStatusEnum.COMPLETE, {
                 "speech_script": output.get("speech_script"),
                 "image_prompts": output.get("image_prompts"),
                 "topic": output.get("topic"),
                 "transcript": output.get("transcript"),
+                "audio_file": output.get("audio_file"),
+                "video_file": output.get("video_file"),
             }
 
         except Exception as e:

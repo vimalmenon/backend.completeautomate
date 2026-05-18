@@ -7,3 +7,4 @@ class S3ContentTypeEnum(Enum):
     JSON = "application/json"
     PICKLE = "application/octet-stream"
     TXT = "text/plain"
+    MP4 = "video/mp4"
