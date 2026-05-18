@@ -71,6 +71,7 @@ class YouTubeShortLangGraph:
         # Register nodes
         builder.add_node("fetch_input", self._fetch_input)
         builder.add_node("generate_speech", self._generate_speech)
+        builder.add_node("generate_audio", self._generate_audio)
         builder.add_node("generate_image_prompts", self._generate_image_prompts)
         builder.add_node("generate_video", self._generate_video)
         builder.add_node("finalize", self._finalize)
@@ -85,9 +86,16 @@ class YouTubeShortLangGraph:
             {"continue": "generate_speech", "end": END},
         )
 
-        # Conditional: generate_speech → generate_image_prompts or END
+        # Conditional: generate_speech → generate_audio or END
         builder.add_conditional_edges(
             "generate_speech",
+            self._route_on_error,
+            {"continue": "generate_audio", "end": END},
+        )
+
+        # Conditional: generate_audio → generate_image_prompts or END
+        builder.add_conditional_edges(
+            "generate_audio",
             self._route_on_error,
             {"continue": "generate_image_prompts", "end": END},
         )
@@ -170,9 +178,64 @@ class YouTubeShortLangGraph:
                 "speech_script": speech_script,
                 "status": "speech_generated",
             }
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to generate speech for job %s", self.job_id)
-            return _error_state(f"Speech generation failed: {e}")
+            return _error_state("Speech generation failed unexpectedly")
+
+    # ── Node: Generate Audio (TTS) ──
+
+    def _generate_audio(
+        self, state: YouTubeShortGenerationState
+    ) -> YouTubeShortGenerationState:
+        """Convert the speech script to audio via TTS and upload to S3."""
+        try:
+            speech_script: str = state.get("speech_script", "") or ""
+            topic: str = state.get("topic", "") or ""
+
+            if not speech_script:
+                return _error_state("No speech script available for TTS generation")
+
+            # Generate audio using Resemble TTS
+            from backend.ai.speech_generation.resemble_speech_generator import (
+                ResembleSpeechGenerator,
+            )
+
+            tts = ResembleSpeechGenerator(
+                output_format="wav",
+                title=f"youtube-short-{self.job_id}",
+            )
+            audio_bytes = tts.generate_speech(speech_script)
+
+            # Upload to S3
+            audio_name = f"{self.job_id}.wav"
+            s3_key_prefix = f"youtube-shorts/{topic}" if topic else "youtube-shorts"
+            s3_data = S3Data(
+                name=audio_name,
+                content_type=S3ContentTypeEnum.WAV,
+                key=s3_key_prefix,
+            )
+
+            storage = S3Storage()
+            upload_success = storage.upload_data(s3_data, audio_bytes)
+
+            if not upload_success:
+                return _error_state("Failed to upload TTS audio to S3")
+
+            audio_file_dict = s3_data.to_json()
+
+            logger.info(
+                "TTS audio uploaded to S3 for job %s: s3_key=%s",
+                self.job_id,
+                s3_data.s3_key,
+            )
+
+            return {
+                "audio_file": audio_file_dict,
+                "status": "audio_generated",
+            }
+        except Exception:
+            logger.exception("Failed to generate TTS audio for job %s", self.job_id)
+            return _error_state("TTS audio generation failed unexpectedly")
 
     # ── Node: Generate Image Prompts ──
 
