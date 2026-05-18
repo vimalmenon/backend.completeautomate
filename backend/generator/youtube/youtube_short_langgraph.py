@@ -19,6 +19,10 @@ from backend.enum.s3 import S3ContentTypeEnum
 from backend.integration import GeneralAgent
 from backend.integration.storage.s3_storage import S3Storage
 from backend.services.agent_service import AgentService
+from backend.ai.speech_generation.qwen_speech_generator import QwenSpeechGenerator
+from backend.data.s3 import S3Data
+from backend.enum.s3 import S3ContentTypeEnum
+from backend.integration.storage.s3_storage import S3Storage
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +31,7 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     """State for the YouTube Short generation pipeline.
 
     Tracks all data as it flows through the LangGraph nodes:
-    fetch_input → generate_speech → generate_image_prompts → generate_video → finalize
+    fetch_input → generate_speech → generate_audio → generate_image_prompts → generate_video → finalize
     """
 
     # Input from job
@@ -38,8 +42,11 @@ class YouTubeShortGenerationState(TypedDict, total=False):
     transcript: str | None
     # Generated content
     speech_script: str | None
-    audio_file: dict[str, Any] | None
+    # Generated audio
+    audio_file: str | None
+    audio_format: str | None
     image_prompts: list[dict[str, str]] | None
+    # Generated video
     video_file: dict[str, Any] | None
     rendered_video_s3_key: str | None
     # Execution tracking
@@ -237,6 +244,65 @@ class YouTubeShortLangGraph:
             logger.exception("Failed to generate TTS audio for job %s", self.job_id)
             return _error_state("TTS audio generation failed unexpectedly")
 
+    # ── Node: Generate Audio ──
+
+    def _generate_audio(
+        self, state: YouTubeShortGenerationState
+    ) -> YouTubeShortGenerationState:
+        """Generate audio from the speech script using TTS, upload to S3."""
+        try:
+            speech_script: str = state.get("speech_script", "") or ""
+
+            if not speech_script:
+                logger.warning(
+                    "No speech script to convert to audio for job %s",
+                    self.job_id,
+                )
+                return {
+                    "audio_file": None,
+                    "audio_format": None,
+                    "status": "audio_skipped",
+                }
+
+            tts = QwenSpeechGenerator(audio_format="mp3")
+            audio_bytes = tts.generate_speech(speech_script)
+            if not audio_bytes:
+                logger.warning("TTS returned empty audio for job %s", self.job_id)
+                return {
+                    "audio_file": None,
+                    "audio_format": None,
+                    "status": "audio_skipped",
+                }
+
+            s3_data = S3Data(
+                name="speech.mp3",
+                content_type=S3ContentTypeEnum.MP3,
+                key=f"youtube-shorts/{self.job_id}",
+            )
+            storage = S3Storage()
+            success = storage.upload_data(s3_data, audio_bytes)
+
+            if not success:
+                logger.error("Failed to upload audio to S3 for job %s", self.job_id)
+                return _error_state("Audio upload to S3 failed")
+
+            logger.info(
+                "Audio generated and uploaded for job %s — key: %s, size: %d bytes",
+                self.job_id,
+                s3_data.s3_key,
+                len(audio_bytes),
+            )
+            return {
+                "audio_file": s3_data.s3_key,
+                "audio_format": "mp3",
+                "status": "audio_generated",
+            }
+        except Exception as e:
+            logger.exception(
+                "Failed to generate audio for job %s", self.job_id
+            )
+            return _error_state(f"Audio generation failed: {e}")
+
     # ── Node: Generate Image Prompts ──
 
     def _generate_image_prompts(
@@ -396,6 +462,7 @@ class YouTubeShortLangGraph:
             "speech_script": state.get("speech_script"),
             "image_prompts": state.get("image_prompts"),
             "audio_file": state.get("audio_file"),
+            "audio_format": state.get("audio_format"),
             "video_file": state.get("video_file"),
         }
         return {
@@ -498,5 +565,7 @@ def _error_state(message: str) -> YouTubeShortGenerationState:
         "status": "failed",
         "speech_script": None,
         "image_prompts": None,
+        "audio_file": None,
+        "audio_format": None,
         "output": None,
     }

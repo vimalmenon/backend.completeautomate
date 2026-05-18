@@ -28,6 +28,10 @@ class S3Data:
             return S3ContentTypeEnum.JSON
         if extension == "pickle":
             return S3ContentTypeEnum.PICKLE
+        if extension == "mp3":
+            return S3ContentTypeEnum.MP3
+        if extension == "wav":
+            return S3ContentTypeEnum.WAV
         if extension == "mp4":
             return S3ContentTypeEnum.MP4
         raise AppException(
@@ -85,6 +89,10 @@ class S3Data:
             if self.key:
                 return f"audio/{self.key}/{self.name}"
             return f"audio/{self.name}"
+        if self.content_type == S3ContentTypeEnum.MP4:
+            if self.key:
+                return f"videos/{self.key}/{self.name}"
+            return f"videos/{self.name}"
         if self.content_type == S3ContentTypeEnum.JSON:
             if self.key:
                 return f"json/{self.key}/{self.name}"
@@ -116,7 +124,7 @@ class S3Data:
             if self.key:
                 return f"backend/output/audio/{self.key}/{self.name}"
             return f"backend/output/audio/{self.name}"
-        if self.content_type == S3ContentTypeEnum.JSON:
+        if self.content_type == S3ContentTypeEnum.MP4:
             if self.key:
                 return f"backend/output/json/{self.key}/{self.name}"
             return f"backend/output/json/{self.name}"
