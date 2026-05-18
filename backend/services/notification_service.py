@@ -25,7 +25,7 @@ class NotificationService:
     """
 
     @staticmethod
-    def _format_job_summary(
+    def _format_job_summary(  # noqa: C901
         job_id: str,
         job_type: str,
         status: str,

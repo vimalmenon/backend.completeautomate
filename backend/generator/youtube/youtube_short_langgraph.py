@@ -200,7 +200,7 @@ class YouTubeShortLangGraph:
 
     # ── Node: Generate Video ──
 
-    def _generate_video(
+    def _generate_video(  # noqa: C901
         self, state: YouTubeShortGenerationState
     ) -> YouTubeShortGenerationState:
         """Render the YouTube Short video using Remotion and upload to S3."""
