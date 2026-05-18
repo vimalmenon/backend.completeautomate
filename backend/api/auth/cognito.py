@@ -9,9 +9,21 @@ from logging import getLogger
 from typing import Any, cast
 
 import httpx
-from jose import jwk, jws
-from jose.constants import Algorithms
-from jose.exceptions import JWSError, JWTError
+
+try:
+    from jose import jwk, jws
+    from jose.constants import Algorithms
+    from jose.exceptions import JWSError, JWTError
+
+    JOSE_EXCEPTIONS: tuple[type[BaseException], ...] = (JWTError, JWSError)
+    _JOSE_IMPORT_ERROR: ModuleNotFoundError | None = None
+except ModuleNotFoundError as exc:
+    jwk = cast(Any, None)
+    jws = cast(Any, None)
+    Algorithms = cast(Any, None)
+
+    JOSE_EXCEPTIONS = (Exception,)
+    _JOSE_IMPORT_ERROR = exc
 
 from backend.config.env import env
 
@@ -112,13 +124,18 @@ class CognitoJWTVerifier:
         Raises ``ValueError`` (with a human-readable message) on any
         validation failure.
         """
+        if _JOSE_IMPORT_ERROR is not None:
+            raise ValueError(
+                "python-jose is required for Cognito JWT verification"
+            ) from _JOSE_IMPORT_ERROR
+
         if not token:
             raise ValueError("No token provided")
 
         # ---- 1. Decode header without verification to get the kid ----
         try:
             header = jws.get_unverified_header(token)
-        except (JWTError, JWSError) as exc:
+        except JOSE_EXCEPTIONS as exc:
             raise ValueError(f"Invalid token header: {exc}") from exc
 
         kid = header.get("kid")
@@ -139,7 +156,7 @@ class CognitoJWTVerifier:
         try:
             payload_raw = jws.verify(token, key, algorithms=[Algorithms.RS256])
             payload: dict[str, Any] = json.loads(payload_raw.decode("utf-8"))
-        except (JWTError, JWSError) as exc:
+        except JOSE_EXCEPTIONS as exc:
             raise ValueError(f"Token signature verification failed: {exc}") from exc
 
         # ---- 4. Validate standard claims ----

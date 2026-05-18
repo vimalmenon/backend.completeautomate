@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Self
+from typing import Any, ClassVar, Self
 
 from backend.enum.s3 import S3ContentTypeEnum
 from backend.exception import AppException
@@ -11,7 +11,7 @@ class S3Data:
     content_type: S3ContentTypeEnum
     key: str | None = None
 
-    EXTENSION_MAP: dict[str, S3ContentTypeEnum] = {
+    EXTENSION_MAP: ClassVar[dict[str, S3ContentTypeEnum]] = {
         "png": S3ContentTypeEnum.PNG,
         "jpg": S3ContentTypeEnum.JPEG,
         "jpeg": S3ContentTypeEnum.JPEG,
