@@ -33,7 +33,7 @@ Priority-ordered suggestions for improving the project.
 
 - **[2] TTS Node in LangGraph Pipeline** — The YouTube Shorts generator produces a speech script but has no audio generation step. Add a `generate_audio` node that calls the existing Resemble AI / TTS providers, following the same pattern as the existing speech generator nodes.
 - **[2] Phase 2 Audit: Hardcoded Prompts** — Scan all generators for prompts written directly in Python code (bypassing the Prompt Agent system). Move any found prompts into versioned `PromptDBData` entries so they benefit from evaluations, few-shot examples, and the dashboard.
-- **[4] Prompt Generation Tests** — Expand the Phase 4 test suite: render each prompt template with mock data, validate the output schema matches expected response format, test edge cases (empty transcript, missing fields).
+- **[x] [4] Prompt Generation Tests** — Generalized prompt template suites: 20 tests covering all 9 PromptTaskEnum tasks, optional variable handling, StrictUndefined edge cases, example injections, and seed template rendering. 🔄
 
 ### 🥈 High Value — Moderate Effort
 
@@ -125,9 +125,9 @@ Priority-ordered suggestions for improving the project.
   - [x] [4] Build few-shot example management (add/remove/list)
   - [x] [4] Add few-shot injection into AgentService template rendering
   - [x] [4] Create prompt generation tests
-    - [ ] Render each prompt template with mock data
-    - [ ] Validate output schema matches expected response format
-    - [ ] Test with edge cases (empty transcript, missing fields)
+    - [x] Render each prompt template with mock data
+    - [x] Validate output schema matches expected response format
+    - [x] Test with edge cases (empty transcript, missing fields)
   - [x] [4] Build prompt version rollback mechanism
 
   **Phase 5: Parallel Execution**
