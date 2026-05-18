@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException
 from backend.data.api import (
     PromptCreateRequest,
     PromptRequest,
+    PromptRollbackResponse,
     PromptUpdateRequest,
     PromptUpdateResult,
 )
@@ -62,6 +63,37 @@ async def update_prompt(task: PromptTaskEnum, data: PromptUpdateRequest):
 async def list_versions(task: PromptTaskEnum):
     versions = PromptManager().get_version_history(task)
     return [PromptVersionResponse.model_validate(v.to_json()) for v in versions]
+
+
+@router.post("/prompts/{task}/rollback/{version_id}", tags=["prompts"])
+async def rollback_prompt(task: PromptTaskEnum, version_id: str):
+    """Restore a prompt to a previous version.
+
+    Creates a new version entry recording the rollback in the audit trail.
+    """
+    try:
+        from uuid import UUID
+
+        prompt = PromptManager().rollback_prompt(task, UUID(version_id))
+        return PromptRollbackResponse(
+            task=prompt.task.value,
+            version=prompt.active_version,
+            description=prompt.description,
+            prompt=prompt.prompt,
+            system_message=prompt.system_message,
+            ai=prompt.ai.value,
+            comment=prompt.comment,
+            last_updated=prompt.last_updated,
+            rolled_back_from=UUID(version_id),
+        )
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid version_id format")
+    except Exception as e:
+        from backend.exception import AppException
+
+        if isinstance(e, AppException):
+            raise HTTPException(status_code=404, detail=str(e))
+        raise
 
 
 @router.get("/prompts/{task}/results", tags=["prompts"])
