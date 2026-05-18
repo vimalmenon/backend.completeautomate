@@ -18,6 +18,12 @@ class S3Data:
             return S3ContentTypeEnum.PNG
         if extension in {"jpg", "jpeg"}:
             return S3ContentTypeEnum.JPEG
+        if extension in {"mp3", "wav", "ogg"}:
+            if extension == "mp3":
+                return S3ContentTypeEnum.MP3
+            if extension == "wav":
+                return S3ContentTypeEnum.WAV
+            return S3ContentTypeEnum.OGG
         if extension == "json":
             return S3ContentTypeEnum.JSON
         if extension == "pickle":
@@ -63,7 +69,7 @@ class S3Data:
         )
 
     @property
-    def s3_key(self) -> str:
+    def s3_key(self) -> str:  # noqa: C901
         if self.content_type in {
             S3ContentTypeEnum.PNG,
             S3ContentTypeEnum.JPEG,
@@ -71,6 +77,14 @@ class S3Data:
             if self.key:
                 return f"images/{self.key}/{self.name}"
             return f"images/{self.name}"
+        if self.content_type in {
+            S3ContentTypeEnum.MP3,
+            S3ContentTypeEnum.WAV,
+            S3ContentTypeEnum.OGG,
+        }:
+            if self.key:
+                return f"audio/{self.key}/{self.name}"
+            return f"audio/{self.name}"
         if self.content_type == S3ContentTypeEnum.JSON:
             if self.key:
                 return f"json/{self.key}/{self.name}"
@@ -86,7 +100,7 @@ class S3Data:
         raise AppException("Unsupported content type for S3 key generation")
 
     @property
-    def downloaded_path(self) -> str:
+    def downloaded_path(self) -> str:  # noqa: C901
         if self.content_type in {
             S3ContentTypeEnum.PNG,
             S3ContentTypeEnum.JPEG,
@@ -94,6 +108,14 @@ class S3Data:
             if self.key:
                 return f"backend/output/images/{self.key}/{self.name}"
             return f"backend/output/images/{self.name}"
+        if self.content_type in {
+            S3ContentTypeEnum.MP3,
+            S3ContentTypeEnum.WAV,
+            S3ContentTypeEnum.OGG,
+        }:
+            if self.key:
+                return f"backend/output/audio/{self.key}/{self.name}"
+            return f"backend/output/audio/{self.name}"
         if self.content_type == S3ContentTypeEnum.JSON:
             if self.key:
                 return f"backend/output/json/{self.key}/{self.name}"
