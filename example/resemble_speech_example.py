@@ -2,7 +2,6 @@ from pathlib import Path
 
 from backend.ai.speech_generation import ResembleSpeechGenerator
 
-
 OUTPUT_PATH = Path("example/output/resemble_speech_example.wav")
 SCRIPT = """
 Automation is at its best when it gives your time back.

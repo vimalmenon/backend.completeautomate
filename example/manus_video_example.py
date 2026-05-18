@@ -3,7 +3,6 @@ from pathlib import Path
 
 from backend.ai import ManusVideoGenerator
 
-
 OUTPUT_PATH = Path("example/output/manus_video_example.mp4")
 PROMPT = """
 Create a short presenter-style avatar clip for Complete Automate.
@@ -41,7 +40,9 @@ def main() -> None:
     saved_path = generator.save_video(prompt=PROMPT, output_path=OUTPUT_PATH)
 
     print(f"Saved scaffold video artifact to: {saved_path}")
-    print("Replace ExampleManusClient with the live Manus adapter when API details are available.")
+    print(
+        "Replace ExampleManusClient with the live Manus adapter when API details are available."
+    )
 
 
 if __name__ == "__main__":

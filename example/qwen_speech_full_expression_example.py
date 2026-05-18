@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 OUTPUT_PATH = Path("example/output/qwen_speech_full_expression_2_minutes.mp3")
 WORDS_PER_MINUTE = 145
 SPEECH_RATE = 0.92
