@@ -220,7 +220,9 @@ class YouTubeShortLangGraph:
             # Build the render config
             audio_url = ""
             if audio_file:
-                audio_url = audio_file.get("downloaded_path", "") or audio_file.get("s3_key", "")
+                audio_url = audio_file.get("downloaded_path", "") or audio_file.get(
+                    "s3_key", ""
+                )
 
             render_config = {
                 "props": {

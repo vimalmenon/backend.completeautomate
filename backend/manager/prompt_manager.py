@@ -119,9 +119,7 @@ class PromptManager:
     ) -> PromptVersionDBData | None:
         return PromptVersionDB().get_version(prompt_task=task, version_id=version_id)
 
-    def rollback_prompt(
-        self, task: PromptTaskEnum, version_id: UUID
-    ) -> PromptDBData:
+    def rollback_prompt(self, task: PromptTaskEnum, version_id: UUID) -> PromptDBData:
         """Restore a prompt to a historical version.
 
         Creates a NEW version entry with the historical data so the rollback
@@ -129,9 +127,7 @@ class PromptManager:
         """
         target = self.get_version(task=task, version_id=version_id)
         if target is None:
-            raise AppException(
-                f"Version {version_id} not found for task {task.value}"
-            )
+            raise AppException(f"Version {version_id} not found for task {task.value}")
 
         current = self.get_prompt_by_task(task=task)
         if current is None:
@@ -167,9 +163,7 @@ class PromptManager:
             last_updated=now,
             examples=target.examples,
         )
-        PromptDB().update_prompt(
-            prompt_task=task, values=updated_prompt.to_json()
-        )
+        PromptDB().update_prompt(prompt_task=task, values=updated_prompt.to_json())
         return updated_prompt
 
     def add_result(self, data: PromptResultDBData) -> None:

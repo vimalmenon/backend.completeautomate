@@ -18,7 +18,7 @@ class NotificationService:
 
     Usage:
         NotificationService.notify_job_complete(job_id, job_type, status, task_data)
-    
+
     To add a new channel:
         1. Add a method like _send_signal(...)
         2. Call it in notify() based on env config
@@ -105,7 +105,9 @@ class NotificationService:
 
         logger.info(
             "Job %s [%s] %s — sending notifications",
-            job_id, job_type, status,
+            job_id,
+            job_type,
+            status,
         )
 
         cls._send_email(job_id, job_type, status, summary)
@@ -142,5 +144,6 @@ class NotificationService:
         except Exception as e:
             logger.warning(
                 "Failed to send email notification for job %s: %s",
-                job_id, e,
+                job_id,
+                e,
             )
