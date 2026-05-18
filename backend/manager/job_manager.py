@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from typing import Any
 from uuid import UUID, uuid4
@@ -7,6 +8,9 @@ from backend.data import (
 )
 from backend.database import JobDB
 from backend.enum import STATUS_PRIORITY, JobsStatusEnum, JobTypeEnum
+from backend.services.notification_service import NotificationService
+
+logger = logging.getLogger(__name__)
 
 
 class JobManager:
@@ -97,6 +101,20 @@ class JobManager:
             job_id=job_id,
             values=values,
         )
+
+        # Send notification on completion or failure
+        if status in (JobsStatusEnum.COMPLETE, JobsStatusEnum.FAILED):
+            try:
+                NotificationService.notify_job_complete(
+                    job_id=str(job_id),
+                    job_type=str(task_data.get("type", "unknown"))
+                    if task_data and isinstance(task_data, dict)
+                    else "unknown",
+                    task_data=task_data if isinstance(task_data, dict) else None,
+                    error_msg=error_msg if status == JobsStatusEnum.FAILED else None,
+                )
+            except Exception:
+                logger.exception("Failed to send notification for job %s", job_id)
 
     def update_job_status(
         self,

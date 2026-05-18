@@ -37,6 +37,7 @@ class Env:
     YOUTUBE_CHANNEL_ID: str = os.environ["YOUTUBE_CHANNEL_ID"]
     OFFLINE: bool = _to_bool(os.environ.get("OFFLINE", "false"))
     CORS_ALLOWED_ORIGINS: list[str] = _to_list(os.environ["CORS_ALLOWED_ORIGINS"])
+    NOTIFICATION_EMAIL_TO: str = os.environ.get("NOTIFICATION_EMAIL_TO", "")
 
 
 env = Env()
