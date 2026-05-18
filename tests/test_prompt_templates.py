@@ -63,6 +63,12 @@ MOCK_BLOG_TEMPLATE = (
     "{% if outline %}Outline: {{ outline }}{% endif %}"
 )
 
+MOCK_TOPIC_SUGGESTION_TEMPLATE = (
+    "Trending: {{ trending_data }}\nNiche: {{ niche }}\n"
+    "Audience: {{ audience }}\nTone: {{ tone }}\n"
+    "Return JSON suggestions."
+)
+
 MOCK_EVALUATION_TEMPLATE = (
     "Prompt: {{ prompt }}\nInput: {{ test_data }}\nOutput: {{ response }}\n"
     "Score 0-100."
@@ -215,6 +221,28 @@ def blog_data() -> dict:
 
 
 @pytest.fixture
+def topic_suggestion_prompt() -> PromptDBData:
+    return PromptDBData(
+        task=PromptTaskEnum.BlogTopicSuggestion,
+        description="Suggest blog topics from trending data",
+        active_version=uuid4(),
+        prompt=MOCK_TOPIC_SUGGESTION_TEMPLATE,
+        system_message="You are a content strategist.",
+        ai=AIModelEnum.Grok,
+    )
+
+
+@pytest.fixture
+def topic_suggestion_data() -> dict:
+    return {
+        "trending_data": "[Google News] AI launch event\n[Google News] New framework released",
+        "niche": "AI & Technology",
+        "audience": "Developers",
+        "tone": "professional",
+    }
+
+
+@pytest.fixture
 def evaluation_prompt() -> PromptDBData:
     return PromptDBData(
         task=PromptTaskEnum.PromptEvaluation,
@@ -293,6 +321,11 @@ TASK_TEST_DATA: list[tuple[PromptTaskEnum, str, str]] = [
         PromptTaskEnum.BlogPostGenerationPrompt,
         "blog_prompt",
         "blog_data",
+    ),
+    (
+        PromptTaskEnum.BlogTopicSuggestion,
+        "topic_suggestion_prompt",
+        "topic_suggestion_data",
     ),
     (
         PromptTaskEnum.PromptEvaluation,

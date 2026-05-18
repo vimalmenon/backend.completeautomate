@@ -1,6 +1,9 @@
 from backend.prompt_agent.blog_post_generation_prompt.blog_post_generation_prompt_agent import (
     BlogPostGenerationPromptAgent,
 )
+from backend.prompt_agent.blog_topic_suggestion.blog_topic_suggestion_agent import (
+    BlogTopicSuggestionAgent,
+)
 from backend.prompt_agent.prompt_evaluation.prompt_evaluation_agent import (
     PromptEvaluationAgent,
 )
@@ -28,6 +31,7 @@ from backend.prompt_agent.youtube_video_twitter_post.youtube_video_twitter_post_
 
 __all__ = [
     "BlogPostGenerationPromptAgent",
+    "BlogTopicSuggestionAgent",
     "PromptEvaluationAgent",
     "PromptImprovementAgent",
     "YouTubeVideoSummarizationAgent",

@@ -311,6 +311,43 @@ class PromptManager:
                 ai=AIModelEnum.Grok,
             ),
             PromptDBData(
+                task=PromptTaskEnum.BlogTopicSuggestion,
+                description=(
+                    "Suggest blog topics from trending data, niche, and audience"
+                ),
+                active_version=uuid4(),
+                prompt=(
+                    "You are a content strategist. Given trending topics, a niche, "
+                    "and target audience, suggest blog post ideas.\n\n"
+                    "Trending Data:\n{{ trending_data }}\n\n"
+                    "Niche: {{ niche }}\n"
+                    "Target Audience: {{ audience }}\n"
+                    "Tone: {{ tone }}\n\n"
+                    "For each suggestion, pick topics that are:\n"
+                    "- Relevant to the niche\n"
+                    "- Timely (connected to current trends)\n"
+                    "- Likely to perform well in search\n\n"
+                    "Return a JSON array of objects with:\n"
+                    "  - \"title\": the blog post title\n"
+                    "  - \"keywords\": array of 3-5 SEO keywords\n"
+                    "  - \"description\": 1-2 sentence summary\n"
+                    "  - \"audience\": the target audience\n"
+                    "  - \"tone\": the writing tone\n\n"
+                    "Example:\n"
+                    "[{\"title\": \"Why AI Agents Are the Next Big Thing\", "
+                    "\"keywords\": [\"AI agents\", \"autonomous AI\", \"agentic workflows\"], "
+                    "\"description\": \"A deep dive into how AI agents are transforming industries\", "
+                    "\"audience\": \"Developers and tech enthusiasts\", "
+                    "\"tone\": \"professional\"}]\n\n"
+                    "Respond with ONLY the JSON array, no extra text."
+                ),
+                system_message=(
+                    "You are a content strategist who identifies timely, "
+                    "high-impact blog topics from trending data."
+                ),
+                ai=AIModelEnum.Grok,
+            ),
+            PromptDBData(
                 task=PromptTaskEnum.PromptImprovement,
                 description="Improve a prompt template based on evaluation results",
                 active_version=uuid4(),

@@ -11,6 +11,8 @@ class PromptTaskEnum(str, Enum):
     YouTubeShortSpeechGenerationPrompt = "YouTubeShortSpeechGenerationPrompt"
     # Blog post generation
     BlogPostGenerationPrompt = "BlogPostGenerationPrompt"
+    # Blog topic suggestion from trending data
+    BlogTopicSuggestion = "BlogTopicSuggestion"
     # Meta-prompt tasks for the prompt review/evaluation system
     PromptEvaluation = "PromptEvaluation"
     PromptImprovement = "PromptImprovement"

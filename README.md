@@ -44,8 +44,7 @@ Priority-ordered suggestions for improving the project.
 ### 🥉 Feature Expansions
 
 - **[3] Basic Auth** — Add HTTP Basic Auth to the FastAPI app for development/staging protection.
-- **[6] AWS Cognito** — Full authentication with user pools, JWTs, and role-based access control.
-- **[4-6] YouTube Topic Suggester** — Find trending topics for shorts/videos using YouTube data + Google Trends. Could feed into the Shorts LangGraph as a new generation pipeline.
+- **[x] [4-6] Trending Topic Suggester** — `POST /api/v1/jobs/trending-topics`: fetches Google News RSS + Google Trends, AI suggests blog topics with keywords. 🔥
 - **[4] Playlist Support** — Fetch all videos in a YouTube playlist and process them as a batch.
 - **[6] Notification System** — Send Signal, Email (SMTP already configured), or WhatsApp when generation pipelines complete.
 

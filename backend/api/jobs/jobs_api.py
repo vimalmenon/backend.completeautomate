@@ -91,3 +91,38 @@ async def update_job(job_id: UUID, request: JobUpdateRequest) -> JobResponse:
 async def execute_job(job_id: UUID) -> dict[str, Any]:
     result = JobSchedulerManager().execute()
     return {"status": result}
+
+
+# ── Trending Blog Topics ─────────────────────────────────────────────
+
+
+class TrendingTopicsRequest(BaseModelWithConfig):
+    niche: str = Field("AI & Technology", description="Niche or industry to focus on")
+    audience: str = Field("Tech enthusiasts", description="Target audience for suggestions")
+    tone: str = Field("professional", description="Writing tone")
+    max_suggestions: int = Field(5, description="Maximum number of topic suggestions", ge=1, le=20)
+
+
+class TrendingTopicsResponse(BaseModelWithConfig):
+    niche: str
+    suggestions: list[dict]
+
+
+@router.post("/jobs/trending-topics", tags=["jobs"], response_model=TrendingTopicsResponse)
+async def suggest_blog_topics(request: TrendingTopicsRequest) -> TrendingTopicsResponse:
+    """Fetch Google Trends + Google News → AI suggests blog topics → return curated list."""
+    from backend.generator.trending.trending_blog_topic_generator import (
+        TrendingBlogTopicGenerator,
+    )
+
+    generator = TrendingBlogTopicGenerator(
+        niche=request.niche,
+        audience=request.audience,
+        tone=request.tone,
+        max_suggestions=request.max_suggestions,
+    )
+    suggestions = generator.generate()
+    return TrendingTopicsResponse(
+        niche=request.niche,
+        suggestions=suggestions,
+    )
