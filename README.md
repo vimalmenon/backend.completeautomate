@@ -154,8 +154,6 @@ Priority-ordered suggestions for improving the project.
   - [ ] Mock Integration with YouTube API
   - [ ] Test all the flows from Generator to Updater, Analyze
   - [ ] Test Data for DB integration
-- [x] Email
-  - [x] [3] Set up Email with CompleteAutomate (hello@completeautomate.com)
 
 **Ideas / Low Priority:**
 
